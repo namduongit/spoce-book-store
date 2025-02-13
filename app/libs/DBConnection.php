@@ -85,7 +85,6 @@ class app_libs_DBConnection {
             'other' => '',
             'params' => '',
             'field' => '',
-            'value' => '',
         ];
         // Gộp 2 mảng theo key (nhận value theo key) mảng params đằng sau sẽ ghi đè lại theo key
         $this->queryParam = array_merge($default, $params);
@@ -112,19 +111,17 @@ class app_libs_DBConnection {
     public function select() {
         $sql = 'SELECT ' . $this->queryParam['select'] . ' FROM ' . $this->table_name;
 
-        if (!empty($this->queryParam['where'])) {
-            $sql .= ' WHERE ' . $this->queryParam['where'];
-        }
+        $sql .= ' ' . $this->building_condition($this->queryParam['where']);
 
         if (!empty($this->queryParam['other'])) {
             $sql .= ' ' . $this->queryParam['other'];
         }
 
         $query = $this->query($sql, $this->queryParam['params']);
-        var_dump($query);
 
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
+
 
 
     public function select_one() {

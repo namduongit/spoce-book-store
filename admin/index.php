@@ -22,5 +22,15 @@
     // }
     $a->open_connect();
 
-    $result = $a->building_queryParam([])->select();
+    $result = $a->building_queryParam([
+        'field' => [
+            'name' => 'namduongit',
+            'street' => 'test_street',
+            'ward' => 'test_ward',
+            'number_of_basement' => 2005
+        ]
+    ])->insert();
+
+    echo "ID vừa được thêm vào là: " . $result;
+
     $a->close_connect();
