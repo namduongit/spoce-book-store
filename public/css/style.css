@@ -1,0 +1,27 @@
+* {
+    font-family: var(--font-family);
+}
+
+.topbar {
+    padding: 0.8rem 0;
+    color: white;
+    background-color: var(--topbar-color);
+}
+
+.topbar__auth__btn {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.topbar__phone:hover .topbar__phone__title,
+.topbar__email:hover .topbar__email__title,
+.topbar__address:hover .topbar__address__title,
+.topbar__auth__btn:hover .topbar__auth__btn__title {
+    color: var(--topbar-color-hover);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.topbar i {
+    color: inherit;
+}

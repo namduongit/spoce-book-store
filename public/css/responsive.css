@@ -1,0 +1,39 @@
+/* ========== CẤU HÌNH CHUNG ========== */
+:root {
+    font-size: 16px; /* Cỡ chữ gốc */
+}
+
+/* ========== DESKTOP (≥ 1280px) ========== */
+@media (min-width: 1280px) {
+    :root {
+        font-size: 16px;
+    }
+}
+
+/* ========== LAPTOP NHỎ (1024px - 1279px) ========== */
+@media (max-width: 1279px) {
+    :root {
+        font-size: 15px;
+    }
+}
+
+/* ========== TABLET (768px - 1023px) ========== */
+@media (max-width: 1023px) {
+    :root {
+        font-size: 14px;
+    }
+}
+
+/* ========== ĐIỆN THOẠI LỚN (480px - 767px) ========== */
+@media (max-width: 767px) {
+    :root {
+        font-size: 13px;
+    }
+}
+
+/* ========== ĐIỆN THOẠI NHỎ (< 480px) ========== */
+@media (max-width: 479px) {
+    :root {
+        font-size: 12px;
+    }
+}

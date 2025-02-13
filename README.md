@@ -7,6 +7,11 @@ Lớp `DBConnection` dùng để kết nối và thực hiện các thao tác tr
 (⚙️ Đang cập nhật nội dung chi tiết...)
 
 ---
+## Quy định về CSS giao diện
+- Về kích thước của các phần tử thì đa số dùng rem, hạn chế dùng pixel nhất có thể
+- Quy định bạn đầu 1rem = 16px nó sẽ nhỏ dần theo màn hình
+
+---
 
 ## 📂 Phân bố các thư mục và ý nghĩa
 
@@ -46,3 +51,4 @@ Lớp `DBConnection` dùng để kết nối và thực hiện các thao tác tr
 1️⃣ Clone repo này về máy:
    ```sh
    git clone https://github.com/your-username/my-php-project.git
+
