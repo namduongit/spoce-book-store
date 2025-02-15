@@ -1,13 +1,13 @@
 <?php
     include '../app/config.php';
 
-    $a = new app_test_building(
-        'mysql',
-        'localhost',
-        'estatebasic',
-        'root',
-        'NDuong205'
-    );
+    // $a = new app_test_building(
+    //     'mysql',
+    //     'localhost',
+    //     'estatebasic',
+    //     'root',
+    //     'NDuong205'
+    // );
 
 
     // if ($a->open_connect() != null) {
@@ -20,17 +20,17 @@
     //     print_r($row);
     //     echo "<br>";
     // }
-    $a->open_connect();
+    // $a->open_connect();
 
-    $result = $a->building_queryParam([
-        'field' => [
-            'name' => 'namduongit',
-            'street' => 'test_street',
-            'ward' => 'test_ward',
-            'number_of_basement' => 2005
-        ]
-    ])->insert();
+    // $result = $a->building_queryParam([
+    //     'field' => [
+    //         'name' => 'namduongit',
+    //         'street' => 'test_street',
+    //         'ward' => 'test_ward',
+    //         'number_of_basement' => 2005
+    //     ]
+    // ])->insert();
 
-    echo "ID vừa được thêm vào là: " . $result;
+    // echo "ID vừa được thêm vào là: " . $result;
 
-    $a->close_connect();
+    // $a->close_connect();

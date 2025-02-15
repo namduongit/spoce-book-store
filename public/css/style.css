@@ -25,3 +25,49 @@
 .topbar i {
     color: inherit;
 }
+
+.header {
+    padding: 1rem 0;
+    color: black;
+    background-color: white;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.header__container
+.header__logo,
+.header__support {
+    width: 25%;
+}
+
+.header__container
+.header__logo img {
+    width: 100%;
+}
+
+.header__container .header__support {
+    justify-content: center;
+}
+
+.header__container .header__support .header__support__icon i {
+    height: 100%;
+    margin-right: 1rem;
+}
+
+.header__container .header__search {
+    width: 50%;
+}
+
+.header__search .header__search__warp div {
+    position: absolute;
+    color: white;
+    background-color: black;
+    right: 0;
+    height: 100%;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+}
+
+.header__search .header__search__warp input {
+    width: 100%;
+    padding: 0.4rem;
+}

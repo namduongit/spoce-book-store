@@ -2,7 +2,7 @@
 
 :root {
     --font-family: "Montserrat", serif;
-    --topbar-color: #417505;
+    --topbar-color: #044785;
     --topbar-color-hover: #E07F05;
 }
 
@@ -29,8 +29,12 @@ i {
     display: flex;
 }
 
-.just-content-center {
+.just-content-spbt {
     justify-content: space-between;
+}
+
+.align-items-center {
+    align-items: center;
 }
 
 .hide-items {
@@ -43,4 +47,8 @@ i {
 
 .margin-right-small {
     margin-right: 1rem;
+}
+
+.pos-relative {
+    position: relative;
 }

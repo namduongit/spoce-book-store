@@ -18,7 +18,7 @@
 
 <body>
     <div class="topbar d-flex">
-        <div class="topbar__container container d-flex just-content-center">
+        <div class="topbar__container container d-flex just-content-spbt">
             <div class="topbar__phone d-flex">
                 <div class="topbar__phone__icon">
                     <i class="fa-solid fa-phone-volume"></i>
@@ -69,22 +69,33 @@
 
 
     <header class="header">
-        <div class="header__container inline-items-between">
+        <div class="header__container container d-flex just-content-spbt align-items-center">
             <div class="header__logo">
-
+                <img src="../media/Logo/public_logo.png" alt="This is Web's logo">
             </div>
             <div class="header__search">
-
+                <div class="header__search__warp d-flex pos-relative">
+                    <input type="text" name="search_product">
+                    <div onclick="">Tìm kiếm</div>
+                </div>
             </div>
-            <div class="header__support">
-
+            <div class="header__support d-flex align-items-center">
+                <div class="header__support__icon">
+                    <i class="fa-solid fa-blender-phone"></i>
+                </div>
+                <div class="header__support__title">
+                    <div>Hỗ trợ khách hàng</div>
+                    <div>0388 853 835</div>
+                </div>
             </div>
-            <div class="header__upper__icon">
-
+            <div class="header__upper__icon hide-items">
+                <i class="fa-solid fa-bars"></i>
             </div>
         </div>
     </header>
 
+
+    
 </body>
 
 </html>
