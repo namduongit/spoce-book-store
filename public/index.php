@@ -9,6 +9,7 @@
     <link rel="icon" type="image/png" href="../media/Logo/human_book.png">
     <!-- File css nằm chỗ này -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/animation.css">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -94,8 +95,129 @@
         </div>
     </header>
 
+    <div class="body">
+        <div class="body__container container d-flex just-content-spbt">
+            <div class="body__container__slidebar">
+                <div class="body__container__slidebar__title"> Danh mục </div>
+                <ul class="body__container__slidebar__list">
 
-    
+                    <li class="has-child dropdown">
+                        <a href="#">Sách Kinh Tế</a>
+                        <i class="fa-solid fa-angles-right"></i>
+                        <ul>
+                            <!-- Xây dựng Menu đa cấp ở đây -->
+                        </ul>
+                    </li>
+
+                    <li class="has-child dropdown">
+                        <a href="#">Sách Văn Học Trong Nước</a>
+                        <i class="fa-solid fa-angles-right"></i>
+                        <ul>
+                            <!-- Xây dựng Menu đa cấp ở đây -->
+                        </ul>
+                    </li>
+
+                    <li class="has-child dropdown">
+                        <a href="#">Sách Văn Học Nước Ngoài</a>
+                        <i class="fa-solid fa-angles-right"></i>
+                        <ul>
+                            <!-- Xây dựng Menu đa cấp ở đây -->
+                        </ul>
+                    </li>
+
+                    <li class="has-child dropdown">
+                        <a href="#">Sách Thưởng Thức Đời Sống</a>
+                        <i class="fa-solid fa-angles-right"></i>
+                        <ul>
+                            <!-- Xây dựng Menu đa cấp ở đây -->
+                        </ul>
+                    </li>
+
+                    <li class="has-child dropdown">
+                        <a href="#">Sách Thiếu Nhi</a>
+                        <i class="fa-solid fa-angles-right"></i>
+                        <ul>
+                            <!-- Xây dựng Menu đa cấp ở đây -->
+                        </ul>
+                    </li>
+
+                    <li class="has-child dropdown">
+                        <a href="#">Sách Phát Triển Bản Thân</a>
+                        <i class="fa-solid fa-angles-right"></i>
+                        <ul>
+                            <!-- Xây dựng Menu đa cấp ở đây -->
+                        </ul>
+                    </li>
+
+                    <li class="has-child dropdown">
+                        <a href="#">Sách Tin Học Ngoại Ngữ</a>
+                        <i class="fa-solid fa-angles-right"></i>
+                        <ul>
+                            <!-- Xây dựng Menu đa cấp ở đây -->
+                        </ul>
+                    </li>
+
+                    <li class="has-child dropdown">
+                        <a href="#">Sách Chuyên Ngành</a>
+                        <i class="fa-solid fa-angles-right"></i>
+                        <ul>
+                            <!-- Xây dựng Menu đa cấp ở đây -->
+                        </ul>
+                    </li>
+
+                    <li class="has-child dropdown">
+                        <a href="#">Sách Giáo Khoa - Giáo Trình</a>
+                        <i class="fa-solid fa-angles-right"></i>
+                        <ul>
+                            <!-- Xây dựng Menu đa cấp ở đây -->
+                        </ul>
+                    </li>
+
+                    <li class="has-child dropdown">
+                        <a href="#">Sách Phát Hành 2024</a>
+                        <i class="fa-solid fa-angles-right"></i>
+                        <ul>
+                            <!-- Xây dựng Menu đa cấp ở đây -->
+                        </ul>
+                    </li>
+
+                    <li class="has-child dropdown">
+                        <a href="#">Sách Mới 2025</a>
+                        <i class="fa-solid fa-angles-right"></i>
+                        <ul>
+                            <!-- Xây dựng Menu đa cấp ở đây -->
+                        </ul>
+                    </li>
+
+                    <li class="has-child dropdown">
+                        <a href="#">Review Sách</a>
+                        <i class="fa-solid fa-angles-right"></i>
+                        <ul>
+                            <!-- Xây dựng Menu đa cấp ở đây -->
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="body__container__content">
+                <div class="body__container__content__homeslider">
+                    <div class="body__container__content__homeslider__left"><</div>
+                    <img src="../media/Banner/banner_1.png" alt="This is banner web">
+                    <div class="body__container__content__homeslider__right">></div>
+                </div>
+                <div class="body__container__content__banner d-flex just-content-spbt">
+                    <img src="../media/Banner/banner_2.png" alt=""></img>
+                    <img src="../media/Banner/banner_3.png" alt=""></img>
+                </div>
+                <div class="body__container__content__product">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 </body>
 
 </html>

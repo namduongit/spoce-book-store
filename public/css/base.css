@@ -4,11 +4,17 @@
     --font-family: "Montserrat", serif;
     --topbar-color: #044785;
     --topbar-color-hover: #E07F05;
+    --bg-color: white;
+    --i-hover: #EEEEEE;
 }
 
-* {
-    font-family: "Montserrat", serif;
-    font-family: var(--font-family);
+*:not(i) {
+    font-family: var(--font-family) !important;
+}
+
+a {
+    text-decoration: none;
+    color: black;
 }
 
 /* icon */
