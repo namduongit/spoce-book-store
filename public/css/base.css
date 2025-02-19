@@ -6,10 +6,18 @@
     --topbar-color-hover: #E07F05;
     --bg-color: white;
     --i-hover: #EEEEEE;
+    --has-product: #008029;
+    --nhas-product: #ea1313;
+    --slide-list-hover: #F6F6F6;
 }
+
 
 *:not(i) {
     font-family: var(--font-family) !important;
+}
+
+img {
+    width: 100%;
 }
 
 a {
@@ -43,18 +51,34 @@ i {
     align-items: center;
 }
 
-.hide-items {
+.hide-item {
     display: none;
 }
 
 .width-fit-content {
     width: fit-content;
 }
+/* -----------------------------------MARGIN---------------------------------------- */
 
 .margin-right-small {
     margin-right: 1rem;
 }
+.margin-right-medium {
+    margin-right: 2rem;
+}
 
+.margin-top-small {
+    margin-top: 1rem;
+}
+.margin-top-medium {
+    margin-top: 2rem;
+}
+
+/* -------------------------------------------------------------------------------- */
+
+/* ----------------------------------POSITION-------------------------------------- */
 .pos-relative {
     position: relative;
 }
+
+/* -------------------------------------------------------------------------------- */

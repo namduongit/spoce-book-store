@@ -1,39 +1,35 @@
-/* ========== CẤU HÌNH CHUNG ========== */
-:root {
-    font-size: 16px; /* Cỡ chữ gốc */
+html {
+    font-size: 62.5%; /* 1rem = 10px */
 }
 
-/* ========== DESKTOP (≥ 1280px) ========== */
-@media (min-width: 1280px) {
-    :root {
-        font-size: 16px;
-    }
+body {
+    font-size: 1.6rem; /* 16px */
 }
 
-/* ========== LAPTOP NHỎ (1024px - 1279px) ========== */
+/* ============================== LAPTOP NHỎ (1024px - 1279px) ============================== */
 @media (max-width: 1279px) {
-    :root {
-        font-size: 15px;
+    html {
+        font-size: 58%; /* 1rem = 9.28px */
     }
 }
 
-/* ========== TABLET (768px - 1023px) ========== */
+/* ============================== TABLET (768px - 1023px) ============================== */
 @media (max-width: 1023px) {
-    :root {
-        font-size: 14px;
+    html {
+        font-size: 55%; /* 1rem = 8.8px */
     }
 }
 
-/* ========== ĐIỆN THOẠI LỚN (480px - 767px) ========== */
+/* ============================== ĐIỆN THOẠI LỚN (480px - 767px) ============================== */
 @media (max-width: 767px) {
-    :root {
-        font-size: 13px;
+    html {
+        font-size: 50%; /* 1rem = 8px */
     }
 }
 
-/* ========== ĐIỆN THOẠI NHỎ (< 480px) ========== */
+/* ============================== ĐIỆN THOẠI NHỎ (< 480px) ============================== */
 @media (max-width: 479px) {
-    :root {
-        font-size: 12px;
+    html {
+        font-size: 45%; /* 1rem = 7.2px */
     }
 }

@@ -5,219 +5,926 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spoce Book Store</title>
-    <!-- Logo chỗ này nè -->
-    <link rel="icon" type="image/png" href="../media/Logo/human_book.png">
-    <!-- File css nằm chỗ này -->
+    <link rel="icon" type="image/png" href="../media/logo/human_book.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="css/animation.css">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/style.css">
-    <!-- File khởi tạo dữ liệu hay gì đó của Js nằm chỗ này -->
 </head>
 
 <body>
-    <div class="topbar d-flex">
+    <div class="topbar">
         <div class="topbar__container container d-flex just-content-spbt">
-            <div class="topbar__phone d-flex">
-                <div class="topbar__phone__icon">
-                    <i class="fa-solid fa-phone-volume"></i>
+            <div class="topbar__contact d-flex">
+                <div class="topbar__contact-item margin-right-medium">
+                    <i class="topbar__contact-icon fa-solid fa-phone-volume"></i>
+                    <span class="topbar__contact-text">0388.853.835</span>
                 </div>
-                <div class="topbar__phone__title">
-                    0388.853.835
+                <div class="topbar__contact-item margin-right-medium">
+                    <i class="topbar__contact-icon fa-solid fa-envelope-open-text"></i>
+                    <span class="topbar__contact-text">spoce_bookstore@gmail.com</span>
                 </div>
-            </div>
-
-            <div class="topbar__email d-flex">
-                <div class="topbar__email__icon">
-                    <i class="fa-solid fa-envelope-open-text"></i>
-                </div>
-                <div class="topbar__email__title">
-                    spoce_bookstore@gmail.com
+                <div class="topbar__contact-item margin-right-medium">
+                    <i class="topbar__contact-icon fa-solid fa-location-dot "></i>
+                    <span class="topbar__contact-text">273 An Dương Vương, P2, Q5, TP.HCM</span>
                 </div>
             </div>
-
-            <div class="topbar__address d-flex">
-                <div class="topbar__address__icon">
-                    <i class="fa-solid fa-location-dot"></i>
-                </div>
-                <div class="topbar__address__title">
-                    273 An Dương Vương, Phường 2, Quận 5, Thành Phố Hồ Chí Minh
-                </div>
-            </div>
-
-            <div class="topbar__auth d-flex">
-                <div class="topbar__auth__btn topbar__auth_btn--login d-flex margin-right-small">
+            <div class="topbar__auth d-flex ">
+                <div class="topbar__auth-btn topbar__auth-btn--login margin-right-medium">
                     <i class="fa-solid fa-street-view"></i>
-                    <div class="topbar__auth__btn__title">Đăng nhập</div>
+                    <span>Đăng nhập</span>
                 </div>
-                <div class="topbar__auth__btn topbar__auth_btn--register d-flex margin-right-small">
+                <div class="topbar__auth-btn topbar__auth-btn--register margin-right-medium">
                     <i class="fa-solid fa-user-pen"></i>
-                    <div class="topbar__auth__btn__title">Đăng ký</div>
+                    <span>Đăng ký</span>
                 </div>
-                <div class="topbar__auth__btn topbar__auth_btn--logout hide-items d-flex margin-right-small">
+                <div class="topbar__auth-btn topbar__auth-btn--logout margin-right-medium hide-item">
                     <i class="fa-solid fa-person-through-window"></i>
-                    <div class="topbar__auth__btn__title">Đăng xuất</div>
+                    <span>Đăng xuất</span>
                 </div>
-                <div class="topbar__auth__btn topbar__auth_btn--settings hide-items d-flex margin-right-small">
+                <div class="topbar__auth-btn topbar__auth-btn--settings margin-right-medium hide-item">
                     <i class="fa-solid fa-user-gear"></i>
-                    <div class="topbar__auth__btn__title">Tài khoản</div>
+                    <span>Tài khoản</span>
                 </div>
             </div>
         </div>
     </div>
 
-
     <header class="header">
-        <div class="header__container container d-flex just-content-spbt align-items-center">
+        <div class="header__container container d-flex align-items-center just-content-spbt">
             <div class="header__logo">
-                <img src="../media/Logo/public_logo.png" alt="This is Web's logo">
+                <img src="../media/logo/public_logo.png" alt="Logo Web">
             </div>
+
             <div class="header__search">
-                <div class="header__search__warp d-flex pos-relative">
-                    <input type="text" name="search_product">
-                    <div onclick="">Tìm kiếm</div>
+                <div class="header__search-wrapper">
+                    <input class="header__search-input" type="text" placeholder="Tìm kiếm sản phẩm">
+                    <button class="header__search-btn">Tìm kiếm</button>
                 </div>
             </div>
-            <div class="header__support d-flex align-items-center">
-                <div class="header__support__icon">
-                    <i class="fa-solid fa-blender-phone"></i>
+
+            <div class="header__support d-flex just-content-spbt align-items-center">
+                <i class="header__support-icon fa-solid fa-blender-phone"></i>
+                <div class="header__support-info">
+                    <span>Hỗ trợ khách hàng</span>
+                    <div></div>
+                    <span>0388 853 835</span>
                 </div>
-                <div class="header__support__title">
-                    <div>Hỗ trợ khách hàng</div>
-                    <div>0388 853 835</div>
-                </div>
-            </div>
-            <div class="header__upper__icon hide-items">
-                <i class="fa-solid fa-bars"></i>
             </div>
         </div>
     </header>
 
-    <div class="body">
-        <div class="body__container container d-flex just-content-spbt">
-            <div class="body__container__slidebar">
-                <div class="body__container__slidebar__title"> Danh mục </div>
-                <ul class="body__container__slidebar__list">
-
-                    <li class="has-child dropdown">
+    <div class="main">
+        <div class="main__container container d-flex just-content-spbt">
+            <aside class="sidebar">
+                <h3 class="sidebar__title">Danh mục</h3>
+                <ul class="sidebar__list">
+                    <li class="sidebar__item d-flex just-content-spbt">
                         <a href="#">Sách Kinh Tế</a>
-                        <i class="fa-solid fa-angles-right"></i>
-                        <ul>
-                            <!-- Xây dựng Menu đa cấp ở đây -->
-                        </ul>
+                        <i class="fa-solid fa-chevron-right"></i>
                     </li>
-
-                    <li class="has-child dropdown">
+                    <li class="sidebar__item d-flex just-content-spbt">
                         <a href="#">Sách Văn Học Trong Nước</a>
-                        <i class="fa-solid fa-angles-right"></i>
-                        <ul>
-                            <!-- Xây dựng Menu đa cấp ở đây -->
-                        </ul>
+                        <i class="fa-solid fa-chevron-right"></i>
                     </li>
-
-                    <li class="has-child dropdown">
+                    <li class="sidebar__item d-flex just-content-spbt">
                         <a href="#">Sách Văn Học Nước Ngoài</a>
-                        <i class="fa-solid fa-angles-right"></i>
-                        <ul>
-                            <!-- Xây dựng Menu đa cấp ở đây -->
-                        </ul>
+                        <i class="fa-solid fa-chevron-right"></i>
                     </li>
-
-                    <li class="has-child dropdown">
-                        <a href="#">Sách Thưởng Thức Đời Sống</a>
-                        <i class="fa-solid fa-angles-right"></i>
-                        <ul>
-                            <!-- Xây dựng Menu đa cấp ở đây -->
-                        </ul>
-                    </li>
-
-                    <li class="has-child dropdown">
+                    <li class="sidebar__item d-flex just-content-spbt">
                         <a href="#">Sách Thiếu Nhi</a>
-                        <i class="fa-solid fa-angles-right"></i>
-                        <ul>
-                            <!-- Xây dựng Menu đa cấp ở đây -->
-                        </ul>
+                        <i class="fa-solid fa-chevron-right"></i>
                     </li>
-
-                    <li class="has-child dropdown">
+                    <li class="sidebar__item d-flex just-content-spbt">
                         <a href="#">Sách Phát Triển Bản Thân</a>
-                        <i class="fa-solid fa-angles-right"></i>
-                        <ul>
-                            <!-- Xây dựng Menu đa cấp ở đây -->
-                        </ul>
+                        <i class="fa-solid fa-chevron-right"></i>
                     </li>
-
-                    <li class="has-child dropdown">
+                    <li class="sidebar__item d-flex just-content-spbt">
                         <a href="#">Sách Tin Học Ngoại Ngữ</a>
-                        <i class="fa-solid fa-angles-right"></i>
-                        <ul>
-                            <!-- Xây dựng Menu đa cấp ở đây -->
-                        </ul>
+                        <i class="fa-solid fa-chevron-right"></i>
                     </li>
-
-                    <li class="has-child dropdown">
+                    <li class="sidebar__item d-flex just-content-spbt">
                         <a href="#">Sách Chuyên Ngành</a>
-                        <i class="fa-solid fa-angles-right"></i>
-                        <ul>
-                            <!-- Xây dựng Menu đa cấp ở đây -->
-                        </ul>
+                        <i class="fa-solid fa-chevron-right"></i>
                     </li>
-
-                    <li class="has-child dropdown">
-                        <a href="#">Sách Giáo Khoa - Giáo Trình</a>
-                        <i class="fa-solid fa-angles-right"></i>
-                        <ul>
-                            <!-- Xây dựng Menu đa cấp ở đây -->
-                        </ul>
+                    <li class="sidebar__item d-flex just-content-spbt">
+                        <a href="#">Sách Kỹ Năng Sống</a>
+                        <i class="fa-solid fa-chevron-right"></i>
                     </li>
-
-                    <li class="has-child dropdown">
-                        <a href="#">Sách Phát Hành 2024</a>
-                        <i class="fa-solid fa-angles-right"></i>
-                        <ul>
-                            <!-- Xây dựng Menu đa cấp ở đây -->
-                        </ul>
+                    <li class="sidebar__item d-flex just-content-spbt">
+                        <a href="#">Truyện Tranh</a>
+                        <i class="fa-solid fa-chevron-right"></i>
                     </li>
-
-                    <li class="has-child dropdown">
-                        <a href="#">Sách Mới 2025</a>
-                        <i class="fa-solid fa-angles-right"></i>
-                        <ul>
-                            <!-- Xây dựng Menu đa cấp ở đây -->
-                        </ul>
-                    </li>
-
-                    <li class="has-child dropdown">
-                        <a href="#">Review Sách</a>
-                        <i class="fa-solid fa-angles-right"></i>
-                        <ul>
-                            <!-- Xây dựng Menu đa cấp ở đây -->
-                        </ul>
-                    </li>
-
                 </ul>
-            </div>
-            <div class="body__container__content">
-                <div class="body__container__content__homeslider">
-                    <div class="body__container__content__homeslider__left"><</div>
-                    <img src="../media/Banner/banner_1.png" alt="This is banner web">
-                    <div class="body__container__content__homeslider__right">></div>
-                </div>
-                <div class="body__container__content__banner d-flex just-content-spbt">
-                    <img src="../media/Banner/banner_2.png" alt=""></img>
-                    <img src="../media/Banner/banner_3.png" alt=""></img>
-                </div>
-                <div class="body__container__content__product">
+            </aside>
 
+            <section class="content">
+                <div class="slider">
+                    <button class="slider__btn slider__btn--left">&#10094;</button>
+                    <img class="slider__image" src="../media/banner/banner_1.png" alt="Banner">
+                    <button class="slider__btn slider__btn--right">&#10095;</button>
                 </div>
-            </div>
+                <div class="banner d-flex just-content-spbt">
+                    <img class="banner__image" src="../media/banner/banner_2.png" alt="">
+                    <img class="banner__image" src="../media/banner/banner_3.png" alt="">
+                </div>
+            </section>
         </div>
     </div>
 
+    <main class="body">
+        <div class="body__container container">
+            <section class="book-category book-category--bestseller">
+                <h2 class="book-category__title">Sách bán chạy</h2>
+                <div class="book-category__list">
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            <section class="book-category book-category--vietnamese">
+            <h2 class="book-category__title">Sách tiếng Việt</h2>
+                <div class="book-category__list">
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            <section class="book-category book-category--english">
+            <h2 class="book-category__title">Sách tiếng Anh</h2>
+                <div class="book-category__list">
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            <section class="book-category book-category--textbook">
+            <h2 class="book-category__title">Sách giáo khoa</h2>
+                <div class="book-category__list">
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                    <div class="book-category__item">
+                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
+                        <div class="book-category__item-name">Người thắp lửa</div>
+                        <div class="book-category-rate d-flex margin-top-small">
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                        <div class="book-category__item-price">220,000</div>
+                        <div class="book-category__item-add-to-cart margin-top-small">
+                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
+                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+    </main>
 
 
+    <footer class="footer">
+        <div class="footer__container container">
+            <p class="footer__text">&copy; 2025 Spoce Book Store. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 
 </html>
