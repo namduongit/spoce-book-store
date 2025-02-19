@@ -11,6 +11,10 @@
     --slide-list-hover: #F6F6F6;
 }
 
+body {
+    position: relative;
+}
+
 
 *:not(i) {
     font-family: var(--font-family) !important;

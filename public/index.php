@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- Nhúng các thư viện Css -->
+    <script src="js/detail_product.js" defer></script>
 </head>
 
 <body>
@@ -139,7 +142,7 @@
             <section class="book-category book-category--bestseller">
                 <h2 class="book-category__title">Sách bán chạy</h2>
                 <div class="book-category__list">
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -158,7 +161,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -177,7 +180,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -196,7 +199,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -215,7 +218,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -234,7 +237,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -253,7 +256,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -272,7 +275,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -291,7 +294,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -310,7 +313,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -332,9 +335,9 @@
                 </div>
             </section>
             <section class="book-category book-category--vietnamese">
-            <h2 class="book-category__title">Sách tiếng Việt</h2>
+                <h2 class="book-category__title">Sách tiếng Việt</h2>
                 <div class="book-category__list">
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -353,7 +356,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -372,7 +375,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -391,7 +394,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -410,7 +413,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -429,7 +432,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -448,7 +451,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -467,7 +470,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -486,7 +489,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -505,7 +508,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -527,9 +530,9 @@
                 </div>
             </section>
             <section class="book-category book-category--english">
-            <h2 class="book-category__title">Sách tiếng Anh</h2>
+                <h2 class="book-category__title">Sách tiếng Anh</h2>
                 <div class="book-category__list">
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -548,7 +551,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -567,7 +570,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -586,7 +589,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -605,7 +608,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -624,7 +627,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -643,7 +646,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -662,7 +665,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -681,7 +684,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -700,7 +703,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -722,9 +725,9 @@
                 </div>
             </section>
             <section class="book-category book-category--textbook">
-            <h2 class="book-category__title">Sách giáo khoa</h2>
+                <h2 class="book-category__title">Sách giáo khoa</h2>
                 <div class="book-category__list">
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -743,7 +746,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -762,7 +765,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -781,7 +784,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -800,7 +803,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -819,7 +822,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -838,7 +841,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -857,7 +860,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -876,7 +879,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -895,7 +898,7 @@
                         </div>
                     </div>
 
-                    <div class="book-category__item">
+                    <div class="book-category__item" onclick="show_detail_product(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">
@@ -925,6 +928,11 @@
             <p class="footer__text">&copy; 2025 Spoce Book Store. All rights reserved.</p>
         </div>
     </footer>
+
+
+    <!-- Hiển thị thông tin chi tiết sách -->
+    <div class="show-detail-product"></div>
+
 </body>
 
 </html>
