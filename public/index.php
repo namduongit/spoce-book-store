@@ -15,6 +15,7 @@
 
     <!-- Nhúng các thư viện Css -->
     <script src="js/detail_product.js" defer></script>
+    <script src="js/login_register.js" defer></script>
 </head>
 
 <body>
@@ -35,11 +36,11 @@
                 </div>
             </div>
             <div class="topbar__auth d-flex ">
-                <div class="topbar__auth-btn topbar__auth-btn--login margin-right-medium">
+                <div class="topbar__auth-btn topbar__auth-btn--login margin-right-medium" onclick="show_form(this)">
                     <i class="fa-solid fa-street-view"></i>
                     <span>Đăng nhập</span>
                 </div>
-                <div class="topbar__auth-btn topbar__auth-btn--register margin-right-medium">
+                <div class="topbar__auth-btn topbar__auth-btn--register margin-right-medium" onclick="show_form(this)">
                     <i class="fa-solid fa-user-pen"></i>
                     <span>Đăng ký</span>
                 </div>
@@ -932,6 +933,11 @@
 
     <!-- Hiển thị thông tin chi tiết sách -->
     <div class="show-detail-product"></div>
+
+    <!-- Hiển thị bảng nhập thông tin đăng nhập hoặc đăng xuất -->
+    <div class="auth"></div>
+
+
 
 </body>
 
