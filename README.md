@@ -50,5 +50,5 @@ Lớp `DBConnection` dùng để kết nối và thực hiện các thao tác tr
 ## 📜 **Cách sử dụng**
 1️⃣ Clone repo này về máy:
    ```sh
-   git clone https://github.com/your-username/my-php-project.git
+   git clone https://github.com/namduongit/spoce-book-store.git
 
