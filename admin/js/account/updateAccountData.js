@@ -1,3 +1,5 @@
+import { isNotFirstItemSelected } from "../selectEvents.js";
+
 // Hàm thiết lập sự kiện Sửa một người dùng cho bảng
 export function updateAccountData(idAccountSelected) {
   // Phải truy vấn từ CSDL thông qua idAccountSelected để lấy được dữ liệu của đối tượng hiện tại
@@ -25,49 +27,57 @@ export function updateAccountData(idAccountSelected) {
         <div class="dialog__row">
           <div class="dialog__form-group">
             <label>Mã người dùng</label>
-            <input type="text" id="update-account-id" readonly />
+            <input type="text" id="add-account-id" readonly />
           </div>
           <div class="dialog__form-group">
-            <label>Tên đăng nhập</label>
-            <input type="text" id="update-account-username" placeholder="Nhập Tên đăng nhập" autofocus/>
-          </div>
-        </div>
-        <div class="dialog__row">
-          <div class="dialog__form-group">
-            <label>Mật khẩu</label>
-            <input type="text" id="update-account-password" placeholder="Nhập Mật khẩu" />
-          </div>
-          <div class="dialog__form-group">
-            <label>Mật khẩu lần 2</label>
-            <input type="text" id="update-account-password-2" placeholder="Nhập Mật khẩu lần 2" />
+            <label>Họ và tên</label>
+            <input type="text" id="add-account-fullname" placeholder="Nhập Họ và tên" autofocus/>
           </div>
         </div>
         <div class="dialog__row">
           <div class="dialog__form-group">
             <label>Số điện thoại</label>
-            <input type="text" id="update-account-phone" placeholder="Nhập Số điện thoại" />
+            <input type="text" id="add-account-phone" placeholder="Nhập Số điện thoại" />
           </div>
           <div class="dialog__form-group">
             <label>Email</label>
-            <input type="text" id="update-account-email" placeholder="Nhập Email"/>
+            <input type="text" id="add-account-email" placeholder="Nhập Email"/>
+          </div>
+        </div>
+        <div class="dialog__row">
+          <div class="dialog__form-group full">
+            <label>Địa chỉ</label>
+            <input type="text" id="add-account-address" placeholder="Nhập Địa chỉ" />
+            <button>Chọn</button>
           </div>
         </div>
         <div class="dialog__row">
           <div class="dialog__form-group">
-          <label>Phân quyền</label>
-          <select id="update-account-privilege">
-              <option value="" selected>Chọn Phân quyền</option>
-              <option value="1">Quản lý</option>
-              <option value="2">Nhân viên</option>
-              <option value="3">Khách hàng</option>
-          </select>
+            <label>Tên tài khoản</label>
+            <input type="text" id="add-account-username" readonly />
+          </div>
+          <div class="dialog__form-group">
+            <label>Mật khẩu</label>
+            <input type="text" id="add-account-password" placeholder="Nhập Mật khẩu" />
+          </div>
         </div>
+        <div class="dialog__row">
+          <div class="dialog__form-group">
+            <label>Phân quyền</label>
+            <select id="add-account-privilege">
+                <option value="" selected>Chọn Phân quyền</option>
+                <option value="1">Quản lý</option>
+                <option value="2">Nhân viên</option>
+                <option value="3">Khách hàng</option>
+            </select>
+            <button>Chi tiết</button>
+          </div>
           <div class="dialog__form-group">
             <label>Trạng thái</label>
-            <select id="update-account-status" disabled>
+            <select id="add-account-status" disabled>
               <option value="" selected>Chọn Trạng thái</option>
               <option value="1">Hoạt động</option>
-              <option value="2">Tạm dừng</option>
+              <option value="0">Tạm dừng</option>
             </select>
           </div>
         </div>
@@ -88,13 +98,7 @@ export function updateAccountData(idAccountSelected) {
     ".dialog__form-group > select"
   );
   selectElement.forEach((select) => {
-    select.addEventListener("change", function () {
-      if (select.value !== "") {
-        select.classList.add("changed");
-      } else {
-        select.classList.remove("changed");
-      }
-    });
+    isNotFirstItemSelected(select);
   });
 
   // Gán sự kiện cho nút "Sửa" dialog
@@ -102,24 +106,23 @@ export function updateAccountData(idAccountSelected) {
     .getElementById("update-account-button")
     .addEventListener("click", () => {
       // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-      const id = document.getElementById("update-account-id");
-      const username = document.getElementById("update-account-username");
-      const password = document.getElementById("update-account-password");
-      const password2 = document.getElementById("update-account-password-2");
+      const fullname = document.getElementById("update-account-fullname");
       const phone = document.getElementById("update-account-phone");
       const email = document.getElementById("update-account-email");
+      const address = document.getElementById("update-account-address");
+      const password = document.getElementById("update-account-password");
       const privilege = document.getElementById("update-account-privilege");
-      const status = document.getElementById("update-account-status");
+      // - Chi tiết quyền
 
       // ... (Xử lý tiếp ở đây)
-      console.log(id.value);
-      console.log(username.value);
+      console.log(fullname.value);
+      console.log(phone.value);
+      console.log(email.value);
+      console.log(address.value);
       console.log(password.value);
-      console.log(password2.value);
       console.log(phone.value);
       console.log(email.value);
       console.log(privilege.value);
-      console.log(status.value);
     });
 
   // Gán sự kiện cho nút "Đóng" dialog

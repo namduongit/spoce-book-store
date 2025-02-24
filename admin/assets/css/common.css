@@ -123,7 +123,14 @@
 }
 
 /* <===== Detail / Add / Update Dialog =====> */
-.dialog:where(.account, .type) {
+.dialog:where(
+    .account,
+    .supplies,
+    .publisher,
+    .issuer,
+    .type,
+    .address-select
+  ) {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -155,8 +162,15 @@
   width: 100%;
   margin-top: 10px;
 }
+.dialog__row + .dialog__row {
+  margin-top: 14px;
+}
 .dialog__form-group {
+  position: relative;
   width: 50%;
+}
+.dialog__form-group.full {
+  width: 100%;
 }
 .dialog__form-group label,
 .dialog__form-group input,
@@ -164,7 +178,7 @@
   width: 100%;
   height: 40px;
   color: #dedede;
-  font-size: 14px;
+  font-size: 16px;
   transition: 0.3s ease-in-out;
 }
 .dialog__form-group input {
@@ -181,12 +195,19 @@
 }
 .dialog__form-group input::placeholder {
   color: #dedede;
-  font-size: 14px;
+  font-size: 16px;
+  transition: 0.3s ease-in-out;
 }
-.dialog__form-group:has(input:focus) label {
+.dialog__form-group input:hover::placeholder {
   color: #000;
 }
-.dialog__form-group input:focus {
+.dialog__form-group input:focus::placeholder {
+  color: #dedede;
+}
+.dialog__form-group:has(input:is(:focus, :hover)) label {
+  color: #000;
+}
+.dialog__form-group input:is(:focus, :hover) {
   border-color: #000;
   color: #000;
 }
@@ -221,6 +242,24 @@
   background: #dedede;
   border: none;
   color: #000;
+}
+.dialog__form-group button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #000;
+  border: none;
+  width: 80px;
+  height: 20px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+.dialog__form-group button:hover {
+  background: var(--primary-color);
 }
 .dialog__icons {
   display: flex;

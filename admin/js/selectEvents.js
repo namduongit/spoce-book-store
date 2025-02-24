@@ -43,3 +43,18 @@ export function selectFormEvents() {
     });
   });
 }
+
+// Nếu không chọn mục ban đầu thì thay đổi định dạng
+export function isNotFirstItemSelected(select) {
+  select.addEventListener("change", function (e) {
+    // - Loại bỏ giá trị mặc định
+    e.preventDefault();
+
+    // - Thay đổi khi chọn mục
+    if (select.value !== "") {
+      select.classList.add("changed");
+    } else {
+      select.classList.remove("changed");
+    }
+  });
+}

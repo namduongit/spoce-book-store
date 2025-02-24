@@ -46,15 +46,15 @@
                     <span class="text">Người dùng</span>
                 </a>
             </li>
-            <li class="sidebar__item">
+            <!-- <li class="sidebar__item">
                 <a href="#" class="sidebar__action" data-main-content="customer">
                     <i class="icon fa-solid fa-user-tie"></i>
                     <span class="text">Khách hàng</span>
                 </a>
-            </li>
+            </li> -->
             <li class="sidebar__item">
                 <a href="#" class="sidebar__action" data-main-content="supplies">
-                    <i class="icon fa-solid fa-user-secret"></i>
+                    <i class="icon fa-solid fa-user-tie"></i>
                     <span class="text">Nhà cung cấp</span>
                 </a>
             </li>
@@ -71,13 +71,13 @@
                 </a>
             </li>
             <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="publish">
+                <a href="#" class="sidebar__action" data-main-content="publisher">
                     <i class="icon fa-solid fa-user-tag"></i>
                     <span class="text">Nhà xuất bản</span>
                 </a>
             </li>
             <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="reissue">
+                <a href="#" class="sidebar__action" data-main-content="issuer">
                     <i class="icon fa-solid fa-user-shield"></i>
                     <span class="text">Nhà phát hành</span>
                 </a>
@@ -111,7 +111,6 @@
     <!-- Javascript -->
     <script type="module" src="js/changeMainContent.js"></script>
     <script type="module" src="js/showSidebar.js"></script>
-    <script type="module" src="js/account/updateAccountData.js"></script>
 </body>
 
 </html>

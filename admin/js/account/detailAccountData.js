@@ -23,51 +23,58 @@ export function detailAccountData(idAccountSelected) {
           </button>
           <div class="dialog__line"></div>
           <div class="dialog__row">
-            <div class="dialog__form-group" readonly>
+            <div class="dialog__form-group">
               <label>Mã người dùng</label>
-              <input type="text" id="detail-account-id" readonly />
+              <input type="text" id="add-account-id" readonly />
             </div>
             <div class="dialog__form-group">
-              <label>Tên đăng nhập</label>
-              <input type="text" id="detail-account-username" readonly/>
+              <label>Họ và tên</label>
+              <input type="text" id="add-account-fullname" readonly />
             </div>
           </div>
           <div class="dialog__row">
-            <div class="dialog__form-group" readonly>
-              <label>Mật khẩu</label>
-              <input type="text" id="detail-account-password" readonly />
-            </div>
-            <div class="dialog__form-group" readonly>
-              <label>Mật khẩu lần 2</label>
-              <input type="text" id="detail-account-password-2" readonly />
-            </div>
-          </div>
-          <div class="dialog__row">
-            <div class="dialog__form-group" readonly>
+            <div class="dialog__form-group">
               <label>Số điện thoại</label>
-              <input type="text" id="detail-account-phone" readonly />
+              <input type="text" id="add-account-phone" readonly />
             </div>
-            <div class="dialog__form-group" readonly>
+            <div class="dialog__form-group">
               <label>Email</label>
-              <input type="text" id="detail-account-email" readonly/>
+              <input type="text" id="add-account-email" readonly />
+            </div>
+          </div>
+          <div class="dialog__row">
+            <div class="dialog__form-group full">
+              <label>Địa chỉ</label>
+              <input type="text" id="add-account-address" readonly />
             </div>
           </div>
           <div class="dialog__row">
             <div class="dialog__form-group">
-            <label>Phân quyền</label>
-            <select id="detail-account-privilege" disabled>
-                <option value="" selected>Chọn Phân quyền</option>
-                <option value="1">Quản lý</option>
-                <option value="2">Nhân viên</option>
-                <option value="3">Khách hàng</option>
-            </select>
+              <label>Tên tài khoản</label>
+              <input type="text" id="add-account-username" readonly />
+            </div>
+            <div class="dialog__form-group">
+              <label>Mật khẩu</label>
+              <input type="text" id="add-account-password" readonly />
+            </div>
           </div>
+          <div class="dialog__row">
+            <div class="dialog__form-group">
+              <label>Phân quyền</label>
+              <select id="add-account-privilege" disabled>
+                  <option value="" selected>Chọn Phân quyền</option>
+                  <option value="1">Quản lý</option>
+                  <option value="2">Nhân viên</option>
+                  <option value="3">Khách hàng</option>
+              </select>
+              <button>Chi tiết</button>
+            </div>
             <div class="dialog__form-group">
               <label>Trạng thái</label>
-              <select id="detail-account-status" disabled>
+              <select id="add-account-status" disabled>
                 <option value="" selected>Chọn Trạng thái</option>
                 <option value="1">Hoạt động</option>
-                <option value="2">Tạm dừng</option>
+                <option value="0">Tạm dừng</option>
               </select>
             </div>
           </div>
@@ -85,13 +92,7 @@ export function detailAccountData(idAccountSelected) {
     ".dialog__form-group > select"
   );
   selectElement.forEach((select) => {
-    select.addEventListener("change", function () {
-      if (select.value !== "") {
-        select.classList.add("changed");
-      } else {
-        select.classList.remove("changed");
-      }
-    });
+    isNotFirstItemSelected(select);
   });
 
   // Gán sự kiện cho nút "Đóng" dialog

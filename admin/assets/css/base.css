@@ -299,12 +299,14 @@ body {
   border-bottom: 2px solid var(--primary-color);
 } */
 .main__table tbody td > span:is(.active, .stop) {
-  background: #98fb98;
+  /* background: #98fb98; */
+  background: #01e51c;
   padding: 4px 6px;
   border-radius: 4px;
 }
 .main__table tbody td > span.stop {
-  background: #ff8f8f;
+  /* background: #ff8f8f; */
+  background: #f44336;
 }
 .main__table tbody td:last-of-type {
   display: flex;

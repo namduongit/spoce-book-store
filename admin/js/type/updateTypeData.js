@@ -1,3 +1,5 @@
+import { isNotFirstItemSelected } from "../selectEvents.js";
+
 // Hàm thiết lập sự kiện Sửa một thể loại cho bảng
 export function updateTypeData(idTypeSelected) {
   // Phải truy vấn từ CSDL thông qua idTypeSelected để lấy được dữ liệu của đối tượng hiện tại
@@ -38,7 +40,7 @@ export function updateTypeData(idTypeSelected) {
               <select id="update-type-status" disabled>
                 <option value="" selected>Chọn Trạng thái</option>
                 <option value="1">Hoạt động</option>
-                <option value="2">Tạm dừng</option>
+                <option value="0">Tạm dừng</option>
               </select>
             </div>
             <div class="dialog__form-group">
@@ -61,13 +63,7 @@ export function updateTypeData(idTypeSelected) {
     ".dialog__form-group > select"
   );
   selectElement.forEach((select) => {
-    select.addEventListener("change", function () {
-      if (select.value !== "") {
-        select.classList.add("changed");
-      } else {
-        select.classList.remove("changed");
-      }
-    });
+    isNotFirstItemSelected(select);
   });
 
   // Gán sự kiện cho nút "Sửa" dialog
@@ -75,12 +71,10 @@ export function updateTypeData(idTypeSelected) {
     .getElementById("update-type-button")
     .addEventListener("click", () => {
       // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-      const id = document.getElementById("update-type-id");
       const name = document.getElementById("update-type-name");
       const status = document.getElementById("update-type-status");
 
       // ... (Xử lý tiếp ở đây)
-      console.log(id.value);
       console.log(name.value);
       console.log(status.value);
     });

@@ -1,3 +1,5 @@
+import { isNotFirstItemSelected } from "../selectEvents.js";
+
 // Hàm thiết lập sự kiện Thêm một thể loại cho bảng
 export function addTypeData() {
   // Biến chứa đối tượng là nút "Thêm"
@@ -40,7 +42,7 @@ export function addTypeData() {
                 <select id="add-type-status">
                   <option value="" selected>Chọn Trạng thái</option>
                   <option value="1">Hoạt động</option>
-                  <option value="2">Tạm dừng</option>
+                  <option value="0">Tạm dừng</option>
                 </select>
               </div>
               <div class="dialog__form-group">
@@ -63,13 +65,7 @@ export function addTypeData() {
       ".dialog__form-group > select"
     );
     selectElement.forEach((select) => {
-      select.addEventListener("change", function () {
-        if (select.value !== "") {
-          select.classList.add("changed");
-        } else {
-          select.classList.remove("changed");
-        }
-      });
+      isNotFirstItemSelected(select);
     });
 
     // Gán sự kiện cho nút "thêm" dialog
