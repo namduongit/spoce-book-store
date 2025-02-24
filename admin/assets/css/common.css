@@ -1,0 +1,313 @@
+/* <===== Input Text Form 1 =====> */
+.inp-text-form-1 {
+  position: relative;
+}
+.inp-text-form-1 input {
+  width: 100%;
+  height: 30px;
+  padding-left: 10px;
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  background: #f3f3f3;
+  color: #000;
+  font-size: 14px;
+  /* font-weight: 550; */
+  transition: 0.3s ease-in-out;
+  box-shadow: 0 0 0 5px transparent;
+}
+.inp-text-form-1 span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 30px;
+  padding-left: 10px;
+  color: #dedede;
+  font-size: 14px;
+  /* font-weight: 600; */
+  line-height: 30px;
+  transition: 0.3s ease-in-out;
+  pointer-events: none;
+}
+.inp-text-form-1 input:focus + span,
+.inp-text-form-1 input:valid + span {
+  color: #000;
+  transform: translateY(-30px) translateX(-10px) scale(0.95);
+}
+.inp-text-form-1 input:not(:focus) + span {
+  color: #dedede;
+}
+.inp-text-form-1 input:hover,
+.inp-text-form-1 input:focus {
+  border: 2px solid #000;
+}
+.inp-text-form-1 input:hover + span {
+  color: #000;
+}
+
+/* <===== Select Form 1 =====> */
+.slt-form-1 {
+  position: relative;
+}
+.slt-form-1 input {
+  width: 100%;
+  height: 30px;
+  padding-left: 10px;
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  background: #f3f3f3;
+  color: #000;
+  font-size: 14px;
+  /* font-weight: 550; */
+  transition: 0.3s ease-in-out;
+  box-shadow: 0 0 0 5px transparent;
+  cursor: pointer;
+}
+.slt-form-1 span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 30px;
+  padding-left: 10px;
+  color: #dedede;
+  font-size: 14px;
+  /* font-weight: 600; */
+  line-height: 30px;
+  transition: 0.3s ease-in-out;
+  pointer-events: none;
+}
+.slt-form-1 ul {
+  position: absolute;
+  top: 35px;
+  left: 0;
+  width: 100%;
+  border-radius: 0 0 4px 4px;
+  background-color: #fff;
+  color: #dedede;
+  font-size: 14px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s ease-in-out;
+}
+.slt-form-1 ul li {
+  height: 30px;
+  padding-left: 10px;
+  line-height: 30px;
+  cursor: pointer;
+}
+.slt-form-1 input:focus + span,
+.slt-form-1 input:valid + span {
+  color: #000;
+  transform: translateY(-30px) translateX(-10px) scale(0.95);
+}
+.slt-form-1 input:not(:focus) + span {
+  color: #dedede;
+}
+.slt-form-1 input:hover,
+.slt-form-1 input:focus {
+  border: 2px solid #000;
+}
+.slt-form-1 input:hover + span {
+  color: #000;
+}
+.slt-form-1 input:focus ~ ul {
+  opacity: 1;
+  visibility: visible;
+}
+.slt-form-1 input:focus ~ ul li:hover,
+.slt-form-1 input:focus ~ ul li.select {
+  background: #000;
+  color: #fff;
+}
+
+/* <===== Detail / Add / Update Dialog =====> */
+.dialog:where(.account, .type) {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* width: 300px; */
+  background: white;
+  padding: 22px 24px;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 5px 30px 0 rgba(0, 0, 0, 0.2);
+}
+.dialog__title {
+  position: relative;
+  top: -4px;
+  font-size: 20px;
+  text-align: center;
+}
+.dialog__line {
+  width: 100%;
+  height: 4px;
+  background: #000;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+.dialog__row {
+  display: flex;
+  align-items: center;
+  gap: 0 24px;
+  width: 100%;
+  margin-top: 10px;
+}
+.dialog__form-group {
+  width: 50%;
+}
+.dialog__form-group label,
+.dialog__form-group input,
+.dialog__form-group select {
+  width: 100%;
+  height: 40px;
+  color: #dedede;
+  font-size: 14px;
+  transition: 0.3s ease-in-out;
+}
+.dialog__form-group input {
+  padding-left: 8px;
+  outline: none;
+  border: 1px solid #dedede;
+  margin-top: 4px;
+  border-radius: 12px;
+  pointer-events: auto;
+}
+.dialog__form-group input:read-only {
+  background: #dedede;
+  border: none;
+}
+.dialog__form-group input::placeholder {
+  color: #dedede;
+  font-size: 14px;
+}
+.dialog__form-group:has(input:focus) label {
+  color: #000;
+}
+.dialog__form-group input:focus {
+  border-color: #000;
+  color: #000;
+}
+.dialog__form-group:has(input:not(:placeholder-shown)) label {
+  color: #000;
+}
+.dialog__form-group:has(input:not(:placeholder-shown)) input {
+  border-color: #000;
+  color: #000;
+}
+.dialog__form-group select {
+  padding-left: 8px;
+  outline: none;
+  border: 1px solid #dedede;
+  margin-top: 4px;
+  border-radius: 12px;
+  transition: 0.3s ease-in-out;
+  pointer-events: auto;
+}
+.dialog__form-group select:hover,
+.dialog__form-group select.changed {
+  border-color: #000;
+  color: #000;
+}
+.dialog__form-group:has(select:hover, select.changed) label {
+  color: #000;
+}
+.dialog__form-group:has(select:disabled) label {
+  color: #000;
+}
+.dialog__form-group select:disabled {
+  background: #dedede;
+  border: none;
+  color: #000;
+}
+.dialog__icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+.dialog__icons i {
+  width: 120px;
+  height: 120px;
+  font-size: 88px;
+  line-height: 120px;
+  text-align: center;
+}
+.dialog__icons i:nth-of-type(2) {
+  width: 80px;
+  height: 80px;
+  font-size: 54px;
+  line-height: 80px;
+}
+.dialog__buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-top: 34px;
+}
+/* .dialog__buttons button:first-of-type {
+  margin-left: auto;
+} */
+.dialog__buttons button,
+.dialog__close {
+  width: 250px;
+  height: 30px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+}
+.dialog__buttons button.add {
+  background: #699f4c;
+  border: 2px solid #699f4c;
+}
+.dialog__buttons button.add:hover {
+  background: #fff;
+  color: #699f4c;
+}
+.dialog__buttons button.update {
+  background: #bf873e;
+  border: 2px solid #bf873e;
+}
+.dialog__buttons button.update:hover {
+  background: #fff;
+  color: #bf873e;
+}
+.dialog__buttons button.yes {
+  width: 150px;
+  background: #01e51c;
+  border: 2px solid #01e51c;
+}
+.dialog__buttons button.yes:hover {
+  background: #fff;
+  color: #01e51c;
+}
+.dialog__buttons button.no {
+  width: 150px;
+  background: #f44336;
+  border: 2px solid #f44336;
+}
+.dialog__buttons button.no:hover {
+  background: #fff;
+  color: #f44336;
+}
+.dialog__close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border: none;
+  color: #000;
+  font-size: 18px;
+  line-height: 40px;
+}
+.dialog__close:hover {
+  color: #f44336;
+}

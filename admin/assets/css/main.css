@@ -1,0 +1,48 @@
+:root {
+  --width-left-menu: 250px;
+}
+
+/* <===== Main =====> */
+.main {
+  position: relative;
+  left: var(--width-left-menu);
+  width: calc(100% - var(--width-left-menu));
+  transition: 0.3s ease;
+}
+.sidebar.hide ~ .main {
+  width: calc(100% - 60px);
+  left: 60px;
+}
+
+/* <=== Main Line ===> */
+.main .main__line {
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  grid-gap: 24px;
+  height: 56px;
+  width: 100%;
+  background: var(--primary-color);
+  padding: 0 24px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+.main .main__line::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: -20px -20px 0 var(--primary-color);
+}
+.main .main__line .icon {
+  color: #fff;
+  cursor: pointer;
+}

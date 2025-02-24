@@ -1,0 +1,135 @@
+// Hàm thiết lập sự kiện Sửa một người dùng cho bảng
+export function updateAccountData(idAccountSelected) {
+  // Phải truy vấn từ CSDL thông qua idAccountSelected để lấy được dữ liệu của đối tượng hiện tại
+  // ...
+
+  // Biến chứa đối tượng là nút "Sửa"
+  const updateButton = document.getElementById("update-button-account");
+
+  // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
+  updateButton.classList.add("active");
+
+  // Tạo một dialog để sửa một người dùng
+  const updateDialog = document.createElement("dialog");
+  // - Định dạng dialog
+  updateDialog.classList.add("dialog");
+  updateDialog.classList.add("account");
+  updateDialog.style.width = "672px";
+  // - Ghi nội dung dialog
+  updateDialog.innerHTML = `
+        <h1 class="dialog__title">Sửa người dùng</h1>
+        <button id="close-account-button" class="dialog__close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="dialog__line"></div>
+        <div class="dialog__row">
+          <div class="dialog__form-group">
+            <label>Mã người dùng</label>
+            <input type="text" id="update-account-id" readonly />
+          </div>
+          <div class="dialog__form-group">
+            <label>Tên đăng nhập</label>
+            <input type="text" id="update-account-username" placeholder="Nhập Tên đăng nhập" autofocus/>
+          </div>
+        </div>
+        <div class="dialog__row">
+          <div class="dialog__form-group">
+            <label>Mật khẩu</label>
+            <input type="text" id="update-account-password" placeholder="Nhập Mật khẩu" />
+          </div>
+          <div class="dialog__form-group">
+            <label>Mật khẩu lần 2</label>
+            <input type="text" id="update-account-password-2" placeholder="Nhập Mật khẩu lần 2" />
+          </div>
+        </div>
+        <div class="dialog__row">
+          <div class="dialog__form-group">
+            <label>Số điện thoại</label>
+            <input type="text" id="update-account-phone" placeholder="Nhập Số điện thoại" />
+          </div>
+          <div class="dialog__form-group">
+            <label>Email</label>
+            <input type="text" id="update-account-email" placeholder="Nhập Email"/>
+          </div>
+        </div>
+        <div class="dialog__row">
+          <div class="dialog__form-group">
+          <label>Phân quyền</label>
+          <select id="update-account-privilege">
+              <option value="" selected>Chọn Phân quyền</option>
+              <option value="1">Quản lý</option>
+              <option value="2">Nhân viên</option>
+              <option value="3">Khách hàng</option>
+          </select>
+        </div>
+          <div class="dialog__form-group">
+            <label>Trạng thái</label>
+            <select id="update-account-status" disabled>
+              <option value="" selected>Chọn Trạng thái</option>
+              <option value="1">Hoạt động</option>
+              <option value="2">Tạm dừng</option>
+            </select>
+          </div>
+        </div>
+        <div class="dialog__buttons">
+          <button id="update-account-button" class="update">Sửa</button>
+        </div>
+      `;
+
+  // Thêm vào body
+  document.body.appendChild(updateDialog);
+
+  // Hiển thị updateDialog
+  updateDialog.showModal();
+
+  // Sự kiện cho các thành phần trong dialog
+  // - Nếu các select đã được chọn giá trị khác mặc định thì đổi định dạng
+  const selectElement = document.querySelectorAll(
+    ".dialog__form-group > select"
+  );
+  selectElement.forEach((select) => {
+    select.addEventListener("change", function () {
+      if (select.value !== "") {
+        select.classList.add("changed");
+      } else {
+        select.classList.remove("changed");
+      }
+    });
+  });
+
+  // Gán sự kiện cho nút "Sửa" dialog
+  document
+    .getElementById("update-account-button")
+    .addEventListener("click", () => {
+      // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
+      const id = document.getElementById("update-account-id");
+      const username = document.getElementById("update-account-username");
+      const password = document.getElementById("update-account-password");
+      const password2 = document.getElementById("update-account-password-2");
+      const phone = document.getElementById("update-account-phone");
+      const email = document.getElementById("update-account-email");
+      const privilege = document.getElementById("update-account-privilege");
+      const status = document.getElementById("update-account-status");
+
+      // ... (Xử lý tiếp ở đây)
+      console.log(id.value);
+      console.log(username.value);
+      console.log(password.value);
+      console.log(password2.value);
+      console.log(phone.value);
+      console.log(email.value);
+      console.log(privilege.value);
+      console.log(status.value);
+    });
+
+  // Gán sự kiện cho nút "Đóng" dialog
+  document
+    .getElementById("close-account-button")
+    .addEventListener("click", () => {
+      // Xoá dialog
+      updateDialog.remove();
+
+      // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
+      updateButton.classList.remove("active");
+    });
+}
