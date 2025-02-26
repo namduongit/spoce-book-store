@@ -3,39 +3,51 @@ function show_detail_product(product_id) {
 
     detail_html = `
         <div class="show-detail-product__container">
-
-            <div class="show-detail-product__header">
-
-            </div>
-
-            <div class="show-detail-product__content d-flex">
+            <div class="show-detail-product__content d-flex just-content-spbt">
                 <div class="show-detail-product__image">
                     <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="Tên Sách">
                 </div>
 
                 <div class="show-detail-product__purchase">
-                    <h1 class="show-detail-product__title">Người truyền lửa</h1>
-                    <p class="show-detail-product__code">Barcode: 893532502468</p>
-                    <p class="show-detail-product__genre">Sách Văn Học Việt Nam</p>
-                    <p class="show-detail-product__price">
-                        Giá gốc: <span class="show-detail-product__price--old">300,000₫</span>
-                        <br>
-                        Giá bán: <span class="show-detail-product__price--new">250,000₫</span>
-                    </p>
-                    <p class="show-detail-product__status show-detail-product__status--instock">Còn hàng</p>
-                    <div class="show-detail-product__quantity">
-                        <button class="show-detail-product__quantity-btn show-detail-product__quantity-btn--decrease">-</button>
-                        <input type="text" value="1" class="show-detail-product__quantity-input">
-                        <button class="show-detail-product__quantity-btn show-detail-product__quantity-btn--increase">+</button>
+
+                    <div class="show-detail-product__header">
+                        <h1 class="show-detail-product__title">Người truyền lửa</h1>
+                        <p class="show-detail-product__genre"> Barcode:
+                            <b class="font-weight-bold">893532502468</b>
+                        </p>
+                        <p class="show-detail-product__genre">Tác giả:
+                            <b class="font-weight-bold">Dương chưa thêm</b>
+                        </p>
+                        <p class="show-detail-product__genre">Thể loại:
+                            <b class="font-weight-bold">Dương chưa thêm</b>
+                        </p>
+
+
+                        <p class="show-detail-product__genre">
+                            Giá bán:&nbsp;
+                            <b class="show-detail-product__price--old">300,000₫</b>
+                            <b class="show-detail-product__price--new">250,000₫</b>
+                        </p>
                     </div>
-                    <div class="show-detail-product__actions">
-                        <button class="show-detail-product__btn show-detail-product__btn--add-to-cart">
-                            <i class="fa-solid fa-cart-plus"></i> Thêm vào giỏ hàng
-                        </button>
-                        <button class="show-detail-product__btn show-detail-product__btn--buy-now">
-                            <i class="fa-solid fa-bolt"></i> Mua ngay
-                        </button>
+
+                    <div style="margin-top: auto;">
+                        <div class="show-detail-product__quantity d-flex">
+                            <p class="show-detail-product__status show-detail-product__status--instock">Còn hàng</p>
+                            <button class="show-detail-product__quantity-btn show-detail-product__quantity-btn--decrease">-</button>
+                            <input type="text" value="1" class="show-detail-product__quantity-input">
+                            <button class="show-detail-product__quantity-btn show-detail-product__quantity-btn--increase">+</button>
+                        </div>
+
+                        <div class="show-detail-product__actions">
+                            <button class="show-detail-product__btn show-detail-product__btn--buy-now">
+                                <i class="fa-solid fa-bolt"></i>&nbsp;Mua ngay
+                            </button>
+                            <button class="show-detail-product__btn show-detail-product__btn--add-to-cart">
+                                <i class="fa-solid fa-cart-plus"></i>&nbsp;Giỏ hàng
+                            </button>
+                        </div>
                     </div>
+
                 </div>
             </div>
 
@@ -79,7 +91,7 @@ function show_option(object) {
                 <li><strong>Số trang:</strong> 350</li>
                 <li><strong>Loại bìa:</strong> Bìa cứng</li>
                 <li><strong>Tác giả:</strong> Nguyễn Nam Dương</li>
-                <li><strong>Nhà xuất bản:</strong> Spoce Book Store/li>
+                <li><strong>Nhà xuất bản:</strong> Spoce Book Store</li>
             </ul>
         `;
     } else {

@@ -6,64 +6,23 @@
  * Date: 13-02-2025
  */
 
+// $dsn = "mysql:host=localhost:3306;dbname=book_store;charset=utf8";
+
 class app_libs_DBConnection {
-    protected $server_name;
-    protected $host;
-    protected $port;
-    protected $database_name;
-    protected $username;
-    protected $password;
+    protected $dsn = "mysql:host=localhost:3306;dbname=book_store;charset=utf8";
+    protected $username = "book_store";
+    protected $password = "book_store";
 
     protected $table_name = 'building';
-
-    protected static $connection = null;
-
     // Mảng lưu trữ các param được dùng để truy vấn
     protected $queryParam = [];
 
-    public function __construct(
-        $server_name = "",
-        $host = "",
-        $database_name = "",
-        $username = "",
-        $password = "",
-        $port = null
-    ) {
-        $this->server_name = $server_name;
-        $this->host = $host;
-        $this->database_name = $database_name;
-        $this->username = $username;
-        $this->password = $password;
-        $this->port = $port;
-    }
+    protected static $connection = null;
 
     public function open_connect() {
         if (self::$connection == null) {
             try {
-                $port_part = !empty($this->port) ? ";port={$this->port}" : "";
-
-                switch (strtolower($this->server_name)) {
-                    case "mysql":
-                        $dsn = "mysql:host={$this->host}{$port_part};dbname={$this->database_name};charset=utf8";
-                        break;
-
-                    case "sqlsrv":
-                        $dsn = "sqlsrv:Server={$this->host}{$port_part};Database={$this->database_name}";
-                        break;
-
-                    case "pgsql":
-                        $dsn = "pgsql:host={$this->host}{$port_part};dbname={$this->database_name}";
-                        break;
-
-                    case "sqlite":
-                        $dsn = "sqlite:{$this->database_name}";
-                        break;
-
-                    default:
-                        throw new Exception("Hệ quản trị cơ sở dữ liệu không được hỗ trợ: {$this->server_name}");
-                }
-
-                self::$connection = new PDO($dsn, $this->username, $this->password);
+                self::$connection = new PDO($this->dsn, $this->username, $this->password);
                 self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             } catch (Exception $exception) {
@@ -161,6 +120,7 @@ class app_libs_DBConnection {
 
         return $this->query($sql, []);
     }
-
-
 }
+
+
+
