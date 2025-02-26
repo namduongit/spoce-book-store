@@ -368,6 +368,10 @@
     color: #666;
 }
 
+.show-detail-product__genre {
+    margin-bottom: 10px;
+}
+
 /* --------------------- Phần nội dung chính (Ảnh + Mua hàng) --------------------- */
 
 /* ----------------------------- Ảnh sản phẩm --------------------------------- */
@@ -441,7 +445,8 @@
 /* --------------------- Nút bấm (Mua hàng / Giỏ hàng) --------------------- */
 .show-detail-product__actions {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 0 10px;
 }
 .show-detail-product__btn {
     padding: 1rem;

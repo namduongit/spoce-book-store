@@ -5,9 +5,7 @@ function show_detail_product(product_id) {
         <div class="show-detail-product__container">
 
             <div class="show-detail-product__header">
-                <h1 class="show-detail-product__title">Người truyền lửa</h1>
-                <p class="show-detail-product__code">Barcode: 893532502468</p>
-                <p class="show-detail-product__genre">Sách Văn Học Việt Nam</p>
+
             </div>
 
             <div class="show-detail-product__content d-flex">
@@ -16,6 +14,9 @@ function show_detail_product(product_id) {
                 </div>
 
                 <div class="show-detail-product__purchase">
+                    <h1 class="show-detail-product__title">Người truyền lửa</h1>
+                    <p class="show-detail-product__code">Barcode: 893532502468</p>
+                    <p class="show-detail-product__genre">Sách Văn Học Việt Nam</p>
                     <p class="show-detail-product__price">
                         Giá gốc: <span class="show-detail-product__price--old">300,000₫</span>
                         <br>
