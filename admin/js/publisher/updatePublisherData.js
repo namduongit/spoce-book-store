@@ -16,7 +16,7 @@ export function updatePublisherData(idPublisherSelected) {
   // - Định dạng dialog
   updateDialog.classList.add("dialog");
   updateDialog.classList.add("publisher");
-  updateDialog.style.width = "672px";
+  updateDialog.style.width = "398px";
   // - Ghi nội dung dialog
   updateDialog.innerHTML = `
             <h1 class="dialog__title">Sửa nhà xuất bản</h1>
@@ -25,25 +25,25 @@ export function updatePublisherData(idPublisherSelected) {
             </button>
             <div class="dialog__line"></div>
             <div class="dialog__row">
-              <div class="dialog__form-group">
+              <div class="dialog__form-group full">
                 <label>Mã nhà xuất bản</label>
                 <input type="text" id="update-publisher-id" readonly />
               </div>
-              <div class="dialog__form-group">
+            </div>
+            <div class="dialog__row">
+              <div class="dialog__form-group full">
                 <label>Tên nhà xuất bản</label>
                 <input type="text" id="update-publisher-name" placeholder="Nhập Tên nhà xuất bản" autofocus/>
               </div>
             </div>
             <div class="dialog__row">
-              <div class="dialog__form-group">
+              <div class="dialog__form-group full">
                 <label>Trạng thái</label>
                 <select id="update-publisher-status" disabled>
                   <option value="" selected>Chọn Trạng thái</option>
                   <option value="1">Hoạt động</option>
                   <option value="0">Tạm dừng</option>
                 </select>
-              </div>
-              <div class="dialog__form-group">
               </div>
             </div>
             <div class="dialog__buttons">

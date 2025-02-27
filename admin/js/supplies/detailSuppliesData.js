@@ -1,3 +1,5 @@
+import { isNotFirstItemSelected } from "../selectEvents.js";
+
 // Hàm thiết lập sự kiện Sửa một nhà cung cấp cho bảng
 export function detailSuppliesData(idSuppliesSelected) {
   // Phải truy vấn từ CSDL thông qua idSuppliesSelected để lấy được dữ liệu của đối tượng hiện tại
@@ -14,7 +16,7 @@ export function detailSuppliesData(idSuppliesSelected) {
   // - Định dạng dialog
   detailDialog.classList.add("dialog");
   detailDialog.classList.add("supplies");
-  detailDialog.style.width = "672px";
+  detailDialog.style.width = "772px";
   // - Ghi nội dung dialog
   detailDialog.innerHTML = `
             <h1 class="dialog__title">Chi tiết nhà cung cấp</h1>

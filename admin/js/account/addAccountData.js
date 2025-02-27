@@ -88,7 +88,7 @@ export function addAccountData() {
     // - Định dạng dialog
     addDialog.classList.add("dialog");
     addDialog.classList.add("account");
-    addDialog.style.width = "672px";
+    addDialog.style.width = "772px";
     // - Ghi nội dung dialog
     addDialog.innerHTML = `
       <h1 class="dialog__title">Thêm người dùng</h1>

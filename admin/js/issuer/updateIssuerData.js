@@ -16,7 +16,7 @@ export function updateIssuerData(idIssuerSelected) {
   // - Định dạng dialog
   updateDialog.classList.add("dialog");
   updateDialog.classList.add("issuer");
-  updateDialog.style.width = "672px";
+  updateDialog.style.width = "398px";
   // - Ghi nội dung dialog
   updateDialog.innerHTML = `
               <h1 class="dialog__title">Sửa nhà phát hành</h1>
@@ -25,25 +25,25 @@ export function updateIssuerData(idIssuerSelected) {
               </button>
               <div class="dialog__line"></div>
               <div class="dialog__row">
-                <div class="dialog__form-group">
+                <div class="dialog__form-group full">
                   <label>Mã nhà phát hành</label>
                   <input type="text" id="update-issuer-id" readonly />
                 </div>
-                <div class="dialog__form-group">
+              </div>
+              <div class="dialog__row">
+                <div class="dialog__form-group full">
                   <label>Tên nhà phát hành</label>
                   <input type="text" id="update-issuer-name" placeholder="Nhập Tên nhà phát hành" autofocus/>
                 </div>
               </div>
               <div class="dialog__row">
-                <div class="dialog__form-group">
+                <div class="dialog__form-group full">
                   <label>Trạng thái</label>
                   <select id="update-issuer-status" disabled>
                     <option value="" selected>Chọn Trạng thái</option>
                     <option value="1">Hoạt động</option>
                     <option value="0">Tạm dừng</option>
                   </select>
-                </div>
-                <div class="dialog__form-group">
                 </div>
               </div>
               <div class="dialog__buttons">

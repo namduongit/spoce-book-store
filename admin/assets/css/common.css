@@ -29,20 +29,55 @@
   transition: 0.3s ease-in-out;
   pointer-events: none;
 }
-.inp-text-form-1 input:focus + span,
-.inp-text-form-1 input:valid + span {
+.inp-text-form-1 input:focus ~ span,
+.inp-text-form-1 input:valid ~ span {
   color: #000;
   transform: translateY(-30px) translateX(-10px) scale(0.95);
 }
-.inp-text-form-1 input:not(:focus) + span {
+.inp-text-form-1 input:not(:focus) ~ span {
   color: #dedede;
 }
 .inp-text-form-1 input:hover,
 .inp-text-form-1 input:focus {
   border: 2px solid #000;
 }
-.inp-text-form-1 input:hover + span {
+.inp-text-form-1 input:hover ~ span {
   color: #000;
+}
+.inp-text-form-1 input[type="date"] {
+  color: transparent;
+}
+.inp-text-form-1 input[type="date"]:valid,
+.inp-text-form-1 input[type="date"]:focus {
+  color: #000;
+}
+.inp-text-form-1.date {
+  display: flex;
+  align-items: center;
+  gap: 0 12px;
+}
+.inp-text-form-1.date input[type="date"] {
+  padding-left: 4px;
+  width: calc(50% - 6px);
+  font-family: "Poppins";
+}
+.inp-text-form-1.date > i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: #dedede;
+  font-size: 6px;
+  transform: translate3d(-50%, -50%, 0);
+  transition: 0.3s ease-in-out;
+}
+.inp-text-form-1.date:has(input:hover) > i,
+.inp-text-form-1.date:has(input:focus) > i,
+.inp-text-form-1.date:has(input:valid) > i {
+  color: #000;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  pointer-events: none;
 }
 
 /* <===== Select Form 1 =====> */
@@ -84,7 +119,7 @@
   width: 100%;
   border-radius: 0 0 4px 4px;
   background-color: #fff;
-  color: #dedede;
+  color: #c5c5c5;
   font-size: 14px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   opacity: 0;
@@ -126,9 +161,13 @@
 .dialog:where(
     .account,
     .supplies,
+    .discount,
+    .book,
+    .author,
+    .category,
+    .cover,
     .publisher,
     .issuer,
-    .type,
     .address-select
   ) {
   position: fixed;
@@ -169,11 +208,15 @@
   position: relative;
   width: 50%;
 }
+.dialog__form-group.book {
+  width: calc(100% / 3);
+}
 .dialog__form-group.full {
   width: 100%;
 }
 .dialog__form-group label,
 .dialog__form-group input,
+.dialog__form-group textarea,
 .dialog__form-group select {
   width: 100%;
   height: 40px;
@@ -181,7 +224,7 @@
   font-size: 16px;
   transition: 0.3s ease-in-out;
 }
-.dialog__form-group input {
+.dialog__form-group :is(input, textarea) {
   padding-left: 8px;
   outline: none;
   border: 1px solid #dedede;
@@ -189,32 +232,33 @@
   border-radius: 12px;
   pointer-events: auto;
 }
-.dialog__form-group input:read-only {
+.dialog__form-group :is(input, textarea):read-only {
   background: #dedede;
   border: none;
 }
-.dialog__form-group input::placeholder {
+.dialog__form-group :is(input, textarea)::placeholder {
   color: #dedede;
   font-size: 16px;
   transition: 0.3s ease-in-out;
 }
-.dialog__form-group input:hover::placeholder {
+.dialog__form-group :is(input, textarea):hover::placeholder {
   color: #000;
 }
-.dialog__form-group input:focus::placeholder {
+.dialog__form-group :is(input, textarea):focus::placeholder {
   color: #dedede;
 }
-.dialog__form-group:has(input:is(:focus, :hover)) label {
+.dialog__form-group:has(:is(input, textarea):is(:focus, :hover)) label {
   color: #000;
 }
-.dialog__form-group input:is(:focus, :hover) {
+.dialog__form-group :is(input, textarea):is(:focus, :hover) {
   border-color: #000;
   color: #000;
 }
-.dialog__form-group:has(input:not(:placeholder-shown)) label {
+.dialog__form-group:has(:is(input, textarea):not(:placeholder-shown)) label {
   color: #000;
 }
-.dialog__form-group:has(input:not(:placeholder-shown)) input {
+.dialog__form-group:has(input:not(:placeholder-shown)) input,
+.dialog__form-group:has(textarea:not(:placeholder-shown)) textarea {
   border-color: #000;
   color: #000;
 }
@@ -247,9 +291,9 @@
   position: absolute;
   top: 0;
   right: 0;
-  background: #000;
+  background: #2286e3;
   border: none;
-  width: 80px;
+  width: 72px;
   height: 20px;
   color: #fff;
   font-size: 12px;
@@ -259,7 +303,7 @@
   transition: 0.2s ease-in-out;
 }
 .dialog__form-group button:hover {
-  background: var(--primary-color);
+  background: #1d71c0;
 }
 .dialog__icons {
   display: flex;
@@ -319,12 +363,12 @@
 }
 .dialog__buttons button.yes {
   width: 150px;
-  background: #01e51c;
-  border: 2px solid #01e51c;
+  background: #3dc55d;
+  border: 2px solid #3dc55d;
 }
 .dialog__buttons button.yes:hover {
   background: #fff;
-  color: #01e51c;
+  color: #3dc55d;
 }
 .dialog__buttons button.no {
   width: 150px;
@@ -349,4 +393,65 @@
 }
 .dialog__close:hover {
   color: #f44336;
+}
+.dialog__form-group.image {
+  position: absolute;
+  width: calc(100% / 3 - 32px);
+  top: 90px;
+  left: 24px;
+}
+.dialog__form-group.image img {
+  display: block;
+  width: calc(calc(232px * 3) / 4);
+  height: 232px;
+  background: #dedede;
+  margin: 7px auto;
+}
+.dialog__form-group.image button {
+  display: inline-block;
+  width: 100%;
+  top: calc(100% - 40px);
+  height: 40px;
+  background-color: #2286e3;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+.dialog__form-group.image button:hover {
+  background-color: #1d71c0;
+}
+.dialog__row:has(.dialog__form-group.description) {
+  margin: 0;
+}
+.dialog__form-group.description {
+  position: absolute;
+  top: 418px;
+  left: 24px;
+  width: calc(100% / 3 - 32px);
+}
+.dialog__form-group.description textarea {
+  height: 124px;
+  padding-top: 8px;
+  resize: "off";
+}
+.dialog__form-group:has(input[type="date"]) label {
+  color: #dedede !important;
+}
+.dialog__form-group input[type="date"] {
+  border-color: #dedede !important;
+  color: #dedede !important;
+}
+.dialog__form-group input[type="date"]:hover,
+.dialog__form-group input[type="date"]:focus,
+.dialog__form-group input[type="date"].hasValidDate {
+  border-color: #000 !important;
+  color: #000 !important;
+}
+.dialog__form-group:has(input[type="date"]:hover) label,
+.dialog__form-group:has(input[type="date"]:focus) label,
+.dialog__form-group:has(input[type="date"].hasValidDate) label {
+  color: #000 !important;
 }

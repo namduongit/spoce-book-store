@@ -16,7 +16,7 @@ export function updateSuppliesData(idSuppliesSelected) {
   // - Định dạng dialog
   updateDialog.classList.add("dialog");
   updateDialog.classList.add("supplies");
-  updateDialog.style.width = "672px";
+  updateDialog.style.width = "772px";
   // - Ghi nội dung dialog
   updateDialog.innerHTML = `
             <h1 class="dialog__title">Sửa nhà cung cấp</h1>

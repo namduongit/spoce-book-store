@@ -1,24 +1,24 @@
 //
-export function lockTypeData(idTypeSelected) {
-  // Phải truy vấn từ CSDL thông qua idTypeSelected để lấy được dữ liệu của đối tượng hiện tại
+export function lockBookData(idBookSelected) {
+  // Phải truy vấn từ CSDL thông qua idBookSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
 
   // Biến chứa đối tượng là nút "Khoá"
-  const lockButton = document.getElementById("lock-button-type");
+  const lockButton = document.getElementById("lock-button-book");
 
   // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
   lockButton.classList.add("active");
 
-  // Tạo một dialog để khoá - mở khoá một thể loại
+  // Tạo một dialog để khoá - mở khoá một sách
   const lockDialog = document.createElement("dialog");
   // - Định dạng dialog
   lockDialog.classList.add("dialog");
-  lockDialog.classList.add("type");
+  lockDialog.classList.add("book");
   lockDialog.style.width = "400px";
   // - Ghi nội dung dialog
   lockDialog.innerHTML = `
-            <h1 class="dialog__title">Khoá thể loại</h1>
-            <button id="close-type-button" class="dialog__close">
+            <h1 class="dialog__title">Khoá sách</h1>
+            <button id="close-book-button" class="dialog__close">
               <i class="fa-solid fa-xmark"></i>
             </button>
             <div class="dialog__line"></div>
@@ -40,7 +40,7 @@ export function lockTypeData(idTypeSelected) {
   lockDialog.showModal();
 
   // Gán sự kiện cho nút "Đóng" dialog
-  document.getElementById("close-type-button").addEventListener("click", () => {
+  document.getElementById("close-book-button").addEventListener("click", () => {
     // Xoá dialog
     lockDialog.remove();
 

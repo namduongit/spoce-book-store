@@ -16,7 +16,7 @@ export function updateAccountData(idAccountSelected) {
   // - Định dạng dialog
   updateDialog.classList.add("dialog");
   updateDialog.classList.add("account");
-  updateDialog.style.width = "672px";
+  updateDialog.style.width = "772px";
   // - Ghi nội dung dialog
   updateDialog.innerHTML = `
         <h1 class="dialog__title">Sửa người dùng</h1>

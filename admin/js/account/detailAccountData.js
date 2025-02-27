@@ -1,3 +1,5 @@
+import { isNotFirstItemSelected } from "../selectEvents.js";
+
 // Hàm thiết lập sự kiện Sửa một người dùng cho bảng
 export function detailAccountData(idAccountSelected) {
   // Phải truy vấn từ CSDL thông qua idAccountSelected để lấy được dữ liệu của đối tượng hiện tại
@@ -14,7 +16,7 @@ export function detailAccountData(idAccountSelected) {
   // - Định dạng dialog
   detailDialog.classList.add("dialog");
   detailDialog.classList.add("account");
-  detailDialog.style.width = "672px";
+  detailDialog.style.width = "772px";
   // - Ghi nội dung dialog
   detailDialog.innerHTML = `
           <h1 class="dialog__title">Chi tiết người dùng</h1>

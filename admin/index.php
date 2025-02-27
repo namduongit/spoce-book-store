@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
@@ -29,29 +29,41 @@
         <!-- Menu -->
         <ul class="sidebar__menu">
             <li class="sidebar__item active">
-                <a href="#" class="sidebar__action" data-main-content="dashboard">
-                    <i class="icon fa-solid fa-chart-line"></i>
-                    <span class="text">Thống kê</span>
+                <a href="#" class="sidebar__action" data-main-content="profit_dashboard">
+                    <i class="icon fa-solid fa-dollar-sign"></i>
+                    <span class="text">Thống kê lợi nhuận</span>
+                </a>
+            </li>
+            <li class="sidebar__item">
+                <a href="#" class="sidebar__action" data-main-content="revenue_dashboard">
+                    <i class="icon fa-solid fa-money-bill-trend-up"></i>
+                    <span class="text">Thống kê doanh thu</span>
+                </a>
+            </li>
+            <li class="sidebar__item">
+                <a href="#" class="sidebar__action" data-main-content="input_ticket_dashboard">
+                    <i class="icon fa-solid fa-file-invoice-dollar"></i>
+                    <span class="text">Thống kê phiếu nhập</span>
+                </a>
+            </li>
+            <li class="sidebar__item">
+                <a href="#" class="sidebar__action" data-main-content="order_dashboard">
+                    <i class="icon fa-solid fa-hand-holding-dollar"></i>
+                    <span class="text">Thống kê đơn hàng</span>
                 </a>
             </li>
             <li class="sidebar__item">
                 <a href="#" class="sidebar__action" data-main-content="order">
-                    <i class="icon fa-solid fa-star"></i>
+                    <i class="icon fa-solid fa-receipt"></i>
                     <span class="text">Đơn hàng</span>
                 </a>
             </li>
             <li class="sidebar__item">
                 <a href="#" class="sidebar__action" data-main-content="account">
-                    <i class="icon fa-solid fa-user-gear"></i>
+                    <i class="icon fa-solid fa-user"></i>
                     <span class="text">Người dùng</span>
                 </a>
             </li>
-            <!-- <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="customer">
-                    <i class="icon fa-solid fa-user-tie"></i>
-                    <span class="text">Khách hàng</span>
-                </a>
-            </li> -->
             <li class="sidebar__item">
                 <a href="#" class="sidebar__action" data-main-content="supplies">
                     <i class="icon fa-solid fa-user-tie"></i>
@@ -59,8 +71,14 @@
                 </a>
             </li>
             <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="input-ticket">
-                    <i class="icon fa-solid fa-clipboard-list"></i>
+                <a href="#" class="sidebar__action" data-main-content="discount">
+                    <i class="icon fa-solid fa-percent"></i>
+                    <span class="text">Giảm giá</span>
+                </a>
+            </li>
+            <li class="sidebar__item">
+                <a href="#" class="sidebar__action" data-main-content="input_ticket">
+                    <i class="icon fa-solid fa-file-pen"></i>
                     <span class="text">Phiếu nhập</span>
                 </a>
             </li>
@@ -68,6 +86,24 @@
                 <a href="#" class="sidebar__action" data-main-content="book">
                     <i class="icon fa-solid fa-book"></i>
                     <span class="text">Sách</span>
+                </a>
+            </li>
+            <li class="sidebar__item">
+                <a href="#" class="sidebar__action" data-main-content="author">
+                    <i class="icon fa-solid fa-user-pen"></i>
+                    <span class="text">Tác giả</span>
+                </a>
+            </li>
+            <li class="sidebar__item">
+                <a href="#" class="sidebar__action" data-main-content="category">
+                    <i class="icon fa-solid fa-font-awesome"></i>
+                    <span class="text">Thể loại</span>
+                </a>
+            </li>
+            <li class="sidebar__item">
+                <a href="#" class="sidebar__action" data-main-content="cover">
+                    <i class="icon fa-solid fa-book-open"></i>
+                    <span class="text">Loại bìa</span>
                 </a>
             </li>
             <li class="sidebar__item">
@@ -82,18 +118,12 @@
                     <span class="text">Nhà phát hành</span>
                 </a>
             </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="type">
-                    <i class="icon fa-solid fa-font-awesome"></i>
-                    <span class="text">Thể loại</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
+            <!-- <li class="sidebar__item">
                 <a href="#" class="sidebar__action">
                     <i class="icon fa-solid fa-right-from-bracket"></i>
                     <span class="text">Đăng xuất</span>
                 </a>
-            </li>
+            </li> -->
         </ul>
     </sidebar>
 
@@ -102,6 +132,8 @@
         <!-- Line -->
         <nav class="main__line">
             <i class="icon fa-solid fa-bars"></i>
+            <i class="icon fa-solid fa-gear"></i>
+            <i class="icon fa-solid fa-power-off"></i>
         </nav>
         <!-- Content -->
         <div class="main__content" id="main-content">

@@ -1,33 +1,33 @@
-import { updateIssuerData } from "./updateIssuerData.js";
-import { lockIssuerData } from "./lockIssuerData.js";
+import { updateDiscountData } from "./updateDiscountData.js";
+import { lockDiscountData } from "./lockDiscountData.js";
 
 // Dữ liệu tạm thời (sau phải xây dựng hàm truy xuất dữ liệu từ csdl)
 let data = [
   {
-    id: "1",
-    name: "Phát hành 01",
+    id: 1,
+    name: "Khuyến mãi 1",
+    dateStart: "27/02/2025",
+    dateEnd: "27/02/2025",
+    percent: 72,
     status: "Hoạt động",
     dateUpdate: "",
   },
   {
-    id: "2",
-    name: "phát hành 02",
-    status: "Hoạt động",
-    dateUpdate: "",
-  },
-  {
-    id: "3",
-    name: "Spoce Store",
+    id: 2,
+    name: "Khuyến mãi 2",
+    dateStart: "27/02/2025",
+    dateEnd: "27/02/2025",
+    percent: 29,
     status: "Tạm dừng",
     dateUpdate: "",
   },
 ];
 
-// Hàm cập nhật lại dữ liệu cho bảng Nhà phát hành
-export function renderIssuerTable() {
-  // Biến chứa đối tượng bảng Nhà phát hành
-  const bodyInIssuerTable = document.querySelector(
-    ".main__data > .main__table.issuer > tbody"
+// Hàm cập nhật lại dữ liệu cho bảng Thể loại
+export function renderDiscountTable() {
+  // Biến chứa đối tượng bảng Thể loại
+  const bodyInDiscountTable = document.querySelector(
+    ".main__data > .main__table.discount > tbody"
   );
 
   // Chuyển đổi dữ liệu thành các thẻ html
@@ -37,12 +37,15 @@ export function renderIssuerTable() {
           <tr>
               <td>${data[i].id}</td>
               <td>${data[i].name}</td>
+              <td>${data[i].dateStart}</td>
+              <td>${data[i].dateEnd}</td>
+              <td>${data[i].percent}</td>
               <td><span ${
                 data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
               }>${data[i].status}</span></td>
               <td>
-                  <i id="update-button-issuer" class="fa-solid fa-pen-to-square"></i>
-                  <i id="lock-button-issuer" class="fa-solid fa-${
+                  <i id="update-button-discount" class="fa-solid fa-pen-to-square"></i>
+                  <i id="lock-button-discount" class="fa-solid fa-${
                     data[i].status === "Hoạt động" ? "" : "un"
                   }lock"></i>
               </td>
@@ -51,21 +54,21 @@ export function renderIssuerTable() {
   }
 
   // Cập nhật lại giao diện
-  bodyInIssuerTable.innerHTML = html;
+  bodyInDiscountTable.innerHTML = html;
 
   // Gán sự kiện cho các nút sau khi thay đổi giao diện
   const idColumnInTable = document.querySelectorAll(
-    ".main__data > .main__table.issuer > tbody > tr > td:first-of-type"
+    ".main__data > .main__table.discount > tbody > tr > td:first-of-type"
   );
   const listButtonInTable = document.querySelectorAll(
-    ".main__data > .main__table.issuer > tbody > tr > td:last-of-type"
+    ".main__data > .main__table.discount > tbody > tr > td:last-of-type"
   );
   listButtonInTable.forEach((buttons, row) => {
     // Các nút cần gán sự kiện trên mỗi dòng
     const updateButton = buttons.children[0];
     const lockButton = buttons.children[1];
     // Id của đối tượng đã được chọn để thao tác
-    const idIssuerSelected = idColumnInTable.item(row);
+    const idDiscountSelected = idColumnInTable.item(row);
 
     // Gán sự kiện hiện dialog sửa thể loại
     updateButton.addEventListener("click", (e) => {
@@ -73,7 +76,7 @@ export function renderIssuerTable() {
       e.preventDefault();
 
       // Gọi hàm sự kiện
-      updateIssuerData(idIssuerSelected);
+      updateDiscountData(idDiscountSelected);
     });
 
     // Gán sự kiện hiện dialog khoá / mở khoá thể loại
@@ -82,7 +85,7 @@ export function renderIssuerTable() {
       e.preventDefault();
 
       // Gọi hàm sự kiện
-      lockIssuerData(idIssuerSelected);
+      lockDiscountData(idDiscountSelected);
     });
   });
 }

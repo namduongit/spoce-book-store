@@ -18,7 +18,7 @@ export function addSuppliesData() {
     // - Định dạng dialog
     addDialog.classList.add("dialog");
     addDialog.classList.add("supplies");
-    addDialog.style.width = "672px";
+    addDialog.style.width = "772px";
     // - Ghi nội dung dialog
     addDialog.innerHTML = `
         <h1 class="dialog__title">Thêm nhà cung cấp</h1>

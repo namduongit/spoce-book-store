@@ -1,9 +1,9 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 
-// Hàm thiết lập sự kiện Thêm một nhà phát hành cho bảng
-export function addIssuerData() {
+// Hàm thiết lập sự kiện Thêm một loại bìa cho bảng
+export function addCoverData() {
   // Biến chứa đối tượng là nút "Thêm"
-  const addButton = document.getElementById("add-button-issuer");
+  const addButton = document.getElementById("add-button-cover");
 
   // Gán sự kiện khi nhấn nút "Thêm"
   addButton.addEventListener("click", (e) => {
@@ -13,35 +13,35 @@ export function addIssuerData() {
     // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
     addButton.classList.add("active");
 
-    // Tạo một dialog để thêm một nhà phát hành
+    // Tạo một dialog để thêm một loại bìa
     const addDialog = document.createElement("dialog");
     // - Định dạng dialog
     addDialog.classList.add("dialog");
-    addDialog.classList.add("issuer");
+    addDialog.classList.add("cover");
     addDialog.style.width = "398px";
     // - Ghi nội dung dialog
     addDialog.innerHTML = `
-                <h1 class="dialog__title">Thêm nhà phát hành</h1>
-                <button id="close-issuer-button" class="dialog__close">
+                <h1 class="dialog__title">Thêm loại bìa</h1>
+                <button id="close-cover-button" class="dialog__close">
                   <i class="fa-solid fa-xmark"></i>
                 </button>
                 <div class="dialog__line"></div>
                 <div class="dialog__row">
                   <div class="dialog__form-group full">
-                    <label>Mã nhà phát hành</label>
-                    <input type="text" id="add-issuer-id" readonly />
+                    <label>Mã loại bìa</label>
+                    <input type="text" id="add-cover-id" readonly />
                   </div>
                 </div>
                 <div class="dialog__row">
                   <div class="dialog__form-group full">
-                    <label>Tên nhà phát hành</label>
-                    <input type="text" id="add-issuer-name" placeholder="Nhập Tên nhà phát hành" autofocus/>
+                    <label>Tên loại bìa</label>
+                    <input type="text" id="add-cover-name" placeholder="Nhập Tên loại bìa" autofocus/>
                   </div>
                 </div>
                 <div class="dialog__row">
                   <div class="dialog__form-group full">
                     <label>Trạng thái</label>
-                    <select id="add-issuer-status">
+                    <select id="add-cover-status">
                       <option value="" selected>Chọn Trạng thái</option>
                       <option value="1">Hoạt động</option>
                       <option value="0">Tạm dừng</option>
@@ -49,7 +49,7 @@ export function addIssuerData() {
                   </div>
                 </div>
                 <div class="dialog__buttons">
-                  <button id="add-issuer-button" class="add">Thêm</button>
+                  <button id="add-cover-button" class="add">Thêm</button>
                 </div>
               `;
 
@@ -70,12 +70,12 @@ export function addIssuerData() {
 
     // Gán sự kiện cho nút "Thêm" dialog
     document
-      .getElementById("add-issuer-button")
+      .getElementById("add-cover-button")
       .addEventListener("click", () => {
         // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-        const id = document.getElementById("add-issuer-id");
-        const name = document.getElementById("add-issuer-name");
-        const status = document.getElementById("add-issuer-status");
+        const id = document.getElementById("add-cover-id");
+        const name = document.getElementById("add-cover-name");
+        const status = document.getElementById("add-cover-status");
 
         // ... (Xử lý tiếp ở đây)
         console.log(id.value);
@@ -85,7 +85,7 @@ export function addIssuerData() {
 
     // Gán sự kiện cho nút "Đóng" dialog
     document
-      .getElementById("close-issuer-button")
+      .getElementById("close-cover-button")
       .addEventListener("click", () => {
         // Xoá dialog
         addDialog.remove();

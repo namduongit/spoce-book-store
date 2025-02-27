@@ -38,9 +38,7 @@ export function renderPublisherTable() {
               <td>${data[i].id}</td>
               <td>${data[i].name}</td>
               <td><span ${
-                data[i].status === "Hoạt động"
-                  ? 'class="active"'
-                  : 'class="stop"'
+                data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
               }>${data[i].status}</span></td>
               <td>
                   <i id="update-button-publisher" class="fa-solid fa-pen-to-square"></i>

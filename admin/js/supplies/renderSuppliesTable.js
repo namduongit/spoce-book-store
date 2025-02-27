@@ -39,7 +39,7 @@ export function renderSuppliesTable() {
             <td>${data[i].phone}</td>
             <td>${data[i].email}</td>
             <td><span ${
-              data[i].status === "Hoạt động" ? 'class="active"' : 'class="stop"'
+              data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
             }>${data[i].status}</span></td>
             <td>
                 <i id="detail-button-supplies" class="fa-solid fa-circle-info"></i>

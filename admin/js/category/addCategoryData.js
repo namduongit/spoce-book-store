@@ -1,9 +1,9 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 
 // Hàm thiết lập sự kiện Thêm một thể loại cho bảng
-export function addTypeData() {
+export function addCategoryData() {
   // Biến chứa đối tượng là nút "Thêm"
-  const addButton = document.getElementById("add-button-type");
+  const addButton = document.getElementById("add-button-category");
 
   // Gán sự kiện khi nhấn nút "Thêm"
   addButton.addEventListener("click", (e) => {
@@ -17,8 +17,8 @@ export function addTypeData() {
     const addDialog = document.createElement("dialog");
     // - Định dạng dialog
     addDialog.classList.add("dialog");
-    addDialog.classList.add("type");
-    addDialog.style.width = "672px";
+    addDialog.classList.add("category");
+    addDialog.style.width = "398px";
     // - Ghi nội dung dialog
     addDialog.innerHTML = `
             <h1 class="dialog__title">Thêm thể loại</h1>
@@ -27,29 +27,29 @@ export function addTypeData() {
             </button>
             <div class="dialog__line"></div>
             <div class="dialog__row">
-              <div class="dialog__form-group">
+              <div class="dialog__form-group full">
                 <label>Mã thể loại</label>
-                <input type="text" id="add-type-id" readonly />
-              </div>
-              <div class="dialog__form-group">
-                <label>Tên thể loại</label>
-                <input type="text" id="add-type-name" placeholder="Nhập Tên thể loại" autofocus/>
+                <input type="text" id="add-category-id" readonly />
               </div>
             </div>
             <div class="dialog__row">
-              <div class="dialog__form-group">
+              <div class="dialog__form-group full">
+                <label>Tên thể loại</label>
+                <input type="text" id="add-category-name" placeholder="Nhập Tên thể loại" autofocus/>
+              </div>
+            </div>
+            <div class="dialog__row">
+              <div class="dialog__form-group full">
                 <label>Trạng thái</label>
-                <select id="add-type-status">
+                <select id="add-category-status">
                   <option value="" selected>Chọn Trạng thái</option>
                   <option value="1">Hoạt động</option>
                   <option value="0">Tạm dừng</option>
                 </select>
               </div>
-              <div class="dialog__form-group">
-              </div>
             </div>
             <div class="dialog__buttons">
-              <button id="add-type-button" class="add">Thêm</button>
+              <button id="add-category-button" class="add">Thêm</button>
             </div>
           `;
 
@@ -69,17 +69,19 @@ export function addTypeData() {
     });
 
     // Gán sự kiện cho nút "thêm" dialog
-    document.getElementById("add-type-button").addEventListener("click", () => {
-      // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-      const id = document.getElementById("add-type-id");
-      const name = document.getElementById("add-type-name");
-      const status = document.getElementById("add-type-status");
+    document
+      .getElementById("add-category-button")
+      .addEventListener("click", () => {
+        // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
+        const id = document.getElementById("add-category-id");
+        const name = document.getElementById("add-category-name");
+        const status = document.getElementById("add-category-status");
 
-      // ... (Xử lý tiếp ở đây)
-      console.log(id.value);
-      console.log(name.value);
-      console.log(status.value);
-    });
+        // ... (Xử lý tiếp ở đây)
+        console.log(id.value);
+        console.log(name.value);
+        console.log(status.value);
+      });
 
     // Gán sự kiện cho nút "Đóng" dialog
     document

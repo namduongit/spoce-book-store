@@ -18,7 +18,7 @@ export function addPublisherData() {
     // - Định dạng dialog
     addDialog.classList.add("dialog");
     addDialog.classList.add("publisher");
-    addDialog.style.width = "672px";
+    addDialog.style.width = "398px";
     // - Ghi nội dung dialog
     addDialog.innerHTML = `
               <h1 class="dialog__title">Thêm nhà xuất bản</h1>
@@ -27,25 +27,25 @@ export function addPublisherData() {
               </button>
               <div class="dialog__line"></div>
               <div class="dialog__row">
-                <div class="dialog__form-group">
+                <div class="dialog__form-group full">
                   <label>Mã nhà xuất bản</label>
                   <input type="text" id="add-publisher-id" readonly />
                 </div>
-                <div class="dialog__form-group">
+              </div>
+              <div class="dialog__row">
+                <div class="dialog__form-group full">
                   <label>Tên nhà xuất bản</label>
                   <input type="text" id="add-publisher-name" placeholder="Nhập Tên nhà xuất bản" autofocus/>
                 </div>
               </div>
               <div class="dialog__row">
-                <div class="dialog__form-group">
+                <div class="dialog__form-group full">
                   <label>Trạng thái</label>
                   <select id="add-publisher-status">
                     <option value="" selected>Chọn Trạng thái</option>
                     <option value="1">Hoạt động</option>
                     <option value="0">Tạm dừng</option>
                   </select>
-                </div>
-                <div class="dialog__form-group">
                 </div>
               </div>
               <div class="dialog__buttons">
