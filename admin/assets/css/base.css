@@ -229,7 +229,12 @@ body {
   justify-content: space-between;
   align-items: center;
 } */
-.main__filter-btn {
+.main__row > .main__select ul {
+  max-height: 204px;
+  overflow-y: scroll;
+}
+.main__filter-btn,
+.main__see-btn {
   width: 70px;
   height: 30px;
   background: #007bff;
@@ -241,11 +246,13 @@ body {
   transition: 0.3s ease-in-out;
   cursor: pointer;
 }
-.main__filter-btn:hover {
+.main__filter-btn:hover,
+.main__see-btn:hover {
   background: #fff;
   color: #007bff;
 }
-.main__add-btn {
+.main__add-btn,
+.main__print-btn {
   width: 100px;
   height: 30px;
   background: #699f4c;
@@ -258,8 +265,14 @@ body {
   transition: 0.2s ease-in-out;
   cursor: pointer;
 }
+.main__print-btn {
+  width: 140px;
+}
+
 .main__add-btn:hover,
-.main__add-btn.active {
+.main__add-btn.active,
+.main__print-btn:hover,
+.main__print-btn.active {
   background: #fff;
   color: #699f4c;
 }
@@ -288,6 +301,7 @@ body {
   height: var(--table-height);
   font-size: var(--table-row-font-size);
   text-align: center;
+  padding: 4px 6px;
 }
 .main__table.book td {
   height: calc(var(--table-height) * 3);
@@ -304,9 +318,6 @@ body {
 
 .main__table tbody tr:nth-of-type(even) {
   background-color: #f3f3f3;
-}
-.main__table tbody tr:last-of-type {
-  /* border-bottom: 2px solid #303234; */
 }
 /* .main__table tbody tr:hover {
   font-weight: bold;
@@ -346,6 +357,38 @@ body {
 }
 .main__table tbody td:last-of-type i.active {
   color: var(--primary-color);
+}
+.main__table tfoot td:first-of-type {
+  background: #3597f2;
+  color: #fff;
+  font-size: var(--table-column-font-size);
+  font-weight: 700;
+}
+.main__table tfoot tr {
+  /* border-top: 2px solid var(--primary-color); */
+  border-bottom: 1px solid #dddddd;
+  /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); */
+}
+.main__total-text {
+  margin-top: 6px;
+  font-size: 16px;
+  text-align: right;
+}
+.main__total-text span {
+  font-style: italic;
+}
+.main__table.dashboard th,
+.main__table.dashboard td {
+  border: 1px solid #000;
+}
+.main__table.profit_dashboard tbody td:nth-of-type(4),
+.main__table.profit_dashboard tfoot td:nth-of-type(2),
+.main__table.profit_dashboard tbody td:nth-of-type(5),
+.main__table.profit_dashboard tfoot td:nth-of-type(3),
+.main__table.profit_dashboard tbody td:nth-of-type(6),
+.main__table.profit_dashboard tfoot td:nth-of-type(4) {
+  display: table-cell;
+  text-align: right;
 }
 /* <= Main Pagination => */
 .main__pagination {

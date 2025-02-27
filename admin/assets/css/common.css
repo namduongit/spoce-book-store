@@ -159,6 +159,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 /* <===== Detail / Add / Update Dialog =====> */
 .dialog:where(
+    .profit_dashboard,
     .account,
     .supplies,
     .discount,
@@ -293,7 +294,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   right: 0;
   background: #2286e3;
   border: none;
-  width: 72px;
+  width: 80px;
   height: 20px;
   color: #fff;
   font-size: 12px;
@@ -454,4 +455,128 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .dialog__form-group:has(input[type="date"]:focus) label,
 .dialog__form-group:has(input[type="date"].hasValidDate) label {
   color: #000 !important;
+}
+
+/* <===== Dashboard =====> */
+.ticket:where(.profit_dashboard) {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* width: 300px; */
+  background: white;
+  padding: 22px 24px;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 5px 30px 0 rgba(0, 0, 0, 0.2);
+}
+.ticket__close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border: none;
+  color: #000;
+  font-size: 18px;
+  line-height: 40px;
+}
+.ticket__close:hover {
+  color: #f44336;
+}
+.ticket__header {
+  display: flex;
+  align-items: center;
+}
+.ticket__logo {
+  width: 240px;
+  height: 80px;
+  object-fit: cover;
+}
+.ticket__contact {
+  font-size: 16px;
+  font-weight: 500;
+}
+.ticket__body {
+  margin-top: 24px;
+}
+.ticket__title {
+  font-size: 28px;
+  text-align: center;
+}
+.ticket__date {
+  font-size: 16px;
+  text-align: center;
+}
+.ticket__table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 24px;
+  font-size: 0.9em;
+  font-family: sans-serif;
+}
+.ticket__table thead tr {
+  /* background-color: #303234; */
+  background: var(--primary-color);
+  color: #ffffff;
+}
+.ticket__table th,
+.ticket__table td {
+  height: 40px;
+  padding: 4px 6px;
+  border: 1px solid #000;
+  font-size: var(14px);
+  text-align: center;
+}
+.ticket__table tfoot td:first-of-type {
+  background: #3597f2;
+  color: #fff;
+  font-size: var(--table-column-font-size);
+  font-weight: 700;
+}
+.ticket__table.profit_dashboard tbody td:nth-of-type(4),
+.ticket__table.profit_dashboard tfoot td:nth-of-type(2),
+.ticket__table.profit_dashboard tbody td:nth-of-type(5),
+.ticket__table.profit_dashboard tfoot td:nth-of-type(3),
+.ticket__table.profit_dashboard tbody td:nth-of-type(6),
+.ticket__table.profit_dashboard tfoot td:nth-of-type(4) {
+  display: table-cell;
+  text-align: right;
+}
+.ticket__total-text {
+  margin-top: 6px;
+  font-size: 16px;
+  text-align: right;
+}
+.ticket__total-text span {
+  font-style: italic;
+}
+.ticket__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+}
+.ticket_customer {
+  text-align: center;
+}
+.ticket__print-btn {
+  width: 160px;
+  height: 30px;
+  background: #699f4c;
+  border: 2px solid #699f4c;
+  margin: 32px 0 0 50%;
+  transform: translateX(-50%);
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+}
+.ticket__print-btn:hover {
+  background: #fff;
+  color: #699f4c;
 }

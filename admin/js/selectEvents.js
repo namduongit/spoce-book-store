@@ -58,3 +58,54 @@ export function isNotFirstItemSelected(select) {
     }
   });
 }
+
+// Hàm
+export function updateTimelineSelects() {
+  // Biến giữ các đối tượng liên quan đến select cho việc lọc theo thời gian
+  const timelineInputSelect = document.querySelector(
+    ".main__timeline-slt > input"
+  );
+  const timelineDetailInputSelect = document.querySelector(
+    ".main__timeline-detail-slt > input"
+  );
+  const timelineUlSelect = document.querySelector(".main__timeline-slt > ul");
+  const timelineDetailUlSelect = document.querySelector(
+    ".main__timeline-detail-slt > ul"
+  );
+
+  // Tuỳ chỉnh thời gian khi "lọc theo năm" hoặc "lọc theo tháng"
+  let timelineDetailYearFormat = ``;
+  for (let year = 2020; year <= 2030; year++) {
+    timelineDetailYearFormat += `<li>Năm ${year}</li>`;
+  }
+  let timelineDetailMonthFormat = ``;
+  for (let year = 2020; year <= 2030; year++) {
+    for (let month = 1; month <= 12; month++) {
+      timelineDetailMonthFormat += `<li>Tháng ${month}/${year}</li>`;
+    }
+  }
+
+  // Gán sự kiện cho "Khoảng thời gian"
+  timelineUlSelect.addEventListener("click", (e) => {
+    // Loại bỏ giá trị mặc định
+    e.preventDefault();
+
+    // Cập nhật lại "Thời gian cụ thể"
+    timelineDetailInputSelect.value = "";
+
+    // Tuỳ theo giá trị "Khoảng thời gian" mà cập nhật tương ứng
+    if (timelineInputSelect.value === "Lọc theo năm") {
+      timelineDetailUlSelect.innerHTML = timelineDetailYearFormat;
+    } else {
+      timelineDetailUlSelect.innerHTML = timelineDetailMonthFormat;
+    }
+
+    // Gán sự kiện cho "Thời gian cụ thể"
+    timelineDetailUlSelect.addEventListener("click", (e) => {
+      // Loại bỏ giá trị mặc định
+      e.preventDefault();
+
+      console.log(timelineDetailInputSelect.value);
+    });
+  });
+}

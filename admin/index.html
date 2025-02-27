@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xem trước phiếu in</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 20px;
+      }
+
+      #invoice-content {
+        width: 600px;
+        margin: auto;
+        padding: 20px;
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #007bff;
+      }
+
+      p {
+        font-size: 16px;
+        color: #333;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 10px 15px;
+        font-size: 16px;
+        color: white;
+        background-color: #28a745;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+
+      .btn:hover {
+        background-color: #218838;
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 10;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background: white;
+        width: 600px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        position: relative;
+      }
+
+      .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 20px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="invoice-content">
+      <h1>Chi tiết phiếu in</h1>
+      <p>Khách hàng: <strong>Nguyễn Văn A</strong></p>
+      <p>Sản phẩm: <strong>Kem dưỡng da</strong></p>
+      <p>Giá: <strong>250.000đ</strong></p>
+      <p>Ngày mua: <strong>27/02/2025</strong></p>
+    </div>
+    <button class="btn" onclick="openModal()">Xem phiếu in</button>
+
+    <!-- Modal hiển thị phiếu in -->
+    <div id="invoice-modal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Phiếu in</h2>
+        <div id="modal-invoice"></div>
+        <button class="btn" onclick="printPDF()">In PDF</button>
+      </div>
+    </div>
+
+    <script>
+      function openModal() {
+        // Lấy nội dung HTML từ phần invoice gốc
+        document.getElementById("modal-invoice").innerHTML =
+          document.getElementById("invoice-content").innerHTML;
+        document.getElementById("invoice-modal").style.display = "flex";
+      }
+
+      function closeModal() {
+        document.getElementById("invoice-modal").style.display = "none";
+      }
+
+      function printPDF() {
+        const element = document.getElementById("modal-invoice");
+        html2pdf().from(element).save("phieu-in.pdf");
+      }
+    </script>
+  </body>
+</html>

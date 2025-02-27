@@ -1,46 +1,60 @@
-import { selectFormEvents } from "./selectEvents.js";
+import { selectFormEvents, updateTimelineSelects } from "./selectEvents.js";
 import { clickToShowDatePicker } from "./others.js";
-import { filterAccountData } from "./account/filterAccountData.js";
-import { addAccountData } from "./account/addAccountData.js";
-import { renderAccountTable } from "./account/renderAccountTable.js";
-import { filterAuthorData } from "./author/filterAuthorData.js";
-import { addAuthorData } from "./author/addAuthorData.js";
-import { renderAuthorTable } from "./author/renderAuthorTable.js";
-import { filterCategoryData } from "./category/filterCategoryData.js";
-import { addCategoryData } from "./category/addCategoryData.js";
-import { renderCategoryTable } from "./category/renderCategoryTable.js";
-import { filterCoverData } from "./cover/filterCoverData.js";
-import { addCoverData } from "./cover/addCoverData.js";
-import { renderCoverTable } from "./cover/renderCoverTable.js";
-import { filterSuppliesData } from "./supplies/filterSuppliesData.js";
-import { addSuppliesData } from "./supplies/addSuppliesData.js";
-import { renderSuppliesTable } from "./supplies/renderSuppliesTable.js";
-import { filterPublisherData } from "./publisher/filterPublisherData.js";
-import { addPublisherData } from "./publisher/addPublisherData.js";
-import { renderPublisherTable } from "./publisher/renderPublisherTable.js";
-import { filterIssuerData } from "./issuer/filterIssuerData.js";
-import { addIssuerData } from "./issuer/addIssuerData.js";
-import { renderIssuerTable } from "./issuer/renderIssuerTable.js";
+import { printProfitDashboardTicket } from "./profitDashboard/printProfitDashboardTicket.js";
+import { updateProfitDashboardTable } from "./profitDashboard/updateProfitDashboardTable.js";
+import { updateAccountTable } from "./account/updateAccountTable.js";
+import { updateSuppliesTable } from "./supplies/updateSuppliesTable.js";
+import { updateDiscountTable } from "./discount/updateDiscountTable.js";
+import { updateBookTable } from "./book/updateBookTable.js";
+import { updateAuthorTable } from "./author/updateAuthorTable.js";
+import { updateCategoryTable } from "./category/updateCategoryTable.js";
+import { updateCoverTable } from "./cover/updateCoverTable.js";
+import { updatePublisherTable } from "./publisher/updatePublisherTable.js";
+import { updateIssuerTable } from "./issuer/updateIssuerTable.js";
 
 import { renderInputTicketTable } from "./input_ticket/renderInputTicketTable.js";
 
-import { addBookData } from "./book/addBookData.js";
-import { filterBookData } from "./book/filterBookData.js";
-import { renderBookTable } from "./book/renderBookTable.js";
-
-import { filterDiscountData } from "./discount/filterDiscountData.js";
-import { addDiscountData } from "./discount/addDiscountData.js";
-import { renderDiscountTable } from "./discount/renderDiscountTable.js";
-
 // Biến chứa nội dung sẽ thay đổi của menu tương ứng
 const mainContentMap = {
-  profit_dashboard: `<h1>Thống kê lợi nhuận</h1>`,
+  profit_dashboard: `
+    <h1 class="main__title">Thống kê lợi nhuận</h1>
+    <div class="main__row">
+      <div class="main__timeline-slt main__select slt-form-1">
+        <input required="" type="text" id="status-slt-profit_dashboard" />
+        <span><i class="fa-solid fa-timeline"></i></i>&nbsp;&nbsp;Chọn Khoảng thời gian</span>
+        <ul>
+          <li>Lọc theo năm</li>
+          <li>Lọc theo tháng</li>
+        </ul>
+      </div>
+      <div class="main__timeline-detail-slt main__select slt-form-1">
+        <input required="" type="text" id="status-slt-profit_dashboard" />
+        <span><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;Chọn Thời gian cụ thể</span>
+        <ul>
+        </ul>
+      </div>
+      <button class="main__see-btn" id="filter-button-profit_dashboard">
+        <i class="fa-solid fa-eye"></i>
+        <span>Xem</span>
+      </button>
+      <button class="main__print-btn" id="print-button-profit_dashboard">
+        <i class="fa-solid fa-print"></i>
+        <span>In thống kê</span>
+      </button>
+    </div>
+    <div class="main__data">
+      <table class="main__table dashboard profit_dashboard">
+        <thead><tr><th width="100%">Thống kê lợi nhuận</th></tr></thead>
+        <tbody></tbody>
+        <tfoot></tfoot>
+      </table>
+      <p class="main__total-text"><strong>Viết bằng chữ:</strong> <span>0 đồng</span></p>
+    </div>
+  `,
   revenue_dashboard: `<h1>Thống kê doanh thu</h1>`,
   input_ticket_dashboard: `<h1>Thống kê phiếu nhập</h1>`,
   order_dashboard: `<h1>Thống kê đơn hàng</h1>`,
-  order: `
-    <h1>Đơn hàng</h1>
-  `,
+  order: `<h1>Hoá đơn</h1>`,
   account: `
     <h1 class="main__title">Người dùng</h1>
     <div class="main__row">
@@ -736,6 +750,8 @@ const menuInSideBar = document.querySelectorAll(
   ".sidebar__menu > .sidebar__item"
 );
 
+menuInSideBar.item(0).click();
+
 // Gán sự kiện cho từng mục ở sidebar
 menuInSideBar.forEach((item, i) => {
   item.addEventListener("click", (e) => {
@@ -763,57 +779,46 @@ menuInSideBar.forEach((item, i) => {
       // Thay đổi nội dung ở trang tương ứng
       mainContentDiv.innerHTML = mainContentMap[mainContentKey];
 
+      // Đa phần thì trang nào cũng cần gọi hàm này
+      selectFormEvents();
+
       // Gán sự kiện tương ứng cho trang tương ứng
-      if (mainContentKey === "dashboard") {
+      if (mainContentKey === "profit_dashboard") {
+        updateTimelineSelects();
+        printProfitDashboardTicket();
+        updateProfitDashboardTable();
       } else if (mainContentKey === "order") {
       } else if (mainContentKey === "account") {
-        filterAccountData();
-        addAccountData();
-        renderAccountTable();
+        updateAccountTable();
       } else if (mainContentKey === "supplies") {
-        filterSuppliesData();
-        addSuppliesData();
-        renderSuppliesTable();
+        updateSuppliesTable();
       } else if (mainContentKey === "discount") {
-        clickToShowDatePicker("find-date-start-before-inp-discount");
-        clickToShowDatePicker("find-date-start-after-inp-discount");
-        clickToShowDatePicker("find-date-end-before-inp-discount");
-        clickToShowDatePicker("find-date-end-after-inp-discount");
-        filterDiscountData();
-        addDiscountData();
-        renderDiscountTable();
+        updateDiscountTable();
       } else if (mainContentKey === "input_ticket") {
         clickToShowDatePicker("find-date-create-before-inp-input_ticket");
         clickToShowDatePicker("find-date-create-after-inp-input_ticket");
         renderInputTicketTable();
       } else if (mainContentKey === "book") {
-        filterBookData();
-        addBookData();
-        renderBookTable();
+        updateBookTable();
       } else if (mainContentKey === "author") {
-        filterAuthorData();
-        addAuthorData();
-        renderAuthorTable();
+        updateAuthorTable();
       } else if (mainContentKey === "category") {
-        filterCategoryData();
-        addCategoryData();
-        renderCategoryTable();
+        updateCategoryTable();
       } else if (mainContentKey === "cover") {
-        filterCoverData();
-        addCoverData();
-        renderCoverTable();
+        updateCoverTable();
       } else if (mainContentKey === "publisher") {
-        filterPublisherData();
-        addPublisherData();
-        renderPublisherTable();
+        updatePublisherTable();
       } else if (mainContentKey === "issuer") {
-        filterIssuerData();
-        addIssuerData();
-        renderIssuerTable();
+        updateIssuerTable();
       }
-
-      // Đa phần thì trang nào cũng cần gọi hàm này
-      selectFormEvents();
     }
   });
+});
+
+// Mặc định thì "Thống kê Lợi nhuận" luôn được hiển thị đầu tiên
+window.addEventListener("load", function () {
+  selectFormEvents();
+  updateTimelineSelects();
+  printProfitDashboardTicket();
+  updateProfitDashboardTable();
 });

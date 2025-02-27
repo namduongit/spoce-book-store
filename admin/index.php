@@ -16,6 +16,8 @@
     <!-- Styles CSS -->
     <link rel="stylesheet" href="assets/css/base.css">
     <link rel="stylesheet" href="assets/css/common.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 
 <body>
@@ -137,6 +139,43 @@
         </nav>
         <!-- Content -->
         <div class="main__content" id="main-content">
+            <h1 class="main__title">Thống kê lợi nhuận</h1>
+            <div class="main__row">
+                <div class="main__timeline-slt main__select slt-form-1">
+                    <input required="" type="text" id="status-slt-profit_dashboard" />
+                    <span><i class="fa-solid fa-timeline"></i></i>&nbsp;&nbsp;Chọn Khoảng thời gian</span>
+                    <ul>
+                        <li>Lọc theo năm</li>
+                        <li>Lọc theo tháng</li>
+                    </ul>
+                </div>
+                <div class="main__timeline-detail-slt main__select slt-form-1">
+                    <input required="" type="text" id="status-slt-profit_dashboard" />
+                    <span><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;Chọn Thời gian cụ thể</span>
+                    <ul>
+                    </ul>
+                </div>
+                <button class="main__see-btn" id="filter-button-profit_dashboard">
+                    <i class="fa-solid fa-eye"></i>
+                    <span>Xem</span>
+                </button>
+                <button class="main__print-btn" id="print-button-profit_dashboard">
+                    <i class="fa-solid fa-print"></i>
+                    <span>In thống kê</span>
+                </button>
+            </div>
+            <div class="main__data">
+                <table class="main__table dashboard profit_dashboard">
+                    <thead>
+                        <tr>
+                            <th width="100%">Thống kê lợi nhuận</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot></tfoot>
+                </table>
+                <p class="main__total-text"><strong>Viết bằng chữ:</strong> <span>0 đồng</span></p>
+            </div>
         </div>
     </main>
 
