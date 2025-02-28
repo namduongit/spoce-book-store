@@ -381,12 +381,48 @@ body {
 .main__table.dashboard td {
   border: 1px solid #000;
 }
-.main__table.profit_dashboard tbody td:nth-of-type(4),
-.main__table.profit_dashboard tfoot td:nth-of-type(2),
-.main__table.profit_dashboard tbody td:nth-of-type(5),
-.main__table.profit_dashboard tfoot td:nth-of-type(3),
-.main__table.profit_dashboard tbody td:nth-of-type(6),
-.main__table.profit_dashboard tfoot td:nth-of-type(4) {
+.main__table:where(
+    .profit_dashboard,
+    .revenue_dashboard,
+    .input_ticket_dashboard
+  )
+  tbody
+  td:nth-of-type(4),
+.main__table:where(
+    .profit_dashboard,
+    .revenue_dashboard,
+    .input_ticket_dashboard
+  )
+  tfoot
+  td:nth-of-type(2),
+.main__table:where(
+    .profit_dashboard,
+    .revenue_dashboard,
+    .input_ticket_dashboard
+  )
+  tbody
+  td:nth-of-type(5),
+.main__table:where(
+    .profit_dashboard,
+    .revenue_dashboard,
+    .input_ticket_dashboard
+  )
+  tfoot
+  td:nth-of-type(3),
+.main__table:where(
+    .profit_dashboard,
+    .revenue_dashboard,
+    .input_ticket_dashboard
+  )
+  tbody
+  td:nth-of-type(6),
+.main__table:where(
+    .profit_dashboard,
+    .revenue_dashboard,
+    .input_ticket_dashboard
+  )
+  tfoot
+  td:nth-of-type(4) {
   display: table-cell;
   text-align: right;
 }

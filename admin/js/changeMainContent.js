@@ -1,7 +1,7 @@
 import { selectFormEvents, updateTimelineSelects } from "./selectEvents.js";
 import { clickToShowDatePicker } from "./others.js";
-import { printProfitDashboardTicket } from "./profitDashboard/printProfitDashboardTicket.js";
-import { updateProfitDashboardTable } from "./profitDashboard/updateProfitDashboardTable.js";
+import { printProfitDashboardTicket } from "./dashboard/printProfitDashboard.js";
+import { updateProfitDashboardTable } from "./dashboard/updateProfitDashboardTable.js";
 import { updateAccountTable } from "./account/updateAccountTable.js";
 import { updateSuppliesTable } from "./supplies/updateSuppliesTable.js";
 import { updateDiscountTable } from "./discount/updateDiscountTable.js";
@@ -13,6 +13,11 @@ import { updatePublisherTable } from "./publisher/updatePublisherTable.js";
 import { updateIssuerTable } from "./issuer/updateIssuerTable.js";
 
 import { renderInputTicketTable } from "./input_ticket/renderInputTicketTable.js";
+
+import { updateRevenueDashboardTable } from "./dashboard/updateRevenueDashboardTable.js";
+import { printRevenueDashboardTicket } from "./dashboard/printRevenueDashboard.js";
+import { updateInputTicketDashboardTable } from "./dashboard/updateInputTicketDashboard.js";
+import { printInputTicketDashboardTicket } from "./dashboard/printInputTicketDashboard.js";
 
 // Biến chứa nội dung sẽ thay đổi của menu tương ứng
 const mainContentMap = {
@@ -51,8 +56,76 @@ const mainContentMap = {
       <p class="main__total-text"><strong>Viết bằng chữ:</strong> <span>0 đồng</span></p>
     </div>
   `,
-  revenue_dashboard: `<h1>Thống kê doanh thu</h1>`,
-  input_ticket_dashboard: `<h1>Thống kê phiếu nhập</h1>`,
+  revenue_dashboard: `
+    <h1 class="main__title">Thống kê doanh thu</h1>
+    <div class="main__row">
+      <div class="main__timeline-slt main__select slt-form-1">
+        <input required="" type="text" id="status-slt-revenue_dashboard" />
+        <span><i class="fa-solid fa-timeline"></i></i>&nbsp;&nbsp;Chọn Khoảng thời gian</span>
+        <ul>
+          <li>Lọc theo năm</li>
+          <li>Lọc theo tháng</li>
+        </ul>
+      </div>
+      <div class="main__timeline-detail-slt main__select slt-form-1">
+        <input required="" type="text" id="status-slt-revenue_dashboard" />
+        <span><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;Chọn Thời gian cụ thể</span>
+        <ul>
+        </ul>
+      </div>
+      <button class="main__see-btn" id="filter-button-revenue_dashboard">
+        <i class="fa-solid fa-eye"></i>
+        <span>Xem</span>
+      </button>
+      <button class="main__print-btn" id="print-button-revenue_dashboard">
+        <i class="fa-solid fa-print"></i>
+        <span>In thống kê</span>
+      </button>
+    </div>
+    <div class="main__data">
+      <table class="main__table dashboard revenue_dashboard">
+        <thead><tr><th width="100%">Thống kê doanh thu</th></tr></thead>
+        <tbody></tbody>
+        <tfoot></tfoot>
+      </table>
+      <p class="main__total-text"><strong>Viết bằng chữ:</strong> <span>0 đồng</span></p>
+    </div>
+  `,
+  input_ticket_dashboard: `
+    <h1 class="main__title">Thống kê phiếu nhập</h1>
+    <div class="main__row">
+      <div class="main__timeline-slt main__select slt-form-1">
+        <input required="" type="text" id="status-slt-input_ticket_dashboard" />
+        <span><i class="fa-solid fa-timeline"></i></i>&nbsp;&nbsp;Chọn Khoảng thời gian</span>
+        <ul>
+          <li>Lọc theo năm</li>
+          <li>Lọc theo tháng</li>
+        </ul>
+      </div>
+      <div class="main__timeline-detail-slt main__select slt-form-1">
+        <input required="" type="text" id="status-slt-input_ticket_dashboard" />
+        <span><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;Chọn Thời gian cụ thể</span>
+        <ul>
+        </ul>
+      </div>
+      <button class="main__see-btn" id="filter-button-input_ticket_dashboard">
+        <i class="fa-solid fa-eye"></i>
+        <span>Xem</span>
+      </button>
+      <button class="main__print-btn" id="print-button-input_ticket_dashboard">
+        <i class="fa-solid fa-print"></i>
+        <span>In thống kê</span>
+      </button>
+    </div>
+    <div class="main__data">
+      <table class="main__table dashboard input_ticket_dashboard">
+        <thead><tr><th width="100%">Thống kê phiếu nhập</th></tr></thead>
+        <tbody></tbody>
+        <tfoot></tfoot>
+      </table>
+      <p class="main__total-text"><strong>Viết bằng chữ:</strong> <span>0 đồng</span></p>
+    </div>
+  `,
   order_dashboard: `<h1>Thống kê đơn hàng</h1>`,
   order: `<h1>Hoá đơn</h1>`,
   account: `
@@ -787,6 +860,14 @@ menuInSideBar.forEach((item, i) => {
         updateTimelineSelects();
         printProfitDashboardTicket();
         updateProfitDashboardTable();
+      } else if (mainContentKey === "revenue_dashboard") {
+        updateTimelineSelects();
+        printRevenueDashboardTicket();
+        updateRevenueDashboardTable();
+      } else if (mainContentKey === "input_ticket_dashboard") {
+        updateTimelineSelects();
+        printInputTicketDashboardTicket();
+        updateInputTicketDashboardTable();
       } else if (mainContentKey === "order") {
       } else if (mainContentKey === "account") {
         updateAccountTable();
