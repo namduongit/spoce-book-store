@@ -15,6 +15,22 @@ body {
     position: relative;
 }
 
+table {
+    border-collapse: collapse;
+}
+
+body::-webkit-scrollbar {
+    width: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: var(--topbar-color);
+}
+
+body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
 
 *:not(i) {
     font-family: var(--font-family) !important;

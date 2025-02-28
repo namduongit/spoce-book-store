@@ -16,6 +16,7 @@
     <!-- Nhúng các thư viện Css -->
     <script src="js/detail_product.js" defer></script>
     <script src="js/login_register.js" defer></script>
+    <script src="js/cart.js" defer></script>
 </head>
 
 <body>
@@ -53,7 +54,112 @@
                     <span>Tài khoản</span>
                 </div>
             </div>
+
         </div>
+
+        <div class="topbart__cart-action">
+            <span class="topbar__cart-holder">
+                <i class="fa-solid fa-cart-shopping topbar__cart-icon"></i>
+                <span class="topbar__count-holder">
+                    <span class="topbar__count">0</span>
+                </span>
+            </span>
+
+            <div class="topbar__cart-detail-holder">
+                <div class="topbar__cart-detail">
+                    <div class="topbar__cart-view">
+                        <table>
+                            <tr>
+                                <td><img src="images\vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="bookimg"></td>
+                                <td>
+                                    <p class="topbar__product-info">
+                                        <a href="#">Người thắp lửa</a>
+                                        <span>893532502468 / Sách thiếu nhi / 220.000đ</span>
+                                    </p>
+
+                                    <div class="topbar__cart-view-amountprice-holder">
+                                        <span>1</span>
+                                        <div>220.000đ</div>
+                                    </div>
+                                    
+                                    <div class="topbar__product-cancel"><i class="fa-solid fa-xmark"></i></div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><img src="images\vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="bookimg"></td>
+                                <td>
+                                    <p class="topbar__product-info">
+                                        <a href="#">Người thắp lửa</a>
+                                        <span>893532502468 / Sách thiếu nhi / 220.000đ</span>
+                                    </p>
+
+                                    <div class="topbar__cart-view-amountprice-holder">
+                                        <span>1</span>
+                                        <div>220.000đ</div>
+                                    </div>
+                                    
+                                    <div class="topbar__product-cancel"><i class="fa-solid fa-xmark"></i></div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><img src="images\vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="bookimg"></td>
+                                <td>
+                                    <p class="topbar__product-info">
+                                        <a href="#">Người thắp lửa</a>
+                                        <span>893532502468 / Sách thiếu nhi / 220.000đ</span>
+                                    </p>
+
+                                    <div class="topbar__cart-view-amountprice-holder">
+                                        <span>1</span>
+                                        <div>220.000đ</div>
+                                    </div>
+                                    
+                                    <div class="topbar__product-cancel"><i class="fa-solid fa-xmark"></i></div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><img src="images\vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="bookimg"></td>
+                                <td>
+                                    <p class="topbar__product-info">
+                                        <a href="#">Người thắp lửa</a>
+                                        <span>893532502468 / Sách thiếu nhi / 220.000đ</span>
+                                    </p>
+
+                                    <div class="topbar__cart-view-amountprice-holder">
+                                        <span>1</span>
+                                        <div>220.000đ</div>
+                                    </div>
+                                    
+                                    <div class="topbar__product-cancel"><i class="fa-solid fa-xmark"></i></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="topbar__cart-detail-divide"></div>
+
+                    <div class="topbar__cart-price">
+                        <table>
+                            <tr class="topbar__price-total">
+                                <td>TỔNG TIỀN:</td>
+                                <td>220.000đ</td>
+                            </tr>
+
+                            <tr class="topbar__cart-btn">
+                                <td><button>Xem giỏ hàng</button></td>
+                                <td><button>Thanh toán</button></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <header class="header">
