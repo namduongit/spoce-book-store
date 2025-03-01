@@ -1,5 +1,5 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
-import { updateAddressSelect } from "../updateAddressSelect.js";
+import { updateAddressSelect } from "../../../CallAPI/updateAddressSelect.js"
 
 // Hàm hiện dialog cho việc "chọn" địa chỉ
 function showAddressSelectDialog() {
@@ -14,6 +14,7 @@ function showAddressSelectDialog() {
     <button id="close-address-select-button" class="dialog__close">
       <i class="fa-solid fa-xmark"></i>
     </button>
+
     <div class="dialog__row">
       <div class="dialog__form-group full">
         <label>Số nhà và tên đường</label>
@@ -23,13 +24,15 @@ function showAddressSelectDialog() {
         />
       </div>
     </div>
+
     <div class="dialog__row">
       <div class="dialog__form-group full">
         <label>Tỉnh thành </label>
-        <select id="city-select">
+        <select id="province-select">
         </select>
       </div>
     </div>
+
     <div class="dialog__row">
       <div class="dialog__form-group full">
         <label>Quận / Huyện</label>
@@ -37,13 +40,15 @@ function showAddressSelectDialog() {
         </select>
       </div>
     </div>
+
     <div class="dialog__row">
       <div class="dialog__form-group full">
         <label>Phường / Xã</label>
         <select id="ward-select">
         </select>
-      </div>  
+      </div>
     </div>
+
     <div class="dialog__buttons">
       <button id="address-select-button" class="yes">Đồng ý</button>
     </div>
@@ -55,8 +60,8 @@ function showAddressSelectDialog() {
   // Hiển thị addDialog
   addDialog.showModal();
 
-  //
-  updateAddressSelect();
+  // Gọi Update địa chỉ
+  updateAddressSelect("province-select", "district-select", "ward-select");
 
   // Gán sự kiện cho nút "Đóng" dialog
   document

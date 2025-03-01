@@ -81,7 +81,7 @@
                                         <span>1</span>
                                         <div>220.000đ</div>
                                     </div>
-                                    
+
                                     <div class="topbar__product-cancel"><i class="fa-solid fa-xmark"></i></div>
                                 </td>
                             </tr>
@@ -98,7 +98,7 @@
                                         <span>1</span>
                                         <div>220.000đ</div>
                                     </div>
-                                    
+
                                     <div class="topbar__product-cancel"><i class="fa-solid fa-xmark"></i></div>
                                 </td>
                             </tr>
@@ -115,7 +115,7 @@
                                         <span>1</span>
                                         <div>220.000đ</div>
                                     </div>
-                                    
+
                                     <div class="topbar__product-cancel"><i class="fa-solid fa-xmark"></i></div>
                                 </td>
                             </tr>
@@ -132,7 +132,7 @@
                                         <span>1</span>
                                         <div>220.000đ</div>
                                     </div>
-                                    
+
                                     <div class="topbar__product-cancel"><i class="fa-solid fa-xmark"></i></div>
                                 </td>
                             </tr>
@@ -155,7 +155,7 @@
                         </table>
                     </div>
 
-                    
+
                 </div>
             </div>
         </div>

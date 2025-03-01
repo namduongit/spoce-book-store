@@ -7,5 +7,7 @@ spl_autoload_register(function ($class_name) {
      * Xong rồi include thêm .php đằng sau cho export_class
      */
     $path_class = str_replace('app', '', dirname(__FILE__));
+    echo $path_class . ''. $export_class . '.php';
+    die();
     include $path_class . ''. $export_class . '.php';
 });

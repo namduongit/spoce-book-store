@@ -1,7 +1,7 @@
 import { isNotFirstItemSelected } from "./selectEvents.js";
 
 // Hàm thay đổi địa chỉ giao hàng mới từ người dùng nhập vào
-export function updateAddressSelect() {
+export function updateAddressSelect(city, district, ward) {
   // Biến giữ thông tin các select lần lượt là Tỉnh thành - Quận / Huyện - Phường / Xã
   const citySelect = document.getElementById("city-select");
   const districtSelect = document.getElementById("district-select");
@@ -34,7 +34,7 @@ export function updateAddressSelect() {
   }
   citySelect.innerHTML = cityItems;
 
-  //Khi người dùng lựa chọn Thành phố
+  // Khi người dùng lựa chọn Thành phố
   citySelect.addEventListener("change", function () {
     const cityIDSelected = citySelect.value;
     let districtsFromCitySelected;
@@ -55,7 +55,7 @@ export function updateAddressSelect() {
     }
     districtSelect.innerHTML = districtItems;
 
-    //Khi người dùng lựa chọn Quận / Huyện
+    // Khi người dùng lựa chọn Quận / Huyện
     districtSelect.addEventListener("change", function () {
       const districtIDSelected = districtSelect.value;
       let wardsFromDistrictSelected;
@@ -77,6 +77,7 @@ export function updateAddressSelect() {
       wardSelect.innerHTML = wardItems;
     });
   });
+
 }
 
 // Mảng chứa thông tin của tỉnh thành, quận huyện, phường xã để nhập địa chỉ cho người dùng
