@@ -53,6 +53,7 @@ export function printInputTicketDashboardTicket() {
                     <p>Cửa hàng bán sách SPOCE STORE</p>
                     <p>273 An Đ. Vương, Phường 2, Quận 5, Hồ Chí Minh 700000</p>
                     <p>123456789 - 0987654321</p>
+                    <p>spocestore@gmail.com.vn</p>
                 </div>
             </header>
             <main class="ticket__body">

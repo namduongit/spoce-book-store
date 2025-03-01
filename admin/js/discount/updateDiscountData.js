@@ -1,4 +1,5 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
+import { clickToShowDatePicker, defaultDateSelected } from "../others.js";
 
 // Hàm thiết lập sự kiện Sửa một khuyến mãi cho bảng
 export function updateDiscountData(idDiscountSelected) {
@@ -45,13 +46,19 @@ export function updateDiscountData(idDiscountSelected) {
               </div>
             </div>
             <div class="dialog__row">
+                  <div class="dialog__form-group">
+                    <label>Tiền đơn hàng tối thiểu</label>
+                    <input type="text" id="update-discount-order-price-start" placeholder="Nhập Tiền đơn hàng tối thiểu" />
+                  </div>
+                  <div class="dialog__form-group">
+                    <label>Tiền đơn hàng tối đa</label>
+                    <input type="text" id="update-discount-order-price-end" placeholder="Nhập Tiền đơn hàng tối đa" />
+                  </div>
+                </div>
+            <div class="dialog__row">
               <div class="dialog__form-group">
                 <label>Phần trăm (%)</label>
-                <select id="update-discount-percent">
-                  <option value="" selected>Chọn Giá trị</option>
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                </select>
+                <input type="text" id="update-discount-percent" placeholder="Nhập Phần trăm (%)" />
               </div>
               <div class="dialog__form-group">
                 <label>Trạng thái</label>
@@ -81,6 +88,11 @@ export function updateDiscountData(idDiscountSelected) {
   selectElement.forEach((select) => {
     isNotFirstItemSelected(select);
   });
+  // -
+  clickToShowDatePicker("update-discount-date-start");
+  clickToShowDatePicker("update-discount-date-end");
+  defaultDateSelected("update-discount-date-start");
+  defaultDateSelected("update-discount-date-end");
 
   // Gán sự kiện cho nút "Sửa" dialog
   document

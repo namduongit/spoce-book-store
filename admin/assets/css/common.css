@@ -160,6 +160,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* <===== Detail / Add / Update Dialog =====> */
 .dialog:where(
     .profit_dashboard,
+    .order,
     .account,
     .supplies,
     .discount,
@@ -209,11 +210,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   position: relative;
   width: 50%;
 }
-.dialog__form-group.book {
+.dialog__form-group:where(.book, .order) {
   width: calc(100% / 3);
+}
+.dialog__form-group.order.half {
+  width: calc(calc(100% / 3) / 2 - 12px);
 }
 .dialog__form-group.full {
   width: 100%;
+}
+.dialog__form-group.order.full {
+  width: calc(calc(calc(100% / 3) * 2) + 16px);
 }
 .dialog__form-group label,
 .dialog__form-group input,
@@ -438,6 +445,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding-top: 8px;
   resize: "off";
 }
+.dialog__form-group.half {
+}
 .dialog__form-group:has(input[type="date"]) label {
   color: #dedede !important;
 }
@@ -456,9 +465,68 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .dialog__form-group:has(input[type="date"].hasValidDate) label {
   color: #000 !important;
 }
-
+.dialog__form-group table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 4px;
+  font-size: 16px;
+  font-family: sans-serif;
+}
+.dialog__form-group table thead tr {
+  /* background-color: #303234; */
+  background: #000;
+  color: #ffffff;
+}
+.dialog__form-group table th,
+.dialog__form-group table td {
+  height: 40px;
+  font-size: 14px;
+  text-align: center;
+  padding: 4px 6px;
+}
+.dialog__form-group table th,
+.dialog__form-group table td {
+  border: 1px solid #000;
+}
+.dialog__buttons.order {
+  justify-content: flex-end;
+}
+.dialog__buttons.order button {
+  width: 200px;
+  border: 2px solid #000;
+}
+.dialog__buttons button.confirm-status {
+  background: #3dc55d;
+  border-color: #3dc55d;
+}
+.dialog__buttons button.confirm-status:hover {
+  background: #fff;
+  color: #3dc55d;
+}
+.dialog__buttons button.shipping-status {
+  background: #ffdf4e;
+  border-color: #ffdf4e;
+}
+.dialog__buttons button.shipping-status:hover {
+  background: #fff;
+  color: #ffdf4e;
+}
+.dialog__buttons button.cancel-status {
+  background: #f44336;
+  border-color: #f44336;
+}
+.dialog__buttons button.cancel-status:hover {
+  background: #fff;
+  color: #f44336;
+}
 /* <===== Dashboard =====> */
-.ticket:where(.profit_dashboard, .revenue_dashboard, .input_ticket_dashboard) {
+.ticket:where(
+    .profit_dashboard,
+    .revenue_dashboard,
+    .input_ticket_dashboard,
+    .order
+  ) {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -591,4 +659,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .ticket__print-btn:hover {
   background: #fff;
   color: #699f4c;
+}
+.ticket__body.order .ticket__info {
+  font-size: 17px;
+}
+.ticket__body.order .ticket__date {
+  margin-bottom: 24px;
+}
+.ticket__body.order .ticket__table {
+  margin-top: 4px;
+}
+.ticket__footer.order {
+  justify-content: space-around;
 }

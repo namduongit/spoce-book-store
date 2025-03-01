@@ -230,8 +230,11 @@ body {
   align-items: center;
 } */
 .main__row > .main__select ul {
-  max-height: 204px;
+  max-height: 210px;
   overflow-y: scroll;
+}
+.main__row + .main__row {
+  margin-top: 40px;
 }
 .main__filter-btn,
 .main__see-btn {
@@ -276,11 +279,40 @@ body {
   background: #fff;
   color: #699f4c;
 }
+.main__refresh-btn {
+  width: 70px;
+  height: 30px;
+  background: #f44336;
+  border: 2px solid #f44336;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+}
+.main__refresh-btn:hover {
+  background: #fff;
+  color: #f44336;
+}
+.main__buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: auto;
+  gap: 15px;
+}
+.main__buttons button {
+  width: 50%;
+}
 /* <= Main Data => */
 .main__data {
   width: calc(100% - 60px);
   margin: 15px 0 0 30px;
   min-height: 520px;
+}
+.main__data:has(.main__table.order) {
+  min-height: 450px;
 }
 .main__table {
   table-layout: fixed;
@@ -294,7 +326,6 @@ body {
   /* background-color: #303234; */
   background: var(--primary-color);
   color: #ffffff;
-  text-align: left;
 }
 .main__table th,
 .main__table td {
@@ -303,13 +334,13 @@ body {
   text-align: center;
   padding: 4px 6px;
 }
+/* .main__table.order td {
+  height: calc(var(--table-height) * 2);
+} */
 .main__table.book td {
   height: calc(var(--table-height) * 3);
 }
 .main__table th {
-  font-size: var(--table-column-font-size);
-}
-.main__table.book th {
   font-size: var(--table-column-font-size);
 }
 .main__table tbody tr {

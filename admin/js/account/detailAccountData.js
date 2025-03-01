@@ -27,43 +27,43 @@ export function detailAccountData(idAccountSelected) {
           <div class="dialog__row">
             <div class="dialog__form-group">
               <label>Mã người dùng</label>
-              <input type="text" id="add-account-id" readonly />
+              <input type="text" id="detail-account-id" readonly />
             </div>
             <div class="dialog__form-group">
               <label>Họ và tên</label>
-              <input type="text" id="add-account-fullname" readonly />
+              <input type="text" id="detail-account-fullname" readonly />
             </div>
           </div>
           <div class="dialog__row">
             <div class="dialog__form-group">
               <label>Số điện thoại</label>
-              <input type="text" id="add-account-phone" readonly />
+              <input type="text" id="detail-account-phone" readonly />
             </div>
             <div class="dialog__form-group">
               <label>Email</label>
-              <input type="text" id="add-account-email" readonly />
+              <input type="text" id="detail-account-email" readonly />
             </div>
           </div>
           <div class="dialog__row">
             <div class="dialog__form-group full">
               <label>Địa chỉ</label>
-              <input type="text" id="add-account-address" readonly />
+              <input type="text" id="detail-account-address" readonly />
             </div>
           </div>
           <div class="dialog__row">
             <div class="dialog__form-group">
               <label>Tên tài khoản</label>
-              <input type="text" id="add-account-username" readonly />
+              <input type="text" id="detail-account-username" readonly />
             </div>
             <div class="dialog__form-group">
               <label>Mật khẩu</label>
-              <input type="text" id="add-account-password" readonly />
+              <input type="text" id="detail-account-password" readonly />
             </div>
           </div>
           <div class="dialog__row">
             <div class="dialog__form-group">
               <label>Phân quyền</label>
-              <select id="add-account-privilege" disabled>
+              <select id="detail-account-privilege" disabled>
                   <option value="" selected>Chọn Phân quyền</option>
                   <option value="1">Quản lý</option>
                   <option value="2">Nhân viên</option>
@@ -73,7 +73,7 @@ export function detailAccountData(idAccountSelected) {
             </div>
             <div class="dialog__form-group">
               <label>Trạng thái</label>
-              <select id="add-account-status" disabled>
+              <select id="detail-account-status" disabled>
                 <option value="" selected>Chọn Trạng thái</option>
                 <option value="1">Hoạt động</option>
                 <option value="0">Tạm dừng</option>
