@@ -2,22 +2,21 @@ import { selectFormEvents, updateTimelineSelects } from "./selectEvents.js";
 import { clickToShowDatePicker } from "./others.js";
 import { printProfitDashboardTicket } from "./dashboard/printProfitDashboard.js";
 import { updateProfitDashboardTable } from "./dashboard/updateProfitDashboardTable.js";
+import { updateRevenueDashboardTable } from "./dashboard/updateRevenueDashboardTable.js";
+import { printRevenueDashboardTicket } from "./dashboard/printRevenueDashboard.js";
+import { updateInputTicketDashboardTable } from "./dashboard/updateInputTicketDashboard.js";
+import { printInputTicketDashboardTicket } from "./dashboard/printInputTicketDashboard.js";
+import { updateOrderTable } from "./order/updateOrderTable.js";
 import { updateAccountTable } from "./account/updateAccountTable.js";
-import { updateSuppliesTable } from "./supplies/updateSuppliesTable.js";
 import { updateDiscountTable } from "./discount/updateDiscountTable.js";
+import { updateSuppliesTable } from "./supplies/updateSuppliesTable.js";
+import { updateInputTicketTable } from "./input_ticket/updateInputTicketTable.js";
 import { updateBookTable } from "./book/updateBookTable.js";
 import { updateAuthorTable } from "./author/updateAuthorTable.js";
 import { updateCategoryTable } from "./category/updateCategoryTable.js";
 import { updateCoverTable } from "./cover/updateCoverTable.js";
 import { updatePublisherTable } from "./publisher/updatePublisherTable.js";
 import { updateIssuerTable } from "./issuer/updateIssuerTable.js";
-
-import { renderInputTicketTable } from "./input_ticket/renderInputTicketTable.js";
-
-import { updateRevenueDashboardTable } from "./dashboard/updateRevenueDashboardTable.js";
-import { printRevenueDashboardTicket } from "./dashboard/printRevenueDashboard.js";
-import { updateInputTicketDashboardTable } from "./dashboard/updateInputTicketDashboard.js";
-import { printInputTicketDashboardTicket } from "./dashboard/printInputTicketDashboard.js";
 
 // Biến chứa nội dung sẽ thay đổi của menu tương ứng
 const mainContentMap = {
@@ -127,13 +126,111 @@ const mainContentMap = {
     </div>
   `,
   order_dashboard: `<h1>Thống kê đơn hàng</h1>`,
-  order: `<h1>Hoá đơn</h1>`,
+  order: `
+    <h1 class="main__title">Đơn hàng</h1>
+    <div class="main__row">
+      <div class="main__find-inp inp-text-form-1">
+        <input required="" type="text" id="find-inp-order" />
+        <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Khách hàng</span>
+      </div>
+      <div class="main__sort-slt main__select slt-form-1">
+        <input required="" type="text" id="sort-slt-order" />
+        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Chọn Sắp xếp</span>
+        <ul>
+          <li>ID tăng dần</li>
+          <li>ID giảm dần</li>
+          <li>Khách hàng tăng dần</li>
+          <li>Khách hàng giảm dần</li>
+          <li>Ngày tạo đơn tăng dần</li>
+          <li>Ngày tạo đơn giảm dần</li>
+          <li>Tổng thanh toán tăng dần</li>
+          <li>Tổng thanh toán giảm dần</li>
+        </ul>
+      </div>
+      <div class="main__find-inp inp-text-form-1 date">
+        <input required="" type="date" id="find-date-create-before-inp-order" />
+        <i class="fa-solid fa-minus"></i>
+        <input required="" type="date" id="find-date-create-after-inp-order" />
+        <span><i class="fa-solid fa-calendar"></i>&nbsp;&nbsp;Ngày tạo đơn</span>
+      </div>
+      <div class="main__city-slt main__select slt-form-1">
+        <input required="" type="text" id="city-slt-order" />
+        <span><i class="fa-solid fa-city"></i>&nbsp;&nbsp;Chọn Tỉnh / Thành phố</span>
+        <ul>
+          <li>Hà Nội</li>
+          <li>Thành phố Hồ Chí Minh</li>
+        </ul>
+      </div>
+      <div class="main__district-slt main__select slt-form-1">
+        <input required="" type="text" id="district-slt-order" />
+        <span><i class="fa-solid fa-tree-city"></i>&nbsp;&nbsp;Chọn Quận</span>
+        <ul>
+          <li>Quận 1</li>
+          <li>Quận 10</li>
+        </ul>
+      </div>
+    </div>
+    <div class="main__row">
+      <div class="main__status-slt main__select slt-form-1">
+        <input required="" type="text" id="status-slt-order" />
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
+        <ul>
+          <li>Đã hoàn thành</li>
+          <li>Chưa thanh toán</li>
+          <li>Đang chờ xác nhận</li>
+          <li>Đã huỷ phiếu</li>
+        </ul>
+      </div>
+      <div class="main__buttons"> 
+        <button class="main__filter-btn" id="filter-button-order">
+          <i class="fa-solid fa-filter"></i>
+          <span>Lọc</span>
+        </button>
+        <button class="main__refresh-btn" id="filter-button-order">
+          <i class="fa-solid fa-refresh"></i>
+          <span>Đặt lại</span>
+        </button>
+      </div>
+    </div>
+    <div class="main__data">
+      <table class="main__table order">
+        <thead>
+          <tr>
+              <th width="10%">ID</th>
+              <th width="10%">Khách hàng</th>
+              <th width="14%">Ngày tạo đơn</th>
+              <th width="14%">Quận, Tỉnh / TP</th>
+              <th width="28%">Tổng thanh toán (VNĐ)</th>
+              <th width="14%">Trạng thái</th>
+              <th width="10%"></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div class="main__pagination">
+      <button class="main-pagination__button previous">
+        <i class="icon fa-solid fa-chevron-left"></i>
+      </button>
+      <button class="main-pagination__button">1</button>
+      <button class="main-pagination__button active">2</button>
+      <button class="main-pagination__button">3</button>
+      <button class="main-pagination__button">...</button>
+      <button class="main-pagination__button">997</button>
+      <button class="main-pagination__button">998</button>
+      <button class="main-pagination__button">999</button>
+      <button class="main-pagination__button next">
+        <i class="icon fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+  `,
   account: `
     <h1 class="main__title">Người dùng</h1>
     <div class="main__row">
       <div class="main__find-inp inp-text-form-1">
         <input required="" type="text" id="find-inp-account" />
-        <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên đăng nhập</span>
+        <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Họ và tên</span>
       </div>
       <div class="main__sort-slt main__select slt-form-1">
         <input required="" type="text" id="sort-slt-account" />
@@ -156,7 +253,7 @@ const mainContentMap = {
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-account" />
-        <span><i class="fa-solid fa-refresh"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
           <li>Hoạt động</li>
           <li>Tạm dừng</li>
@@ -176,7 +273,7 @@ const mainContentMap = {
         <thead>
           <tr>
               <th width="10%">ID</th>
-              <th width="34%">Tên đăng nhập</th>
+              <th width="34%">Họ và tên</th>
               <th width="14%">Phân quyền</th>
               <th width="14%">Số điện thoại</th>
               <th width="14%">Trạng thái</th>
@@ -222,7 +319,7 @@ const mainContentMap = {
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-supplies" />
-        <span><i class="fa-solid fa-refresh"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
           <li>Hoạt động</li>
           <li>Tạm dừng</li>
@@ -290,7 +387,7 @@ const mainContentMap = {
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-discount" />
-        <span><i class="fa-solid fa-refresh"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
           <li>Hoạt động</li>
           <li>Tạm dừng</li>
@@ -355,8 +452,8 @@ const mainContentMap = {
           <li>Ngày lập phiếu giảm dần</li>
           <li>Số loại sách tăng dần</li>
           <li>Số loại sách giảm dần</li>
-          <li>Tổng thanh toán tăng dần</li>
-          <li>Tổng thanh toán giảm dần</li>
+          <li>Tổng tiền nhập tăng dần</li>
+          <li>Tổng tiền nhập giảm dần</li>
         </ul>
       </div>
       <div class="main__find-inp inp-text-form-1 date">
@@ -367,7 +464,7 @@ const mainContentMap = {
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-input_ticket" />
-        <span><i class="fa-solid fa-refresh"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
           <li>Đã hoàn thành</li>
           <li>Chưa thanh toán</li>
@@ -391,7 +488,7 @@ const mainContentMap = {
               <th width="10%">ID</th>
               <th width="16%">Ngày lập phiếu</th>
               <th width="16%">Tổng số lượng</th>
-              <th width="26%">Tổng tiền thanh toán (VNĐ)</th>
+              <th width="26%">Tổng tiền nhập (VNĐ)</th>
               <th width="16%">Trạng thái</th>
               <th width="16%"></th>
           </tr>
@@ -445,7 +542,7 @@ const mainContentMap = {
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-book" />
-        <span><i class="fa-solid fa-refresh"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
           <li>Hoạt động</li>
           <li>Tạm dừng</li>
@@ -512,7 +609,7 @@ const mainContentMap = {
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-author" />
-        <span><i class="fa-solid fa-refresh"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
           <li>Hoạt động</li>
           <li>Tạm dừng</li>
@@ -576,7 +673,7 @@ const mainContentMap = {
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-category" />
-        <span><i class="fa-solid fa-refresh"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
           <li>Hoạt động</li>
           <li>Tạm dừng</li>
@@ -640,7 +737,7 @@ const mainContentMap = {
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-cover" />
-        <span><i class="fa-solid fa-refresh"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
           <li>Hoạt động</li>
           <li>Tạm dừng</li>
@@ -704,7 +801,7 @@ const mainContentMap = {
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-publisher" />
-        <span><i class="fa-solid fa-refresh"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
           <li>Hoạt động</li>
           <li>Tạm dừng</li>
@@ -768,7 +865,7 @@ const mainContentMap = {
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-issuer" />
-        <span><i class="fa-solid fa-refresh"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
           <li>Hoạt động</li>
           <li>Tạm dừng</li>
@@ -869,6 +966,7 @@ menuInSideBar.forEach((item, i) => {
         printInputTicketDashboardTicket();
         updateInputTicketDashboardTable();
       } else if (mainContentKey === "order") {
+        updateOrderTable();
       } else if (mainContentKey === "account") {
         updateAccountTable();
       } else if (mainContentKey === "supplies") {
@@ -876,9 +974,7 @@ menuInSideBar.forEach((item, i) => {
       } else if (mainContentKey === "discount") {
         updateDiscountTable();
       } else if (mainContentKey === "input_ticket") {
-        clickToShowDatePicker("find-date-create-before-inp-input_ticket");
-        clickToShowDatePicker("find-date-create-after-inp-input_ticket");
-        renderInputTicketTable();
+        updateInputTicketTable();
       } else if (mainContentKey === "book") {
         updateBookTable();
       } else if (mainContentKey === "author") {

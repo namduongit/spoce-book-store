@@ -1,3 +1,4 @@
+import { detailDiscountData } from "./detailDiscountData.js";
 import { updateDiscountData } from "./updateDiscountData.js";
 import { lockDiscountData } from "./lockDiscountData.js";
 
@@ -23,9 +24,9 @@ let data = [
   },
 ];
 
-// Hàm cập nhật lại dữ liệu cho bảng Thể loại
+// Hàm cập nhật lại dữ liệu cho bảng khuyến mãi
 export function renderDiscountTable() {
-  // Biến chứa đối tượng bảng Thể loại
+  // Biến chứa đối tượng bảng khuyến mãi
   const bodyInDiscountTable = document.querySelector(
     ".main__data > .main__table.discount > tbody"
   );
@@ -44,6 +45,7 @@ export function renderDiscountTable() {
                 data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
               }>${data[i].status}</span></td>
               <td>
+                  <i id="detail-button-discount" class="fa-solid fa-circle-info"></i>
                   <i id="update-button-discount" class="fa-solid fa-pen-to-square"></i>
                   <i id="lock-button-discount" class="fa-solid fa-${
                     data[i].status === "Hoạt động" ? "" : "un"
@@ -65,12 +67,22 @@ export function renderDiscountTable() {
   );
   listButtonInTable.forEach((buttons, row) => {
     // Các nút cần gán sự kiện trên mỗi dòng
-    const updateButton = buttons.children[0];
-    const lockButton = buttons.children[1];
+    const detailButton = buttons.children[0];
+    const updateButton = buttons.children[1];
+    const lockButton = buttons.children[2];
     // Id của đối tượng đã được chọn để thao tác
     const idDiscountSelected = idColumnInTable.item(row);
 
-    // Gán sự kiện hiện dialog sửa thể loại
+    // Gán sự kiện hiện dialog chi tiết khuyến mãi
+    detailButton.addEventListener("click", (e) => {
+      // Loại bỏ giá trị mặc định
+      e.preventDefault();
+
+      // Gọi hàm sự kiện
+      detailDiscountData(idDiscountSelected);
+    });
+
+    // Gán sự kiện hiện dialog sửa khuyến mãi
     updateButton.addEventListener("click", (e) => {
       // Loại bỏ giá trị mặc định
       e.preventDefault();
@@ -79,7 +91,7 @@ export function renderDiscountTable() {
       updateDiscountData(idDiscountSelected);
     });
 
-    // Gán sự kiện hiện dialog khoá / mở khoá thể loại
+    // Gán sự kiện hiện dialog khoá / mở khoá khuyến mãi
     lockButton.addEventListener("click", (e) => {
       // Loại bỏ giá trị mặc định
       e.preventDefault();

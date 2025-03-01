@@ -49,12 +49,18 @@ export function addDiscountData() {
                 </div>
                 <div class="dialog__row">
                   <div class="dialog__form-group">
+                    <label>Tiền đơn hàng tối thiểu</label>
+                    <input type="text" id="add-discount-order-price-start" placeholder="Nhập Tiền đơn hàng tối thiểu" />
+                  </div>
+                  <div class="dialog__form-group">
+                    <label>Tiền đơn hàng tối đa</label>
+                    <input type="text" id="add-discount-order-price-end" placeholder="Nhập Tiền đơn hàng tối đa" />
+                  </div>
+                </div>
+                <div class="dialog__row">
+                  <div class="dialog__form-group">
                     <label>Phần trăm (%)</label>
-                    <select id="add-discount-percent">
-                      <option value="" selected>Chọn Giá trị</option>
-                      <option value="0">0</option>
-                      <option value="1">1</option>
-                    </select>
+                    <input type="text" id="add-discount-percent" placeholder="Nhập Phần trăm (%)" />
                   </div>
                   <div class="dialog__form-group">
                     <label>Trạng thái</label>
