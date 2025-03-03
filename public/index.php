@@ -149,7 +149,7 @@
                             </tr>
 
                             <tr class="topbar__cart-btn">
-                                <td><button>Xem giỏ hàng</button></td>
+                                <td class="topbar__cart"><button>Xem giỏ hàng</button></td>
                                 <td><button>Thanh toán</button></td>
                             </tr>
                         </table>
@@ -1029,6 +1029,210 @@
         </div>
     </main>
 
+    <div class="show-cart hide-item">
+        <div class="show-cart__container">
+            <div class="show-cart__title">
+                GIỎ HÀNG
+            </div>
+            <div class="show-cart__cart">
+                <div class="show-cart__item d-flex">
+
+                    <img class="show-cart__img" src="images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="product">
+                        
+                    <div class="show-cart__detail d-flex">
+                            <div class="show-cart__bookname">Người thắp lửa</div>
+                            <div class="show-cart__price">893532502468 / Sách thiếu nhi / 220.000đ</div>
+                    </div>
+
+                    <div class="show-cart__amountbox">
+                        <button class="show-cart__btn show-cart__btn--left">-</button>
+                        <input type="text" name="product-amount" value="1">
+                        <button class="show-cart__btn show-cart__btn--right">+</button>
+                    </div>
+
+                    <div class="show-cart__priceamount">220.000đ</div>
+
+                    <a href="#" class="show-cart__remove"><i class="fa-solid fa-trash-can"></i></a>
+                </div>
+
+                <div class="show-cart__item d-flex">
+
+                    <img class="show-cart__img" src="images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="product">
+                        
+                    <div class="show-cart__detail d-flex">
+                            <div class="show-cart__bookname">Người thắp lửa</div>
+                            <div class="show-cart__price">893532502468 / Sách thiếu nhi / 220.000đ</div>
+                    </div>
+
+                    <div class="show-cart__amountbox">
+                        <button class="show-cart__btn show-cart__btn--left">-</button>
+                        <input type="text" name="product-amount" value="1">
+                        <button class="show-cart__btn show-cart__btn--right">+</button>
+                    </div>
+
+                    <div class="show-cart__priceamount">220.000đ</div>
+
+                    <a href="#" class="show-cart__remove"><i class="fa-solid fa-trash-can"></i></a>
+                </div>
+
+                <div class="show-cart__item d-flex">
+
+                    <img class="show-cart__img" src="images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="product">
+                        
+                    <div class="show-cart__detail d-flex">
+                            <div class="show-cart__bookname">Người thắp lửa</div>
+                            <div class="show-cart__price">893532502468 / Sách thiếu nhi / 220.000đ</div>
+                    </div>
+
+                    <div class="show-cart__amountbox">
+                        <button class="show-cart__btn show-cart__btn--left">-</button>
+                        <input type="text" name="product-amount" value="1">
+                        <button class="show-cart__btn show-cart__btn--right">+</button>
+                    </div>
+
+                    <div class="show-cart__priceamount">220.000đ</div>
+
+                    <a href="#" class="show-cart__remove"><i class="fa-solid fa-trash-can"></i></a>
+                </div>
+
+                <div class="show-cart__item d-flex">
+
+                    <img class="show-cart__img" src="images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="product">
+                        
+                    <div class="show-cart__detail d-flex">
+                            <div class="show-cart__bookname">Người thắp lửa</div>
+                            <div class="show-cart__price">893532502468 / Sách thiếu nhi / 220.000đ</div>
+                    </div>
+
+                    <div class="show-cart__amountbox">
+                        <button class="show-cart__btn show-cart__btn--left">-</button>
+                        <input type="text" name="product-amount" value="1">
+                        <button class="show-cart__btn show-cart__btn--right">+</button>
+                    </div>
+
+                    <div class="show-cart__priceamount">220.000đ</div>
+
+                    <a href="#" class="show-cart__remove"><i class="fa-solid fa-trash-can"></i></a>
+                </div>
+
+                <div class="show-cart__item d-flex">
+
+                    <img class="show-cart__img" src="images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="product">
+                        
+                    <div class="show-cart__detail d-flex">
+                            <div class="show-cart__bookname">Người thắp lửa</div>
+                            <div class="show-cart__price">893532502468 / Sách thiếu nhi / 220.000đ</div>
+                    </div>
+
+                    <div class="show-cart__amountbox">
+                        <button class="show-cart__btn show-cart__btn--left">-</button>
+                        <input type="text" name="product-amount" value="1">
+                        <button class="show-cart__btn show-cart__btn--right">+</button>
+                    </div>
+
+                    <div class="show-cart__priceamount">220.000đ</div>
+
+                    <a href="#" class="show-cart__remove"><i class="fa-solid fa-trash-can"></i></a>
+                </div>
+
+
+                <div class="show-cart__item d-flex">
+
+                    <img class="show-cart__img" src="images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="product">
+                        
+                    <div class="show-cart__detail d-flex">
+                            <div class="show-cart__bookname">Người thắp lửa</div>
+                            <div class="show-cart__price">893532502468 / Sách thiếu nhi / 220.000đ</div>
+                    </div>
+
+                    <div class="show-cart__amountbox">
+                        <button class="show-cart__btn show-cart__btn--left">-</button>
+                        <input type="text" name="product-amount" value="1">
+                        <button class="show-cart__btn show-cart__btn--right">+</button>
+                    </div>
+
+                    <div class="show-cart__priceamount">220.000đ</div>
+
+                    <a href="#" class="show-cart__remove"><i class="fa-solid fa-trash-can"></i></a>
+                </div>
+
+                <div class="show-cart__item d-flex">
+
+                    <img class="show-cart__img" src="images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="product">
+                        
+                    <div class="show-cart__detail d-flex">
+                            <div class="show-cart__bookname">Người thắp lửa</div>
+                            <div class="show-cart__price">893532502468 / Sách thiếu nhi / 220.000đ</div>
+                    </div>
+
+                    <div class="show-cart__amountbox">
+                        <button class="show-cart__btn show-cart__btn--left">-</button>
+                        <input type="text" name="product-amount" value="1">
+                        <button class="show-cart__btn show-cart__btn--right">+</button>
+                    </div>
+
+                    <div class="show-cart__priceamount">220.000đ</div>
+
+                    <a href="#" class="show-cart__remove"><i class="fa-solid fa-trash-can"></i></a>
+                </div>
+
+                <div class="show-cart__item d-flex">
+
+                    <img class="show-cart__img" src="images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="product">
+                        
+                    <div class="show-cart__detail d-flex">
+                            <div class="show-cart__bookname">Người thắp lửa</div>
+                            <div class="show-cart__price">893532502468 / Sách thiếu nhi / 220.000đ</div>
+                    </div>
+
+                    <div class="show-cart__amountbox">
+                        <button class="show-cart__btn show-cart__btn--left">-</button>
+                        <input type="text" name="product-amount" value="1">
+                        <button class="show-cart__btn show-cart__btn--right">+</button>
+                    </div>
+
+                    <div class="show-cart__priceamount">220.000đ</div>
+
+                    <a href="#" class="show-cart__remove"><i class="fa-solid fa-trash-can"></i></a>
+                </div>
+
+                <div class="show-cart__item d-flex">
+
+                    <img class="show-cart__img" src="images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="product">
+                        
+                    <div class="show-cart__detail d-flex">
+                            <div class="show-cart__bookname">Người thắp lửa</div>
+                            <div class="show-cart__price">893532502468 / Sách thiếu nhi / 220.000đ</div>
+                    </div>
+
+                    <div class="show-cart__amountbox">
+                        <button class="show-cart__btn show-cart__btn--left">-</button>
+                        <input type="text" name="product-amount" value="1">
+                        <button class="show-cart__btn show-cart__btn--right">+</button>
+                    </div>
+
+                    <div class="show-cart__priceamount">220.000đ</div>
+
+                    <a href="#" class="show-cart__remove"><i class="fa-solid fa-trash-can"></i></a>
+                </div>
+
+            </div>
+
+
+            <div class="show-cart__checkout">
+                <div class="show-cart__checkout-info">
+                    <div class="show-cart__checkout-title">Thông tin đơn hàng</div>
+                    <div class="show-cart__totalprice">Tổng số tiền: <span>220.000đ</span></div>
+                    <span>Bạn có thể nhập mã giảm giá ở trang thanh toán.</span>
+                    <p><a href="#" class="show-cart__continue-buy-btn"><i class="fa fa-reply"></i> Tiếp tục mua hàng</a></p>
+                </div>
+                <div class="show-cart__checkoutbox">
+                    <button>Xóa tất cả</button>
+                    <button><i class="fa-regular fa-circle-check"></i> Thanh toán</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer class="footer">
         <div class="footer__container container">

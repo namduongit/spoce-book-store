@@ -80,6 +80,10 @@ i {
     display: none;
 }
 
+.show-item {
+    display: block;
+}
+
 .width-fit-content {
     width: fit-content;
 }
