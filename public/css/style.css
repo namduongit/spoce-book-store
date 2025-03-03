@@ -658,11 +658,16 @@
     border-radius: 0 0 30px 30px;
 }
 
+.topbar__cart-holder:hover .topbar__cart-icon {
+    color: #E07F05;
+}
+
 .topbar__cart-icon {
     position: absolute;
     font-size: 2.4rem;
     bottom: 10px;
     left: 8px;
+    transition: all 0.15s;
 }
 
 .topbar__count-holder {
@@ -685,7 +690,7 @@
     color: black;
     background-color: white;
     position: absolute;
-    top: 50%;
+    top: 0;
     right: 0;
     width: 300px;
     box-shadow: 0 1px 5px 2px rgba(0, 0, 0, 0.1);
