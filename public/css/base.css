@@ -77,7 +77,7 @@ i {
 }
 
 .hide-item {
-    display: none;
+    display: none !important;
 }
 
 .show-item {
