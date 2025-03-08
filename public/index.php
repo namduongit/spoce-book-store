@@ -7,16 +7,25 @@
     <title>Spoce Book Store</title>
     <link rel="icon" type="image/png" href="../media/logo/human_book.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="css/animation.css">
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    <link rel="stylesheet" href="css/style.css">
-
     <!-- Nhúng các thư viện Css -->
-    <script src="js/detail_product.js" defer></script>
-    <script src="js/login_register.js" defer></script>
-    <script src="js/cart.js" defer></script>
+    <link rel="stylesheet" href="public/css/animation.css">
+    <link rel="stylesheet" href="public/css/reset.css">
+    <link rel="stylesheet" href="public/css/base.css">
+    <link rel="stylesheet" href="public/css/responsive.css">
+    <link rel="stylesheet" href="public/css/style.css">
+
+    <!-- Nhúng các thư viện Js -->
+    <script src="public/js/detail_product.js" defer></script>
+    <script src="public/js/login_register.js" defer></script>
+    <script src="public/js/cart.js" defer></script>
+
+    <script src="public/js/top_bar.js"></script>
+
+
+    <script src="public/js/script.js" defer></script>
+    <!-- Thư viện javascript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 
 <body>
@@ -54,7 +63,6 @@
                     <span>Tài khoản</span>
                 </div>
             </div>
-
         </div>
 
         <div class="topbart__cart-action">
@@ -192,39 +200,39 @@
                 <h3 class="sidebar__title">Danh mục</h3>
                 <ul class="sidebar__list">
                     <li class="sidebar__item d-flex just-content-spbt">
-                        <a href="#">Sách Kinh Tế</a>
+                        <a href="/?book=economics">Economics Books</a>
                         <i class="fa-solid fa-chevron-right"></i>
                     </li>
                     <li class="sidebar__item d-flex just-content-spbt">
-                        <a href="#">Sách Văn Học Trong Nước</a>
+                        <a href="/?book=domestic-literature">Domestic Literature</a>
                         <i class="fa-solid fa-chevron-right"></i>
                     </li>
                     <li class="sidebar__item d-flex just-content-spbt">
-                        <a href="#">Sách Văn Học Nước Ngoài</a>
+                        <a href="/?book=foreign-literature">Foreign Literature</a>
                         <i class="fa-solid fa-chevron-right"></i>
                     </li>
                     <li class="sidebar__item d-flex just-content-spbt">
-                        <a href="#">Sách Thiếu Nhi</a>
+                        <a href="/?book=children">Children's Books</a>
                         <i class="fa-solid fa-chevron-right"></i>
                     </li>
                     <li class="sidebar__item d-flex just-content-spbt">
-                        <a href="#">Sách Phát Triển Bản Thân</a>
+                        <a href="/?book=self-development">Self-Development Books</a>
                         <i class="fa-solid fa-chevron-right"></i>
                     </li>
                     <li class="sidebar__item d-flex just-content-spbt">
-                        <a href="#">Sách Tin Học Ngoại Ngữ</a>
+                        <a href="/?book=computer-language">Computer & Language Books</a>
                         <i class="fa-solid fa-chevron-right"></i>
                     </li>
                     <li class="sidebar__item d-flex just-content-spbt">
-                        <a href="#">Sách Chuyên Ngành</a>
+                        <a href="/?book=specialized">Specialized Books</a>
                         <i class="fa-solid fa-chevron-right"></i>
                     </li>
                     <li class="sidebar__item d-flex just-content-spbt">
-                        <a href="#">Sách Kỹ Năng Sống</a>
+                        <a href="/?book=life-skills">Life Skills Books</a>
                         <i class="fa-solid fa-chevron-right"></i>
                     </li>
                     <li class="sidebar__item d-flex just-content-spbt">
-                        <a href="#">Truyện Tranh</a>
+                        <a href="/?book=comics">Comics</a>
                         <i class="fa-solid fa-chevron-right"></i>
                     </li>
                 </ul>

@@ -12,10 +12,10 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Reset CSS -->
-    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="admin/assets/css/reset.css">
     <!-- Styles CSS -->
-    <link rel="stylesheet" href="assets/css/base.css">
-    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="admin/assets/css/base.css">
+    <link rel="stylesheet" href="admin/assets/css/common.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
