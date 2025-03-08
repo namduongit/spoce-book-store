@@ -8,8 +8,9 @@ header('Content-Type: application/json');
 
 
 $book_model = new app_models_Sach();
+$category_book = new app_models_TheLoai();
 
-$mode_book = isset($_GET['book']) ? $_GET['book'] : 'all+product';
+$mode_book = isset($_GET['book']) ? $_GET['book'] : 'getAllBooks';
 
 $response = [];
 
@@ -50,15 +51,23 @@ if (!$books) {
     exit();
 }
 
-// Trả về JSON
 foreach ($books as $book) {
     $response[] = [
         "id" => $book['maSach'],
         "name" => $book['tenSach'],
+        "numberOfPages" => $book['soTrang'],
+        "size" => $book['kichThuoc'],
+        "description" => $book['moTa'],
+        "authorId" => $book['maTacGia'],
+        "genreId" => $book['maTheLoai'],
+        "coverTypeId" => $book['maLoaiBia'],
+        "publisherId" => $book['maNXB'],
+        "publishYear" => $book['namXuatBan'],
+        "originalPrice" => $book['giaTran'],
+        "sellingPrice" => $book['giaBan'],
         "image" => $book['hinhAnh'],
-        "price" => $book['giaBan'],
-        "in_stock" => $book['trangThai'] == 1,
-        "rating" => rand(3, 5)
+        "status" => $book['trangThai'],
+        "updatedAt" => $book['ngayCapNhat']
     ];
 }
 

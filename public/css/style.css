@@ -194,10 +194,33 @@
 
 .body {
     margin-top: 5rem;
+    margin-bottom: 5rem;
 }
 
+.body__container .book-filter {
+    width: 22%;
+    background-color: #e1e1e1;
+    height: fit-content;
+    border-radius: 1.5rem;
+}
+
+.body__container .book-filter
+.pd-filter:last-child {
+    border-bottom: 0px solid black;
+}
+
+.filter-group__header {
+    margin-bottom: 1rem;
+}
+
+.filter-group__header,
+.filter-group__content {
+    padding: 0 1rem;
+}
+
+
 .body__container .book-category {
-    margin-bottom: 5rem;
+    width: 75%;
 }
 
 .book-category__title {
@@ -861,7 +884,7 @@
     height: 4px;
     background: #000;
     border-radius: 8px;
-    
+
 }
 
 .show-cart__cart {
@@ -1358,7 +1381,7 @@
 
 .checkout__credit-method-holder > .checkout__input-field {
     width: 50%;
-    
+
 }
 
 .checkout__credit-method-holder > .checkout__input-field:last-child {

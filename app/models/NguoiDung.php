@@ -1,0 +1,67 @@
+<?php
+class app_models_NguoiDung extends app_libs_DBConnection {
+    protected $table_name = "NguoiDung";
+
+    // Lấy tất cả người dùng
+    public function getAllUsers() {
+        return $this->building_queryParam()->select();
+    }
+
+    // Lấy người dùng theo ID
+    public function getUserById($maNguoiDung) {
+        return $this->building_queryParam([
+            'where' => 'maNguoiDung = ?',
+            'params' => [$maNguoiDung]
+        ])->select_one();
+    }
+
+    // Lấy người dùng theo tài khoản
+    public function getUserByUsername($tenTaiKhoan) {
+        return $this->building_queryParam([
+            'where' => 'tenTaiKhoan = ?',
+            'params' => [$tenTaiKhoan]
+        ])->select_one();
+    }
+
+    // Thêm người dùng mới
+    public function insertUser($data) {
+        return $this->building_queryParam([
+            'field' => $data
+        ])->insert();
+    }
+
+    // Cập nhật người dùng
+    public function updateUser($maNguoiDung, $data) {
+        return $this->building_queryParam([
+            'value' => $data,
+            'where' => 'maNguoiDung = ?',
+            'params' => [$maNguoiDung]
+        ])->update();
+    }
+
+    // Xóa người dùng
+    public function deleteUser($maNguoiDung) {
+        return $this->building_queryParam([
+            'where' => 'maNguoiDung = ?',
+            'params' => [$maNguoiDung]
+        ])->delete();
+    }
+
+    // Kiểm tra đăng nhập
+    public function checkLogin($tenTaiKhoan, $matKhau) {
+        return $this->building_queryParam([
+            'where' => 'tenTaiKhoan = ? AND matKhau = ?',
+            'params' => [$tenTaiKhoan, $matKhau]
+        ])->select_one();
+    }
+
+    // Cập nhật mật khẩu người dùng
+    public function updatePassword($maNguoiDung, $newPassword) {
+        return $this->building_queryParam([
+            'value' => ['matKhau' => $newPassword],
+            'where' => 'maNguoiDung = ?',
+            'params' => [$maNguoiDung]
+        ])->update();
+    }
+}
+?>

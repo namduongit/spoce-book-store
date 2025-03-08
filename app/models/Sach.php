@@ -47,5 +47,14 @@ class app_models_Sach extends app_libs_DBConnection {
         ])->select();
     }
 
+    public function getBookByPrice($minPrice = 0, $maxPrice = INF) {
+        return $this->building_queryParam([
+            'where' => 'giaBan >= ? and giaBan <= ?',
+            'params' => [$minPrice, $maxPrice]
+        ]);
+    }
+
+    
+
 }
 ?>

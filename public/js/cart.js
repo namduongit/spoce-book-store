@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     function showCart() {
-        console.log("showCart called");
+        // console.log("showCart called");
         let cartDetail = document.querySelector(".topbar__cart-detail-holder");
         cartDetail.classList.toggle("show");
     }
@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function showMainCart() {
-        console.log("show main cart is called");
+        // console.log("show main cart is called");
         let mainCart = document.querySelector(".show-cart");
         let mainInterface = document.querySelector(".main");
         let mainBody = document.querySelector(".body");
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function backToMain() {
-        console.log("back to main is called");
+        // console.log("back to main is called");
         let mainCart = document.querySelector(".show-cart");
         let mainInterface = document.querySelector(".main");
         let mainBody = document.querySelector(".body");
