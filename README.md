@@ -9,7 +9,24 @@ Lớp `DBConnection` dùng để kết nối và thực hiện các thao tác tr
 ---
 ## Quy định về CSS giao diện
 - Về kích thước của các phần tử thì đa số dùng rem, hạn chế dùng pixel nhất có thể
-- Quy định bạn đầu 1rem = 16px nó sẽ nhỏ dần theo màn hình
+- Quy định bạn đầu 1rem = 10px nó sẽ nhỏ dần theo màn hình
+---
+
+---
+## Sử dụng gọi các gói (module)
+
+### 1️⃣ **Dấu trang** 🛠️
+📌 `./` → Thư mục hiện tại (cùng thư mục với tệp đang chạy).
+📌 `../` → Thư mục cha (cấp trên của thư mục hiện tại).
+
+### 2️⃣ **Về Ajax** 🛠️
+📌 Do chạy từ trang đầu tiên `index.php` nên các trang `index.php` trong admin và public đều phải gọi
+   các file `CSS` và `JavaScript` bằng admin hoặc public rồi đến `/` thì mới nhận được file
+📌 Ngoài ra các file còn lại không cần gọi như như vậy muốn trỏ về thì dùng `../`
+📌  Về bản chất khi thì vẫn tính là `index.php` đầu tiên của Project nên trong các hàm của `JavaScript` thì dùng khác với các import.  `url: "public/handle/book.php?page=" + mode`
+
+### 3️⃣ **Import gói** 🛠️
+📌 `JavaScript` là một trong những ngôn ngữ yêu cầu khi import bất kì 1 gói nào tự build phải xác định cấp cùng với thư mục gọi gói
 
 ---
 

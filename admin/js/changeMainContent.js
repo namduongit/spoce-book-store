@@ -181,7 +181,7 @@ const mainContentMap = {
           <li>Đã huỷ phiếu</li>
         </ul>
       </div>
-      <div class="main__buttons"> 
+      <div class="main__buttons">
         <button class="main__filter-btn" id="filter-button-order">
           <i class="fa-solid fa-filter"></i>
           <span>Lọc</span>

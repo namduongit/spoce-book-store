@@ -1,5 +1,9 @@
 <?php
     // include_once 'public/index.php';
+
+    // include_once 'public/handle/book.php';
+    // die();
+
     $param = $_SERVER['REQUEST_URI'];
     $page = null;
 
@@ -8,10 +12,16 @@
         if ($page === 'home') {
             include_once 'public/index.php';
             die();
-        } else if ($page === 'admin') {
+        }
+        else if ($page === 'admin') {
             include_once 'admin/index.php';
             die();
-        } else {
+        }
+        // Xử lí page thanh toán hay giỏ hàng hay đăng nhập đăng xuất ở đây
+        else if ($page === 'shopping+cart') {
+            die();
+        }
+        else {
             include_once 'public/index.php';
             die();
         }

@@ -13,7 +13,7 @@ class app_libs_DBConnection {
     protected $username = "book_store";
     protected $password = "book_store";
 
-    protected $table_name = 'building';
+    protected $table_name = 'default_table';
     // Mảng lưu trữ các param được dùng để truy vấn
     protected $queryParam = [];
 
@@ -62,12 +62,16 @@ class app_libs_DBConnection {
      */
 
      public function query($sql, $param = []) {
+        if (self::$connection == null) self::$connection = $this->open_connect();
+
         $query = self::$connection->prepare($sql);
         $query->execute(is_array($param) ? $param : []);
         return $query;
     }
 
     public function select() {
+        if (self::$connection == null) self::$connection = $this->open_connect();
+
         $sql = 'SELECT ' . $this->queryParam['select'] . ' FROM ' . $this->table_name;
 
         $sql .= ' ' . $this->building_condition($this->queryParam['where']);
@@ -84,6 +88,8 @@ class app_libs_DBConnection {
 
 
     public function select_one() {
+        if (self::$connection == null) self::$connection = $this->open_connect();
+
         $this->queryParam['other'] = 'LIMIT 1';
         $data = $this->select();
 
@@ -91,6 +97,8 @@ class app_libs_DBConnection {
     }
 
     public function insert() {
+        if (self::$connection == null) self::$connection = $this->open_connect();
+
         $fields = array_keys($this->queryParam['field']);
         $placeholders = array_fill(0, count($fields), '?');
 
@@ -101,6 +109,8 @@ class app_libs_DBConnection {
     }
 
     public function update() {
+        if (self::$connection == null) self::$connection = $this->open_connect();
+
         $fieldValues = [];
         $params = [];
         foreach ($this->queryParam['value'] as $field => $value) {
@@ -115,6 +125,8 @@ class app_libs_DBConnection {
     }
 
     public function delete() {
+        if (self::$connection == null) self::$connection = $this->open_connect();
+
         $sql = 'DELETE FROM ' . $this->table_name . ' ' .
         $this->building_condition($this->queryParam['where']) . ' ' . $this->queryParam['other'];
 

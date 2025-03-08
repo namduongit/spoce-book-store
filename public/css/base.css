@@ -77,7 +77,11 @@ i {
 }
 
 .hide-item {
-    display: none;
+    display: none !important;
+}
+
+.show-item {
+    display: block;
 }
 
 .width-fit-content {
