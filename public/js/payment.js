@@ -144,4 +144,39 @@ document.addEventListener("DOMContentLoaded", () => {
             checkout.classList.remove("hide-item");
         }
     });
+
+    document.querySelector(".checkout__submit-btn-final").addEventListener("click", function () {
+        let fullName = document.querySelector("#fullname");
+        let numberPhone = document.querySelector("#numberphone");
+        let address = document.querySelector("#address");
+        let city = document.querySelector("#city");
+        let district = document.querySelector("#district");
+        let ward = document.querySelector("#ward");
+        let warning = document.querySelectorAll(".checkout__empty-field-warning");
+        let warningTwo = document.querySelectorAll(".checkout__empty-field-warning-two");
+
+        if (fullName.value === "") {
+            warning[0].classList.remove("hide-item");
+        }
+
+        if (numberPhone.value === "") {
+            warning[1].classList.remove("hide-item");
+        }
+
+        if (address.value === "") {
+            warning[3].classList.remove("hide-item");
+        }
+
+        if (city.value === "default") {
+            warningTwo[0].classList.remove("hide-item");
+        }
+
+        if (district.value === "default") {
+            warningTwo[1].classList.remove("hide-item");
+        }
+
+        if (ward.value === "default") {
+            warningTwo[2].classList.remove("hide-item");
+        }
+    });
 });

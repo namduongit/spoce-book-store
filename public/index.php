@@ -1228,8 +1228,8 @@
                     <p><a href="#" class="show-cart__continue-buy-btn"><i class="fa fa-reply"></i> Tiếp tục mua hàng</a></p>
                 </div>
                 <div class="show-cart__checkoutbox">
-                    <button>Xóa tất cả</button>
                     <button class="show-cart__to-checkout-btn"><i class="fa-regular fa-circle-check"></i> Thanh toán</button>
+                    <button><i class="fa-solid fa-circle-xmark"></i> Xóa tất cả</button>
                 </div>
             </div>
         </div>
@@ -1258,16 +1258,20 @@
                                 <input type="text" id="fullname" name="fullname" placeholder=" ">
                                 <label for="fullname">Họ và tên</label>
                             </div>
+                            <p class="checkout__empty-field-warning hide-item">Vui lòng nhập họ tên</p>
                             <div class="checkout__input-field">
                                 
                                 <input type="text" id="numberphone" name="numberphone" placeholder=" ">
                                 <label for="numberphone">Số điện thoại</label>
                             </div>
+                            <p class="checkout__empty-field-warning hide-item">Vui lòng nhập số điện thoại</p>
+                            <p class="checkout__empty-field-warning hide-item">Số điện thoại không hợp lệ (độ dài 10 kí tự, không chứa ký tự đặc biệt và khoảng trắng)</p>
                             <div class="checkout__input-field">
                                 
                                 <input type="text" id="address" name="address" placeholder=" ">
                                 <label for="address">Địa chỉ</label>
                             </div>
+                            <p class="checkout__empty-field-warning hide-item">Vui lòng nhập địa chỉ</p>
                         </div>
                         <div class="checkout__address-field-two">
                             <div class="checkout__input-field checkout__address-select">
@@ -1275,18 +1279,21 @@
                                 <select name="city" id="city">
                                     <option value="default" selected>Chọn tỉnh / thành</option>
                                 </select>
+                                <p class="checkout__empty-field-warning-two hide-item">Vui lòng chọn tỉnh thành</p>
                             </div>
                             <div class="checkout__input-field checkout__address-select">
                                 <label>Quận / huyện</label>
                                 <select name="district" id="district">
                                     <option value="default" selected>Chọn quận / huyện</option>
                                 </select>
+                                <p class="checkout__empty-field-warning-two hide-item">Vui lòng chọn quận huyện</p>
                             </div>
                             <div class="checkout__input-field checkout__address-select">
                                 <label>Phường / xã</label>
                                 <select name="ward" id="ward">
                                     <option value="default" selected>Chọn phường / xã</option>
                                 </select>
+                                <p class="checkout__empty-field-warning-two hide-item">Vui lòng chọn phường xã</p>
                             </div>
                         </div>
                     </div>
@@ -1553,7 +1560,7 @@
                     <div class="checkout__submit-btn-container">
                         <span class="checkout__back-to-cart-btn">Giỏ hàng</span>
                         <div class="checkout__submit-btn-holder">
-                            <button>Hoàn tất đơn hàng</button>
+                            <button class="checkout__submit-btn-final">Hoàn tất đơn hàng</button>
                         </div>
                     </div>
                 </div>
