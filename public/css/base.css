@@ -111,8 +111,17 @@ i {
     position: relative;
 }
 
-/* -------------------------------------------------------------------------------- */
+/* ----------------------------------PADDING------------------------------------- */
 .pd-filter {
     padding: 1.3rem 1.5rem;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid gray;
+}
+
+/* ----------------------------------BUTTOn-------------------------------------- */
+.sort-btn {
+    background-color: #0565bc;
+}
+
+.reset-btn {
+    background-color: #f25529;
 }

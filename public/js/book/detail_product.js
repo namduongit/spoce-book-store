@@ -105,3 +105,45 @@ function show_option(object) {
 function close_detail_product() {
     document.querySelector('.show-detail-product').style.display = 'none';
 }
+
+function show_filter(element) {
+    const contentFilter = element.closest(".filter-group").querySelector(".filter-group__content");
+
+    contentFilter.classList.toggle("hide-item");
+
+    element.classList.toggle("fa-minus");
+    element.classList.toggle("fa-plus");
+}
+
+
+$(function() {
+    $("#price-slider").slider({
+        range: true,
+        min: 10000,
+        max: 5000000, // Max 5 triệu
+        values: [27000, 250000], // Giá trị mặc định
+        slide: function(event, ui) {
+            $("#min-price").text(ui.values[0].toLocaleString());
+            $("#max-price").text(ui.values[1].toLocaleString());
+
+            // Cập nhật vào input
+            $(".filter-group__input").eq(0).val(ui.values[0].toLocaleString());
+            $(".filter-group__input").eq(1).val(ui.values[1].toLocaleString());
+        }
+    });
+
+    // Cập nhật slider khi nhập giá trị vào input
+    $(".filter-group__input").on("input", function() {
+        let minVal = parseInt($(".filter-group__input").eq(0).val().replace(/\D/g, "")) || 10000;
+        let maxVal = parseInt($(".filter-group__input").eq(1).val().replace(/\D/g, "")) || 5000000;
+
+        // Đảm bảo giá trị hợp lệ
+        if (minVal < 10000) minVal = 10000;
+        if (maxVal > 5000000) maxVal = 5000000;
+        if (minVal > maxVal) minVal = maxVal;
+
+        $("#price-slider").slider("values", [minVal, maxVal]);
+    });
+});
+
+
