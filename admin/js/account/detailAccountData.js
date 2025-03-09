@@ -69,7 +69,6 @@ export function detailAccountData(idAccountSelected) {
                   <option value="2">Nhân viên</option>
                   <option value="3">Khách hàng</option>
               </select>
-              <button>Chi tiết</button>
             </div>
             <div class="dialog__form-group">
               <label>Trạng thái</label>

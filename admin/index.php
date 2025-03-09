@@ -35,7 +35,7 @@
         <!-- Menu -->
         <ul class="sidebar__menu">
             <li class="sidebar__item active">
-                <a href="#" class="sidebar__action" data-main-content="profit_dashboard">
+                <a href="/profit_dashboard" class="sidebar__action" data-main-content="profit_dashboard">
                     <i class="icon fa-solid fa-dollar-sign"></i>
                     <span class="text">Thống kê lợi nhuận</span>
                 </a>
@@ -65,6 +65,18 @@
                 </a>
             </li>
             <li class="sidebar__item">
+                <a href="#" class="sidebar__action" data-main-content="discount">
+                    <i class="icon fa-solid fa-percent"></i>
+                    <span class="text">Giảm giá</span>
+                </a>
+            </li>
+            <li class="sidebar__item">
+                <a href="#" class="sidebar__action" data-main-content="privilege">
+                    <i class="icon fa-solid fa-users-line"></i>
+                    <span class="text">Nhóm quyền</span>
+                </a>
+            </li>
+            <li class="sidebar__item">
                 <a href="#" class="sidebar__action" data-main-content="account">
                     <i class="icon fa-solid fa-user"></i>
                     <span class="text">Người dùng</span>
@@ -72,14 +84,8 @@
             </li>
             <li class="sidebar__item">
                 <a href="#" class="sidebar__action" data-main-content="supplies">
-                    <i class="icon fa-solid fa-user-tie"></i>
+                    <i class="icon fa-solid fa-user-shield"></i>
                     <span class="text">Nhà cung cấp</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="discount">
-                    <i class="icon fa-solid fa-percent"></i>
-                    <span class="text">Giảm giá</span>
                 </a>
             </li>
             <li class="sidebar__item">
@@ -116,12 +122,6 @@
                 <a href="#" class="sidebar__action" data-main-content="publisher">
                     <i class="icon fa-solid fa-user-tag"></i>
                     <span class="text">Nhà xuất bản</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="issuer">
-                    <i class="icon fa-solid fa-user-shield"></i>
-                    <span class="text">Nhà phát hành</span>
                 </a>
             </li>
             <!-- <li class="sidebar__item">

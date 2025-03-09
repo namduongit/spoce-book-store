@@ -18,7 +18,7 @@ export function addBookData() {
     // - Định dạng dialog
     addDialog.classList.add("dialog");
     addDialog.classList.add("book");
-    addDialog.style.width = "1146px";
+    addDialog.style.width = "1178px";
     // - Ghi nội dung dialog
     addDialog.innerHTML = `
         <h1 class="dialog__title">Thêm sách</h1>
@@ -69,27 +69,8 @@ export function addBookData() {
         <div class="dialog__row">
             <div class="dialog__form-group book"></div>
             <div class="dialog__form-group book">
-                <label>Nhà xuất bản</label>
-                <select id="add-book-publish-name">
-                    <option value="" selected>Chọn Nhà xuất bản</option>
-                    <option value="1">Nhà xuất bản 1</option>
-                    <option value="0">Nhà xuất bản 2</option>
-                </select>
-            </div>
-            <div class="dialog__form-group book">
-                <label>Nhà phát hành</label>
-                <select id="add-book-issuer">
-                    <option value="" selected>Chọn Nhà phát hành</option>
-                    <option value="1">Nhà phát hành 1</option>
-                    <option value="0">Nhà phát hành 2</option>
-                </select>
-            </div>
-        </div>
-        <div class="dialog__row">
-            <div class="dialog__form-group book"></div>
-            <div class="dialog__form-group book">
-                <label>Năm xuất bản</label>
-                <input type="text" id="add-book-publish-year" placeholder="Nhập Năm xuất bản" />
+                <label>Số trang</label>
+                <input type="text" id="add-book-pages" placeholder="Nhập Số trang" />
             </div>
             <div class="dialog__form-group book">
                 <label>Loại bìa</label>
@@ -98,6 +79,21 @@ export function addBookData() {
                     <option value="1">Bìa cứng</option>
                     <option value="0">Bìa mềm</option>
                 </select>
+            </div>
+        </div>
+        <div class="dialog__row">
+            <div class="dialog__form-group book"></div>
+            <div class="dialog__form-group book">
+                <label>Nhà xuất bản</label>
+                <select id="add-book-publish-name">
+                    <option value="" selected>Chọn Nhà xuất bản</option>
+                    <option value="1">Nhà xuất bản 1</option>
+                    <option value="0">Nhà xuất bản 2</option>
+                </select>
+            </div>
+            <div class="dialog__form-group book">
+                <label>Năm xuất bản</label>
+                <input type="text" id="add-book-publish-year" placeholder="Nhập Năm xuất bản" />
             </div>
         </div>
         <div class="dialog__row">
@@ -122,14 +118,6 @@ export function addBookData() {
         <div class="dialog__row">
             <div class="dialog__form-group book"></div>
             <div class="dialog__form-group book">
-                <label>Giảm giá</label>
-                <select id="add-book-discount">
-                    <option value="" selected>Chọn Giảm giá</option>
-                    <option value="1">Hoạt động</option>
-                    <option value="0">Tạm dừng</option>
-                </select>
-            </div>
-            <div class="dialog__form-group book">
                 <label>Trạng thái</label>
                 <select id="add-book-status">
                     <option value="" selected>Chọn Trạng thái</option>
@@ -137,6 +125,7 @@ export function addBookData() {
                     <option value="0">Tạm dừng</option>
                 </select>
             </div>
+            <div class="dialog__form-group book"></div>
         </div>
         <div class="dialog__buttons">
             <button id="add-book-button" class="add">Thêm</button>
@@ -181,13 +170,12 @@ export function addBookData() {
       const title = document.getElementById("add-book-title");
       const author = document.getElementById("add-book-author");
       const type = document.getElementById("add-book-type");
-      const publishName = document.getElementById("add-book-publish-name");
-      const issuer = document.getElementById("add-book-issuer");
-      const publishYear = document.getElementById("add-book-publish-year");
+      const pages = document.getElementById("add-book-pages");
       const cover = document.getElementById("add-book-cover");
+      const publishName = document.getElementById("add-book-publish-name");
+      const publishYear = document.getElementById("add-book-publish-year");
       const priceBase = document.getElementById("add-book-price-base");
       const priceOrder = document.getElementById("add-book-price-order");
-      const discount = document.getElementById("add-book-discount");
       const description = document.getElementById("add-book-description");
       const status = document.getElementById("add-book-status");
 
@@ -198,12 +186,11 @@ export function addBookData() {
       console.log(author.value);
       console.log(type.value);
       console.log(publishName.value);
-      console.log(issuer.value);
+      console.log(pages.value);
       console.log(publishYear.value);
       console.log(cover.value);
       console.log(priceBase.value);
       console.log(priceOrder.value);
-      console.log(discount.value);
       console.log(description.value);
       console.log(status.value);
     });

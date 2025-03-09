@@ -7,18 +7,20 @@ let data = [
   {
     id: 1,
     name: "Khuyến mãi 1",
+    type: "Tiền",
+    value: 200000,
     dateStart: "27/02/2025",
     dateEnd: "27/02/2025",
-    percent: 72,
     status: "Hoạt động",
     dateUpdate: "",
   },
   {
     id: 2,
     name: "Khuyến mãi 2",
+    type: "Phần trăm",
+    value: 20,
     dateStart: "27/02/2025",
     dateEnd: "27/02/2025",
-    percent: 29,
     status: "Tạm dừng",
     dateUpdate: "",
   },
@@ -38,9 +40,9 @@ export function renderDiscountTable() {
           <tr>
               <td>${data[i].id}</td>
               <td>${data[i].name}</td>
+              <td>${data[i].type}</td>
               <td>${data[i].dateStart}</td>
               <td>${data[i].dateEnd}</td>
-              <td>${data[i].percent}</td>
               <td><span ${
                 data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
               }>${data[i].status}</span></td>

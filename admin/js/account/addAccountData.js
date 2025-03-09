@@ -8,7 +8,7 @@ function showAddressSelectDialog() {
   // - Định dạng dialog
   addDialog.classList.add("dialog");
   addDialog.classList.add("address-select");
-  addDialog.style.width = "448px";
+  addDialog.style.width = "464px";
   // - Ghi nội dung dialog
   addDialog.innerHTML = `
     <button id="close-address-select-button" class="dialog__close">
@@ -140,14 +140,13 @@ export function addAccountData() {
       </div>
       <div class="dialog__row">
         <div class="dialog__form-group">
-          <label>Phân quyền</label>
+          <label>Nhóm quyền</label>
           <select id="add-account-privilege">
-              <option value="" selected>Chọn Phân quyền</option>
+              <option value="" selected>Chọn Nhóm quyền</option>
               <option value="1">Quản lý</option>
               <option value="2">Nhân viên</option>
               <option value="3">Khách hàng</option>
           </select>
-          <button>Chi tiết</button>
         </div>
         <div class="dialog__form-group">
           <label>Trạng thái</label>

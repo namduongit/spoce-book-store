@@ -16,7 +16,7 @@ export function updateBookData(idBookSelected) {
   // - Định dạng dialog
   updateDialog.classList.add("dialog");
   updateDialog.classList.add("book");
-  updateDialog.style.width = "1146px";
+  updateDialog.style.width = "1178px";
   // - Ghi nội dung dialog
   updateDialog.innerHTML = `
         <h1 class="dialog__title">Sửa sách</h1>
@@ -67,27 +67,8 @@ export function updateBookData(idBookSelected) {
         <div class="dialog__row">
             <div class="dialog__form-group book"></div>
             <div class="dialog__form-group book">
-                <label>Nhà xuất bản</label>
-                <select id="update-book-publish-name">
-                    <option value="" selected>Chọn Nhà xuất bản</option>
-                    <option value="1">Nhà xuất bản 1</option>
-                    <option value="0">Nhà xuất bản 2</option>
-                </select>
-            </div>
-            <div class="dialog__form-group book">
-                <label>Nhà phát hành</label>
-                <select id="update-book-issuer">
-                    <option value="" selected>Chọn Nhà phát hành</option>
-                    <option value="1">Nhà phát hành 1</option>
-                    <option value="0">Nhà phát hành 2</option>
-                </select>
-            </div>
-        </div>
-        <div class="dialog__row">
-            <div class="dialog__form-group book"></div>
-            <div class="dialog__form-group book">
-                <label>Năm xuất bản</label>
-                <input type="text" id="update-book-publish-year" placeholder="Nhập Năm xuất bản" />
+                <label>Số trang</label>
+                <input type="text" id="update-book-pages" placeholder="Nhập Số trang" />
             </div>
             <div class="dialog__form-group book">
                 <label>Loại bìa</label>
@@ -96,6 +77,21 @@ export function updateBookData(idBookSelected) {
                     <option value="1">Bìa cứng</option>
                     <option value="0">Bìa mềm</option>
                 </select>
+            </div>
+        </div>
+        <div class="dialog__row">
+            <div class="dialog__form-group book"></div>
+            <div class="dialog__form-group book">
+                <label>Nhà xuất bản</label>
+                <select id="update-book-publish-name">
+                    <option value="" selected>Chọn Nhà xuất bản</option>
+                    <option value="1">Nhà xuất bản 1</option>
+                    <option value="0">Nhà xuất bản 2</option>
+                </select>
+            </div>
+            <div class="dialog__form-group book">
+                <label>Năm xuất bản</label>
+                <input type="text" id="update-book-publish-year" placeholder="Nhập Năm xuất bản" />
             </div>
         </div>
         <div class="dialog__row">
@@ -120,14 +116,6 @@ export function updateBookData(idBookSelected) {
         <div class="dialog__row">
             <div class="dialog__form-group book"></div>
             <div class="dialog__form-group book">
-                <label>Giảm giá</label>
-                <select id="update-book-discount">
-                    <option value="" selected>Chọn Giảm giá</option>
-                    <option value="1">Hoạt động</option>
-                    <option value="0">Tạm dừng</option>
-                </select>
-            </div>
-            <div class="dialog__form-group book">
                 <label>Trạng thái</label>
                 <select id="update-book-status" disabled>
                     <option value="" selected>Chọn Trạng thái</option>
@@ -135,6 +123,7 @@ export function updateBookData(idBookSelected) {
                     <option value="0">Tạm dừng</option>
                 </select>
             </div>
+            <div class="dialog__form-group book"></div>
         </div>
         <div class="dialog__buttons">
             <button id="update-book-button" class="add">Sửa</button>
@@ -166,13 +155,12 @@ export function updateBookData(idBookSelected) {
       const title = document.getElementById("update-book-title");
       const author = document.getElementById("update-book-author");
       const type = document.getElementById("update-book-type");
-      const publishName = document.getElementById("update-book-publish-name");
-      const issuer = document.getElementById("update-book-issuer");
-      const publishYear = document.getElementById("update-book-publish-year");
+      const pages = document.getElementById("update-book-pages");
       const cover = document.getElementById("update-book-cover");
+      const publishName = document.getElementById("update-book-publish-name");
+      const publishYear = document.getElementById("update-book-publish-year");
       const priceBase = document.getElementById("update-book-price-base");
       const priceOrder = document.getElementById("update-book-price-order");
-      const discount = document.getElementById("update-book-discount");
       const description = document.getElementById("update-book-description");
       //   const status = document.getElementById("update-book-status");
 
@@ -182,13 +170,12 @@ export function updateBookData(idBookSelected) {
       console.log(title.value);
       console.log(author.value);
       console.log(type.value);
-      console.log(publishName.value);
-      console.log(issuer.value);
-      console.log(publishYear.value);
+      console.log(pages.value);
       console.log(cover.value);
+      console.log(publishName.value);
+      console.log(publishYear.value);
       console.log(priceBase.value);
       console.log(priceOrder.value);
-      console.log(discount.value);
       console.log(description.value);
       //   console.log(status.value);
     });

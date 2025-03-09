@@ -174,15 +174,15 @@ export function updateOrderData(idOrderSelected) {
           </div>
           <div class="dialog__row">
             <div class="dialog__form-group full">
-              <label style="color: #000;">sửa đơn hàng</label>
+              <label style="color: #000;">Chi tiết đơn hàng</label>
               <table>
                 <thead>
                   <tr>  
                     <th width="10%">Mã sách</th>
-                    <th width="42%">Tên sách</th>
+                    <th width="42%" class="name">Tên sách</th>
                     <th width="10%">Số lượng</th>
                     <th width="14%">Đơn giá (VNĐ)</th>
-                    <th width="24%">Thành tiền (VNĐ)</th>
+                    <th width="24%" class="total">Thành tiền (VNĐ)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -191,9 +191,9 @@ export function updateOrderData(idOrderSelected) {
             </div>
           </div>
           <div class="dialog__buttons order">
-            <button class="confirm-status">Đã hoàn thành</button>
-            <button class="shipping-status">Đang giao</button>
-            <button class="cancel-status">Đã huỷ đơn</button>
+            <button class="ship-status">Giao hàng</button>
+            <button class="confirm-status">Xác nhận</button>
+            <button class="cancel-status">Huỷ đơn</button>
           </div>
     `;
 

@@ -160,10 +160,10 @@ export function printOrderTicket() {
                       <thead>
                         <tr>  
                           <th width="10%">Mã sách</th>
-                          <th width="42%">Tên sách</th>
+                          <th width="42%" class="name">Tên sách</th>
                           <th width="10%">Số lượng</th>
                           <th width="14%">Đơn giá (VNĐ)</th>
-                          <th width="24%">Thành tiền (VNĐ)</th>
+                          <th width="24%" class="total">Thành tiền (VNĐ)</th>
                         </tr>
                       </thead>
                       <tbody></tbody>

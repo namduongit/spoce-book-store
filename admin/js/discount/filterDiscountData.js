@@ -2,20 +2,13 @@
 export function filterDiscountData() {
   // Biến chứa đối tượng thẻ input liên quan đến tìm kiếm thông tin
   const idOrNameInput = document.getElementById("find-id-or-name-inp-discount");
-  // Biến chứa đối tượng thẻ input liên quan đến lọc ngày bắt đầu (trước - sau)
-  const dateStartBeforeInput = document.getElementById(
-    "find-date-start-before-inp-discount"
+  // Biến chứa đối tượng thẻ select liên quan đến lọc loại khuyến mãi
+  const typeSelect = document.getElementById("type-slt-discount");
+  // Biến chứa đối tượng thẻ input liên quan đến lọc ngày áp dụng (bắt đầu - kết thúc)
+  const dateStartInput = document.getElementById(
+    "find-date-start-inp-discount"
   );
-  const dateStartAfterInput = document.getElementById(
-    "find-date-start-after-inp-discount"
-  );
-  // Biến chứa đối tượng thẻ input liên quan đến lọc ngày kết thúc (trước - sau)
-  const dateEndBeforeInput = document.getElementById(
-    "find-date-end-before-inp-discount"
-  );
-  const dateEndAfterInput = document.getElementById(
-    "find-date-end-after-inp-discount"
-  );
+  const dateEndInput = document.getElementById("find-date-end-inp-discount");
   // Biến chứa đối tượng thẻ select liên quan đến lọc trạng thái
   const statusSelect = document.getElementById("status-slt-discount");
   // Biến chứa đối tượng là nút "Lọc"
@@ -28,10 +21,9 @@ export function filterDiscountData() {
 
     //
     console.log(idOrNameInput.value);
-    console.log(dateStartBeforeInput.value);
-    console.log(dateStartAfterInput.value);
-    console.log(dateEndBeforeInput.value);
-    console.log(dateEndAfterInput.value);
+    console.log(typeSelect.value);
+    console.log(dateStartInput.value);
+    console.log(dateEndInput.value);
     console.log(statusSelect.value);
   });
 }
