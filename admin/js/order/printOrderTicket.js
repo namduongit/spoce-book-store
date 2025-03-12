@@ -102,7 +102,9 @@ function renderOrderDetailTable() {
 }
 
 //
-export function printOrderTicket() {
+export function printOrderTicket(idOrderSelected) {
+  //
+
   const printButton = document.getElementById("print-button-order");
 
   // Lấy ra ngày hiện tại

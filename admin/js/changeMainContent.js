@@ -1,11 +1,11 @@
 import { selectFormEvents, updateTimelineSelects } from "./selectEvents.js";
-import { clickToShowDatePicker } from "./others.js";
 import { printProfitDashboardTicket } from "./dashboard/printProfitDashboard.js";
 import { updateProfitDashboardTable } from "./dashboard/updateProfitDashboardTable.js";
 import { updateRevenueDashboardTable } from "./dashboard/updateRevenueDashboardTable.js";
 import { printRevenueDashboardTicket } from "./dashboard/printRevenueDashboard.js";
 import { updateInputTicketDashboardTable } from "./dashboard/updateInputTicketDashboard.js";
 import { printInputTicketDashboardTicket } from "./dashboard/printInputTicketDashboard.js";
+import { updateOrderDashboardTable } from "./order_dashboard/updateOrderDashboardTable.js";
 import { updateOrderTable } from "./order/updateOrderTable.js";
 import { updateAccountTable } from "./account/updateAccountTable.js";
 import { updateDiscountTable } from "./discount/updateDiscountTable.js";
@@ -127,13 +127,85 @@ const mainContentMap = {
       <p class="main__total-text"><strong>Viết bằng chữ:</strong> <span>0 đồng</span></p>
     </div>
   `,
-  order_dashboard: `<h1>Thống kê đơn hàng</h1>`,
+  order_dashboard: `
+    <h1 class="main__title">Thống kê đơn hàng</h1>
+    <div class="main__row">
+      <div class="main__find-inp inp-text-form-1">
+        <input required="" type="text" id="find-inp-customer" />
+        <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;Khách hàng</span>
+      </div>
+      <div class="main__sort-slt main__select slt-form-1">
+        <input required="" type="text" id="sort-slt-order_dashboard" />
+        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Chọn Sắp xếp</span>
+        <ul>
+          <li>Khách hàng tăng dần</li>
+          <li>Khách hàng giảm dần</li>
+          <li>Ngày thống kê tăng dần</li>
+          <li>Ngày thống kê giảm dần</li>
+          <li>Tổng đơn hàng tăng dần</li>
+          <li>Tổng đơn hàng giảm dần</li>
+          <li>Tổng thanh toán tăng dần</li>
+          <li>Tổng thanh toán giảm dần</li>
+        </ul>
+      </div>
+      <div class="main__find-inp inp-text-form-1 date">
+        <input required="" type="date" id="find-date-dashboard-before-inp-order_dashboard" />
+        <i class="fa-solid fa-minus"></i>
+        <input required="" type="date" id="find-date-dashboard-after-inp-order_dashboard" />
+        <span><i class="fa-solid fa-calendar"></i>&nbsp;&nbsp;Ngày thống kê</span>
+      </div>
+      <div class="main__find-inp inp-text-form-1">
+        <input required="" type="text" id="find-inp-row" />
+        <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Nhập số dòng</span>
+      </div>
+      <div class="main__buttons">
+        <button class="main__filter-btn" id="filter-button-order_dashboard">
+          <i class="fa-solid fa-filter"></i>
+          <span>Lọc</span>
+        </button>
+        <button class="main__refresh-btn" id="filter-button-order_dashboard">
+          <i class="fa-solid fa-refresh"></i>
+          <span>Đặt lại</span>
+        </button>
+      </div>
+    </div>
+    <div class="main__data">
+      <table class="main__table order_dashboard">
+        <thead>
+          <tr>
+              <th width="14%">Khách hàng</th>
+              <th width="19%">Ngày thống kê</th>
+              <th width="19%">Tổng đơn hàng</th>
+              <th width="38%">Tổng thanh toán (VNĐ)</th>
+              <th width="10%"></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div class="main__pagination">
+      <button class="main-pagination__button previous">
+        <i class="icon fa-solid fa-chevron-left"></i>
+      </button>
+      <button class="main-pagination__button">1</button>
+      <button class="main-pagination__button active">2</button>
+      <button class="main-pagination__button">3</button>
+      <button class="main-pagination__button">...</button>
+      <button class="main-pagination__button">997</button>
+      <button class="main-pagination__button">998</button>
+      <button class="main-pagination__button">999</button>
+      <button class="main-pagination__button next">
+        <i class="icon fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+  `,
   order: `
     <h1 class="main__title">Đơn hàng</h1>
     <div class="main__row">
       <div class="main__find-inp inp-text-form-1">
         <input required="" type="text" id="find-inp-order" />
-        <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Khách hàng</span>
+        <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID đơn hàng</span>
       </div>
       <div class="main__sort-slt main__select slt-form-1">
         <input required="" type="text" id="sort-slt-order" />
@@ -141,8 +213,6 @@ const mainContentMap = {
         <ul>
           <li>ID tăng dần</li>
           <li>ID giảm dần</li>
-          <li>Khách hàng tăng dần</li>
-          <li>Khách hàng giảm dần</li>
           <li>Ngày tạo đơn tăng dần</li>
           <li>Ngày tạo đơn giảm dần</li>
           <li>Tổng thanh toán tăng dần</li>
@@ -199,11 +269,10 @@ const mainContentMap = {
         <thead>
           <tr>
               <th width="10%">ID</th>
-              <th width="10%">Khách hàng</th>
-              <th width="14%">Ngày tạo đơn</th>
-              <th width="14%">Quận, Tỉnh / TP</th>
-              <th width="28%">Tổng thanh toán (VNĐ)</th>
-              <th width="14%">Trạng thái</th>
+              <th width="16%">Ngày tạo đơn</th>
+              <th width="16%">Quận, Tỉnh / TP</th>
+              <th width="32%">Tổng thanh toán (VNĐ)</th>
+              <th width="16%">Trạng thái</th>
               <th width="10%"></th>
           </tr>
         </thead>
@@ -298,8 +367,9 @@ const mainContentMap = {
         <span><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Chọn Phân quyền</span>
         <ul>
           <li>Quản lý</li>
-          <li>Nhân viên</li>
-          <li>Khách hàng</li>
+          <li>Nhân viên thủ kho</li>
+          <li>Nhân viên bán hàng</li>
+          <li>Khách hàng</li> 
         </ul>
       </div>
       <div class="main__status-slt main__select slt-form-1">
@@ -954,6 +1024,8 @@ menuInSideBar.forEach((item, i) => {
         updateTimelineSelects();
         printInputTicketDashboardTicket();
         updateInputTicketDashboardTable();
+      } else if (mainContentKey === "order_dashboard") {
+        updateOrderDashboardTable();
       } else if (mainContentKey === "order") {
         updateOrderTable();
       } else if (mainContentKey === "privilege") {

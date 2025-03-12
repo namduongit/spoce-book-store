@@ -1,5 +1,5 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
-import { updateAddressSelect } from "../../../CallAPI/updateAddressSelect.js"
+import { updateAddressSelect } from "../../../CallAPI/updateAddressSelect.js";
 
 // Hàm hiện dialog cho việc "chọn" địa chỉ
 function showAddressSelectDialog() {
@@ -140,11 +140,12 @@ export function addAccountData() {
       </div>
       <div class="dialog__row">
         <div class="dialog__form-group">
-          <label>Nhóm quyền</label>
+          <label>Phân quyền</label>
           <select id="add-account-privilege">
-              <option value="" selected>Chọn Nhóm quyền</option>
+              <option value="" selected>Chọn Phân quyền</option>
               <option value="1">Quản lý</option>
-              <option value="2">Nhân viên</option>
+              <option value="2">Nhân viên thủ kho</option>
+              <option value="2">Nhân viên bán hàng</option>
               <option value="3">Khách hàng</option>
           </select>
         </div>

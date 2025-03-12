@@ -67,8 +67,9 @@ export function updateAccountData(idAccountSelected) {
             <select id="add-account-privilege">
                 <option value="" selected>Chọn Phân quyền</option>
                 <option value="1">Quản lý</option>
-                <option value="2">Nhân viên</option>
-                <option value="3">Khách hàng</option>
+                <option value="2">Nhân viên thủ kho</option>
+                <option value="3">Nhân viên bán hàng</option>
+                <option value="4">Khách hàng</option>
             </select>
           </div>
           <div class="dialog__form-group">

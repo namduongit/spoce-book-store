@@ -14,13 +14,17 @@
     <!-- Reset CSS -->
     <link rel="stylesheet" href="admin/assets/css/reset.css">
     <!-- Styles CSS -->
-    <link rel="stylesheet" href="admin/assets/css/base.css">
-    <link rel="stylesheet" href="admin/assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/common.css">
 
+    <!-- Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js"
+        integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </head>
 
@@ -67,15 +71,15 @@
             <li class="sidebar__item">
                 <a href="#" class="sidebar__action" data-main-content="discount">
                     <i class="icon fa-solid fa-percent"></i>
-                    <span class="text">Giảm giá</span>
+                    <span class="text">Khuyến mãi</span>
                 </a>
             </li>
-            <li class="sidebar__item">
+            <!-- <li class="sidebar__item">
                 <a href="#" class="sidebar__action" data-main-content="privilege">
                     <i class="icon fa-solid fa-users-line"></i>
                     <span class="text">Nhóm quyền</span>
                 </a>
-            </li>
+            </li> -->
             <li class="sidebar__item">
                 <a href="#" class="sidebar__action" data-main-content="account">
                     <i class="icon fa-solid fa-user"></i>
@@ -184,8 +188,8 @@
     </main>
 
     <!-- Javascript -->
-    <script type="module" src="admin/js/changeMainContent.js"></script>
-    <script type="module" src="admin/js/showSidebar.js"></script>
+    <script type="module" src="js/changeMainContent.js"></script>
+    <script type="module" src="js/showSidebar.js"></script>
 </body>
 
 </html>

@@ -501,10 +501,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .dialog__form-group table td {
   border: 1px solid #000;
 }
-.dialog__form-group table:has(thead th.name) td:nth-of-type(2) {
+.dialog__form-group table td.name {
   text-align: left;
 }
-.dialog__form-group table:has(thead th.total) td:last-of-type {
+.dialog__form-group table td.total {
   text-align: right;
 }
 .dialog__buttons:is(.order, .input_ticket) {
@@ -566,7 +566,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     .profit_dashboard,
     .revenue_dashboard,
     .input_ticket_dashboard,
-    .order
+    .order,
+    .input_ticket
   ) {
   position: fixed;
   top: 50%;
@@ -707,15 +708,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background: #fff;
   color: #699f4c;
 }
-.ticket__body.order .ticket__info {
+.ticket__body:where(.order, .input_ticket) .ticket__info {
   font-size: 17px;
 }
-.ticket__body.order .ticket__date {
+.ticket__body:where(.order, .input_ticket) .ticket__date {
   margin-bottom: 24px;
 }
-.ticket__body.order .ticket__table {
+.ticket__body:where(.order, .input_ticket) .ticket__table {
   margin-top: 4px;
 }
-.ticket__footer.order {
+.ticket__footer:where(.order, .input_ticket) {
   justify-content: space-around;
 }
