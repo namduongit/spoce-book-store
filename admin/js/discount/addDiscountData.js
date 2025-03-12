@@ -38,6 +38,20 @@ export function addDiscountData() {
                   </div>
                 </div>
                 <div class="dialog__row">
+                   <div class="dialog__form-group">
+                    <label>Loại khuyến mãi</label>
+                    <select id="add-discount-type">
+                      <option value="" selected>Chọn Loại khuyến mãi</option>
+                      <option value="1">Phần trăm</option>
+                      <option value="0">Tiền</option>
+                    </select>
+                  </div>
+                  <div class="dialog__form-group">
+                    <label>Giá trị</label>
+                    <input type="text" id="add-discount-value" placeholder="Nhập Giá trị" />
+                  </div>
+                </div>
+                <div class="dialog__row">
                   <div class="dialog__form-group">
                     <label>Ngày bắt đầu</label>
                     <input type="date" id="add-discount-date-start" />
@@ -49,19 +63,15 @@ export function addDiscountData() {
                 </div>
                 <div class="dialog__row">
                   <div class="dialog__form-group">
-                    <label>Tiền đơn hàng tối thiểu</label>
-                    <input type="text" id="add-discount-order-price-start" placeholder="Nhập Tiền đơn hàng tối thiểu" />
+                    <label>Tiền đơn tối thiểu</label>
+                    <input type="text" id="add-discount-order-min-cost" placeholder="Nhập Tiền đơn tối thiểu" />
                   </div>
                   <div class="dialog__form-group">
-                    <label>Tiền đơn hàng tối đa</label>
-                    <input type="text" id="add-discount-order-price-end" placeholder="Nhập Tiền đơn hàng tối đa" />
+                    <label>Tiền giảm tối đa</label>
+                    <input type="text" id="add-discount-order-max-discount" placeholder="Nhập Tiền giảm tối đa" />
                   </div>
                 </div>
                 <div class="dialog__row">
-                  <div class="dialog__form-group">
-                    <label>Phần trăm (%)</label>
-                    <input type="text" id="add-discount-percent" placeholder="Nhập Phần trăm (%)" />
-                  </div>
                   <div class="dialog__form-group">
                     <label>Trạng thái</label>
                     <select id="add-discount-status">
@@ -70,6 +80,7 @@ export function addDiscountData() {
                       <option value="0">Tạm dừng</option>
                     </select>
                   </div>
+                  <div class="dialog__form-group"></div>
                 </div>
                 <div class="dialog__buttons">
                   <button id="add-discount-button" class="add">Thêm</button>
@@ -103,17 +114,23 @@ export function addDiscountData() {
         // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
         const id = document.getElementById("add-discount-id");
         const name = document.getElementById("add-discount-name");
+        const type = document.getElementById("add-discount-type");
+        const value = document.getElementById("add-discount-value");
         const dateStart = document.getElementById("add-discount-date-start");
         const dateEnd = document.getElementById("add-discount-date-end");
-        const percent = document.getElementById("add-discount-percent");
+        const minCost = document.getElementById("add-discount-order-min-cost");
+        const maxDiscount = document.getElementById("add-discount-order-max-discount");
         const status = document.getElementById("add-discount-status");
 
         // ... (Xử lý tiếp ở đây)
         console.log(id.value);
         console.log(name.value);
+        console.log(type.value);
+        console.log(value.value);
         console.log(dateStart.value);
         console.log(dateEnd.value);
-        console.log(percent.value);
+        console.log(minCost.value);
+        console.log(maxDiscount.value);
         console.log(status.value);
       });
 

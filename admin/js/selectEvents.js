@@ -74,14 +74,19 @@ export function updateTimelineSelects() {
   );
 
   // Tuỳ chỉnh thời gian khi "lọc theo năm" hoặc "lọc theo tháng"
+  const yearStart = 2020,
+    yearEnd = 2030;
   let timelineDetailYearFormat = ``;
-  for (let year = 2020; year <= 2030; year++) {
-    timelineDetailYearFormat += `<li>Năm ${year}</li>`;
+  for (let year = yearStart; year <= yearEnd; year++) {
+    timelineDetailYearFormat += `<li>Năm ${String(year).padStart(4, "0")}</li>`;
   }
   let timelineDetailMonthFormat = ``;
-  for (let year = 2020; year <= 2030; year++) {
+  for (let year = yearStart; year <= yearEnd; year++) {
     for (let month = 1; month <= 12; month++) {
-      timelineDetailMonthFormat += `<li>Tháng ${month}/${year}</li>`;
+      timelineDetailMonthFormat += `<li>Tháng ${String(month).padStart(
+        2,
+        "0"
+      )}/${String(year).padStart(4, "0")}</li>`;
     }
   }
 

@@ -24,7 +24,7 @@ let data = [
     totalPrice: 2570000,
     methodPay: "Thanh toán khi giao hàng (COD)",
     discountId: "",
-    status: "Đã hoàn thành",
+    status: "Đã giao",
     dateUpdate: "",
   },
   {
@@ -47,7 +47,7 @@ let data = [
     totalPrice: 2570000,
     methodPay: "Thanh toán khi giao hàng (COD)",
     discountId: "",
-    status: "Đang giao hàng",
+    status: "Đã xác nhận",
     dateUpdate: "",
   },
   {
@@ -70,7 +70,7 @@ let data = [
     totalPrice: 2570000,
     methodPay: "Thanh toán khi giao hàng (COD)",
     discountId: "",
-    status: "Đang chờ xác nhận",
+    status: "Chưa xác nhận",
     dateUpdate: "",
   },
   {
@@ -119,16 +119,15 @@ export function renderOrderTable() {
     html += `
           <tr>
               <td>${data[i].orderId}</td>
-              <td>${data[i].customerId}</td>
               <td>${data[i].dateCreate}</td>
               <td>${splitAddressToShip(data[i].addressToShip)}</td>
               <td>${vietnamMoneyFormat(data[i].totalPrice)}</td>
               <td><span ${
-                data[i].status === "Đã hoàn thành"
+                data[i].status === "Đã giao"
+                  ? 'class="purple"'
+                  : data[i].status === "Đã xác nhận"
                   ? 'class="green"'
-                  : data[i].status === "Đang giao hàng"
-                  ? 'class="yellow"'
-                  : data[i].status === "Đang chờ xác nhận"
+                  : data[i].status === "Chưa xác nhận"
                   ? 'class="gray"'
                   : 'class="red"'
               }>${data[i].status}</span></td>

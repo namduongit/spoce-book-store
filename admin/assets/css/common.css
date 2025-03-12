@@ -41,7 +41,8 @@
 .inp-text-form-1 input:focus {
   border: 2px solid #000;
 }
-.inp-text-form-1 input:hover ~ span {
+.inp-text-form-1 input:hover ~ span,
+.inp-text-form-1 input:valid ~ span {
   color: #000;
 }
 .inp-text-form-1 input[type="date"] {
@@ -144,7 +145,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .slt-form-1 input:focus {
   border: 2px solid #000;
 }
-.slt-form-1 input:hover + span {
+.slt-form-1 input:hover + span,
+.slt-form-1 input:valid + span {
   color: #000;
 }
 .slt-form-1 input:focus ~ ul {
@@ -161,16 +163,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .dialog:where(
     .profit_dashboard,
     .order,
+    .privilege,
     .account,
-    .supplies,
     .discount,
+    .supplies,
+    .input_ticket,
     .book,
     .author,
     .category,
     .cover,
     .publisher,
     .issuer,
-    .address-select
+    .address-select,
+    .input_ticket-detail
   ) {
   position: fixed;
   top: 50%;
@@ -210,16 +215,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   position: relative;
   width: 50%;
 }
-.dialog__form-group:where(.book, .order) {
+.dialog__form-group:where(.book, .order, .input_ticket) {
   width: calc(100% / 3);
 }
-.dialog__form-group.order.half {
+.dialog__form-group:where(.order, .input_ticket).half {
   width: calc(calc(100% / 3) / 2 - 12px);
 }
 .dialog__form-group.full {
   width: 100%;
 }
-.dialog__form-group.order.full {
+.dialog__form-group:where(.order, .input_ticket).full {
   width: calc(calc(calc(100% / 3) * 2) + 16px);
 }
 .dialog__form-group label,
@@ -255,7 +260,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .dialog__form-group :is(input, textarea):focus::placeholder {
   color: #dedede;
 }
-.dialog__form-group:has(:is(input, textarea):is(:focus, :hover)) label {
+.dialog__form-group:has(:is(input, textarea):where(:focus, :hover)) label {
   color: #000;
 }
 .dialog__form-group :is(input, textarea):is(:focus, :hover) {
@@ -271,7 +276,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #000;
 }
 .dialog__form-group select {
-  padding-left: 8px;
+  padding-left: 4px;
   outline: none;
   border: 1px solid #dedede;
   margin-top: 4px;
@@ -361,6 +366,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background: #fff;
   color: #699f4c;
 }
+.dialog__buttons button.reset {
+  width: 100px;
+  background: #9f4d4d;
+  border: 2px solid #9f4d4d;
+}
+.dialog__buttons button.reset:hover {
+  background: #fff;
+  color: #9f4d4d;
+}
 .dialog__buttons button.update {
   background: #bf873e;
   border: 2px solid #bf873e;
@@ -445,8 +459,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding-top: 8px;
   resize: "off";
 }
-.dialog__form-group.half {
-}
 .dialog__form-group:has(input[type="date"]) label {
   color: #dedede !important;
 }
@@ -489,12 +501,26 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .dialog__form-group table td {
   border: 1px solid #000;
 }
-.dialog__buttons.order {
+.dialog__form-group table td.name {
+  text-align: left;
+}
+.dialog__form-group table td.total {
+  text-align: right;
+}
+.dialog__buttons:is(.order, .input_ticket) {
   justify-content: flex-end;
 }
-.dialog__buttons.order button {
+.dialog__buttons:is(.order, .input_ticket) button {
   width: 200px;
   border: 2px solid #000;
+}
+.dialog__buttons button.ship-status {
+  background: #5d3fd3;
+  border-color: #5d3fd3;
+}
+.dialog__buttons button.ship-status:hover {
+  background: #fff;
+  color: #5d3fd3;
 }
 .dialog__buttons button.confirm-status {
   background: #3dc55d;
@@ -504,14 +530,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background: #fff;
   color: #3dc55d;
 }
-.dialog__buttons button.shipping-status {
-  background: #ffdf4e;
-  border-color: #ffdf4e;
-}
-.dialog__buttons button.shipping-status:hover {
-  background: #fff;
-  color: #ffdf4e;
-}
 .dialog__buttons button.cancel-status {
   background: #f44336;
   border-color: #f44336;
@@ -520,12 +538,36 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background: #fff;
   color: #f44336;
 }
+.dialog__privilege-detail {
+  margin-top: 14px;
+}
+.dialog__privilege-detail table {
+  width: 100%;
+  /* table-layout: auto; */
+}
+.dialog__privilege-detail table tr {
+  height: 30px;
+}
+.dialog__privilege-detail table tr:first-of-type {
+  border-bottom: 2px solid #000;
+}
+.dialog__privilege-detail table :is(th, td) {
+  text-align: center;
+}
+.dialog__privilege-detail table td:first-of-type {
+  text-align: left;
+}
+.dialog__privilege-detail table :is(th:not(:first-of-type), td:first-of-type) {
+  font-weight: 400;
+  font-size: 14px;
+}
 /* <===== Dashboard =====> */
 .ticket:where(
     .profit_dashboard,
     .revenue_dashboard,
     .input_ticket_dashboard,
-    .order
+    .order,
+    .input_ticket
   ) {
   position: fixed;
   top: 50%;
@@ -625,6 +667,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: table-cell;
   text-align: right;
 }
+.ticket__table:has(thead th.name) td:nth-of-type(2) {
+  text-align: left;
+}
+.ticket__table:has(thead th.total) td:last-of-type {
+  text-align: right;
+}
 .ticket__total-text {
   margin-top: 6px;
   font-size: 16px;
@@ -660,15 +708,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background: #fff;
   color: #699f4c;
 }
-.ticket__body.order .ticket__info {
+.ticket__body:where(.order, .input_ticket) .ticket__info {
   font-size: 17px;
 }
-.ticket__body.order .ticket__date {
+.ticket__body:where(.order, .input_ticket) .ticket__date {
   margin-bottom: 24px;
 }
-.ticket__body.order .ticket__table {
+.ticket__body:where(.order, .input_ticket) .ticket__table {
   margin-top: 4px;
 }
-.ticket__footer.order {
+.ticket__footer:where(.order, .input_ticket) {
   justify-content: space-around;
 }

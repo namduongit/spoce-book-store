@@ -66,10 +66,10 @@ export function detailAccountData(idAccountSelected) {
               <select id="detail-account-privilege" disabled>
                   <option value="" selected>Chọn Phân quyền</option>
                   <option value="1">Quản lý</option>
-                  <option value="2">Nhân viên</option>
+                  <option value="2">Nhân viên thủ kho</option>
+                  <option value="2">Nhân viên bán hàng</option>
                   <option value="3">Khách hàng</option>
               </select>
-              <button>Chi tiết</button>
             </div>
             <div class="dialog__form-group">
               <label>Trạng thái</label>

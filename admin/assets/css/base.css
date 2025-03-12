@@ -362,6 +362,10 @@ body {
   padding: 4px 6px;
   border-radius: 4px;
 }
+.main__table tbody td > span.purple {
+  /* color: #ff8f8f; */
+  color: #5d3fd3;
+}
 .main__table tbody td > span.yellow {
   /* color: #ff8f8f; */
   color: #ffdf4e;

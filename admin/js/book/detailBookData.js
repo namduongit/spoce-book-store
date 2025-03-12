@@ -16,7 +16,7 @@ export function detailBookData(idBookSelected) {
   // - Định dạng dialog
   detailDialog.classList.add("dialog");
   detailDialog.classList.add("book");
-  detailDialog.style.width = "1146px";
+  detailDialog.style.width = "1178px";
   // - Ghi nội dung dialog
   detailDialog.innerHTML = `
         <h1 class="dialog__title">Chi tiết sách</h1>
@@ -65,6 +65,21 @@ export function detailBookData(idBookSelected) {
         </div>
         <div class="dialog__row">
             <div class="dialog__form-group book"></div>
+             <div class="dialog__form-group book">
+                <label>Số trang</label>
+                <input type="text" id="detail-book-pages" readonly />
+            </div>
+            <div class="dialog__form-group book">
+                <label>Loại bìa</label>
+                <select id="detail-book-cover" disabled>
+                    <option value="" selected>Chọn Loại bìa</option>
+                    <option value="1">Bìa cứng</option>
+                    <option value="0">Bìa mềm</option>
+                </select>
+            </div>
+        </div>
+        <div class="dialog__row">
+            <div class="dialog__form-group book"></div>
             <div class="dialog__form-group book">
                 <label>Nhà xuất bản</label>
                 <select id="detail-book-publish-name" disabled>
@@ -74,27 +89,8 @@ export function detailBookData(idBookSelected) {
                 </select>
             </div>
             <div class="dialog__form-group book">
-                <label>Nhà phát hành</label>
-                <select id="detail-book-issuer" disabled>
-                    <option value="" selected>Chọn Nhà phát hành</option>
-                    <option value="1">Nhà phát hành 1</option>
-                    <option value="0">Nhà phát hành 2</option>
-                </select>
-            </div>
-        </div>
-        <div class="dialog__row">
-            <div class="dialog__form-group book"></div>
-            <div class="dialog__form-group book">
                 <label>Năm xuất bản</label>
                 <input type="text" id="detail-book-publish-year" readonly />
-            </div>
-            <div class="dialog__form-group book">
-                <label>Loại bìa</label>
-                <select id="detail-book-cover" disabled>
-                    <option value="" selected>Chọn Loại bìa</option>
-                    <option value="1">Bìa cứng</option>
-                    <option value="0">Bìa mềm</option>
-                </select>
             </div>
         </div>
         <div class="dialog__row">
@@ -119,14 +115,6 @@ export function detailBookData(idBookSelected) {
         <div class="dialog__row">
             <div class="dialog__form-group book"></div>
             <div class="dialog__form-group book">
-                <label>Giảm giá</label>
-                <select id="detail-book-discount" disabled>
-                    <option value="" selected>Chọn Giảm giá</option>
-                    <option value="1">Hoạt động</option>
-                    <option value="0">Tạm dừng</option>
-                </select>
-            </div>
-            <div class="dialog__form-group book">
                 <label>Trạng thái</label>
                 <select id="detail-book-status" disabled>
                     <option value="" selected>Chọn Trạng thái</option>
@@ -134,6 +122,7 @@ export function detailBookData(idBookSelected) {
                     <option value="0">Tạm dừng</option>
                 </select>
             </div>
+            <div class="dialog__form-group book"></div>
         </div>
     `;
 
