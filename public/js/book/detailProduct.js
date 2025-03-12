@@ -1,4 +1,4 @@
-function show_detail_product(product_id) {
+function showDetailProduct(product_id) {
     let detail_html = ``;
 
     detail_html = `
@@ -53,9 +53,9 @@ function show_detail_product(product_id) {
 
             <div class="show-detail-product__info">
                 <div class="show-detail-product__tabs">
-                    <button class="show-detail-product__tab show-detail-product__tab--desc active margin-right-small" onclick="show_option(this)">Mô tả</button>
-                    <button class="show-detail-product__tab show-detail-product__tab--details margin-right-small" onclick="show_option(this)">Thông tin chi tiết</button>
-                    <button class="show-detail-product__tab show-detail-product__tab--reviews margin-right-small" onclick="show_option(this)">Đánh giá</button>
+                    <button class="show-detail-product__tab show-detail-product__tab--desc active margin-right-small" onclick="showOptionDetailProduct(this)">Mô tả</button>
+                    <button class="show-detail-product__tab show-detail-product__tab--details margin-right-small" onclick="showOptionDetailProduct(this)">Thông tin chi tiết</button>
+                    <button class="show-detail-product__tab show-detail-product__tab--reviews margin-right-small" onclick="showOptionDetailProduct(this)">Đánh giá</button>
                 </div>
                 <div class="show-detail-product__tab-content">
                     <div class="show-detail-product__desc active">
@@ -66,7 +66,7 @@ function show_detail_product(product_id) {
                 </div>
             </div>
 
-            <div class="show-detail-product__close" onclick="close_detail_product()">X</div>
+            <div class="show-detail-product__close" onclick="closeDetailProduct()">X</div>
         </div>
     `;
 
@@ -74,7 +74,7 @@ function show_detail_product(product_id) {
     document.querySelector('.show-detail-product').style.display = 'block';
 }
 
-function show_option(object) {
+function showOptionDetailProduct(object) {
     document.querySelectorAll(".show-detail-product__tab").forEach(tab => {
         tab.classList.remove("active");
     });
@@ -102,11 +102,11 @@ function show_option(object) {
 }
 
 
-function close_detail_product() {
+function closeDetailProduct() {
     document.querySelector('.show-detail-product').style.display = 'none';
 }
 
-function show_filter(element) {
+function showFilter(element) {
     const contentFilter = element.closest(".filter-group").querySelector(".filter-group__content");
 
     contentFilter.classList.toggle("hide-item");
@@ -119,9 +119,9 @@ function show_filter(element) {
 $(function() {
     $("#price-slider").slider({
         range: true,
-        min: 10000,
-        max: 5000000, // Max 5 triệu
-        values: [27000, 250000], // Giá trị mặc định
+        min: 0,
+        max: 2000000, // Giới hạn max là 2 triệu
+        values: [0, 500000], // Giá trị mặc định
         slide: function(event, ui) {
             $("#min-price").text(ui.values[0].toLocaleString());
             $("#max-price").text(ui.values[1].toLocaleString());
@@ -134,15 +134,19 @@ $(function() {
 
     // Cập nhật slider khi nhập giá trị vào input
     $(".filter-group__input").on("input", function() {
-        let minVal = parseInt($(".filter-group__input").eq(0).val().replace(/\D/g, "")) || 10000;
-        let maxVal = parseInt($(".filter-group__input").eq(1).val().replace(/\D/g, "")) || 5000000;
+        let minVal = parseInt($(".filter-group__input").eq(0).val().replace(/\D/g, "")) || 0;
+        let maxVal = parseInt($(".filter-group__input").eq(1).val().replace(/\D/g, "")) || 2000000;
 
         // Đảm bảo giá trị hợp lệ
-        if (minVal < 10000) minVal = 10000;
-        if (maxVal > 5000000) maxVal = 5000000;
+        if (minVal < 0) minVal = 0;
+        if (maxVal > 2000000) maxVal = 2000000;
         if (minVal > maxVal) minVal = maxVal;
 
         $("#price-slider").slider("values", [minVal, maxVal]);
+
+        // Cập nhật lại UI
+        $("#min-price").text(minVal.toLocaleString());
+        $("#max-price").text(maxVal.toLocaleString());
     });
 });
 

@@ -4,7 +4,6 @@ window.onload = () => {
     const regexSplit = URL.split('/');
     const lastPart = regexSplit.pop();
     const result = lastPart.replace(/[^a-zA-Z]/g, "");
-    console.log(result);
 
 
 

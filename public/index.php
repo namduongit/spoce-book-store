@@ -19,19 +19,17 @@
     <link rel="stylesheet" href="public/css/style.css">
 
     <!-- Nhúng các thư viện Js -->
-    <script src="public/js/login_register.js" defer></script>
+    <script src="public/js/auth/login_register.js" defer></script>
 
-    <script src="public/js/cart.js" defer></script>
+    <script src="public/js/cart/cart.js" defer></script>
+    <script src="public/js/cart/payment.js" defer></script>
 
-    <script src="public/js/top_bar.js" defer></script>
-
-
-    <script src="public/js/book/detail_product.js" defer></script>
-    <script src="public/js/book/show_book.js" defer></script>
+    <script src="public/js/book/detailProduct.js" defer></script>
+    <script src="public/js/book/showBook.js" defer></script>
 
     <script src="public/js/script.js" defer></script>
 
-
+    <script src="public/js/filter/filter.js"></script>
 </head>
 
 <body>
@@ -52,11 +50,11 @@
                 </div>
             </div>
             <div class="topbar__auth d-flex ">
-                <div class="topbar__auth-btn topbar__auth-btn--login margin-right-medium" onclick="show_form(this)">
+                <div class="topbar__auth-btn topbar__auth-btn--login margin-right-medium" onclick="showFormUser(this, null)">
                     <i class="fa-solid fa-street-view"></i>
                     <span>Đăng nhập</span>
                 </div>
-                <div class="topbar__auth-btn topbar__auth-btn--register margin-right-medium" onclick="show_form(this)">
+                <div class="topbar__auth-btn topbar__auth-btn--register margin-right-medium" onclick="showFormUser(this, null)">
                     <i class="fa-solid fa-user-pen"></i>
                     <span>Đăng ký</span>
                 </div>
@@ -204,45 +202,11 @@
             <aside class="sidebar">
                 <h3 class="sidebar__title">Danh mục</h3>
                 <ul class="sidebar__list">
-
-                    <li class="sidebar__item d-flex just-content-spbt" data-mode="economics">
-                        <a href="#">Sách Kinh Tế</a>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </li>
-                    <li class="sidebar__item d-flex just-content-spbt" data-mode="domestic-literature">
-                        <a href="#">Văn Học Trong Nước</a>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </li>
-                    <li class="sidebar__item d-flex just-content-spbt" data-mode="foreign-literature">
-                        <a href="#">Văn Học Nước Ngoài</a>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </li>
-                    <li class="sidebar__item d-flex just-content-spbt" data-mode="children">
-                        <a href="#">Sách Thiếu Nhi</a>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </li>
-                    <li class="sidebar__item d-flex just-content-spbt" data-mode="self-development">
-                        <a href="#">Sách Phát Triển Bản Thân</a>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </li>
-                    <li class="sidebar__item d-flex just-content-spbt" data-mode="computer-language">
-                        <a href="#">Sách Tin Học & Ngoại Ngữ</a>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </li>
-                    <li class="sidebar__item d-flex just-content-spbt" data-mode="specialized">
-                        <a href="#">Sách Chuyên Ngành</a>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </li>
-                    <li class="sidebar__item d-flex just-content-spbt" data-mode="life-skills">
-                        <a href="#">Sách Kỹ Năng Sống</a>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </li>
-                    <li class="sidebar__item d-flex just-content-spbt" data-mode="comics">
-                        <a href="#">Truyện Tranh</a>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </li>
-
-
+                    <!--    <li class=\"sidebar__item d-flex just-content-spbt\" data-mode=\"$id_cate\">
+                            <a href=\"/?category=$id_cate\" onclick=\"\"> $name_cate</a>
+                            <i class=\"fa-solid fa-chevron-right\"></i>
+                        </li>
+                -->
                 </ul>
             </aside>
 
@@ -271,12 +235,12 @@
                     <div class="filter-group pd-filter">
                         <div class="filter-group__header d-flex just-content-spbt">
                             <p class="filter-group__title">Giá</p>
-                            <i class="filter-group__toggle fa-solid fa-minus" onclick="show_filter(this)"></i>
+                            <i class="filter-group__toggle fa-solid fa-minus" onclick="showFilter(this)"></i>
                         </div>
                         <div class="filter-group__content">
                             <div class="filter-group__inputs">
                                 <div class="input-wraper">
-                                    <input type="text" class="filter-group__input" value="27,000">
+                                    <input type="text" class="filter-group__input" value="0">
                                 </div>
                                 <div class="input-wraper">
                                     <input type="text" class="filter-group__input" value="500,000">
@@ -284,7 +248,7 @@
                             </div>
                             <div class="filter-group__range">
                                 <div id="price-slider"></div>
-                                <p><span id="min-price">10,000</span>đ - <span id="max-price">500,000</span>đ</p>
+                                <p><span id="min-price">0</span>đ - <span id="max-price">500,000</span>đ</p>
                             </div>
                         </div>
                     </div>
@@ -293,73 +257,129 @@
                     <div class="filter-group pd-filter">
                         <div class="filter-group__header d-flex just-content-spbt">
                             <p class="filter-group__title">Tác giả</p>
-                            <i class="filter-group__toggle fa-solid fa-minus" onclick="show_filter(this)"></i>
+                            <i class="filter-group__toggle fa-solid fa-minus" onclick="showFilter(this)"></i>
                         </div>
                         <!-- Ô nhập tìm kiếm tác giả -->
                         <div class="filter-group__search">
                             <input type="text" class="filter-group__search-input" placeholder="Nhập tên tác giả . . .">
                         </div>
 
-                        <div class="filter-group__content">
-                            <div class="filter-group__option">
-                                <input type="checkbox" class="filter-group__checkbox" value="B.Duck"> B.Duck
-                            </div>
-                            <div class="filter-group__option">
-                                <input type="checkbox" class="filter-group__checkbox" value="Hot Wheels"> Hot Wheels
-                            </div>
-                            <div class="filter-group__option">
-                                <input type="checkbox" class="filter-group__checkbox" value="LEGO DOTS"> LEGO DOTS
-                            </div>
-                            <div class="filter-group__option">
-                                <input type="checkbox" class="filter-group__checkbox" value="LOZ"> LOZ
-                            </div>
-                            <div class="filter-group__option">
-                                <input type="checkbox" class="filter-group__checkbox" value="Fantasy"> Fantasy
-                            </div>
-                            <div class="filter-group__option">
-                                <input type="checkbox" class="filter-group__checkbox" value="R Star"> R Star
-                            </div>
-                            <div class="filter-group__option">
-                                <input type="checkbox" class="filter-group__checkbox" value="VECTO"> VECTO
-                            </div>
+                        <div class="filter-group__content list-author-content">
+                            <?php
+                            include_once 'app/config.php';
+
+                            $author_model = new app_models_TacGia();
+                            $authors = $author_model->getAllAuthors();
+                            $total_authors = count($authors);
+                            $limit = 5;
+
+                            foreach ($authors as $index => $author) {
+                                $author_id = $author['maTacGia'];
+                                $author_name = $author['tenTacGia'];
+                                $hidden_class = $index >= $limit ? 'hide-item' : '';
+
+                                echo "
+                                    <div class=\"filter-group__option $hidden_class\">
+                                        <input type=\"checkbox\" class=\"filter-group__checkbox\" value=\"$author_id\"> $author_name
+                                    </div>";
+                            }
+
+                            if ($total_authors > $limit) {
+                                echo '
+                                    <div class="show-list-author show-more margin-top-small">
+                                        <a href="#">Hiển thị tất cả (' . $total_authors . ')</a>
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </div>';
+                            }
+                            ?>
                         </div>
                     </div>
-
 
                     <!-- Bộ lọc nhà xuất bản -->
                     <div class="filter-group pd-filter">
                         <div class="filter-group__header d-flex just-content-spbt">
                             <p class="filter-group__title">Nhà xuất bản</p>
-                            <i class="filter-group__toggle fa-solid fa-minus" onclick="show_filter(this)"></i>
+                            <i class="filter-group__toggle fa-solid fa-minus" onclick="showFilter(this)"></i>
                         </div>
                         <!-- Ô nhập tìm kiếm tác giả -->
                         <div class="filter-group__search">
                             <input type="text" class="filter-group__search-input" placeholder="Nhập nhà xuất bản . . .">
                         </div>
 
-                        <div class="filter-group__content">
-                            <div class="filter-group__option">
-                                <input type="checkbox" class="filter-group__checkbox"> Bộ lắp ghép
-                            </div>
-                            <div class="filter-group__option">
-                                <input type="checkbox" class="filter-group__checkbox"> Bộ lắp ráp mô hình
-                            </div>
-                            <div class="filter-group__option">
-                                <input type="checkbox" class="filter-group__checkbox"> Đồ chơi không dùng pin
-                            </div>
-                            <div class="filter-group__option">
-                                <input type="checkbox" class="filter-group__checkbox"> Đồ chơi lắp ráp
-                            </div>
-                            <div class="filter-group__option">
-                                <input type="checkbox" class="filter-group__checkbox"> Nhựa
-                            </div>
-                            <div class="filter-group__option">
-                                <input type="checkbox" class="filter-group__checkbox"> Hộp
-                            </div>
-                            <div class="filter-group__option">
-                                <input type="checkbox" class="filter-group__checkbox"> Mô Hình
-                            </div>
+                        <div class="filter-group__content list-publisher-content">
+                            <?php
+                            include_once 'app/config.php';
+
+                            $publisher_model = new app_models_NhaXuatBan();
+                            $publishers = $publisher_model->getAllPublishers();
+
+                            $total_publisher = count($publishers);
+                            $limit = 5;
+
+                            foreach ($publishers as $index => $publisher) {
+                                $publisher_id = $publisher['maNXB'];
+                                $publisher_name = $publisher['tenNXB'];
+                                $hidden_class = $index >= $limit ? 'hide-item' : '';
+
+                                echo "
+                                            <div class=\"filter-group__option $hidden_class\">
+                                                <input type=\"checkbox\" class=\"filter-group__checkbox\" value=\"$publisher_id\"> $publisher_name
+                                            </div>";
+                            }
+
+                            if ($total_authors > $limit) {
+                                echo '
+                                            <div class="show-list-publisher show-more margin-top-small">
+                                                <a href="#">Hiển thị tất cả (' . $total_publisher . ')</a>
+                                                <i class="fa-solid fa-chevron-down"></i>
+                                            </div>';
+                            }
+                            ?>
                         </div>
+                    </div>
+
+                    <!-- Bộ lọc loại bìa -->
+                    <div class="filter-group pd-filter">
+                        <div class="filter-group__header d-flex just-content-spbt">
+                            <p class="filter-group__title">Loại bìa</p>
+                            <i class="filter-group__toggle fa-solid fa-minus" onclick="showFilter(this)"></i>
+                        </div>
+                        <!-- Ô nhập tìm kiếm tác giả -->
+                        <div class="filter-group__search">
+                            <input type="text" class="filter-group__search-input" placeholder="Nhập tên bìa . . .">
+                        </div>
+
+                        <div class="filter-group__content list-cover-content">
+                            <?php
+                            include_once 'app/config.php';
+
+                            $cover_model = new app_models_LoaiBia();
+                            $covers = $cover_model->getAllCovers();
+
+                            $total_cover = count($covers);
+                            $limit = 5;
+
+                            foreach ($covers as $index => $cover) {
+                                $cover_id = $cover['maLoaiBia'];
+                                $cover_name = $cover['tenLoaiBia'];
+                                $hidden_class = $index >= $limit ? 'hide-item' : '';
+
+                                echo "
+                                            <div class=\"filter-group__option $hidden_class\">
+                                                <input type=\"checkbox\" class=\"filter-group__checkbox\" value=\"$cover_id\"> $cover_name
+                                            </div>";
+                            }
+
+                            if ($total_authors > $limit) {
+                                echo '
+                                            <div class="show-list-cover show-more margin-top-small">
+                                                <a href="#">Hiển thị tất cả (' . $total_cover . ')</a>
+                                                <i class="fa-solid fa-chevron-down"></i>
+                                            </div>';
+                            }
+                            ?>
+                        </div>
+
                     </div>
 
                 </div>
@@ -368,9 +388,35 @@
             <section class="book-category">
                 <h2 class="book-category__title">Danh sách sản phẩm</h2>
 
+
+
                 <div class="book-category__sort d-flex">
-                    <div class="book-category__order">
-                        <i class="fa-solid fa-chart-bar"></i>
+
+                    <div class="book-category__sort-item">
+                        <label for="type-category">Thể loại: </label>
+                        <select name="" id="type-category">
+                            <option value="all-category" selected>Tất cả</option>
+                            <?php
+                            include_once 'app/config.php';
+                            $category_model = new app_models_TheLoai;
+
+                            $categories = $category_model->getAllCategories();
+
+                            if (!$categories) {
+                                // Xử lý trường hợp chưa có sách nào
+                            } else {
+                                foreach ($categories as $cate) {
+                                    $id_cate = $cate['maTheLoai'];
+                                    $name_cate = $cate['tenTheLoai'];
+                                    echo "
+                                            <option value=\"$id_cate\">$name_cate</option>
+                                        ";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="book-category__sort-item">
                         <label for="sort-combobox">Sắp xếp theo: </label>
                         <select name="" id="sort-combobox">
                             <option value="base" selected>Mặc định</option>
@@ -378,194 +424,28 @@
                             <option value="asc">Giá tăng dần</option>
                         </select>
                     </div>
-                    <div class="book-category__visible">
-                        <label for="visible-page">Hiển thị theo: </label>
-                        <select name="" id="visible-page">
+
+                    <div class="book-category__sort-item">
+                        <label for="page-show-by">Hiển thị theo: </label>
+                        <select name="" id="page-show-by">
                             <option value="base" selected>Mặc định</option>
                             <option value="16">16 sản phẩm</option>
                             <option value="32">32 sản phẩm</option>
                             <option value="64">64 sản phẩm</option>
                         </select>
                     </div>
+
+
+
                     <div class="book-category__button d-flex">
-                        <div class="btn sort-btn">Lọc sách</div>
+                        <div class="btn sort-btn" onclick="consoleGetBook()">Lọc sách</div>
                         <div class="btn reset-btn">Đặt lại</div>
                     </div>
                 </div>
 
                 <div class="book-category__list" id="book-list">
-                    <div class="book-category__item" onclick="show_detail_product(1)">
-                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
-                        <div class="book-category__item-name">Người thắp lửa</div>
-                        <div class="book-category-rate d-flex margin-top-small">
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
-                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
-                        <div class="book-category__item-price">220,000</div>
-                        <div class="book-category__item-add-to-cart margin-top-small">
-                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
-                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
-                        </div>
-                    </div>
 
-                    <div class="book-category__item" onclick="show_detail_product(1)">
-                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
-                        <div class="book-category__item-name">Người thắp lửa</div>
-                        <div class="book-category-rate d-flex margin-top-small">
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
-                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
-                        <div class="book-category__item-price">220,000</div>
-                        <div class="book-category__item-add-to-cart margin-top-small">
-                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
-                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
-                        </div>
-                    </div>
-
-                    <div class="book-category__item" onclick="show_detail_product(1)">
-                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
-                        <div class="book-category__item-name">Người thắp lửa</div>
-                        <div class="book-category-rate d-flex margin-top-small">
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
-                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
-                        <div class="book-category__item-price">220,000</div>
-                        <div class="book-category__item-add-to-cart margin-top-small">
-                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
-                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
-                        </div>
-                    </div>
-
-                    <div class="book-category__item" onclick="show_detail_product(1)">
-                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
-                        <div class="book-category__item-name">Người thắp lửa</div>
-                        <div class="book-category-rate d-flex margin-top-small">
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
-                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
-                        <div class="book-category__item-price">220,000</div>
-                        <div class="book-category__item-add-to-cart margin-top-small">
-                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
-                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
-                        </div>
-                    </div>
-
-                    <div class="book-category__item" onclick="show_detail_product(1)">
-                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
-                        <div class="book-category__item-name">Người thắp lửa</div>
-                        <div class="book-category-rate d-flex margin-top-small">
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
-                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
-                        <div class="book-category__item-price">220,000</div>
-                        <div class="book-category__item-add-to-cart margin-top-small">
-                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
-                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
-                        </div>
-                    </div>
-
-                    <div class="book-category__item" onclick="show_detail_product(1)">
-                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
-                        <div class="book-category__item-name">Người thắp lửa</div>
-                        <div class="book-category-rate d-flex margin-top-small">
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
-                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
-                        <div class="book-category__item-price">220,000</div>
-                        <div class="book-category__item-add-to-cart margin-top-small">
-                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
-                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
-                        </div>
-                    </div>
-
-                    <div class="book-category__item" onclick="show_detail_product(1)">
-                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
-                        <div class="book-category__item-name">Người thắp lửa</div>
-                        <div class="book-category-rate d-flex margin-top-small">
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
-                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
-                        <div class="book-category__item-price">220,000</div>
-                        <div class="book-category__item-add-to-cart margin-top-small">
-                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
-                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
-                        </div>
-                    </div>
-
-                    <div class="book-category__item" onclick="show_detail_product(1)">
-                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
-                        <div class="book-category__item-name">Người thắp lửa</div>
-                        <div class="book-category-rate d-flex margin-top-small">
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
-                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
-                        <div class="book-category__item-price">220,000</div>
-                        <div class="book-category__item-add-to-cart margin-top-small">
-                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
-                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
-                        </div>
-                    </div>
-
-                    <div class="book-category__item" onclick="show_detail_product(1)">
-                        <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
-                        <div class="book-category__item-name">Người thắp lửa</div>
-                        <div class="book-category-rate d-flex margin-top-small">
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
-                        <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
-                        <div class="book-category__item-price">220,000</div>
-                        <div class="book-category__item-add-to-cart margin-top-small">
-                            <i class="fa-solid fa-cart-plus ook-category__item-button-icon"></i>
-                            <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
-                        </div>
-                    </div>
-
-                    <div class="book-category__item" onclick="show_detail_product(1)">
+                    <div class="book-category__item" onclick="showDetailProduct(1)">
                         <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" class="book-category__item-image"></img>
                         <div class="book-category__item-name">Người thắp lửa</div>
                         <div class="book-category-rate d-flex margin-top-small">

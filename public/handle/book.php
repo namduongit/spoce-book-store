@@ -1,50 +1,33 @@
 <?php
 
-require_once '../../app/config.php';
+require_once __DIR__ . '../../../app/config.php';
 
 
 header('Content-Type: application/json');
-
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
 
 
 $book_model = new app_models_Sach();
-$category_book = new app_models_TheLoai();
 
-$mode_book = isset($_GET['book']) ? $_GET['book'] : 'getAllBooks';
+
+$min_price = isset($_GET['minPrice']) ? $_GET['minPrice'] : '';
+$max_price = isset($_GET['maxPrice']) ? $_GET['maxPrice'] : '';
+
+$order_by = isset($_GET['order']) ? $_GET['order'] : '';
+
+$category = isset($_GET['category']) ? $_GET['category'] : '';
+
+$auth = isset($_GET['author']) ? $_GET['author'] : '';
+
+
+
 
 $response = [];
 
-switch ($mode_book) {
-    case 'economics':
-        $books = $book_model->getBooksByCategory(1);
-        break;
-    case 'domestic-literature':
-        $books = $book_model->getBooksByCategory(2);
-        break;
-    case 'foreign-literature':
-        $books = $book_model->getBooksByCategory(3);
-        break;
-    case 'children':
-        $books = $book_model->getBooksByCategory(4);
-        break;
-    case 'self-development':
-        $books = $book_model->getBooksByCategory(5);
-        break;
-    case 'computer-language':
-        $books = $book_model->getBooksByCategory(6);
-        break;
-    case 'specialized':
-        $books = $book_model->getBooksByCategory(7);
-        break;
-    case 'life-skills':
-        $books = $book_model->getBooksByCategory(8);
-        break;
-    case 'comics':
-        $books = $book_model->getBooksByCategory(9);
-        break;
-    default:
-        $books = $book_model->getAllBooks();
-}
+
+$books = $book_model->getBookByPrice($min_price, $max_price);
 
 if (!$books) {
     echo json_encode(["error" => "Không tìm thấy sách!"]);

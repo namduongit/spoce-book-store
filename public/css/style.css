@@ -197,7 +197,7 @@
     margin-bottom: 5rem;
 }
 
-/* Bộ lọc sách */
+/* Bộ lọc sách theo các input check box */
 
 .body__container .book-filter {
     width: 22%;
@@ -229,7 +229,6 @@ input:focus {
 .filter-group__header .filter-group__title {
     font-weight: 620;
 }
-
 
 .filter-group__header,
 .filter-group__content,
@@ -317,11 +316,11 @@ input:focus {
 
 .filter-group__search input {
     width: 100%;
-    padding: 0.8rem 1rem;
+    padding: 1.1rem 1.5rem;
     border-radius: 0.8rem;
     border: 1px solid gray;
     margin-bottom: 1rem;
-
+    font-size: 1.3rem;
 }
 
 .filter-group__option {
@@ -357,33 +356,37 @@ input:focus {
     transform: translate(-50%, -50%);
 }
 
-/* Lựa chọn sắp xếp */
+
+/* ---------------------------------------- Lựa chọn sắp xếp ------------------------------------- */
 .book-category__sort {
     margin-top: 2.5rem;
     margin-bottom: 3rem;
     padding-left: 1.5rem;
 }
 
-.book-category__sort
+.book-category__sort-item
 select {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.8rem;
+    width: 14.6rem;
     border-radius: 1rem;
     border: 1px solid gray;
 }
 
-.book-category__sort
-.book-category__visible {
-    margin-left: 3rem;
+.book-category__sort-item{
+    margin-right: 1.5rem;
 }
 
-.book-category__button div {
+.book-category__button div{
     width: fit-content;
     padding: 0.5rem 1.5rem;
-    margin-left: 3rem;
     border-radius: 1rem;
     color: white;
     font-weight: bold;
     cursor: pointer;
+}
+
+.book-category__button div:last-child {
+    margin-left: 1rem;
 }
 
 
@@ -720,6 +723,7 @@ select {
     left: 50%;
     top: 50%;
     width: 55%;
+    height: 60%;
     background-color: white;
     border-radius: 1rem;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
@@ -731,11 +735,12 @@ select {
 }
 
 .auth__form-title {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
     color: #333;
+    margin-top: 2rem;
 }
 
 .auth__container .auth__logo {
@@ -749,7 +754,7 @@ select {
 .auth__group {
     position: relative;
     width: 100%;
-    margin: 1rem 0;
+    margin: 2rem 0;
 }
 
 .auth__group input {
