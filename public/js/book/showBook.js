@@ -1,76 +1,61 @@
-/**
-HTTP response status codes indicate whether a specific HTTP request has been successfully completed. Responses are grouped in five classes:
+document.addEventListener("DOMContentLoaded", async function() {
+    let allproduct = await getAllBookProduct();
+    if (Array.isArray(allproduct)) {
+        updateBookToMain(allproduct);
+    } else {
+        console.error("Dữ liệu allproduct không hợp lệ:", allproduct);
+    }
+});
 
-+ Informational responses (100 – 199): Phản hồi thông tin
-+ Successful responses (200 – 299): Phản hồi thành công
-+ Redirection messages (300 – 399): Chuyển hướng tin nhắn
-+ Client error responses (400 – 499): Lỗi phản hồi phía client
-+ Server error responses (500 – 599): Lỗi phản hồi server
-
- */
-
-function updatefilterBookURL(URLParams = {}) {
-    const params = new URLSearchParams(window.location.search);
-
-    // Duyệt qua object URLParams để cập nhật giá trị
-    Object.keys(URLParams).forEach(key => {
-        if (URLParams[key] != '') {
-            params.set(key, URLParams[key]); // Cập nhật giá trị vào URL
-        }
-    });
-
-    // Cập nhật URL & reload trang
-    // window.location.search = params.toString();
-
-    // Cập nhật URL mà không reload trang
-    const newURL = `${window.location.pathname}?${params.toString()}`;
-    history.pushState(null, '', newURL);
-}
-
-
-async function consoleGetBook() {
-    const filterPrice = document.querySelectorAll('.filter-group__inputs .input-wraper');
-    const minPrice = filterPrice[0].querySelector('input').value.replace(/[^\d]/g, "") || "0";
-    const maxPrice = filterPrice[1].querySelector('input').value.replace(/[^\d]/g, "") || "1000000";
-
-    const orderBy = document.getElementById('sort-combobox').value;
-    const pageShowBy = document.getElementById('page-show-by').value;
-
-    const URLParams = {
-        minPrice: minPrice,
-        maxPrice: maxPrice,
-        order: orderBy || '',
-        nameAuthor: '',
-        nameCategory: '',
-        nameCover: '',
-        namePublisher: '',
-        publishYear: ''
-    };
-
-    updatefilterBookURL(URLParams);
-
+// Hàm lấy dữ liệu từ API
+async function getAllBookProduct() {
     try {
-        const queryString = new URLSearchParams(URLParams).toString();
-        const response = await fetch(`public/handle/book.php?${queryString}`, {
-            method: "GET",
-        });
+        let response = await fetch('public/handle/book.php?category=allproduct');
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error('Lỗi khi lấy dữ liệu! HTTP Status: ' + response.status);
         }
 
-        const text = await response.text();
-        console.log("Response Text:", text);
-
-        try {
-            const datas = JSON.parse(text);
-            console.log(datas);
-        } catch (jsonError) {
-            console.error("Lỗi khi parse JSON:", jsonError);
-        }
-
+        let data = await response.json();
+        return data;
     } catch (error) {
-        console.error("Lỗi khi gọi API:", error);
+        console.log('Lỗi lấy dữ liệu');
+        return [];
     }
 }
 
+// Cập nhật giao diện với danh sách sách
+function updateBookToMain(allproduct = []) {
+    if (!Array.isArray(allproduct)) {
+        console.log('Lỗi allProduct không phải là mảng')
+        return;
+    }
+
+    if (window.location.search === "") {
+        const bookList = document.getElementById('book-list');
+        bookList.innerHTML = "";
+
+        allproduct.forEach(product => {
+            bookList.innerHTML += `
+                <div class="book-category__item" onclick="showDetailProduct(${product.id})">
+                    <img src="public/uploads/${product.image}" class="book-category__item-image"></img>
+                    <div class="book-category__item-name">${product.name}</div>
+                    <div class="book-category-rate d-flex margin-top-small">
+                        <i class="fa-regular fa-star"></i>
+                        <i class="fa-regular fa-star"></i>
+                        <i class="fa-regular fa-star"></i>
+                        <i class="fa-regular fa-star"></i>
+                        <i class="fa-regular fa-star"></i>
+                    </div>
+                    <div class="book-category__item-status book-category__item-status--true margin-top-small">Còn hàng</div>
+                    <div class="book-category__item-status book-category__item-status--false margin-top-small hide-item">Hết hàng</div>
+                    <div class="book-category__item-price">220,000</div>
+                    <div class="book-category__item-add-to-cart margin-top-small">
+                        <i class="fa-solid fa-cart-plus book-category__item-button-icon"></i>
+                        <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>
+                    </div>
+                </div>
+            `;
+        });
+    }
+}

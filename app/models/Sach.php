@@ -47,6 +47,7 @@ class app_models_Sach extends app_libs_DBConnection {
         ])->select();
     }
 
+    // Lấy sách theo khoảng giá
     public function getBookByPrice($minPrice = 0, $maxPrice = INF) {
         return $this->building_queryParam([
             'where' => 'giaBan >= ? and giaBan <= ?',
@@ -54,7 +55,50 @@ class app_models_Sach extends app_libs_DBConnection {
         ])->select();
     }
 
+    // Lọc sách theo nhiều điều kiện
+    public function getBookByFilters($minPrice = 0, $maxPrice = INF, $order_by = '', $category = '', $author = '', $id = '') {
+        $conditions = [];
+        $params = [];
 
+        if ($id !== '') {
+            return $this->building_queryParam([
+                'where' => 'maSach = ?',
+                'params' => [$id]
+            ])->select_one();
+        }
 
+        if ($minPrice !== '') {
+            $conditions[] = 'giaBan >= ?';
+            $params[] = $minPrice;
+        }
+
+        if ($maxPrice !== '') {
+            $conditions[] = 'giaBan <= ?';
+            $params[] = $maxPrice;
+        }
+
+        if ($category !== '' && $category !== 'allproduct') {
+            $conditions[] = 'maTheLoai = ?';
+            $params[] = $category;
+        }
+
+        if ($author !== '') {
+            $conditions[] = 'maTacGia = ?';
+            $params[] = $author;
+        }
+
+        $whereClause = count($conditions) > 0 ? implode(' AND ', $conditions) : '';
+
+        $queryParams = [
+            'where' => $whereClause,
+            'params' => $params
+        ];
+
+        if ($order_by !== '') {
+            $queryParams['order'] = $order_by;
+        }
+
+        return $this->building_queryParam($queryParams)->select();
+    }
 }
 ?>

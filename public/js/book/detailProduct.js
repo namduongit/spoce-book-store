@@ -1,78 +1,109 @@
-function showDetailProduct(product_id) {
+function formatMoney(valueString = String) {
+    let result = '';
+    let count = 0;
+    for (let i = valueString.length - 1; i >= 0; i++) {
+        count += 1;
+        if (count % 3 == 0 && i != 0) {
+            result += '.';
+        } else {
+            result += valueString[i];
+        }
+    } return result +" VND";
+}
+
+async function showDetailProduct(product_id) {
+    const URL = `public/handle/book.php?idBook=${product_id}`;
     let detail_html = ``;
 
-    detail_html = `
-        <div class="show-detail-product__container">
-            <div class="show-detail-product__content d-flex just-content-spbt">
-                <div class="show-detail-product__image">
-                    <img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="Tên Sách">
-                </div>
+    async function fetchData(URL) {
+        try {
+            let response = await fetch(URL);
+            let dataProduct = await response.json();
+            console.log(dataProduct);
+            return dataProduct;
+        } catch (error) {
+            console.log('Lỗi khi fetch data sản phẩm sách: ', error);
+            return null;
+        }
+    }
 
-                <div class="show-detail-product__purchase">
+    let productDetail = await fetchData(URL);
 
-                    <div class="show-detail-product__header">
-                        <h1 class="show-detail-product__title">Người truyền lửa</h1>
-                        <p class="show-detail-product__genre"> Barcode:
-                            <b class="font-weight-bold">893532502468</b>
-                        </p>
-                        <p class="show-detail-product__genre">Tác giả:
-                            <b class="font-weight-bold">Dương chưa thêm</b>
-                        </p>
-                        <p class="show-detail-product__genre">Thể loại:
-                            <b class="font-weight-bold">Dương chưa thêm</b>
-                        </p>
-
-
-                        <p class="show-detail-product__genre">
-                            Giá bán:&nbsp;
-                            <b class="show-detail-product__price--old">300,000₫</b>
-                            <b class="show-detail-product__price--new">250,000₫</b>
-                        </p>
+    // Kiểm tra nếu có dữ liệu sách
+    if (productDetail && productDetail.length > 0) {
+        productDetail = productDetail[0];
+        detail_html = `
+            <div class="show-detail-product__container">
+                <div class="show-detail-product__content d-flex just-content-spbt">
+                    <div class="show-detail-product__image">
+                        <img src="public/uploads/${productDetail['image']}" alt="Hình ảnh sách">
                     </div>
 
-                    <div style="margin-top: auto;">
-                        <div class="show-detail-product__quantity d-flex">
-                            <p class="show-detail-product__status show-detail-product__status--instock">Còn hàng</p>
-                            <button class="show-detail-product__quantity-btn show-detail-product__quantity-btn--decrease">-</button>
-                            <input type="text" value="1" class="show-detail-product__quantity-input">
-                            <button class="show-detail-product__quantity-btn show-detail-product__quantity-btn--increase">+</button>
+                    <div class="show-detail-product__purchase">
+                        <div class="show-detail-product__header">
+                            <h1 class="show-detail-product__title">${productDetail['name']}</h1>
+                            <p class="show-detail-product__genre"> Mã sách:
+                                <b class="font-weight-bold">${productDetail['id']}</b>
+                            </p>
+                            <p class="show-detail-product__genre">Tác giả:
+                                <b class="font-weight-bold">${productDetail['authorId']}</b>
+                            </p>
+                            <p class="show-detail-product__genre">Thể loại:
+                                <b class="font-weight-bold">${productDetail['genreId']}</b>
+                            </p>
+                            <p class="show-detail-product__genre">
+                                Giá bán:&nbsp;
+                                <b class="show-detail-product__price--old">${formatMoney(productDetail['originalPrice'])}₫</b>
+                                <b class="show-detail-product__price--new">${productDetail['sellingPrice']}₫</b>
+                            </p>
                         </div>
 
-                        <div class="show-detail-product__actions">
-                            <button class="show-detail-product__btn show-detail-product__btn--buy-now">
-                                <i class="fa-solid fa-bolt"></i>&nbsp;Mua ngay
-                            </button>
-                            <button class="show-detail-product__btn show-detail-product__btn--add-to-cart">
-                                <i class="fa-solid fa-cart-plus"></i>&nbsp;Giỏ hàng
-                            </button>
+                        <div style="margin-top: auto;">
+                            <div class="show-detail-product__quantity d-flex">
+                                <p class="show-detail-product__status show-detail-product__status--instock">Còn hàng</p>
+                                <button class="show-detail-product__quantity-btn show-detail-product__quantity-btn--decrease">-</button>
+                                <input type="text" value="1" class="show-detail-product__quantity-input">
+                                <button class="show-detail-product__quantity-btn show-detail-product__quantity-btn--increase">+</button>
+                            </div>
+
+                            <div class="show-detail-product__actions">
+                                <button class="show-detail-product__btn show-detail-product__btn--buy-now">
+                                    <i class="fa-solid fa-bolt"></i>&nbsp;Mua ngay
+                                </button>
+                                <button class="show-detail-product__btn show-detail-product__btn--add-to-cart">
+                                    <i class="fa-solid fa-cart-plus"></i>&nbsp;Giỏ hàng
+                                </button>
+                            </div>
                         </div>
                     </div>
-
                 </div>
-            </div>
 
-            <div class="show-detail-product__info">
-                <div class="show-detail-product__tabs">
-                    <button class="show-detail-product__tab show-detail-product__tab--desc active margin-right-small" onclick="showOptionDetailProduct(this)">Mô tả</button>
-                    <button class="show-detail-product__tab show-detail-product__tab--details margin-right-small" onclick="showOptionDetailProduct(this)">Thông tin chi tiết</button>
-                    <button class="show-detail-product__tab show-detail-product__tab--reviews margin-right-small" onclick="showOptionDetailProduct(this)">Đánh giá</button>
-                </div>
-                <div class="show-detail-product__tab-content">
-                    <div class="show-detail-product__desc active">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. A alias doloribus, qui voluptas repellendus
-                            tempora iure atque dolorum at, earum tempore! Voluptas qui tempora nihil quas, sapiente enim quos sit?
-                        </p>
+                <div class="show-detail-product__info">
+                    <div class="show-detail-product__tabs">
+                        <button class="show-detail-product__tab show-detail-product__tab--desc active margin-right-small" onclick="showOptionDetailProduct(this)">Mô tả</button>
+                        <button class="show-detail-product__tab show-detail-product__tab--details margin-right-small" onclick="showOptionDetailProduct(this)">Thông tin chi tiết</button>
+                        <button class="show-detail-product__tab show-detail-product__tab--reviews margin-right-small" onclick="showOptionDetailProduct(this)">Đánh giá</button>
+                    </div>
+                    <div class="show-detail-product__tab-content">
+                        <div class="show-detail-product__desc active">
+                            <p>${productDetail['description']}</p>
+                        </div>
                     </div>
                 </div>
+
+                <div class="show-detail-product__close" onclick="closeDetailProduct()">X</div>
             </div>
+        `;
+    } else {
+        detail_html = `<p>Không tìm thấy sản phẩm.</p>`;
+    }
 
-            <div class="show-detail-product__close" onclick="closeDetailProduct()">X</div>
-        </div>
-    `;
-
+    // Thêm chi tiết sản phẩm vào trong HTML
     document.querySelector('.show-detail-product').innerHTML = detail_html;
     document.querySelector('.show-detail-product').style.display = 'block';
 }
+
+
 
 function showOptionDetailProduct(object) {
     document.querySelectorAll(".show-detail-product__tab").forEach(tab => {
@@ -83,8 +114,9 @@ function showOptionDetailProduct(object) {
 
     let contentHTML = "";
     if (object.classList.contains("show-detail-product__tab--desc")) {
-        contentHTML = `<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. A alias doloribus, qui voluptas repellendus
-                            tempora iure atque dolorum at, earum tempore! Voluptas qui tempora nihil quas, sapiente enim quos sit?</p>`;
+        contentHTML = `
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. A alias doloribus, qui voluptas repellendus
+                                        tempora iure atque dolorum at, earum tempore! Voluptas qui tempora nihil quas, sapiente enim quos sit?</p>`;
     } else if (object.classList.contains("show-detail-product__tab--details")) {
         contentHTML = `
             <ul>
@@ -116,13 +148,13 @@ function showFilter(element) {
 }
 
 
-$(function() {
+$(function () {
     $("#price-slider").slider({
         range: true,
         min: 0,
         max: 2000000, // Giới hạn max là 2 triệu
         values: [0, 500000], // Giá trị mặc định
-        slide: function(event, ui) {
+        slide: function (event, ui) {
             $("#min-price").text(ui.values[0].toLocaleString());
             $("#max-price").text(ui.values[1].toLocaleString());
 
@@ -133,7 +165,7 @@ $(function() {
     });
 
     // Cập nhật slider khi nhập giá trị vào input
-    $(".filter-group__input").on("input", function() {
+    $(".filter-group__input").on("input", function () {
         let minVal = parseInt($(".filter-group__input").eq(0).val().replace(/\D/g, "")) || 0;
         let maxVal = parseInt($(".filter-group__input").eq(1).val().replace(/\D/g, "")) || 2000000;
 
