@@ -56,35 +56,47 @@ class app_models_Sach extends app_libs_DBConnection {
     }
 
     // Lọc sách theo nhiều điều kiện
-    public function getBookByFilters($minPrice = 0, $maxPrice = INF, $order_by = '', $category = '', $author = '', $id = '') {
+    public function getBookByFilters($minPrice = 0, $maxPrice = INF, $order_by = '', $category = '', $author = '', $id = '', $status = '', $name = '') {
         $conditions = [];
         $params = [];
 
-        if ($id !== '') {
+        if (!empty($id)) {
             return $this->building_queryParam([
                 'where' => 'maSach = ?',
                 'params' => [$id]
             ])->select_one();
+        } else {
+            return $this->building_queryParam()->select();
         }
 
-        if ($minPrice !== '') {
+        if ($minPrice > 0) {
             $conditions[] = 'giaBan >= ?';
             $params[] = $minPrice;
         }
 
-        if ($maxPrice !== '') {
+        if ($maxPrice !== INF) {
             $conditions[] = 'giaBan <= ?';
             $params[] = $maxPrice;
         }
 
-        if ($category !== '' && $category !== 'allproduct') {
+        if (!empty($category) && $category !== 'allproduct') {
             $conditions[] = 'maTheLoai = ?';
             $params[] = $category;
         }
 
-        if ($author !== '') {
+        if (!empty($author)) {
             $conditions[] = 'maTacGia = ?';
             $params[] = $author;
+        }
+
+        if ($status !== '') {
+            $conditions[] = 'trangThai = ?';
+            $params[] = $status;
+        }
+
+        if (!empty($name)) {
+            $conditions[] = 'tenSach LIKE ?';
+            $params[] = "%$name%";
         }
 
         $whereClause = count($conditions) > 0 ? implode(' AND ', $conditions) : '';
@@ -94,11 +106,13 @@ class app_models_Sach extends app_libs_DBConnection {
             'params' => $params
         ];
 
-        if ($order_by !== '') {
+        if (!empty($order_by)) {
             $queryParams['order'] = $order_by;
         }
 
         return $this->building_queryParam($queryParams)->select();
     }
+
+
 }
 ?>

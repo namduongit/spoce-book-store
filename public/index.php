@@ -19,15 +19,13 @@
     <link rel="stylesheet" href="public/css/style.css">
 
     <!-- Nhúng các thư viện Js -->
-    <script src="public/js/auth/login_register.js" defer></script>
+    <script src="public/js/auth/loginRegister.js" defer></script>
 
     <script src="public/js/cart/cart.js" defer></script>
     <script src="public/js/cart/payment.js" defer></script>
 
     <script src="public/js/book/detailProduct.js" defer></script>
     <script src="public/js/book/showBook.js" defer></script>
-
-    <script src="public/js/script.js" defer></script>
 
     <script src="public/js/filter/filter.js"></script>
 </head>

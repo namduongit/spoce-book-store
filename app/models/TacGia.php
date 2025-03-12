@@ -46,5 +46,33 @@ class app_models_TacGia extends app_libs_DBConnection {
             'params' => [$maTacGia]
         ])->select();
     }
+
+    public function getAuthorByFilter($id = '', $name = '', $status = '') {
+        $conditions = [];
+        $params = [];
+
+        if (!empty($id)) {
+            $conditions[] = 'maTacGia = ?';
+            $params[] = $id;
+        }
+
+        if (!empty($name)) {
+            $conditions[] = 'tenTacGia LIKE ?';
+            $params[] = "%$name%";
+        }
+
+        if ($status !== '') {
+            $conditions[] = 'trangThai = ?';
+            $params[] = $status;
+        }
+
+        $whereClause = count($conditions) > 0 ? implode(' AND ', $conditions) : '';
+
+        return $this->building_queryParam([
+            'where' => $whereClause,
+            'params' => $params
+        ])->select();
+    }
+
 }
 ?>

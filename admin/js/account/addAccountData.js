@@ -1,5 +1,5 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
-import { updateAddressSelect } from "../../../CallAPI/updateAddressSelect.js";
+import { updateAddressSelect } from "../../../api/address/updateAddressSelect.js";
 
 // Hàm hiện dialog cho việc "chọn" địa chỉ
 function showAddressSelectDialog() {

@@ -1,28 +1,56 @@
-function formatMoney(valueString = String) {
-    let result = '';
-    let count = 0;
-    for (let i = valueString.length - 1; i >= 0; i++) {
-        count += 1;
-        if (count % 3 == 0 && i != 0) {
-            result += '.';
-        } else {
-            result += valueString[i];
-        }
-    } return result +" VND";
+function formatMoney(valueString) {
+    if (typeof valueString !== 'string') valueString = String(valueString);
+    return valueString.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VND";
 }
 
+async function getNameCategoryByID(categoryId) {
+    const URL = `api/categories/get.php?cateId=${categoryId}`;
+
+    async function fetchData(URL) {
+        try {
+            let response = await fetch(URL);
+            let dataResponse = await response.json();
+            return dataResponse;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    let response = await fetchData(URL);
+    let result = response[0].name;
+    return result;
+}
+
+async function getNameAuthorByID(authorId) {
+    const URL = `api/authors/get.php?authorId=${authorId}`;
+
+    async function fetchData(URL) {
+        try {
+            let response = await fetch(URL);
+            let dataResponse = await response.json();
+            return dataResponse;
+        } catch (error) {
+            return null;
+        }
+    }
+    let response = await fetchData(URL);
+    let result = response[0].name;
+    return result;
+}
+
+
+
 async function showDetailProduct(product_id) {
-    const URL = `public/handle/book.php?idBook=${product_id}`;
+    const URL = `api/books/get.php?bookId=${product_id}`;
     let detail_html = ``;
 
     async function fetchData(URL) {
         try {
             let response = await fetch(URL);
-            let dataProduct = await response.json();
-            console.log(dataProduct);
-            return dataProduct;
+            let dataResponse = await response.json();
+            return dataResponse;
         } catch (error) {
-            console.log('Lỗi khi fetch data sản phẩm sách: ', error);
+            console.log('Lỗi khi fetch data: ', error);
             return null;
         }
     }
@@ -32,6 +60,10 @@ async function showDetailProduct(product_id) {
     // Kiểm tra nếu có dữ liệu sách
     if (productDetail && productDetail.length > 0) {
         productDetail = productDetail[0];
+
+        let nameCategory = await getNameCategoryByID(productDetail['genreId']);
+        let nameAuthor = await getNameAuthorByID(productDetail['authorId']);
+
         detail_html = `
             <div class="show-detail-product__container">
                 <div class="show-detail-product__content d-flex just-content-spbt">
@@ -46,15 +78,15 @@ async function showDetailProduct(product_id) {
                                 <b class="font-weight-bold">${productDetail['id']}</b>
                             </p>
                             <p class="show-detail-product__genre">Tác giả:
-                                <b class="font-weight-bold">${productDetail['authorId']}</b>
+                                <b class="font-weight-bold">${nameAuthor}</b>
                             </p>
                             <p class="show-detail-product__genre">Thể loại:
-                                <b class="font-weight-bold">${productDetail['genreId']}</b>
+                                <b class="font-weight-bold">${nameCategory}</b>
                             </p>
                             <p class="show-detail-product__genre">
                                 Giá bán:&nbsp;
-                                <b class="show-detail-product__price--old">${formatMoney(productDetail['originalPrice'])}₫</b>
-                                <b class="show-detail-product__price--new">${productDetail['sellingPrice']}₫</b>
+                                <b class="show-detail-product__price--old">${formatMoney(productDetail['originalPrice'])}</b>
+                                <b class="show-detail-product__price--new">${formatMoney(productDetail['sellingPrice'])}</b>
                             </p>
                         </div>
 
@@ -79,16 +111,29 @@ async function showDetailProduct(product_id) {
                 </div>
 
                 <div class="show-detail-product__info">
-                    <div class="show-detail-product__tabs">
+                    <div class="show-detail-product__tabs margin-bottom-medium">
                         <button class="show-detail-product__tab show-detail-product__tab--desc active margin-right-small" onclick="showOptionDetailProduct(this)">Mô tả</button>
                         <button class="show-detail-product__tab show-detail-product__tab--details margin-right-small" onclick="showOptionDetailProduct(this)">Thông tin chi tiết</button>
-                        <button class="show-detail-product__tab show-detail-product__tab--reviews margin-right-small" onclick="showOptionDetailProduct(this)">Đánh giá</button>
                     </div>
-                    <div class="show-detail-product__tab-content">
-                        <div class="show-detail-product__desc active">
+
+                    <div class="show-detail-product__desc active">
                             <p>${productDetail['description']}</p>
-                        </div>
                     </div>
+
+                     <ul class="show-detail-product__details hide-item">
+                        <li><strong>Số trang:</strong> ${productDetail['numberOfPages']} trang</li>
+                        <li><strong>Năm xuất bản:</strong> ${productDetail['publishYear']}</li>
+                        <li><strong>Kích thước:</strong> ${productDetail['size']}</li>
+
+                        <li>
+                            <strong>Loại bìa: ${productDetail['coverTypeId']}</strong>
+                        </li>
+
+                        <li>
+                            <strong>Nhà xuất bản: ${productDetail['publisherId']}</strong>
+                        </li>
+                    </ul>
+
                 </div>
 
                 <div class="show-detail-product__close" onclick="closeDetailProduct()">X</div>
@@ -104,33 +149,14 @@ async function showDetailProduct(product_id) {
 }
 
 
-
 function showOptionDetailProduct(object) {
-    document.querySelectorAll(".show-detail-product__tab").forEach(tab => {
-        tab.classList.remove("active");
-    });
-
-    object.classList.add("active");
-
-    let contentHTML = "";
-    if (object.classList.contains("show-detail-product__tab--desc")) {
-        contentHTML = `
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. A alias doloribus, qui voluptas repellendus
-                                        tempora iure atque dolorum at, earum tempore! Voluptas qui tempora nihil quas, sapiente enim quos sit?</p>`;
-    } else if (object.classList.contains("show-detail-product__tab--details")) {
-        contentHTML = `
-            <ul>
-                <li><strong>Số trang:</strong> 350</li>
-                <li><strong>Loại bìa:</strong> Bìa cứng</li>
-                <li><strong>Tác giả:</strong> Nguyễn Nam Dương</li>
-                <li><strong>Nhà xuất bản:</strong> Spoce Book Store</li>
-            </ul>
-        `;
+    if (object.classList.contains('show-detail-product__tab--desc')) {
+        document.querySelector('.show-detail-product__details').classList.add('hide-item');
+        document.querySelector('.show-detail-product__desc').classList.remove('hide-item');
     } else {
-        contentHTML = `<p>Chưa có đánh giá nào.</p>`;
+        document.querySelector('.show-detail-product__details').classList.remove('hide-item');
+        document.querySelector('.show-detail-product__desc').classList.add('hide-item');
     }
-
-    document.querySelector(".show-detail-product__tab-content").innerHTML = contentHTML;
 }
 
 

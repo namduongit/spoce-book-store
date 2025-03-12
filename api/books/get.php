@@ -45,15 +45,25 @@ function returnJSONBook($books) {
 $book_model = new app_models_Sach();
 
 // Lấy tham số từ query string
+$bookId = isset($_GET['bookId']) ? $_GET['bookId'] : '';
+
+$bookName = isset($_GET['bookName']) ? $_GET['bookName'] : '';
+
 $min_price = isset($_GET['minPrice']) ? $_GET['minPrice'] : '';
 $max_price = isset($_GET['maxPrice']) ? $_GET['maxPrice'] : '';
-$order_by = isset($_GET['order']) ? $_GET['order'] : '';
-$category = isset($_GET['category']) ? $_GET['category'] : '';
-$author = isset($_GET['author']) ? $_GET['author'] : '';
-$id = isset($_GET['idBook']) ? $_GET['idBook'] : '';
+
+$order_by = isset($_GET['orderBy']) ? $_GET['orderBy'] : '';
+
+$categoryId = isset($_GET['cateId']) ? $_GET['cateId'] : '';
+
+$authorId = isset($_GET['authorId']) ? $_GET['authorId'] : '';
+
+$status = isset($_GET['bookStatus']) ? $_GET['bookStatus'] : '';
+
 
 // Gọi phương thức lấy sách theo điều kiện
-$books = $book_model->getBookByFilters($min_price, $max_price, $order_by, $category, $author, $id);
+$books = $book_model->getBookByFilters($min_price, $max_price, $order_by, $categoryId, $authorId, $bookId, $status, $bookName);
+// $books = $book_model->getAllBooks();
 
 // Trả về kết quả dưới dạng JSON
 returnJSONBook($books);

@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 // Hàm lấy dữ liệu từ API
 async function getAllBookProduct() {
     try {
-        let response = await fetch('public/handle/book.php?category=allproduct');
+        let response = await fetch('api/books/get.php');
 
         if (!response.ok) {
             throw new Error('Lỗi khi lấy dữ liệu! HTTP Status: ' + response.status);

@@ -38,5 +38,36 @@ class app_models_TheLoai extends app_libs_DBConnection {
             'params' => [$maTheLoai]
         ])->delete();
     }
+
+    public function getCategoryByFilter($id = '', $name = '', $status = '') {
+        $conditions = [];
+        $params = [];
+
+        if (!empty($id)) {
+            $conditions[] = 'maTheLoai = ?';
+            $params[] = $id;
+        }
+
+        if (!empty($name)) {
+            $conditions[] = 'tenTheLoai LIKE ?';
+            $params[] = "%$name%";
+        }
+
+        if ($status !== '') {
+            $conditions[] = 'trangThai = ?';
+            $params[] = $status;
+        }
+
+        $query = [];
+
+        if (!empty($conditions)) {
+            $query['where'] = implode(' AND ', $conditions);
+            $query['params'] = $params;
+        }
+
+        return $this->building_queryParam($query)->select();
+    }
+
+
 }
 ?>

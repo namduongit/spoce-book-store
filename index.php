@@ -1,7 +1,6 @@
 <?php
-    // include_once 'public/index.php';
 
-    // include_once 'public/handle/book.php';
+    // include_once 'api/books/get.php';
     // die();
 
     $param = $_SERVER['REQUEST_URI'];
