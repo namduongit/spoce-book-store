@@ -9,7 +9,7 @@
 // $dsn = "mysql:host=localhost:3306;dbname=book_store;charset=utf8";
 
 class app_libs_DBConnection {
-    protected $dsn = "mysql:host=localhost:3306;dbname=book_store;charset=utf8";
+    protected $dsn = "mysql:host=localhost:3306;dbname=bookStore;charset=utf8";
     protected $username = "book_store";
     protected $password = "book_store";
 

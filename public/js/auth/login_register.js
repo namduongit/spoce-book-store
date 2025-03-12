@@ -1,14 +1,44 @@
-function show_form(object) {
+document.addEventListener("DOMContentLoaded", () => {
+    const URL = window.location.href;
+    const regexSplit = URL.split('/');
+    const lastPart = regexSplit.pop();
+    const result = lastPart.replace(/[^a-zA-Z]/g, "");
+
+    if (result === 'login') {
+        showFormUser(null, 'Đăng nhập');
+    } else if (result === 'signup') {
+        showFormUser(null, 'Đăng ký');
+    }
+});
+
+// Cập nhật URL khi chuyển đổi giữa đăng nhập & đăng ký
+function updateURLAuth(type) {
+    let baseParam = window.location.origin;
+
+    if (type === 'login' || type === 'signup') {
+        baseParam += '/' + type;
+    }
+
+    history.pushState(null, '', baseParam);
+}
+
+function clearURL() {
+    history.pushState(null, '', window.location.origin);
+}
+
+// Hiển thị form đăng nhập hoặc đăng ký
+function showFormUser(object, text_spans) {
     let form_html = ``;
-    let text_span = object.innerText.trim(); // Loại bỏ khoảng trắng thừa
+    let text_span = object ? object.innerText.trim() : text_spans;
 
     if (text_span === 'Đăng nhập' || text_span === 'Đăng nhập ngay') {
+        updateURLAuth('login');
         form_html = `
             <div class="auth__form auth__form--login">
                 <h2 class="auth__form-title">Đăng nhập</h2>
                 <div class="auth__form-suggest">
-                    <p>Chưa có tài khoản</p>
-                    <span onclick="show_form(this)">Đăng ký ngay</span>
+                    <p>Chưa có tài khoản?</p>
+                    <span onclick="showFormUser(this, null)">Đăng ký ngay</span>
                 </div>
                 <form action="" method="POST">
                     <div class="auth__group">
@@ -24,12 +54,13 @@ function show_form(object) {
             </div>
         `;
     } else if (text_span === 'Đăng ký' || text_span === 'Đăng ký ngay') {
+        updateURLAuth('signup');
         form_html = `
             <div class="auth__form auth__form--register">
                 <h2 class="auth__form-title">Đăng ký</h2>
                 <div class="auth__form-suggest">
-                    <p>Đã có tài khoản</p>
-                    <span onclick="show_form(this)">Đăng nhập ngay</span>
+                    <p>Đã có tài khoản?</p>
+                    <span onclick="showFormUser(this, null)">Đăng nhập ngay</span>
                 </div>
                 <form action="" method="POST">
                     <div class="auth__group">
@@ -57,19 +88,29 @@ function show_form(object) {
     let result_html = `
         <div class="auth__container d-flex just-content-spbt">
             <div class="auth__logo">
-                <img src="../media/Logo/SPOCE BOOK STORE.png" alt="Logo Website">
+                <img src="../../media/Logo/SPOCE_BOOK_STORE.png" alt="Logo Website">
             </div>
-            <div class="auth__form-container">${form_html}</div> <!-- Đưa form vào container -->
+            <div class="auth__form-container">${form_html}</div>
             <div class="auth__container-close" onclick="close_auth_form()">X</div>
         </div>
     `;
 
     let authElement = document.querySelector('.auth');
+    if (!authElement) {
+        authElement = document.createElement('div');
+        authElement.classList.add('auth');
+        document.body.appendChild(authElement);
+    }
+
     authElement.innerHTML = result_html;
     authElement.style.display = 'block';
 }
 
-
+// Đóng form và xóa URL
 function close_auth_form() {
-    document.querySelector('.auth').style.display = 'none';
+    let authElement = document.querySelector('.auth');
+    if (authElement) {
+        authElement.style.display = 'none';
+    }
+    clearURL();
 }

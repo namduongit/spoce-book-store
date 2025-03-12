@@ -197,11 +197,25 @@
     margin-bottom: 5rem;
 }
 
+/* Bộ lọc sách theo các input check box */
+
 .body__container .book-filter {
     width: 22%;
-    background-color: #e1e1e1;
+    background-color: #EEEEEE;
     height: fit-content;
     border-radius: 1.5rem;
+    margin-top: 3.5rem;
+}
+
+.book-filter__title {
+    font-weight: bold;
+    text-align: center;
+}
+
+.filter-group
+input:focus {
+    border: 1px solid gray !important;
+    outline: none !important;
 }
 
 .body__container .book-filter
@@ -210,15 +224,173 @@
 }
 
 .filter-group__header {
-    margin-bottom: 1rem;
+    margin-bottom: 1.2rem;
+}
+.filter-group__header .filter-group__title {
+    font-weight: 620;
 }
 
 .filter-group__header,
-.filter-group__content {
+.filter-group__content,
+.filter-group__search {
     padding: 0 1rem;
 }
 
+.filter-group__content
+.filter-group__inputs {
+    display: flex;
+    justify-content: space-between;
+}
 
+.filter-group__content
+.filter-group__inputs .input-wraper {
+    width: 40%;
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.filter-group__content
+.filter-group__inputs .input-wraper:last-child {
+    margin-right: 6%;
+}
+
+/* Tạo thanh trượt */
+#price-slider {
+    width: 100%;
+    height: 6px; /* Độ dày thanh trượt */
+    background: #e0e0e0; /* Màu nền thanh trượt */
+    border-radius: 3px;
+    position: relative;
+    margin: 10px 0;
+}
+
+/* Phần kéo */
+.ui-slider-handle {
+    background: white !important; /* Màu tay kéo */
+    border: 0.5rem solid #0458A3 !important; /* Viền xanh */
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 50%;
+    top: -8px !important; /* Căn chỉnh vị trí */
+    outline: none !important;
+}
+
+/* Khi kéo */
+.ui-slider-range {
+    background: #0458A3 !important; /* Màu của khoảng giá đã chọn */
+    height: 6px;
+}
+
+.filter-group__content
+.filter-group__inputs
+.input-wraper input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border-radius: 0.8rem;
+    border: 1px solid gray;
+}
+
+.filter-group__slider {
+    color: #0056b3;
+}
+
+.filter-group__content
+.filter-group__inputs
+.input-wraper:first-child::after {
+    content: "đ -";
+    position: absolute;
+    right: -40%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.filter-group__content
+.filter-group__inputs
+.input-wraper:last-child::after {
+    content: "đ";
+    position: absolute;
+    right: -25%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.filter-group__search input {
+    width: 100%;
+    padding: 1.1rem 1.5rem;
+    border-radius: 0.8rem;
+    border: 1px solid gray;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.filter-group__option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-group__checkbox {
+    border: 1px solid gray;
+    padding: 1rem;
+    cursor: pointer;
+    appearance: none;
+    border-radius: 0.5rem;
+    position: relative;
+    display: inline-block;
+    background-color: white;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.filter-group__checkbox:checked {
+    background-color: #0458A3;
+}
+
+.filter-group__checkbox:checked::after {
+    content: "✔";
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+/* ---------------------------------------- Lựa chọn sắp xếp ------------------------------------- */
+.book-category__sort {
+    margin-top: 2.5rem;
+    margin-bottom: 3rem;
+    padding-left: 1.5rem;
+}
+
+.book-category__sort-item
+select {
+    padding: 0.5rem 0.8rem;
+    width: 14.6rem;
+    border-radius: 1rem;
+    border: 1px solid gray;
+}
+
+.book-category__sort-item{
+    margin-right: 1.5rem;
+}
+
+.book-category__button div{
+    width: fit-content;
+    padding: 0.5rem 1.5rem;
+    border-radius: 1rem;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.book-category__button div:last-child {
+    margin-left: 1rem;
+}
+
+
+/* Danh mục sách */
 .body__container .book-category {
     width: 75%;
 }
@@ -551,6 +723,7 @@
     left: 50%;
     top: 50%;
     width: 55%;
+    height: 60%;
     background-color: white;
     border-radius: 1rem;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
@@ -562,11 +735,12 @@
 }
 
 .auth__form-title {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
     color: #333;
+    margin-top: 2rem;
 }
 
 .auth__container .auth__logo {
@@ -580,7 +754,7 @@
 .auth__group {
     position: relative;
     width: 100%;
-    margin: 1rem 0;
+    margin: 2rem 0;
 }
 
 .auth__group input {

@@ -1,6 +1,6 @@
-import { updateInputTicketData } from "./updateInputTicketData.js";
-
 import { vietnamMoneyFormat } from "../others.js";
+import { updateInputTicketData } from "./updateInputTicketData.js";
+import { printInputTicket } from "./printInputTicket.js";
 
 // Dữ liệu tạm thời (sau phải xây dựng hàm truy xuất dữ liệu từ csdl)
 let data = [
@@ -33,9 +33,9 @@ let data = [
   },
 ];
 
-// Hàm cập nhật lại dữ liệu cho bảng Người dùng
+// Hàm cập nhật lại dữ liệu cho bảng phiếu nhập hàng
 export function renderInputTicketTable() {
-  // Biến chứa đối tượng bảng Người dùng
+  // Biến chứa đối tượng bảng phiếu nhập hàng
   const bodyInputTicketTable = document.querySelector(
     ".main__data > .main__table.input_ticket > tbody"
   );
@@ -81,13 +81,22 @@ export function renderInputTicketTable() {
     // Id của đối tượng đã được chọn để thao tác
     const idInputTicketSelected = idColumnInTable.item(row);
 
-    // Gán sự kiện hiện dialog sửa người dùng
+    // Gán sự kiện hiện dialog sửa phiếu nhập hàng
     updateButton.addEventListener("click", (e) => {
       // Loại bỏ giá trị mặc định
       e.preventDefault();
 
       // Gọi hàm sự kiện
       updateInputTicketData(idInputTicketSelected);
+    });
+
+    // Gán sự kiện hiện dialog in phiếu nhập hàng
+    printButton.addEventListener("click", (e) => {
+      // Loại bỏ giá trị mặc định
+      e.preventDefault();
+
+      // Gọi hàm sự kiện
+      printInputTicket(idInputTicketSelected);
     });
   });
 }

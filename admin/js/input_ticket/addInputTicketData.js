@@ -35,13 +35,18 @@ function renderInputTicketDetailTable() {
     html += `
           <tr>
               <td>${data[i].bookId}</td>
-              <td>${data[i].bookName}</td>
+              <td class="name">${data[i].bookName}</td>
               <td>${vietnamMoneyFormat(data[i].priceBase)}</td>
               <td>${vietnamMoneyFormat(data[i].priceInput)}</td>
               <td>${data[i].quantityInput}</td>
-              <td>${vietnamMoneyFormat(
+              <td class="total">${vietnamMoneyFormat(
                 data[i].quantityInput * data[i].priceInput
               )}</td>
+              <td>
+                <i id="update-remove-trash-input_ticket" class="fa-solid fa-trash"
+                  style="color: red; text-align: center;">
+                </i>
+              </td>
           </tr>
       `;
   }
@@ -91,12 +96,6 @@ function addInputTicketDetailTable() {
       <div class="dialog__form-group">
         <label>Số lượng</label>
         <input type="text" id="add-input_ticket-detail-quantity-input" placeholder="Nhập Số lượng" />
-      </div>
-    </div>
-    <div class="dialog__row">
-      <div class="dialog__form-group full">
-        <label>Thành tiền (VNĐ)</label>
-        <input type="text" id="add-input_ticket-detail-total" readonly />
       </div>
     </div>
     <div class="dialog__buttons">
@@ -194,9 +193,13 @@ export function addInputTicketData() {
           </button>
           <div class="dialog__line"></div>
           <div class="dialog__row">
-            <div class="dialog__form-group input_ticket">
+            <div class="dialog__form-group input_ticket half">
               <label>Mã phiếu nhập</label>
-              <input type="text" id="add-input_ticket-id" readonly />
+              <input type="text" id="update-input_ticket-id" readonly />
+            </div>
+            <div class="dialog__form-group input_ticket half">
+              <label>Mã nhân viên</label>
+              <input type="text" id="update-input_ticket-customer" readonly />
             </div>
             <div class="dialog__form-group input_ticket">
               <label>Tổng thanh toán (VNĐ)</label>
@@ -233,11 +236,12 @@ export function addInputTicketData() {
                 <thead>
                   <tr>  
                     <th width="8%">Mã sách</th>
-                    <th width="30%" class="name">Tên sách</th>
+                    <th width="28%">Tên sách</th>
                     <th width="14%">Giá bìa (VNĐ)</th>
                     <th width="14%">Giá nhập (VNĐ)</th>
                     <th width="10%">Số lượng</th>
-                    <th width="24%" class="total">Thành tiền (VNĐ)</th>
+                    <th width="22%">Thành tiền (VNĐ)</th>
+                    <th width="4%"></th>
                   </tr>
                 </thead>
                 <tbody>

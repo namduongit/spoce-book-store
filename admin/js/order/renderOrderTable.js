@@ -119,7 +119,6 @@ export function renderOrderTable() {
     html += `
           <tr>
               <td>${data[i].orderId}</td>
-              <td>${data[i].customerId}</td>
               <td>${data[i].dateCreate}</td>
               <td>${splitAddressToShip(data[i].addressToShip)}</td>
               <td>${vietnamMoneyFormat(data[i].totalPrice)}</td>

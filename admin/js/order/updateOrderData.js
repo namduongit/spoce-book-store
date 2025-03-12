@@ -135,19 +135,23 @@ export function updateOrderData(idOrderSelected) {
               <label>Ngày tạo đơn</label>
               <input type="text" id="update-order-date-create" readonly />
             </div>
+            <div class="dialog__form-group order half">
+              <label>Mã nhân viên</label>
+              <input type="text" id="update-employee-id" readonly />
+            </div>
+            <div class="dialog__form-group order half">
+              <label>Trạng thái</label>
+              <input type="text" id="update-order-status" readonly />
+            </div>
             <div class="dialog__form-group order">
               <label>Tổng thanh toán (VNĐ)</label>
               <input type="text" id="update-order-cost" readonly />
-            </div>
-            <div class="dialog__form-group order">
-              <label>Trạng thái</label>
-              <input type="text" id="update-order-status" readonly />
             </div>
           </div>
           <div class="dialog__row">
             <div class="dialog__form-group order">
               <label>Phương thức thanh toán</label>
-              <input type="text" id="update-order-method-pay" readonly />
+              <input type="text" id="update-order-method-pay" value="Thanh toán chuyển khoản" readonly />
             </div>
             <div class="dialog__form-group order full">
               <label>Địa chỉ giao hàng</label>

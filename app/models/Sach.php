@@ -51,10 +51,10 @@ class app_models_Sach extends app_libs_DBConnection {
         return $this->building_queryParam([
             'where' => 'giaBan >= ? and giaBan <= ?',
             'params' => [$minPrice, $maxPrice]
-        ]);
+        ])->select();
     }
 
-    
+
 
 }
 ?>
