@@ -465,6 +465,13 @@ select {
     overflow: hidden;
 }
 
+.book-category__item-name::after {
+    content: "                                                                                ";
+    white-space: pre;
+    visibility: hidden;
+    display: inline-block;
+}
+
 
 .book-category__item-status--true {
     color: var(--has-product);
@@ -562,10 +569,10 @@ select {
     font-weight: 700;
     color: #222;
     margin-bottom: 1.5rem;
-
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* Giới hạn 2 dòng */
     -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     overflow: hidden;
 }
 

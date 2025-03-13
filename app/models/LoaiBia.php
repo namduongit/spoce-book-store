@@ -15,6 +15,32 @@ class app_models_LoaiBia extends app_libs_DBConnection {
         ])->select_one();
     }
 
+    // Lọc loại bìa theo ID, tên, trạng thái
+    public function getCoverByFilter($id = '', $name = '', $status = '') {
+        $conditions = [];
+        $params = [];
+
+        if (!empty($id)) {
+            $conditions[] = 'maLoaiBia = ?';
+            $params[] = $id;
+        }
+        if (!empty($name)) {
+            $conditions[] = 'tenLoaiBia LIKE ?';
+            $params[] = "%$name%";
+        }
+        if (!empty($status)) {
+            $conditions[] = 'trangThai = ?';
+            $params[] = $status;
+        }
+
+        $whereClause = !empty($conditions) ? implode(' AND ', $conditions) : '1';
+
+        return $this->building_queryParam([
+            'where' => $whereClause,
+            'params' => $params
+        ])->select();
+    }
+
     // Thêm loại bìa mới
     public function insertCover($data) {
         return $this->building_queryParam([

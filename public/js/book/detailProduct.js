@@ -3,18 +3,18 @@ function formatMoney(valueString) {
     return valueString.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VND";
 }
 
+async function fetchData(URL) {
+    try {
+        let response = await fetch(URL);
+        let dataResponse = await response.json();
+        return dataResponse;
+    } catch (error) {
+        return null;
+    }
+}
+
 async function getNameCategoryByID(categoryId) {
     const URL = `api/categories/get.php?cateId=${categoryId}`;
-
-    async function fetchData(URL) {
-        try {
-            let response = await fetch(URL);
-            let dataResponse = await response.json();
-            return dataResponse;
-        } catch (error) {
-            return null;
-        }
-    }
 
     let response = await fetchData(URL);
     let result = response[0].name;
@@ -24,20 +24,27 @@ async function getNameCategoryByID(categoryId) {
 async function getNameAuthorByID(authorId) {
     const URL = `api/authors/get.php?authorId=${authorId}`;
 
-    async function fetchData(URL) {
-        try {
-            let response = await fetch(URL);
-            let dataResponse = await response.json();
-            return dataResponse;
-        } catch (error) {
-            return null;
-        }
-    }
     let response = await fetchData(URL);
     let result = response[0].name;
     return result;
 }
 
+
+async function getNameCoverByID(coverId) {
+    const URL = `api/covers/get.php?coverId=${coverId}`;
+
+    let response = await fetchData(URL);
+    let result = response[0].name;
+    return result;
+}
+
+async function getNamePublisherByID(publisherId) {
+    const URL = `api/publishers/get.php?publisherId=${publisherId}`;
+
+    let response = await fetchData(URL);
+    let result = response[0].name;
+    return result;
+}
 
 
 async function showDetailProduct(product_id) {
@@ -63,6 +70,8 @@ async function showDetailProduct(product_id) {
 
         let nameCategory = await getNameCategoryByID(productDetail['genreId']);
         let nameAuthor = await getNameAuthorByID(productDetail['authorId']);
+        let nameCover = await getNameCoverByID(productDetail['coverTypeId']);
+        let namePublisher = await getNamePublisherByID(productDetail['publisherId']);
 
         detail_html = `
             <div class="show-detail-product__container">
@@ -126,11 +135,11 @@ async function showDetailProduct(product_id) {
                         <li><strong>Kích thước:</strong> ${productDetail['size']}</li>
 
                         <li>
-                            <strong>Loại bìa: ${productDetail['coverTypeId']}</strong>
+                            <strong>Loại bìa:</strong>  ${nameCover}
                         </li>
 
                         <li>
-                            <strong>Nhà xuất bản: ${productDetail['publisherId']}</strong>
+                            <strong>Nhà xuất bản:</strong> ${namePublisher}
                         </li>
                     </ul>
 
@@ -146,6 +155,15 @@ async function showDetailProduct(product_id) {
     // Thêm chi tiết sản phẩm vào trong HTML
     document.querySelector('.show-detail-product').innerHTML = detail_html;
     document.querySelector('.show-detail-product').style.display = 'block';
+
+    let urlSource = new URLSearchParams();
+    urlSource.set("bookName", `${productDetail['name']}`);
+
+    console.log(urlSource.toString());
+
+    // Cập nhật URL đúng cách
+    history.pushState(null, '', window.location.pathname + '?' + urlSource.toString());
+
 }
 
 

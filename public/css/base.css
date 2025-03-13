@@ -133,3 +133,8 @@ i {
 .reset-btn {
     background-color: #f25529;
 }
+
+
+strong {
+    font-weight: bold;
+}
