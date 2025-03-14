@@ -696,14 +696,18 @@ select {
     font-size: 1.4rem;
     cursor: pointer;
     border: none;
-    background-color: #f1f1f1;
     border-radius: 0.5rem;
+    color: gray;
 }
 .show-detail-product__tab:hover {
     background-color: #ddd;
 }
 .show-detail-product__tab.active {
     background-color: #d0021b;
+    color: white;
+}
+.show-detail-product__tabs button:first-child {
+    background-color: #0458a3;
     color: white;
 }
 

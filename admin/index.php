@@ -14,8 +14,8 @@
     <!-- Reset CSS -->
     <link rel="stylesheet" href="admin/assets/css/reset.css">
     <!-- Styles CSS -->
-    <link rel="stylesheet" href="assets/css/base.css">
-    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="admin/assets/css/base.css">
+    <link rel="stylesheet" href="admin/assets/css/common.css">
 
     <!-- Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -188,8 +188,8 @@
     </main>
 
     <!-- Javascript -->
-    <script type="module" src="js/changeMainContent.js"></script>
-    <script type="module" src="js/showSidebar.js"></script>
+    <script type="module" src="admin/js/changeMainContent.js"></script>
+    <script type="module" src="admin/js/showSidebar.js"></script>
 </body>
 
 </html>

@@ -46,6 +46,14 @@ async function getNamePublisherByID(publisherId) {
     return result;
 }
 
+async function getBookByTrueName(bookName) {
+    const URL = `api/books/get.php?bookName=${bookName}`;
+
+    let response = await fetchData(URL);
+    return response;
+}
+
+
 
 async function showDetailProduct(product_id) {
     const URL = `api/books/get.php?bookId=${product_id}`;
@@ -121,11 +129,11 @@ async function showDetailProduct(product_id) {
 
                 <div class="show-detail-product__info">
                     <div class="show-detail-product__tabs margin-bottom-medium">
-                        <button class="show-detail-product__tab show-detail-product__tab--desc active margin-right-small" onclick="showOptionDetailProduct(this)">Mô tả</button>
+                        <button class="show-detail-product__tab show-detail-product__tab--desc margin-right-small active" onclick="showOptionDetailProduct(this)">Giới thiệu sơ lược</button>
                         <button class="show-detail-product__tab show-detail-product__tab--details margin-right-small" onclick="showOptionDetailProduct(this)">Thông tin chi tiết</button>
                     </div>
 
-                    <div class="show-detail-product__desc active">
+                    <div class="show-detail-product__desc">
                             <p>${productDetail['description']}</p>
                     </div>
 
@@ -157,11 +165,8 @@ async function showDetailProduct(product_id) {
     document.querySelector('.show-detail-product').style.display = 'block';
 
     let urlSource = new URLSearchParams();
-    urlSource.set("bookName", `${productDetail['name']}`);
+    urlSource.set("showBook", `${productDetail['name']}`);
 
-    console.log(urlSource.toString());
-
-    // Cập nhật URL đúng cách
     history.pushState(null, '', window.location.pathname + '?' + urlSource.toString());
 
 }
@@ -169,18 +174,49 @@ async function showDetailProduct(product_id) {
 
 function showOptionDetailProduct(object) {
     if (object.classList.contains('show-detail-product__tab--desc')) {
-        document.querySelector('.show-detail-product__details').classList.add('hide-item');
         document.querySelector('.show-detail-product__desc').classList.remove('hide-item');
+        document.querySelector('.show-detail-product__tab--desc').classList.add('active');
+
+        document.querySelector('.show-detail-product__details').classList.add('hide-item');
+        document.querySelector('.show-detail-product__tab--details').classList.remove('active');
+
     } else {
-        document.querySelector('.show-detail-product__details').classList.remove('hide-item');
         document.querySelector('.show-detail-product__desc').classList.add('hide-item');
+        document.querySelector('.show-detail-product__tab--desc').classList.remove('active');
+
+        document.querySelector('.show-detail-product__details').classList.remove('hide-item');
+        document.querySelector('.show-detail-product__tab--details').classList.add('active');
     }
+
+    document.querySelectorAll('.show-detail-product__tabs button').forEach(button => {
+        if (button.classList.contains('active')) {
+            button.style.backgroundColor = '#0458a3';
+            button.style.color = 'white';
+        } else {
+            button.style.color = 'gray';
+            button.style.backgroundColor = '#DDDDDD';
+        }
+    });
 }
 
 
 function closeDetailProduct() {
     document.querySelector('.show-detail-product').style.display = 'none';
+
+    let url = new URL(window.location.href);
+
+    let params = new URLSearchParams(url.search);
+
+    params.delete('showBook');
+
+    let newUrl = url.pathname + '?' + params.toString();
+    if (params.toString() === '') {
+        newUrl = url.pathname;
+    }
+
+    window.history.replaceState({}, document.title, newUrl);
 }
+
 
 function showFilter(element) {
     const contentFilter = element.closest(".filter-group").querySelector(".filter-group__content");
@@ -190,6 +226,20 @@ function showFilter(element) {
     element.classList.toggle("fa-minus");
     element.classList.toggle("fa-plus");
 }
+
+
+document.addEventListener("DOMContentLoaded", async function () {
+    let url = new URL(window.location.href);
+
+    let params = new URLSearchParams(url.search);
+
+    if (params.has('showBook')) {
+        let bookName = params.get('showBook');
+        let book = await getBookByTrueName(bookName);
+        showDetailProduct(book[0].id);
+    }
+});
+
 
 
 $(function () {

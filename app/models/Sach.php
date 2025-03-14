@@ -55,8 +55,26 @@ class app_models_Sach extends app_libs_DBConnection {
         ])->select();
     }
 
-    // Lọc sách theo nhiều điều kiện
-    public function getBookByFilters($minPrice = 0, $maxPrice = INF, $order_by = '', $category = '', $author = '', $id = '', $status = '', $name = '') {
+
+
+    public function getBookByFilters(
+        $minPrice = 0,
+        $maxPrice = null,
+        $order_by = '',
+        $category = '',
+        $author = '',
+        $id = '',
+        $status = '',
+        $name = '',
+        $loaiBia = '',
+        $nhaXuatBan = '',
+        $namXuatBan = ''
+    ) {
+
+        if ($id === '' && $name === '' && $author === '' && $category === '' && $loaiBia === '' && $nhaXuatBan === '' && $namXuatBan === '') {
+            return $this->building_queryParam()->select();
+        }
+
         $conditions = [];
         $params = [];
 
@@ -65,8 +83,6 @@ class app_models_Sach extends app_libs_DBConnection {
                 'where' => 'maSach = ?',
                 'params' => [$id]
             ])->select_one();
-        } else {
-            return $this->building_queryParam()->select();
         }
 
         if ($minPrice > 0) {
@@ -74,7 +90,7 @@ class app_models_Sach extends app_libs_DBConnection {
             $params[] = $minPrice;
         }
 
-        if ($maxPrice !== INF) {
+        if ($maxPrice !== null) {
             $conditions[] = 'giaBan <= ?';
             $params[] = $maxPrice;
         }
@@ -99,19 +115,31 @@ class app_models_Sach extends app_libs_DBConnection {
             $params[] = "%$name%";
         }
 
-        $whereClause = count($conditions) > 0 ? implode(' AND ', $conditions) : '';
+        if (!empty($loaiBia)) {
+            $conditions[] = 'maLoaiBia = ?';
+            $params[] = $loaiBia;
+        }
+
+        if (!empty($nhaXuatBan)) {
+            $conditions[] = 'maNXB = ?';
+            $params[] = $nhaXuatBan;
+        }
+
+        if (!empty($namXuatBan) && is_numeric($namXuatBan)) {
+            $conditions[] = 'namXuatBan = ?';
+            $params[] = $namXuatBan;
+        }
+
+        $whereClause = count($conditions) > 0 ? implode(' AND ', $conditions) : '1';
 
         $queryParams = [
             'where' => $whereClause,
             'params' => $params
         ];
 
-        if (!empty($order_by)) {
-            $queryParams['order'] = $order_by;
-        }
-
         return $this->building_queryParam($queryParams)->select();
     }
+
 
 
 }

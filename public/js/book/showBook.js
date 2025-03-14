@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", async function() {
+document.addEventListener("DOMContentLoaded", async function () {
     let allproduct = await getAllBookProduct();
     if (Array.isArray(allproduct)) {
         updateBookToMain(allproduct);
@@ -31,12 +31,11 @@ function updateBookToMain(allproduct = []) {
         return;
     }
 
-    if (window.location.search === "") {
-        const bookList = document.getElementById('book-list');
-        bookList.innerHTML = "";
+    const bookList = document.getElementById('book-list');
+    bookList.innerHTML = "";
 
-        allproduct.forEach(product => {
-            bookList.innerHTML += `
+    allproduct.forEach(product => {
+        bookList.innerHTML += `
                 <div class="book-category__item" onclick="showDetailProduct(${product.id})">
                     <img src="public/uploads/${product.image}" class="book-category__item-image"></img>
                     <div class="book-category__item-name">${product.name}</div>
@@ -56,6 +55,5 @@ function updateBookToMain(allproduct = []) {
                     </div>
                 </div>
             `;
-        });
-    }
+    });
 }
