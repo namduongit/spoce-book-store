@@ -242,13 +242,13 @@
 
                     <script>
                         function showFilter(element) {
-                        const contentFilter = element.closest(".filter-group").querySelector(".filter-group__content");
+                            const contentFilter = element.closest(".filter-group").querySelector(".filter-group__content");
 
-                        contentFilter.classList.toggle("hide-item");
+                            contentFilter.classList.toggle("hide-item");
 
-                        element.classList.toggle("fa-minus");
-                        element.classList.toggle("fa-plus");
-}
+                            element.classList.toggle("fa-minus");
+                            element.classList.toggle("fa-plus");
+                        }
                     </script>
 
                     <!-- Bộ lọc Giá -->
@@ -449,9 +449,9 @@
                         <label for="page-show-by">Hiển thị theo: </label>
                         <select name="" id="page-show-by">
                             <option value="base" selected>Mặc định</option>
-                            <option value="16">16 sản phẩm</option>
-                            <option value="32">32 sản phẩm</option>
-                            <option value="64">64 sản phẩm</option>
+                            <option value="15">15 sản phẩm</option>
+                            <option value="20">20 sản phẩm</option>
+                            <option value="25">25 sản phẩm</option>
                         </select>
                     </div>
 
@@ -465,8 +465,11 @@
 
                 <div class="book-category__list" id="book-list">
                     <!-- Hiển thị danh sách sản phẩm -->
-
                 </div>
+
+                <!-- Nút phân trang -->
+                <div id="pagination" class="pagination"></div>
+
             </section>
         </div>
     </main>
