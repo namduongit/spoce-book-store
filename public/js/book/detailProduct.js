@@ -168,14 +168,6 @@ window.onpopstate = function(event) {
 };
 
 
-function showFilter(element) {
-    const contentFilter = element.closest(".filter-group").querySelector(".filter-group__content");
-
-    contentFilter.classList.toggle("hide-item");
-
-    element.classList.toggle("fa-minus");
-    element.classList.toggle("fa-plus");
-}
 
 // Hiển thị lại sách nếu trong URL có
 document.addEventListener("DOMContentLoaded", async function () {

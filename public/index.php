@@ -240,7 +240,16 @@
                 <div class="book-filter__title pd-filter">Lọc sản phẩm</div>
                 <div class="book-filter__list">
 
-                    <!-- Bộ lọc tên sản phẩm -->
+                    <script>
+                        function showFilter(element) {
+                        const contentFilter = element.closest(".filter-group").querySelector(".filter-group__content");
+
+                        contentFilter.classList.toggle("hide-item");
+
+                        element.classList.toggle("fa-minus");
+                        element.classList.toggle("fa-plus");
+}
+                    </script>
 
                     <!-- Bộ lọc Giá -->
                     <div class="filter-group pd-filter">
