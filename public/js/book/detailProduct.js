@@ -1,58 +1,4 @@
-function formatMoney(valueString) {
-    if (typeof valueString !== 'string') valueString = String(valueString);
-    return valueString.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VND";
-}
-
-async function fetchData(URL) {
-    try {
-        let response = await fetch(URL);
-        let dataResponse = await response.json();
-        return dataResponse;
-    } catch (error) {
-        return null;
-    }
-}
-
-async function getNameCategoryByID(categoryId) {
-    const URL = `api/categories/get.php?cateId=${categoryId}`;
-
-    let response = await fetchData(URL);
-    let result = response[0].name;
-    return result;
-}
-
-async function getNameAuthorByID(authorId) {
-    const URL = `api/authors/get.php?authorId=${authorId}`;
-
-    let response = await fetchData(URL);
-    let result = response[0].name;
-    return result;
-}
-
-
-async function getNameCoverByID(coverId) {
-    const URL = `api/covers/get.php?coverId=${coverId}`;
-
-    let response = await fetchData(URL);
-    let result = response[0].name;
-    return result;
-}
-
-async function getNamePublisherByID(publisherId) {
-    const URL = `api/publishers/get.php?publisherId=${publisherId}`;
-
-    let response = await fetchData(URL);
-    let result = response[0].name;
-    return result;
-}
-
-async function getBookByTrueName(bookName) {
-    const URL = `api/books/get.php?bookName=${bookName}`;
-
-    let response = await fetchData(URL);
-    return response;
-}
-
+import { formatMoney, getBookByTrueName, getNameAuthorByID, getNameCategoryByID, getNameCoverByID, getNamePublisherByID } from "./getDataBook.js";
 
 
 async function showDetailProduct(product_id) {
@@ -217,6 +163,10 @@ function closeDetailProduct() {
     window.history.replaceState({}, document.title, newUrl);
 }
 
+window.onpopstate = function(event) {
+    closeDetailProduct();
+};
+
 
 function showFilter(element) {
     const contentFilter = element.closest(".filter-group").querySelector(".filter-group__content");
@@ -227,7 +177,7 @@ function showFilter(element) {
     element.classList.toggle("fa-plus");
 }
 
-
+// Hiển thị lại sách nếu trong URL có
 document.addEventListener("DOMContentLoaded", async function () {
     let url = new URL(window.location.href);
 

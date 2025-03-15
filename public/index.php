@@ -19,15 +19,15 @@
     <link rel="stylesheet" href="public/css/style.css">
 
     <!-- Nhúng các thư viện Js -->
-    <script src="public/js/auth/loginRegister.js" defer></script>
+    <script type="module" src="public/js/auth/loginRegister.js" defer></script>
 
-    <script src="public/js/cart/cart.js" defer></script>
-    <script src="public/js/cart/payment.js" defer></script>
+    <script type="module" src="public/js/cart/cart.js" defer></script>
+    <script type="module" src="public/js/cart/payment.js" defer></script>
 
-    <script src="public/js/book/detailProduct.js" defer></script>
-    <script src="public/js/book/showBook.js" defer></script>
+    <script type="module" src="public/js/book/detailProduct.js" defer></script>
+    <script type="module" src="public/js/book/showBook.js" defer></script>
 
-    <script src="public/js/filter/filter.js"></script>
+    <script type="module" src="public/js/filter/filter.js" defer></script>
 </head>
 
 <body>
@@ -192,6 +192,17 @@
                     <span>0388 853 835</span>
                 </div>
             </div>
+
+            <div class="result-search">
+                <div class="result-search__wrapper">
+                    <div class="result-search__wrapper-title"></div>
+                    <div class="result-search__list">
+
+                    </div>
+
+                    <i class="result-search__close fa-solid fa-xmark" id="close-result-search"></i>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -228,6 +239,8 @@
             <section class="book-filter">
                 <div class="book-filter__title pd-filter">Lọc sản phẩm</div>
                 <div class="book-filter__list">
+
+                    <!-- Bộ lọc tên sản phẩm -->
 
                     <!-- Bộ lọc Giá -->
                     <div class="filter-group pd-filter">

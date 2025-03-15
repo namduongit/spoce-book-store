@@ -50,9 +50,35 @@ Lớp `DBConnection` dùng để kết nối và thực hiện các thao tác tr
 📌 Chứa các file **assets** như CSS, JavaScript, hình ảnh cho phần giao diện khách hàng.
 📌 **`index.php`** là file chính của website.
 
-### 5️⃣ **Router** 🔀
+### 5️⃣ **Router** 🔀 `Đã bỏ`
 📌 Xử lý điều hướng URL và chuyển đến đúng **Controller**.
 📌 Nếu URL không hợp lệ, có thể trả về lỗi **404 hoặc 500** tùy theo thiết kế.
+
+### 👤 ** Quản lý Lịch sử URL với pushState và replaceState ** 👤
+
+1️⃣ ```pushState – Thêm URL vào lịch sử```
+```Javascript
+history.pushState(null, '', '/products?page=2');
+```
+👉 Cách hoạt động:
+
+Đổi URL trong thanh địa chỉ.
+
+Lưu vào lịch sử, khi "Back" sẽ quay về theo lịch sử.
+
+Nhấn "Back" sẽ quay lại trang trước đó.
+
+2️⃣ ```replaceState – Thay thế URL hiện tại```
+```Javascript
+history.replaceState(null, '', '/products?page=2');
+```
+👉 Cách hoạt động:
+
+Đổi URL trong thanh địa chỉ.
+
+KHÔNG lưu vào lịch sử.
+
+Nhấn "Back" sẽ quay về trang trước khi dùng replaceState.
 
 ---
 
