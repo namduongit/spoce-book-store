@@ -226,4 +226,6 @@ $(function () {
     });
 });
 
-
+// gán hàm thành biến toàn cục (global scope)
+window.showDetailProduct = showDetailProduct;
+window.closeDetailProduct = closeDetailProduct;
