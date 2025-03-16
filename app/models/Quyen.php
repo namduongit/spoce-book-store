@@ -1,6 +1,6 @@
 <?php
 class app_models_Quyen extends app_libs_DBConnection {
-    protected $table_name = "Quyen";
+    protected $table_name = "quyen";
 
     // Lấy tất cả quyền
     public function getAllRoles() {

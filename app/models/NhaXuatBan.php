@@ -1,6 +1,6 @@
 <?php
 class app_models_NhaXuatBan extends app_libs_DBConnection {
-    protected $table_name = 'NhaXuatBan';
+    protected $table_name = 'nhaXuatBan';
 
     // Lấy tất cả nhà xuất bản
     public function getAllPublishers() {

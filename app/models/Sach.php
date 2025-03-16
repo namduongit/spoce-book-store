@@ -1,6 +1,6 @@
 <?php
 class app_models_Sach extends app_libs_DBConnection {
-    protected $table_name = 'Sach';
+    protected $table_name = 'sach';
 
     // Lấy tất cả sách
     public function getAllBooks() {

@@ -1,6 +1,6 @@
 <?php
 class app_models_TacGia extends app_libs_DBConnection {
-    protected $table_name = 'TacGia';
+    protected $table_name = 'tacGia';
 
     // Lấy tất cả tác giả
     public function getAllAuthors() {

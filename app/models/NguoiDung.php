@@ -1,6 +1,6 @@
 <?php
 class app_models_NguoiDung extends app_libs_DBConnection {
-    protected $table_name = "NguoiDung";
+    protected $table_name = "nguoiDung";
 
     // Lấy tất cả người dùng
     public function getAllUsers() {

@@ -1,6 +1,6 @@
 <?php
 class app_models_LoaiBia extends app_libs_DBConnection {
-    protected $table_name = 'LoaiBia';
+    protected $table_name = 'loaiBia';
 
     // Lấy tất cả loại bìa
     public function getAllCovers() {

@@ -3,7 +3,6 @@ import { formatMoney, getBookByTrueName, getNameAuthorByID, getNameCategoryByID,
 
 async function showDetailProduct(product_id) {
     const URL = `api/books/get.php?bookId=${product_id}`;
-    let detail_html = ``;
 
     async function fetchData(URL) {
         try {
@@ -17,105 +16,84 @@ async function showDetailProduct(product_id) {
     }
 
     let productDetail = await fetchData(URL);
-
-    // Kiểm tra nếu có dữ liệu sách
-    if (productDetail && productDetail.length > 0) {
-        productDetail = productDetail[0];
-
-        let nameCategory = await getNameCategoryByID(productDetail['genreId']);
-        let nameAuthor = await getNameAuthorByID(productDetail['authorId']);
-        let nameCover = await getNameCoverByID(productDetail['coverTypeId']);
-        let namePublisher = await getNamePublisherByID(productDetail['publisherId']);
-
-        detail_html = `
-            <div class="show-detail-product__container">
-                <div class="show-detail-product__content d-flex just-content-spbt">
-                    <div class="show-detail-product__image">
-                        <img src="public/uploads/${productDetail['image']}" alt="Hình ảnh sách">
-                    </div>
-
-                    <div class="show-detail-product__purchase">
-                        <div class="show-detail-product__header">
-                            <h1 class="show-detail-product__title">${productDetail['name']}</h1>
-                            <p class="show-detail-product__genre"> Mã sách:
-                                <b class="font-weight-bold">${productDetail['id']}</b>
-                            </p>
-                            <p class="show-detail-product__genre">Tác giả:
-                                <b class="font-weight-bold">${nameAuthor}</b>
-                            </p>
-                            <p class="show-detail-product__genre">Thể loại:
-                                <b class="font-weight-bold">${nameCategory}</b>
-                            </p>
-                            <p class="show-detail-product__genre">
-                                Giá bán:&nbsp;
-                                <b class="show-detail-product__price--old">${formatMoney(productDetail['originalPrice'])}</b>
-                                <b class="show-detail-product__price--new">${formatMoney(productDetail['sellingPrice'])}</b>
-                            </p>
-                        </div>
-
-                        <div style="margin-top: auto;">
-                            <div class="show-detail-product__quantity d-flex">
-                                <p class="show-detail-product__status show-detail-product__status--instock">Còn hàng</p>
-                                <button class="show-detail-product__quantity-btn show-detail-product__quantity-btn--decrease">-</button>
-                                <input type="text" value="1" class="show-detail-product__quantity-input">
-                                <button class="show-detail-product__quantity-btn show-detail-product__quantity-btn--increase">+</button>
-                            </div>
-
-                            <div class="show-detail-product__actions">
-                                <button class="show-detail-product__btn show-detail-product__btn--buy-now">
-                                    <i class="fa-solid fa-bolt"></i>&nbsp;Mua ngay
-                                </button>
-                                <button class="show-detail-product__btn show-detail-product__btn--add-to-cart">
-                                    <i class="fa-solid fa-cart-plus"></i>&nbsp;Giỏ hàng
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="show-detail-product__info">
-                    <div class="show-detail-product__tabs margin-bottom-medium">
-                        <button class="show-detail-product__tab show-detail-product__tab--desc margin-right-small active" onclick="showOptionDetailProduct(this)">Giới thiệu sơ lược</button>
-                        <button class="show-detail-product__tab show-detail-product__tab--details margin-right-small" onclick="showOptionDetailProduct(this)">Thông tin chi tiết</button>
-                    </div>
-
-                    <div class="show-detail-product__desc">
-                            <p>${productDetail['description']}</p>
-                    </div>
-
-                     <ul class="show-detail-product__details hide-item">
-                        <li><strong>Số trang:</strong> ${productDetail['numberOfPages']} trang</li>
-                        <li><strong>Năm xuất bản:</strong> ${productDetail['publishYear']}</li>
-                        <li><strong>Kích thước:</strong> ${productDetail['size']}</li>
-
-                        <li>
-                            <strong>Loại bìa:</strong>  ${nameCover}
-                        </li>
-
-                        <li>
-                            <strong>Nhà xuất bản:</strong> ${namePublisher}
-                        </li>
-                    </ul>
-
-                </div>
-
-                <div class="show-detail-product__close" onclick="closeDetailProduct()">X</div>
-            </div>
-        `;
-    } else {
-        detail_html = `<p>Không tìm thấy sản phẩm.</p>`;
+    if (!productDetail || productDetail.length === 0) {
+        document.querySelector('.show-detail-product').innerHTML = `<p>Không tìm thấy sản phẩm.</p>`;
+        return;
     }
+
+    productDetail = productDetail[0];
+
+    let nameCategory = await getNameCategoryByID(productDetail['genreId']);
+    let nameAuthor = await getNameAuthorByID(productDetail['authorId']);
+    let nameCover = await getNameCoverByID(productDetail['coverTypeId']);
+    let namePublisher = await getNamePublisherByID(productDetail['publisherId']);
+
+    let detail_html = `
+        <div class="show-detail-product__container">
+            <div class="show-detail-product__content d-flex just-content-spbt">
+                <div class="show-detail-product__image">
+                    <img src="public/uploads/${productDetail['image']}" alt="Hình ảnh sách">
+                </div>
+
+                <div class="show-detail-product__purchase">
+                    <div class="show-detail-product__header">
+                        <h1 class="show-detail-product__title">${productDetail['name']}</h1>
+                        <p class="show-detail-product__genre"> Mã sách:
+                            <b class="font-weight-bold">${productDetail['id']}</b>
+                        </p>
+                        <p class="show-detail-product__genre">Tác giả:
+                            <b class="font-weight-bold">${nameAuthor}</b>
+                        </p>
+                        <p class="show-detail-product__genre">Thể loại:
+                            <b class="font-weight-bold">${nameCategory}</b>
+                        </p>
+                        <p class="show-detail-product__genre">
+                            Giá bán:&nbsp;
+                            <b class="show-detail-product__price--old">${formatMoney(productDetail['originalPrice'])}</b>
+                            <b class="show-detail-product__price--new">${formatMoney(productDetail['sellingPrice'])}</b>
+                        </p>
+                    </div>
+                    <div class="show-detail-product__actions">
+                        <button class="show-detail-product__btn show-detail-product__btn--buy-now">
+                            <i class="fa-solid fa-bolt"></i>&nbsp;Mua ngay
+                        </button>
+                        <button class="show-detail-product__btn show-detail-product__btn--add-to-cart">
+                            <i class="fa-solid fa-cart-plus"></i>&nbsp;Giỏ hàng
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="show-detail-product__info">
+                <div class="show-detail-product__tabs margin-bottom-medium">
+                    <button class="show-detail-product__tab show-detail-product__tab--desc margin-right-small active" onclick="showOptionDetailProduct(this)">Giới thiệu sơ lược</button>
+                    <button class="show-detail-product__tab show-detail-product__tab--details margin-right-small" onclick="showOptionDetailProduct(this)">Thông tin chi tiết</button>
+                </div>
+                <div class="show-detail-product__desc">
+                        <p>${productDetail['description']}</p>
+                </div>
+                 <ul class="show-detail-product__details hide-item">
+                    <li><strong>Số trang:</strong> ${productDetail['numberOfPages']} trang</li>
+                    <li><strong>Năm xuất bản:</strong> ${productDetail['publishYear']}</li>
+                    <li><strong>Kích thước:</strong> ${productDetail['size']}</li>
+                    <li><strong>Loại bìa:</strong>  ${nameCover}</li>
+                    <li><strong>Nhà xuất bản:</strong> ${namePublisher}</li>
+                </ul>
+            </div>
+            <div class="show-detail-product__close" onclick="closeDetailProduct()">X</div>
+        </div>
+    `;
 
     // Thêm chi tiết sản phẩm vào trong HTML
     document.querySelector('.show-detail-product').innerHTML = detail_html;
     document.querySelector('.show-detail-product').style.display = 'block';
 
     let urlSource = new URLSearchParams();
-    urlSource.set("showBook", `${productDetail['name']}`);
+    urlSource.set("showBook", `${productDetail['id']}`);
 
-    history.pushState(null, '', window.location.pathname + '?' + urlSource.toString());
-
+    // 🟢 Lưu state với dữ liệu sản phẩm
+    history.pushState({ product: productDetail }, '', window.location.pathname + '?' + urlSource.toString());
 }
+
 
 
 function showOptionDetailProduct(object) {
@@ -150,21 +128,26 @@ function closeDetailProduct() {
     document.querySelector('.show-detail-product').style.display = 'none';
 
     let url = new URL(window.location.href);
-
     let params = new URLSearchParams(url.search);
-
     params.delete('showBook');
 
-    let newUrl = url.pathname + '?' + params.toString();
-    if (params.toString() === '') {
-        newUrl = url.pathname;
-    }
+    let newUrl = url.pathname + (params.toString() ? '?' + params.toString() : '');
 
+    // 🟢 Thay vì pushState, dùng replaceState để tránh tạo lịch sử thừa
     window.history.replaceState({}, document.title, newUrl);
 }
 
+
+
 window.onpopstate = function(event) {
-    closeDetailProduct();
+    if (event.state && event.state.product) {
+        // 🟢 Nếu có state (dữ liệu sản phẩm), hiển thị lại
+        let productDetail = event.state.product;
+        showDetailProduct(productDetail.id);
+    } else {
+        // 🔴 Nếu không có dữ liệu, đóng trang sản phẩm
+        closeDetailProduct();
+    }
 };
 
 
@@ -172,15 +155,14 @@ window.onpopstate = function(event) {
 // Hiển thị lại sách nếu trong URL có
 document.addEventListener("DOMContentLoaded", async function () {
     let url = new URL(window.location.href);
-
     let params = new URLSearchParams(url.search);
 
     if (params.has('showBook')) {
-        let bookName = params.get('showBook');
-        let book = await getBookByTrueName(bookName);
-        showDetailProduct(book[0].id);
+        let bookId = params.get('showBook');
+        showDetailProduct(bookId);
     }
 });
+
 
 
 

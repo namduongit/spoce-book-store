@@ -3,6 +3,16 @@
     // include_once 'api/books/get.php';
     // die();
 
+    // include_once 'app/libs/DBConnection.php';
+    // $connection = new app_libs_DBConnection();
+    // if ($connection->open_connect() != null) {
+    //     echo "Kết nối thành công";
+    // } else {
+    //     echo "Kết nối thất bại";
+    // }
+
+    // die();
+
     $param = $_SERVER['REQUEST_URI'];
     $page = null;
 

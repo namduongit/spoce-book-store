@@ -6,12 +6,11 @@
  * Date: 13-02-2025
  */
 
-// $dsn = "mysql:host=localhost:3306;dbname=book_store;charset=utf8";
 
 class app_libs_DBConnection {
-    protected $dsn = "mysql:host=localhost:3306;dbname=bookStore;charset=utf8";
-    protected $username = "book_store";
-    protected $password = "book_store";
+    protected $dsn = "mysql:host=128.199.154.64;port=3306;dbname=bookStore;charset=utf8";
+    protected $username = "bookStore";
+    protected $password = "bookStoreWeb";
 
     protected $table_name = 'default_table';
     // Mảng lưu trữ các param được dùng để truy vấn
