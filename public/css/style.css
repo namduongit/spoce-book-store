@@ -3,12 +3,103 @@
   color: white;
   background-color: var(--topbar-color);
 }
+
+.userInformation_icon_container label:hover,
 .topbar__auth-btn:hover span,
 .topbar__contact-item:hover span {
   color: var(--topbar-color-hover);
   cursor: pointer;
   transition: all 0.3s ease;
 }
+
+.userInformation_icon_containe{
+  position: relative;
+}
+
+.information_and_logout_container{
+  padding: 10px;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  background-color: #044785;
+  position: absolute;
+  z-index: 100;
+  border: 5px solid #3498db;
+  border-radius: 5px;
+  box-sizing: border-box;
+  width: 170px;
+}
+
+
+/* ------------ thông tin người dùng */
+
+
+
+  .profile {
+      max-width: 80%;
+      margin: 50px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .profile_body{
+      
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+  }
+
+  .profile_container_title hr {
+      width: 80%;
+      margin: 10px auto;
+      border: 0;
+      height: 4px;
+      background: #044785;
+  }
+
+  .profile_container_title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 15px;
+  }
+
+  .profile_item label{
+      width: 150px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      font-size: 15px;
+      line-height: 1.8;
+  }
+
+  .profile_item{
+      width: 80%;
+      display: flex;
+      justify-content: flex-start;
+      gap: 15px;
+  }
+
+  .profile_icon_exit{
+      font-size: 25px;
+      display: flex;
+      justify-content: flex-end;
+  }
+
+  .profile_item input{
+    width: 100%;
+    padding: 8px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  
+  }
+  
 
 /* -------------------------------------------------------------------------------- */
 

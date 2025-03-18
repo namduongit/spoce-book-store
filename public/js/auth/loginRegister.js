@@ -40,10 +40,10 @@ function showFormUser(object, text_spans) {
                     <p>Chưa có tài khoản?</p>
                     <span onclick="showFormUser(this, null)">Đăng ký ngay</span>
                 </div>
-                <form action="" method="POST">
+                <form id="loginForm" action="" method="POST">
                     <div class="auth__group">
-                        <label for="login-email" class="auth__label">Email</label>
-                        <input type="email" id="login-email" name="email" class="auth__input" required>
+                        <label for="login-username" class="auth__label">Tên người dùng</label>
+                        <input type="text" id="login-username" name="username" class="auth__input" required>
                     </div>
                     <div class="auth__group">
                         <label for="login-password" class="auth__label">Mật khẩu</label>
@@ -62,14 +62,14 @@ function showFormUser(object, text_spans) {
                     <p>Đã có tài khoản?</p>
                     <span onclick="showFormUser(this, null)">Đăng nhập ngay</span>
                 </div>
-                <form action="" method="POST">
+                <form id="registerForm" method="POST">
                     <div class="auth__group">
                         <label for="register-name" class="auth__label">Họ và Tên</label>
                         <input type="text" id="register-name" name="name" class="auth__input" required>
                     </div>
                     <div class="auth__group">
-                        <label for="register-email" class="auth__label">Email</label>
-                        <input type="email" id="register-email" name="email" class="auth__input" required>
+                        <label for="register-username" class="auth__label">Tên người dùng</label>
+                        <input type="text" id="register-username" name="username" class="auth__input" required>
                     </div>
                     <div class="auth__group">
                         <label for="register-password" class="auth__label">Mật khẩu</label>
@@ -114,3 +114,4 @@ function close_auth_form() {
     }
     clearURL();
 }
+

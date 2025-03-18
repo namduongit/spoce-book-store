@@ -19,7 +19,10 @@
     <link rel="stylesheet" href="public/css/style.css">
 
     <!-- Nhúng các thư viện Js -->
-    <script type="module" src="public/js/auth/loginRegister.js" defer></script>
+    <script  src="public/js/auth/loginRegister.js" defer></script>
+    <script type="module"  src="public/js/user/login_register_event.js" defer></script>
+    <script  type="module" src="public/js/user/showUserInformation.js" defer></script>
+
 
     <script type="module" src="public/js/cart/cart.js" defer></script>
     <script type="module" src="public/js/cart/payment.js" defer></script>
@@ -52,18 +55,29 @@
                     <i class="fa-solid fa-street-view"></i>
                     <span>Đăng nhập</span>
                 </div>
-                <div class="topbar__auth-btn topbar__auth-btn--register margin-right-medium" onclick="showFormUser(this, null)">
+                <div class="topbar__auth-btn topbar__auth-btn--register margin-right-medium " onclick="showFormUser(this, null)">
                     <i class="fa-solid fa-user-pen"></i>
                     <span>Đăng ký</span>
                 </div>
-                <div class="topbar__auth-btn topbar__auth-btn--logout margin-right-medium hide-item">
-                    <i class="fa-solid fa-person-through-window"></i>
-                    <span>Đăng xuất</span>
+
+                <div class="userInformation_icon_container hide-item">
+                    <label for="username" class="user_name"> Võ Trịnh khang </label>
+                    <i class="fa-solid fa-user"></i>
+
+                    <div class="information_and_logout_container hide-item">
+                        <div class="topbar__auth-btn topbar__auth-btn--settings margin-right-medium ">
+                            <i class="fa-solid fa-user-gear"></i>
+                            <span>Tài khoản</span>
+                        </div>
+    
+                        <div class="topbar__auth-btn topbar__auth-btn--logout margin-right-medium ">
+                            <i class="fa-solid fa-person-through-window"></i>
+                            <span>Đăng xuất</span>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="topbar__auth-btn topbar__auth-btn--settings margin-right-medium hide-item">
-                    <i class="fa-solid fa-user-gear"></i>
-                    <span>Tài khoản</span>
-                </div>
+
             </div>
         </div>
 
