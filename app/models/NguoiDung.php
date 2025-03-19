@@ -63,5 +63,25 @@ class app_models_NguoiDung extends app_libs_DBConnection {
             'params' => [$maNguoiDung]
         ])->update();
     }
+
+
+    // Đăng nhập
+    public function loginUser($username, $password) {
+        return $this->building_queryParam([
+            'where' => 'tenTaiKhoan = ? and matKhau = ?',
+            'params' => [
+                $username,
+                $password
+            ]
+        ])->select_one();
+    }
+
+    // Kiểm tra tài khoản đẫ tồn tại
+    public function isExistUsername($username) {
+        return $this->building_queryParam([
+            'where' => 'tenTaiKhoan = ?',
+            'params' => [$username]
+        ])->select_one();
+    }
 }
 ?>

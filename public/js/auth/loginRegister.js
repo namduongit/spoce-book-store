@@ -1,16 +1,8 @@
 import {toast} from '../toast.js'
 
 document.addEventListener("DOMContentLoaded", () => {
-    const URL = window.location.href;
-    const regexSplit = URL.split('/');
-    const lastPart = regexSplit.pop();
-    const result = lastPart.replace(/[^a-zA-Z]/g, "");
+    const params = new URLSearchParams();
 
-    if (result === 'login') {
-        showFormUser(null, 'Đăng nhập');
-    } else if (result === 'signup') {
-        showFormUser(null, 'Đăng ký');
-    }
 });
 
 // Cập nhật URL khi chuyển đổi giữa đăng nhập & đăng ký
@@ -28,20 +20,11 @@ function clearURL() {
     history.pushState(null, '', window.location.origin);
 }
 
-// Hiển thị form đăng nhập hoặc đăng ký
 function showFormUser(object, text_spans) {
-
-    toast({
-        title: "WARNING",
-        message: "Không tìm thấy sản phẩm",
-        type: "warning",
-        duration: 3000,
-      });
-    return;
     let form_html = ``;
     let text_span = object ? object.innerText.trim() : text_spans;
 
-    if (text_span === 'Đăng nhập' || text_span === 'Đăng nhập ngay') {
+    if (object.classList.contains('topbar__auth-btn--login') || text_span === 'Đăng nhập ngay') {
         updateURLAuth('login');
         form_html = `
             <div class="auth__form auth__form--login">
@@ -50,20 +33,20 @@ function showFormUser(object, text_spans) {
                     <p>Chưa có tài khoản?</p>
                     <span onclick="showFormUser(this, null)">Đăng ký ngay</span>
                 </div>
-                <form id="loginForm" action="" method="POST">
+                <form id="loginForm">
                     <div class="auth__group">
-                        <label for="login-username" class="auth__label">Tên người dùng</label>
                         <input type="text" id="login-username" name="username" class="auth__input" required>
+                        <label for="login-username" class="auth__label">Tên người dùng</label>
                     </div>
                     <div class="auth__group">
-                        <label for="login-password" class="auth__label">Mật khẩu</label>
                         <input type="password" id="login-password" name="password" class="auth__input" required>
+                        <label for="login-password" class="auth__label">Mật khẩu</label>
                     </div>
                     <button type="submit" class="auth__button">Đăng nhập</button>
                 </form>
             </div>
         `;
-    } else if (text_span === 'Đăng ký' || text_span === 'Đăng ký ngay') {
+    } else if (object.classList.contains('topbar__auth-btn--register') || text_span === 'Đăng ký ngay') {
         updateURLAuth('signup');
         form_html = `
             <div class="auth__form auth__form--register">
@@ -72,22 +55,22 @@ function showFormUser(object, text_spans) {
                     <p>Đã có tài khoản?</p>
                     <span onclick="showFormUser(this, null)">Đăng nhập ngay</span>
                 </div>
-                <form id="registerForm" method="POST">
+                <form id="registerForm">
                     <div class="auth__group">
-                        <label for="register-name" class="auth__label">Họ và Tên</label>
                         <input type="text" id="register-name" name="name" class="auth__input" required>
+                        <label for="register-name" class="auth__label">Họ và Tên</label>
                     </div>
                     <div class="auth__group">
-                        <label for="register-username" class="auth__label">Tên người dùng</label>
                         <input type="text" id="register-username" name="username" class="auth__input" required>
+                        <label for="register-username" class="auth__label">Tên người dùng</label>
                     </div>
                     <div class="auth__group">
-                        <label for="register-password" class="auth__label">Mật khẩu</label>
                         <input type="password" id="register-password" name="password" class="auth__input" required>
+                        <label for="register-password" class="auth__label">Mật khẩu</label>
                     </div>
                     <div class="auth__group">
-                        <label for="confirm-password" class="auth__label">Xác nhận mật khẩu</label>
                         <input type="password" id="confirm-password" name="confirm_password" class="auth__input" required>
+                        <label for="confirm-password" class="auth__label">Xác nhận mật khẩu</label>
                     </div>
                     <button type="submit" class="auth__button">Đăng ký</button>
                 </form>
@@ -114,9 +97,86 @@ function showFormUser(object, text_spans) {
 
     authElement.innerHTML = result_html;
     authElement.style.display = 'block';
+
+    // Kiểm tra đã có chữ trong input thì active cho label lên trên
+    const allGroupAuth = document.querySelectorAll('.auth__form form .auth__group');
+    allGroupAuth.forEach(authGroup => {
+        const inputField = authGroup.querySelector('.auth__input');
+        inputField.oninput = function() {
+            if (inputField.value !== '') {
+                authGroup.querySelector('.auth__label').classList.add('auth__group--active');
+            } else {
+                authGroup.querySelector('.auth__label').classList.remove('auth__group--active');
+            }
+        };
+    });
+
+    const registerForm = document.getElementById("registerForm");
+    if (registerForm) {
+        registerForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const formData = new URLSearchParams();
+            formData.append("name", document.getElementById("register-name").value);
+            formData.append("username", document.getElementById("register-username").value);
+            formData.append("password", document.getElementById("register-password").value);
+            formData.append("confirm_password", document.getElementById("confirm-password").value);
+
+            fetch("../../../api/users/register.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: formData.toString(),
+            })
+            .then(response => response.json())
+            .then(data => {
+                toast({
+                    title: "Thông báo",
+                    message: data.message,
+                    type: data.success === true ? 'success' : 'warning',
+                    duration: 3000
+                });
+            })
+            .catch(error => console.error("Lỗi fetch:", error));
+        });
+    }
+
+
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const formData = new URLSearchParams();
+            formData.append("username", document.getElementById("login-username").value);
+            formData.append("password", document.getElementById("login-password").value);
+
+            fetch("../../../api/users/login.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: formData.toString(),
+            })
+            .then(response => response.json())
+            .then(data => {
+                toast({
+                    title: "Thông báo",
+                    message: data.message,
+                    type: data.success === true ? 'success' : 'warning',
+                    duration: 3000
+                });
+                
+            })
+            .catch(error => console.error("Lỗi fetch:", error));
+        });
+    }
+
 }
 
-// Đóng form và xóa URL
+
+
 function close_auth_form() {
     let authElement = document.querySelector('.auth');
     if (authElement) {
@@ -125,4 +185,9 @@ function close_auth_form() {
     clearURL();
 }
 
-window.showFormUser = showFormUser; 
+window.updateURLAuth = updateURLAuth;
+window.clearURL = clearURL;
+window.showFormUser = showFormUser;
+window.close_auth_form = close_auth_form;
+
+

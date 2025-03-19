@@ -43,9 +43,9 @@
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   }
-  
+
   .profile_body{
-      
+
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -97,9 +97,9 @@
     border-radius: 5px;
     font-size: 14px;
     transition: all 0.3s ease;
-  
+
   }
-  
+
 
 /* -------------------------------------------------------------------------------- */
 
@@ -951,34 +951,41 @@
 
 .auth__group input {
   width: 100%;
-  padding: 1.3rem 2rem;
+  padding: 1.5rem;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.4rem;
   outline: none;
 }
 
 .auth__group label {
   position: absolute;
   top: 50%;
-  left: 10%;
+  left: 5%;
   transform: translateY(-50%);
   background: white;
-  padding: 0 0.3rem;
   font-size: 1.3rem;
   color: #999;
   transition: 0.3s ease-in-out;
   pointer-events: none;
 }
 
-.auth__group input:focus + label,
-.auth__group input:not(:placeholder-shown) + label,
-.auth__group:hover label {
+.auth__group .auth__group--active {
   top: 0;
-  font-size: 1.5rem;
-  color: #007bff;
-  padding: 0 0.3rem;
+  font-size: 1.3rem;
+  color: #1E1E1E;
+  padding: 0 0.5rem;
 }
+
+.auth__group input:focus + label,
+.auth__group input:hover + label,
+.auth__group .auth__group--active {
+  top: 0;
+  font-size: 1.3rem;
+  color: #1E1E1E;
+  padding: 0 0.5rem;
+}
+
 
 .auth__button {
   width: 100%;

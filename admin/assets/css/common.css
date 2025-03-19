@@ -485,10 +485,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-size: 16px;
   font-family: sans-serif;
 }
-.dialog__form-group table thead tr {
+.dialog__form-group table th {
   /* background-color: #303234; */
   background: #000;
   color: #ffffff;
+  line-height: var(--table-height);
+  font-weight: bold;
+
 }
 .dialog__form-group table th,
 .dialog__form-group table td {
@@ -496,6 +499,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-size: 14px;
   text-align: center;
   padding: 4px 6px;
+  line-height: var(--table-height);
 }
 .dialog__form-group table th,
 .dialog__form-group table td {
@@ -548,9 +552,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .dialog__privilege-detail table tr {
   height: 30px;
 }
-.dialog__privilege-detail table tr:first-of-type {
+/* .dialog__privilege-detail table tr:first-of-type {
   border-bottom: 2px solid #000;
-}
+} */
 .dialog__privilege-detail table :is(th, td) {
   text-align: center;
 }
@@ -614,6 +618,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .ticket__title {
   font-size: 28px;
   text-align: center;
+  font-weight: bold;
 }
 .ticket__date {
   font-size: 16px;
@@ -627,10 +632,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-size: 0.9em;
   font-family: sans-serif;
 }
-.ticket__table thead tr {
+.ticket__table th {
   /* background-color: #303234; */
   background: var(--primary-color);
   color: #ffffff;
+  font-weight: bold;
 }
 .ticket__table th,
 .ticket__table td {
@@ -639,6 +645,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border: 1px solid #000;
   font-size: var(14px);
   text-align: center;
+  line-height: var(--table-height);
 }
 .ticket__table tfoot td:first-of-type {
   background: #3597f2;
@@ -681,6 +688,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .ticket__total-text span {
   font-style: italic;
 }
+.ticket__total-text strong {
+  font-weight: bold;
+}
 .ticket__footer {
   display: flex;
   justify-content: space-between;
@@ -719,4 +729,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .ticket__footer:where(.order, .input_ticket) {
   justify-content: space-around;
+}
+:is(.ticket__info, .ticket__footer) b {
+  font-weight: bold;
 }
