@@ -74,12 +74,12 @@
                     <span class="text">Khuyến mãi</span>
                 </a>
             </li>
-            <!-- <li class="sidebar__item">
+            <li class="sidebar__item">
                 <a href="#" class="sidebar__action" data-main-content="privilege">
                     <i class="icon fa-solid fa-users-line"></i>
                     <span class="text">Nhóm quyền</span>
                 </a>
-            </li> -->
+            </li>
             <li class="sidebar__item">
                 <a href="#" class="sidebar__action" data-main-content="account">
                     <i class="icon fa-solid fa-user"></i>

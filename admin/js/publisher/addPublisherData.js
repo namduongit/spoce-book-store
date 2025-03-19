@@ -26,31 +26,33 @@ export function addPublisherData() {
                 <i class="fa-solid fa-xmark"></i>
               </button>
               <div class="dialog__line"></div>
-              <div class="dialog__row">
-                <div class="dialog__form-group full">
-                  <label>Mã nhà xuất bản</label>
-                  <input type="text" id="add-publisher-id" readonly />
+              <form method="post" class="dialog__form">
+                <div class="dialog__row">
+                  <div class="dialog__form-group full">
+                    <label>Mã nhà xuất bản</label>
+                    <input type="text" id="add-publisher-id" readonly />
+                  </div>
                 </div>
-              </div>
-              <div class="dialog__row">
-                <div class="dialog__form-group full">
-                  <label>Tên nhà xuất bản</label>
-                  <input type="text" id="add-publisher-name" placeholder="Nhập Tên nhà xuất bản" autofocus/>
+                <div class="dialog__row">
+                  <div class="dialog__form-group full">
+                    <label>Tên nhà xuất bản</label>
+                    <input type="text" id="add-publisher-name" placeholder="Nhập Tên nhà xuất bản" autofocus/>
+                  </div>
                 </div>
-              </div>
-              <div class="dialog__row">
-                <div class="dialog__form-group full">
-                  <label>Trạng thái</label>
-                  <select id="add-publisher-status">
-                    <option value="" selected>Chọn Trạng thái</option>
-                    <option value="1">Hoạt động</option>
-                    <option value="0">Tạm dừng</option>
-                  </select>
+                <div class="dialog__row">
+                  <div class="dialog__form-group full">
+                    <label>Trạng thái</label>
+                    <select id="add-publisher-status">
+                      <option value="" selected>Chọn Trạng thái</option>
+                      <option value="1">Hoạt động</option>
+                      <option value="0">Tạm dừng</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
-              <div class="dialog__buttons">
-                <button id="add-publisher-button" class="add">Thêm</button>
-              </div>
+                <div class="dialog__buttons">
+                  <button id="add-publisher-button" class="add">Thêm</button>
+                </div>
+              </form>
             `;
 
     // Thêm vào body

@@ -126,79 +126,81 @@ export function updateOrderData(idOrderSelected) {
             <i class="fa-solid fa-xmark"></i>
           </button>
           <div class="dialog__line"></div>
-          <div class="dialog__row">
-            <div class="dialog__form-group order half">
-              <label>Mã đơn hàng</label>
-              <input type="text" id="update-order-id" readonly />
+          <form method="post" class="dialog__form">
+            <div class="dialog__row">
+              <div class="dialog__form-group order half">
+                <label>Mã đơn hàng</label>
+                <input type="text" id="update-order-id" readonly />
+              </div>
+              <div class="dialog__form-group order half">
+                <label>Ngày tạo đơn</label>
+                <input type="text" id="update-order-date-create" readonly />
+              </div>
+              <div class="dialog__form-group order half">
+                <label>Mã nhân viên</label>
+                <input type="text" id="update-employee-id" readonly />
+              </div>
+              <div class="dialog__form-group order half">
+                <label>Trạng thái</label>
+                <input type="text" id="update-order-status" readonly />
+              </div>
+              <div class="dialog__form-group order">
+                <label>Tổng thanh toán (VNĐ)</label>
+                <input type="text" id="update-order-cost" readonly />
+              </div>
             </div>
-            <div class="dialog__form-group order half">
-              <label>Ngày tạo đơn</label>
-              <input type="text" id="update-order-date-create" readonly />
+            <div class="dialog__row">
+              <div class="dialog__form-group order">
+                <label>Phương thức thanh toán</label>
+                <input type="text" id="update-order-method-pay" value="Thanh toán chuyển khoản" readonly />
+              </div>
+              <div class="dialog__form-group order full">
+                <label>Địa chỉ giao hàng</label>
+                <input type="text" id="update-order-address-to-ship" readonly />
+              </div>
             </div>
-            <div class="dialog__form-group order half">
-              <label>Mã nhân viên</label>
-              <input type="text" id="update-employee-id" readonly />
+            <div class="dialog__row">
+              <div class="dialog__form-group order half">
+                <label>Mã khách hàng</label>
+                <input type="text" id="update-order-customer-id" readonly />
+              </div>
+              <div class="dialog__form-group order half">
+                <label>Số điện thoại</label>
+                <input type="text" id="update-order-customer-phone" readonly />
+              </div>
+              <div class="dialog__form-group order">
+                <label>Họ và tên</label>
+                <input type="text" id="update-order-customer-fullname" readonly />
+              </div>
+              <div class="dialog__form-group order">
+                <label>Email</label>
+                <input type="text" id="update-order-customer-email" readonly />
+              </div>
             </div>
-            <div class="dialog__form-group order half">
-              <label>Trạng thái</label>
-              <input type="text" id="update-order-status" readonly />
+            <div class="dialog__row">
+              <div class="dialog__form-group full">
+                <label style="color: #000;">Chi tiết đơn hàng</label>
+                <table>
+                  <thead>
+                    <tr>  
+                      <th width="10%">Mã sách</th>
+                      <th width="42%" class="name">Tên sách</th>
+                      <th width="10%">Số lượng</th>
+                      <th width="14%">Đơn giá (VNĐ)</th>
+                      <th width="24%" class="total">Thành tiền (VNĐ)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class="dialog__form-group order">
-              <label>Tổng thanh toán (VNĐ)</label>
-              <input type="text" id="update-order-cost" readonly />
+            <div class="dialog__buttons order">
+              <button class="ship-status">Giao hàng</button>
+              <button class="confirm-status">Xác nhận</button>
+              <button class="cancel-status">Huỷ đơn</button>
             </div>
-          </div>
-          <div class="dialog__row">
-            <div class="dialog__form-group order">
-              <label>Phương thức thanh toán</label>
-              <input type="text" id="update-order-method-pay" value="Thanh toán chuyển khoản" readonly />
-            </div>
-            <div class="dialog__form-group order full">
-              <label>Địa chỉ giao hàng</label>
-              <input type="text" id="update-order-address-to-ship" readonly />
-            </div>
-          </div>
-          <div class="dialog__row">
-            <div class="dialog__form-group order half">
-              <label>Mã khách hàng</label>
-              <input type="text" id="update-order-customer-id" readonly />
-            </div>
-            <div class="dialog__form-group order half">
-              <label>Số điện thoại</label>
-              <input type="text" id="update-order-customer-phone" readonly />
-            </div>
-            <div class="dialog__form-group order">
-              <label>Họ và tên</label>
-              <input type="text" id="update-order-customer-fullname" readonly />
-            </div>
-            <div class="dialog__form-group order">
-              <label>Email</label>
-              <input type="text" id="update-order-customer-email" readonly />
-            </div>
-          </div>
-          <div class="dialog__row">
-            <div class="dialog__form-group full">
-              <label style="color: #000;">Chi tiết đơn hàng</label>
-              <table>
-                <thead>
-                  <tr>  
-                    <th width="10%">Mã sách</th>
-                    <th width="42%" class="name">Tên sách</th>
-                    <th width="10%">Số lượng</th>
-                    <th width="14%">Đơn giá (VNĐ)</th>
-                    <th width="24%" class="total">Thành tiền (VNĐ)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="dialog__buttons order">
-            <button class="ship-status">Giao hàng</button>
-            <button class="confirm-status">Xác nhận</button>
-            <button class="cancel-status">Huỷ đơn</button>
-          </div>
+          </form >
     `;
 
   // Thêm vào body

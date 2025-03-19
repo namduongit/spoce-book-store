@@ -27,64 +27,66 @@ export function addDiscountData() {
                   <i class="fa-solid fa-xmark"></i>
                 </button>
                 <div class="dialog__line"></div>
-                <div class="dialog__row">
-                  <div class="dialog__form-group">
-                    <label>Mã khuyến mãi</label>
-                    <input type="text" id="add-discount-id" readonly />
+                <form method="post" class="dialog__form">
+                  <div class="dialog__row">
+                    <div class="dialog__form-group">
+                      <label>Mã khuyến mãi</label>
+                      <input type="text" id="add-discount-id" readonly />
+                    </div>
+                    <div class="dialog__form-group">
+                      <label>Tên khuyến mãi</label>
+                      <input type="text" id="add-discount-name" placeholder="Nhập Tên khuyến mãi" autofocus/>
+                    </div>
                   </div>
-                  <div class="dialog__form-group">
-                    <label>Tên khuyến mãi</label>
-                    <input type="text" id="add-discount-name" placeholder="Nhập Tên khuyến mãi" autofocus/>
+                  <div class="dialog__row">
+                     <div class="dialog__form-group">
+                      <label>Loại khuyến mãi</label>
+                      <select id="add-discount-type">
+                        <option value="" selected>Chọn Loại khuyến mãi</option>
+                        <option value="1">Phần trăm</option>
+                        <option value="0">Tiền</option>
+                      </select>
+                    </div>
+                    <div class="dialog__form-group">
+                      <label>Giá trị</label>
+                      <input type="text" id="add-discount-value" placeholder="Nhập Giá trị" />
+                    </div>
                   </div>
-                </div>
-                <div class="dialog__row">
-                   <div class="dialog__form-group">
-                    <label>Loại khuyến mãi</label>
-                    <select id="add-discount-type">
-                      <option value="" selected>Chọn Loại khuyến mãi</option>
-                      <option value="1">Phần trăm</option>
-                      <option value="0">Tiền</option>
-                    </select>
+                  <div class="dialog__row">
+                    <div class="dialog__form-group">
+                      <label>Ngày bắt đầu</label>
+                      <input type="date" id="add-discount-date-start" />
+                    </div>
+                    <div class="dialog__form-group">
+                      <label>Ngày kết thúc</label>
+                      <input type="date" id="add-discount-date-end" />
+                    </div>
                   </div>
-                  <div class="dialog__form-group">
-                    <label>Giá trị</label>
-                    <input type="text" id="add-discount-value" placeholder="Nhập Giá trị" />
+                  <div class="dialog__row">
+                    <div class="dialog__form-group">
+                      <label>Tiền đơn tối thiểu</label>
+                      <input type="text" id="add-discount-order-min-cost" placeholder="Nhập Tiền đơn tối thiểu" />
+                    </div>
+                    <div class="dialog__form-group">
+                      <label>Tiền giảm tối đa</label>
+                      <input type="text" id="add-discount-order-max-discount" placeholder="Nhập Tiền giảm tối đa" />
+                    </div>
                   </div>
-                </div>
-                <div class="dialog__row">
-                  <div class="dialog__form-group">
-                    <label>Ngày bắt đầu</label>
-                    <input type="date" id="add-discount-date-start" />
+                  <div class="dialog__row">
+                    <div class="dialog__form-group">
+                      <label>Trạng thái</label>
+                      <select id="add-discount-status">
+                        <option value="" selected>Chọn Trạng thái</option>
+                        <option value="1">Hoạt động</option>
+                        <option value="0">Tạm dừng</option>
+                      </select>
+                    </div>
+                    <div class="dialog__form-group"></div>
                   </div>
-                  <div class="dialog__form-group">
-                    <label>Ngày kết thúc</label>
-                    <input type="date" id="add-discount-date-end" />
+                  <div class="dialog__buttons">
+                    <button id="add-discount-button" class="add">Thêm</button>
                   </div>
-                </div>
-                <div class="dialog__row">
-                  <div class="dialog__form-group">
-                    <label>Tiền đơn tối thiểu</label>
-                    <input type="text" id="add-discount-order-min-cost" placeholder="Nhập Tiền đơn tối thiểu" />
-                  </div>
-                  <div class="dialog__form-group">
-                    <label>Tiền giảm tối đa</label>
-                    <input type="text" id="add-discount-order-max-discount" placeholder="Nhập Tiền giảm tối đa" />
-                  </div>
-                </div>
-                <div class="dialog__row">
-                  <div class="dialog__form-group">
-                    <label>Trạng thái</label>
-                    <select id="add-discount-status">
-                      <option value="" selected>Chọn Trạng thái</option>
-                      <option value="1">Hoạt động</option>
-                      <option value="0">Tạm dừng</option>
-                    </select>
-                  </div>
-                  <div class="dialog__form-group"></div>
-                </div>
-                <div class="dialog__buttons">
-                  <button id="add-discount-button" class="add">Thêm</button>
-                </div>
+                </form >
               `;
 
     // Thêm vào body

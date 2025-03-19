@@ -24,62 +24,64 @@ export function detailAccountData(idAccountSelected) {
             <i class="fa-solid fa-xmark"></i>
           </button>
           <div class="dialog__line"></div>
-          <div class="dialog__row">
-            <div class="dialog__form-group">
-              <label>Mã người dùng</label>
-              <input type="text" id="detail-account-id" readonly />
+          <form method="get" class="dialog__form">
+            <div class="dialog__row">
+              <div class="dialog__form-group">
+                <label>Mã người dùng</label>
+                <input type="text" id="detail-account-id" readonly />
+              </div>
+              <div class="dialog__form-group">
+                <label>Họ và tên</label>
+                <input type="text" id="detail-account-fullname" readonly />
+              </div>
             </div>
-            <div class="dialog__form-group">
-              <label>Họ và tên</label>
-              <input type="text" id="detail-account-fullname" readonly />
+            <div class="dialog__row">
+              <div class="dialog__form-group">
+                <label>Số điện thoại</label>
+                <input type="text" id="detail-account-phone" readonly />
+              </div>
+              <div class="dialog__form-group">
+                <label>Email</label>
+                <input type="text" id="detail-account-email" readonly />
+              </div>
             </div>
-          </div>
-          <div class="dialog__row">
-            <div class="dialog__form-group">
-              <label>Số điện thoại</label>
-              <input type="text" id="detail-account-phone" readonly />
+            <div class="dialog__row">
+              <div class="dialog__form-group full">
+                <label>Địa chỉ</label>
+                <input type="text" id="detail-account-address" readonly />
+              </div>
             </div>
-            <div class="dialog__form-group">
-              <label>Email</label>
-              <input type="text" id="detail-account-email" readonly />
+            <div class="dialog__row">
+              <div class="dialog__form-group">
+                <label>Tên tài khoản</label>
+                <input type="text" id="detail-account-username" readonly />
+              </div>
+              <div class="dialog__form-group">
+                <label>Mật khẩu</label>
+                <input type="text" id="detail-account-password" readonly />
+              </div>
             </div>
-          </div>
-          <div class="dialog__row">
-            <div class="dialog__form-group full">
-              <label>Địa chỉ</label>
-              <input type="text" id="detail-account-address" readonly />
+            <div class="dialog__row">
+              <div class="dialog__form-group">
+                <label>Nhóm quyền</label>
+                <select id="detail-account-privilege" disabled>
+                    <option value="" selected>Chọn Nhóm quyền</option>
+                    <option value="1">Quản lý</option>
+                    <option value="2">Nhân viên thủ kho</option>
+                    <option value="2">Nhân viên bán hàng</option>
+                    <option value="3">Khách hàng</option>
+                </select>
+              </div>
+              <div class="dialog__form-group">
+                <label>Trạng thái</label>
+                <select id="detail-account-status" disabled>
+                  <option value="" selected>Chọn Trạng thái</option>
+                  <option value="1">Hoạt động</option>
+                  <option value="0">Tạm dừng</option>
+                </select>
+              </div>
             </div>
-          </div>
-          <div class="dialog__row">
-            <div class="dialog__form-group">
-              <label>Tên tài khoản</label>
-              <input type="text" id="detail-account-username" readonly />
-            </div>
-            <div class="dialog__form-group">
-              <label>Mật khẩu</label>
-              <input type="text" id="detail-account-password" readonly />
-            </div>
-          </div>
-          <div class="dialog__row">
-            <div class="dialog__form-group">
-              <label>Phân quyền</label>
-              <select id="detail-account-privilege" disabled>
-                  <option value="" selected>Chọn Phân quyền</option>
-                  <option value="1">Quản lý</option>
-                  <option value="2">Nhân viên thủ kho</option>
-                  <option value="2">Nhân viên bán hàng</option>
-                  <option value="3">Khách hàng</option>
-              </select>
-            </div>
-            <div class="dialog__form-group">
-              <label>Trạng thái</label>
-              <select id="detail-account-status" disabled>
-                <option value="" selected>Chọn Trạng thái</option>
-                <option value="1">Hoạt động</option>
-                <option value="0">Tạm dừng</option>
-              </select>
-            </div>
-          </div>
+          </form>
     `;
 
   // Thêm vào body

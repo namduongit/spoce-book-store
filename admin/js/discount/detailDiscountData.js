@@ -24,64 +24,63 @@ export function detailDiscountData(idDiscountSelected) {
                   <i class="fa-solid fa-xmark"></i>
                 </button>
                 <div class="dialog__line"></div>
-                <div class="dialog__row">
-                  <div class="dialog__form-group">
-                    <label>Mã khuyến mãi</label>
-                    <input type="text" id="detail-discount-id" readonly />
+                <form method="get" class="dialog__form">
+                  <div class="dialog__row">
+                    <div class="dialog__form-group">
+                      <label>Mã khuyến mãi</label>
+                      <input type="text" id="detail-discount-id" readonly />
+                    </div>
+                    <div class="dialog__form-group">
+                      <label>Tên khuyến mãi</label>
+                      <input type="text" id="detail-discount-name" readonly />
+                    </div>
                   </div>
-                  <div class="dialog__form-group">
-                    <label>Tên khuyến mãi</label>
-                    <input type="text" id="detail-discount-name" readonly />
+                  <div class="dialog__row">
+                     <div class="dialog__form-group">
+                      <label>Loại khuyến mãi</label>
+                      <select id="detail-discount-type" disabled>
+                        <option value="" selected>Chọn Loại khuyến mãi</option>
+                        <option value="1">Phần trăm</option>
+                        <option value="0">Tiền</option>
+                      </select>
+                    </div>
+                    <div class="dialog__form-group">
+                      <label>Giá trị</label>
+                      <input type="text" id="detail-discount-value" readonly />
+                    </div>
                   </div>
-                </div>
-                <div class="dialog__row">
-                   <div class="dialog__form-group">
-                    <label>Loại khuyến mãi</label>
-                    <select id="detail-discount-type" disabled>
-                      <option value="" selected>Chọn Loại khuyến mãi</option>
-                      <option value="1">Phần trăm</option>
-                      <option value="0">Tiền</option>
-                    </select>
+                  <div class="dialog__row">
+                    <div class="dialog__form-group">
+                      <label>Ngày bắt đầu</label>
+                      <input type="date hasValidDate" id="detail-discount-date-start" readonly />
+                    </div>
+                    <div class="dialog__form-group">
+                      <label>Ngày kết thúc</label>
+                      <input type="date hasValidDate" id="detail-discount-date-end" value="2025-03-09" readonly />
+                    </div>
                   </div>
-                  <div class="dialog__form-group">
-                    <label>Giá trị</label>
-                    <input type="text" id="detail-discount-value" readonly />
+                  <div class="dialog__row">
+                    <div class="dialog__form-group">
+                      <label>Tiền đơn tối thiểu</label>
+                      <input type="text" id="detail-discount-order-min-cost" readonly />
+                    </div>
+                    <div class="dialog__form-group">
+                      <label>Tiền giảm tối đa</label>
+                      <input type="text" id="detail-discount-order-max-discount" readonly />
+                    </div>
                   </div>
-                </div>
-                <div class="dialog__row">
-                  <div class="dialog__form-group">
-                    <label>Ngày bắt đầu</label>
-                    <input type="date hasValidDate" id="detail-discount-date-start" readonly />
+                  <div class="dialog__row">
+                    <div class="dialog__form-group">
+                      <label>Trạng thái</label>
+                      <select id="detail-discount-status" disabled>
+                        <option value="" selected>Chọn Trạng thái</option>
+                        <option value="1">Hoạt động</option>
+                        <option value="0">Tạm dừng</option>
+                      </select>
+                    </div>
+                    <div class="dialog__form-group"></div>
                   </div>
-                  <div class="dialog__form-group">
-                    <label>Ngày kết thúc</label>
-                    <input type="date hasValidDate" id="detail-discount-date-end" value="2025-03-09" readonly />
-                  </div>
-                </div>
-                <div class="dialog__row">
-                  <div class="dialog__form-group">
-                    <label>Tiền đơn tối thiểu</label>
-                    <input type="text" id="detail-discount-order-min-cost" readonly />
-                  </div>
-                  <div class="dialog__form-group">
-                    <label>Tiền giảm tối đa</label>
-                    <input type="text" id="detail-discount-order-max-discount" readonly />
-                  </div>
-                </div>
-                <div class="dialog__row">
-                  <div class="dialog__form-group">
-                    <label>Trạng thái</label>
-                    <select id="detail-discount-status" disabled>
-                      <option value="" selected>Chọn Trạng thái</option>
-                      <option value="1">Hoạt động</option>
-                      <option value="0">Tạm dừng</option>
-                    </select>
-                  </div>
-                  <div class="dialog__form-group"></div>
-                </div>
-                <div class="dialog__buttons">
-                  <button id="detail-discount-button" class="add">Thêm</button>
-                </div>
+                </form >
     `;
 
   // Thêm vào body

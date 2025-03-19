@@ -26,71 +26,101 @@ export function addPrivilegeData() {
                   <i class="fa-solid fa-xmark"></i>
                 </button>
                 <div class="dialog__line"></div>
-                <div class="dialog__row">
-                  <div class="dialog__form-group">
-                      <label>Mã nhóm quyền</label>
-                      <input type="text" id="add-privilege-id" readonly />
+                <form method="post" class="dialog__form">
+                  <div class="dialog__row">
+                    <div class="dialog__form-group">
+                        <label>Mã nhóm quyền</label>
+                        <input type="text" id="add-privilege-id" readonly />
+                    </div>
+                    <div class="dialog__form-group full">
+                      <label>Tên nhóm quyền</label>
+                      <input type="text" id="add-privilege-name" placeholder="Nhập Tên nhóm quyền" autofocus/>
+                    </div>
+                    <div class="dialog__form-group">
+                      <label>Trạng thái</label>
+                      <select id="add-book-status">
+                          <option value="" selected>Chọn Trạng thái</option>
+                          <option value="1">Hoạt động</option>
+                          <option value="0">Tạm dừng</option>
+                      </select>
+                    </div>
                   </div>
-                  <div class="dialog__form-group full">
-                    <label>Tên nhóm quyền</label>
-                    <input type="text" id="add-privilege-name" placeholder="Nhập Tên nhóm quyền" autofocus/>
+                  <div class="dialog__privilege-detail">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th width="25%">Danh mục chức năng</th>
+                          <th width="15%">Lọc</th>
+                          <th width="15%">Chi tiết</th>
+                          <th width="15%">Thêm</th>
+                          <th width="15%">Sửa</th>
+                          <th width="15%">Xóa / Khoá</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                            <td>Thống kê lợi nhuận</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox" disabled></td>
+                            <td><input type="checkbox" disabled></td>
+                            <td><input type="checkbox" disabled></td>
+                            <td><input type="checkbox" disabled></td>
+                        </tr>
+                        <tr>
+                            <td>Thống kê doanh thu</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox" disabled></td>
+                            <td><input type="checkbox" disabled></td>
+                            <td><input type="checkbox" disabled></td>
+                            <td><input type="checkbox" disabled></td>
+                        </tr>
+                        <tr>
+                            <td>Thống kê phiếu nhập</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox" disabled></td>
+                            <td><input type="checkbox" disabled></td>
+                            <td><input type="checkbox" disabled></td>
+                            <td><input type="checkbox" disabled></td>
+                        </tr>
+                        <tr>
+                            <td>Thống kê đơn hàng</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox" disabled></td>
+                            <td><input type="checkbox" disabled></td>
+                            <td><input type="checkbox" disabled></td>
+                            <td><input type="checkbox" disabled></td>
+                        </tr>
+                        <tr>
+                            <td>Đơn hàng</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox" disabled></td>
+                            <td><input type="checkbox" disabled></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox" disabled></td>
+                        </tr>
+                        <tr>
+                            <td>Khuyến mãi</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td>Nhóm quyền</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
-                  <div class="dialog__form-group">
-                    <label>Trạng thái</label>
-                    <select id="add-book-status">
-                        <option value="" selected>Chọn Trạng thái</option>
-                        <option value="1">Hoạt động</option>
-                        <option value="0">Tạm dừng</option>
-                    </select>
+                  <div class="dialog__buttons">
+                    <button id="add-privilege-button" class="add">Thêm</button>
                   </div>
-                </div>
-                <div class="dialog__privilege-detail">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th width="28%">Danh mục chức năng</th>
-                        <th width="12%">Lọc</th>
-                        <th width="12%">In phiếu</th>
-                        <th width="12%">Chi tiết</th>
-                        <th width="12%">Thêm</th>
-                        <th width="12%">Sửa</th>
-                        <th width="12%">Xóa / Khoá</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                          <td>Thống kê lợi nhuận</td>
-                          <td><input type="checkbox"></td>
-                          <td><input type="checkbox"></td>
-                          <td><input type="checkbox"></td>
-                          <td><input type="checkbox"></td>
-                          <td><input type="checkbox"></td>
-                          <td><input type="checkbox"></td>
-                      </tr>
-                      <tr>
-                          <td>Thống kê doanh thu</td>
-                          <td><input type="checkbox"></td>
-                          <td><input type="checkbox"></td>
-                          <td><input type="checkbox"></td>
-                          <td><input type="checkbox"></td>
-                          <td><input type="checkbox"></td>
-                          <td><input type="checkbox"></td>
-                      </tr>
-                      <tr>
-                          <td>Thống kê phiếu nhập</td>
-                          <td><input type="checkbox"></td>
-                          <td><input type="checkbox"></td>
-                          <td><input type="checkbox"></td>
-                          <td><input type="checkbox"></td>
-                          <td><input type="checkbox"></td>
-                          <td><input type="checkbox"></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div class="dialog__buttons">
-                  <button id="add-privilege-button" class="add">Thêm</button>
-                </div>
+                </form >
               `;
 
     // Thêm vào body

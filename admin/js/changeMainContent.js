@@ -364,7 +364,7 @@ const mainContentMap = {
       </div>
       <div class="main__privilege-slt main__select slt-form-1">
         <input required="" type="text" id="privilege-slt-account" />
-        <span><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Chọn Phân quyền</span>
+        <span><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Chọn Nhóm quyền</span>
         <ul>
           <li>Quản lý</li>
           <li>Nhân viên thủ kho</li>
@@ -395,7 +395,7 @@ const mainContentMap = {
           <tr>
               <th width="10%">ID</th>
               <th width="34%">Họ và tên</th>
-              <th width="14%">Phân quyền</th>
+              <th width="14%">Nhóm quyền</th>
               <th width="14%">Số điện thoại</th>
               <th width="14%">Trạng thái</th>
               <th width="14%"></th>

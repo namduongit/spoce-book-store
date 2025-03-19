@@ -1,6 +1,6 @@
-// import { updatePrivilegeData } from "./updatePrivilegeData.js";
-// import { detailPrivilegeData } from "./detailPrivilegeData.js";
-// import { lockPrivilegeData } from "./lockPrivilegeData.js";
+import { updatePrivilegeData } from "./updatePrivilegeData.js";
+import { detailPrivilegeData } from "./detailPrivilegeData.js";
+import { lockPrivilegeData } from "./lockPrivilegeData.js";
 
 // Dữ liệu tạm thời (sau phải xây dựng hàm truy xuất dữ liệu từ csdl)
 let data = [
@@ -61,46 +61,46 @@ export function renderPrivilegeTable() {
   // Cập nhật lại giao diện
   bodyInPrivilegeTable.innerHTML = html;
 
-  //   // Gán sự kiện cho các nút sau khi thay đổi giao diện
-  //   const idColumnInTable = document.querySelectorAll(
-  //     ".main__data > .main__table.privilege > tbody > tr > td:first-of-type"
-  //   );
-  //   const listButtonInTable = document.querySelectorAll(
-  //     ".main__data > .main__table.privilege > tbody > tr > td:last-of-type"
-  //   );
-  //   listButtonInTable.forEach((buttons, row) => {
-  //     // Các nút cần gán sự kiện trên mỗi dòng
-  //     const detailButton = buttons.children[0];
-  //     const updateButton = buttons.children[1];
-  //     const lockButton = buttons.children[2];
-  //     // Id của đối tượng đã được chọn để thao tác
-  //     const idPrivilegeSelected = idColumnInTable.item(row);
+  // Gán sự kiện cho các nút sau khi thay đổi giao diện
+  const idColumnInTable = document.querySelectorAll(
+    ".main__data > .main__table.privilege > tbody > tr > td:first-of-type"
+  );
+  const listButtonInTable = document.querySelectorAll(
+    ".main__data > .main__table.privilege > tbody > tr > td:last-of-type"
+  );
+  listButtonInTable.forEach((buttons, row) => {
+    // Các nút cần gán sự kiện trên mỗi dòng
+    const detailButton = buttons.children[0];
+    const updateButton = buttons.children[1];
+    const lockButton = buttons.children[2];
+    // Id của đối tượng đã được chọn để thao tác
+    const idPrivilegeSelected = idColumnInTable.item(row);
 
-  //     // Gán sự kiện hiện dialog chi tiết người dùng
-  //     detailButton.addEventListener("click", (e) => {
-  //       // Loại bỏ giá trị mặc định
-  //       e.preventDefault();
+    // Gán sự kiện hiện dialog chi tiết người dùng
+    detailButton.addEventListener("click", (e) => {
+      // Loại bỏ giá trị mặc định
+      e.preventDefault();
 
-  //       // Gọi hàm sự kiện
-  //       detailPrivilegeData(idPrivilegeSelected);
-  //     });
+      // Gọi hàm sự kiện
+      detailPrivilegeData(idPrivilegeSelected);
+    });
 
-  //     // Gán sự kiện hiện dialog sửa người dùng
-  //     updateButton.addEventListener("click", (e) => {
-  //       // Loại bỏ giá trị mặc định
-  //       e.preventDefault();
+    // Gán sự kiện hiện dialog sửa người dùng
+    updateButton.addEventListener("click", (e) => {
+      // Loại bỏ giá trị mặc định
+      e.preventDefault();
 
-  //       // Gọi hàm sự kiện
-  //       updatePrivilegeData(idPrivilegeSelected);
-  //     });
+      // Gọi hàm sự kiện
+      updatePrivilegeData(idPrivilegeSelected);
+    });
 
-  //     // Gán sự kiện hiện dialog khoá / mở khoá người dùng
-  //     lockButton.addEventListener("click", (e) => {
-  //       // Loại bỏ giá trị mặc định
-  //       e.preventDefault();
+    // Gán sự kiện hiện dialog khoá / mở khoá người dùng
+    lockButton.addEventListener("click", (e) => {
+      // Loại bỏ giá trị mặc định
+      e.preventDefault();
 
-  //       // Gọi hàm sự kiện
-  //       lockPrivilegeData(idPrivilegeSelected);
-  //     });
-  //   });
+      // Gọi hàm sự kiện
+      lockPrivilegeData(idPrivilegeSelected);
+    });
+  });
 }

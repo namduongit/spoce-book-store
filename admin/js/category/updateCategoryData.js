@@ -24,31 +24,33 @@ export function updateCategoryData(idCategorySelected) {
             <i class="fa-solid fa-xmark"></i>
           </button>
           <div class="dialog__line"></div>
-          <div class="dialog__row">
-            <div class="dialog__form-group full">
-              <label>Mã thể loại</label>
-              <input type="text" id="update-category-id" readonly />
+          <form method="post" class="dialog__form">
+            <div class="dialog__row">
+              <div class="dialog__form-group full">
+                <label>Mã thể loại</label>
+                <input type="text" id="update-category-id" readonly />
+              </div>
             </div>
-          </div>
-          <div class="dialog__row">
-            <div class="dialog__form-group full">
-              <label>Tên thể loại</label>
-              <input type="text" id="update-category-name" placeholder="Nhập Tên thể loại" autofocus/>
+            <div class="dialog__row">
+              <div class="dialog__form-group full">
+                <label>Tên thể loại</label>
+                <input type="text" id="update-category-name" placeholder="Nhập Tên thể loại" autofocus/>
+              </div>
             </div>
-          </div>
-          <div class="dialog__row">
-            <div class="dialog__form-group full">
-              <label>Trạng thái</label>
-              <select id="update-category-status" disabled>
-                <option value="" selected>Chọn Trạng thái</option>
-                <option value="1">Hoạt động</option>
-                <option value="0">Tạm dừng</option>
-              </select>
+            <div class="dialog__row">
+              <div class="dialog__form-group full">
+                <label>Trạng thái</label>
+                <select id="update-category-status" disabled>
+                  <option value="" selected>Chọn Trạng thái</option>
+                  <option value="1">Hoạt động</option>
+                  <option value="0">Tạm dừng</option>
+                </select>
+              </div>
             </div>
-          </div>
-          <div class="dialog__buttons">
-            <button id="update-category-button" class="update">Sửa</button>
-          </div>
+            <div class="dialog__buttons">
+              <button id="update-category-button" class="update">Sửa</button>
+            </div>
+          </form >
         `;
 
   // Thêm vào body

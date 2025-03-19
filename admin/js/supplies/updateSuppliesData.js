@@ -24,47 +24,49 @@ export function updateSuppliesData(idSuppliesSelected) {
                 <i class="fa-solid fa-xmark"></i>
             </button>
             <div class="dialog__line"></div>
-            <div class="dialog__row">
-                <div class="dialog__form-group">
-                    <label>Mã nhà cung cấp</label>
-                    <input type="text" id="add-supplies-id" readonly />
-                </div>
-                <div class="dialog__form-group">
-                    <label>Tên nhà cung cấp</label>
-                    <input type="text" id="add-supplies-name" placeholder="Nhập Tên nhà cung cấp" autofocus/>
-                </div>
-            </div>
-            <div class="dialog__row">
-                <div class="dialog__form-group">
-                    <label>Số điện thoại</label>
-                    <input type="text" id="add-supplies-phone" placeholder="Nhập Số điện thoại" />
-                </div>
-                <div class="dialog__form-group">
-                    <label>Email</label>
-                    <input type="text" id="add-supplies-email" placeholder="Nhập Email"/>
-                </div>
-            </div>
-            <div class="dialog__row">
-                <div class="dialog__form-group full">
-                    <label>Địa chỉ</label>
-                    <input type="text" id="add-supplies-address" placeholder="Nhập Địa chỉ" />
-                    <button>Chọn địa chỉ</button>
-                </div>
-            </div>
-            <div class="dialog__row">
-                <div class="dialog__form-group">
-                    <label>Trạng thái</label>
-                    <select id="add-supplies-status" disabled>
-                    <option value="" selected>Chọn Trạng thái</option>
-                    <option value="1">Hoạt động</option>
-                    <option value="0">Tạm dừng</option>
-                    </select>
-                </div>
-                <div class="dialog__form-group"></div>
-            </div>
-          <div class="dialog__buttons">
-            <button id="update-supplies-button" class="update">Sửa</button>
-          </div>
+            <form method="post" class="dialog__form">
+              <div class="dialog__row">
+                  <div class="dialog__form-group">
+                      <label>Mã nhà cung cấp</label>
+                      <input type="text" id="add-supplies-id" readonly />
+                  </div>
+                  <div class="dialog__form-group">
+                      <label>Tên nhà cung cấp</label>
+                      <input type="text" id="add-supplies-name" placeholder="Nhập Tên nhà cung cấp" autofocus/>
+                  </div>
+              </div>
+              <div class="dialog__row">
+                  <div class="dialog__form-group">
+                      <label>Số điện thoại</label>
+                      <input type="text" id="add-supplies-phone" placeholder="Nhập Số điện thoại" />
+                  </div>
+                  <div class="dialog__form-group">
+                      <label>Email</label>
+                      <input type="text" id="add-supplies-email" placeholder="Nhập Email"/>
+                  </div>
+              </div>
+              <div class="dialog__row">
+                  <div class="dialog__form-group full">
+                      <label>Địa chỉ</label>
+                      <input type="text" id="add-supplies-address" placeholder="Nhập Địa chỉ" />
+                      <button>Chọn địa chỉ</button>
+                  </div>
+              </div>
+              <div class="dialog__row">
+                  <div class="dialog__form-group">
+                      <label>Trạng thái</label>
+                      <select id="add-supplies-status" disabled>
+                      <option value="" selected>Chọn Trạng thái</option>
+                      <option value="1">Hoạt động</option>
+                      <option value="0">Tạm dừng</option>
+                      </select>
+                  </div>
+                  <div class="dialog__form-group"></div>
+              </div>
+              <div class="dialog__buttons">
+                <button id="update-supplies-button" class="update">Sửa</button>
+              </div>
+            </form>
         `;
 
   // Thêm vào body

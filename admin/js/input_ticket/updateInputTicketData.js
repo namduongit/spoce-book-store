@@ -190,67 +190,69 @@ export function updateInputTicketData(idInputTicketSelected) {
             <i class="fa-solid fa-xmark"></i>
           </button>
           <div class="dialog__line"></div>
-          <div class="dialog__row">
-            <div class="dialog__form-group input_ticket half">
-              <label>Mã phiếu nhập</label>
-              <input type="text" id="update-input_ticket-id" readonly />
+          <form method="post" class="dialog__form">
+            <div class="dialog__row">
+              <div class="dialog__form-group input_ticket half">
+                <label>Mã phiếu nhập</label>
+                <input type="text" id="update-input_ticket-id" readonly />
+              </div>
+              <div class="dialog__form-group input_ticket half">
+                <label>Mã nhân viên</label>
+                <input type="text" id="update-input_ticket-customer" readonly />
+              </div>
+              <div class="dialog__form-group input_ticket">
+                <label>Tổng thanh toán (VNĐ)</label>
+                <input type="text" id="update-input_ticket-cost" readonly />
+              </div>
+              <div class="dialog__form-group input_ticket">
+                <label>Trạng thái</label>
+                <input type="text" id="update-input_ticket-status" readonly />
+              </div>
             </div>
-            <div class="dialog__form-group input_ticket half">
-              <label>Mã nhân viên</label>
-              <input type="text" id="update-input_ticket-customer" readonly />
+            <div class="dialog__row">
+              <div class="dialog__form-group input_ticket half">
+                <label>Ngày tạo phiếu</label>
+                <input type="date" id="update-input_ticket-date-create" />
+              </div>
+              <div class="dialog__form-group input_ticket half">
+                <label>Ngày hợp đồng</label>
+                <input type="date" id="update-input_ticket-date-contract" />
+              </div>
+              <div class="dialog__form-group input_ticket full">
+                <label>Nhà cung cấp</label>
+                <select id="update-author-status">
+                  <option value="" selected>Chọn Nhà cung cấp</option>
+                  <option value="1">NCC00001 - Nhà cung cấp 01</option>
+                  <option value="0">NCC00002 - Nhà cung cấp 02</option>
+                </select>
+              </div>
             </div>
-            <div class="dialog__form-group input_ticket">
-              <label>Tổng thanh toán (VNĐ)</label>
-              <input type="text" id="update-input_ticket-cost" readonly />
+            <div class="dialog__row">
+              <div class="dialog__form-group full">
+                <label style="color: #000;">Chi tiết phiếu nhập</label>
+                <button id="update-button-add-input_ticket-detail"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Sách</button>
+                <table>
+                  <thead>
+                    <tr>  
+                      <th width="8%">Mã sách</th>
+                      <th width="28%">Tên sách</th>
+                      <th width="14%">Giá bìa (VNĐ)</th>
+                      <th width="14%">Giá nhập (VNĐ)</th>
+                      <th width="10%">Số lượng</th>
+                      <th width="22%">Thành tiền (VNĐ)</th>
+                      <th width="4%"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class="dialog__form-group input_ticket">
-              <label>Trạng thái</label>
-              <input type="text" id="update-input_ticket-status" readonly />
+            <div class="dialog__buttons input_ticket">
+              <button class="confirm-status">Hoàn thành</button>
+              <button class="cancel-status">Huỷ phiếu</button>
             </div>
-          </div>
-          <div class="dialog__row">
-            <div class="dialog__form-group input_ticket half">
-              <label>Ngày tạo phiếu</label>
-              <input type="date" id="update-input_ticket-date-create" />
-            </div>
-            <div class="dialog__form-group input_ticket half">
-              <label>Ngày hợp đồng</label>
-              <input type="date" id="update-input_ticket-date-contract" />
-            </div>
-            <div class="dialog__form-group input_ticket full">
-              <label>Nhà cung cấp</label>
-              <select id="update-author-status">
-                <option value="" selected>Chọn Nhà cung cấp</option>
-                <option value="1">NCC00001 - Nhà cung cấp 01</option>
-                <option value="0">NCC00002 - Nhà cung cấp 02</option>
-              </select>
-            </div>
-          </div>
-          <div class="dialog__row">
-            <div class="dialog__form-group full">
-              <label style="color: #000;">Chi tiết phiếu nhập</label>
-              <button id="update-button-add-input_ticket-detail"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Sách</button>
-              <table>
-                <thead>
-                  <tr>  
-                    <th width="8%">Mã sách</th>
-                    <th width="28%">Tên sách</th>
-                    <th width="14%">Giá bìa (VNĐ)</th>
-                    <th width="14%">Giá nhập (VNĐ)</th>
-                    <th width="10%">Số lượng</th>
-                    <th width="22%">Thành tiền (VNĐ)</th>
-                    <th width="4%"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="dialog__buttons input_ticket">
-            <button class="confirm-status">Hoàn thành</button>
-            <button class="cancel-status">Huỷ phiếu</button>
-          </div>
+          </form>
     `;
 
   // Thêm vào body

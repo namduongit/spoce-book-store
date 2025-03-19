@@ -24,31 +24,33 @@ export function updateCoverData(idCoverSelected) {
             <i class="fa-solid fa-xmark"></i>
           </button>
           <div class="dialog__line"></div>
-          <div class="dialog__row">
-            <div class="dialog__form-group full">
-              <label>Mã loại bìa</label>
-              <input type="text" id="update-cover-id" readonly />
+          <form method="post" class="dialog__form">
+            <div class="dialog__row">
+              <div class="dialog__form-group full">
+                <label>Mã loại bìa</label>
+                <input type="text" id="update-cover-id" readonly />
+              </div>
             </div>
-          </div>
-          <div class="dialog__row">
-            <div class="dialog__form-group full">
-              <label>Tên loại bìa</label>
-              <input type="text" id="update-cover-name" placeholder="Nhập Tên loại bìa" autofocus/>
+            <div class="dialog__row">
+              <div class="dialog__form-group full">
+                <label>Tên loại bìa</label>
+                <input type="text" id="update-cover-name" placeholder="Nhập Tên loại bìa" autofocus/>
+              </div>
             </div>
-          </div>
-          <div class="dialog__row">
-            <div class="dialog__form-group full">
-              <label>Trạng thái</label>
-              <select id="update-cover-status" disabled>
-                <option value="" selected>Chọn Trạng thái</option>
-                <option value="1">Hoạt động</option>
-                <option value="0">Tạm dừng</option>
-              </select>
+            <div class="dialog__row">
+              <div class="dialog__form-group full">
+                <label>Trạng thái</label>
+                <select id="update-cover-status" disabled>
+                  <option value="" selected>Chọn Trạng thái</option>
+                  <option value="1">Hoạt động</option>
+                  <option value="0">Tạm dừng</option>
+                </select>
+              </div>
             </div>
-          </div>
-          <div class="dialog__buttons">
-            <button id="update-cover-button" class="update">Sửa</button>
-          </div>
+            <div class="dialog__buttons">
+              <button id="update-cover-button" class="update">Sửa</button>
+            </div>
+          </form >
         `;
 
   // Thêm vào body

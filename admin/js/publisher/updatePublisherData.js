@@ -17,39 +17,41 @@ export function updatePublisherData(idPublisherSelected) {
   updateDialog.classList.add("dialog");
   updateDialog.classList.add("publisher");
   updateDialog.style.width = "398px";
-  // - Ghi nội dung dialog
+  // - Ghi nội dung dialog  
   updateDialog.innerHTML = `
             <h1 class="dialog__title">Sửa nhà xuất bản</h1>
             <button id="close-publisher-button" class="dialog__close">
               <i class="fa-solid fa-xmark"></i>
             </button>
             <div class="dialog__line"></div>
-            <div class="dialog__row">
-              <div class="dialog__form-group full">
-                <label>Mã nhà xuất bản</label>
-                <input type="text" id="update-publisher-id" readonly />
+            <form method="post" class="dialog__form">
+              <div class="dialog__row">
+                <div class="dialog__form-group full">
+                  <label>Mã nhà xuất bản</label>
+                  <input type="text" id="update-publisher-id" readonly />
+                </div>
               </div>
-            </div>
-            <div class="dialog__row">
-              <div class="dialog__form-group full">
-                <label>Tên nhà xuất bản</label>
-                <input type="text" id="update-publisher-name" placeholder="Nhập Tên nhà xuất bản" autofocus/>
+              <div class="dialog__row">
+                <div class="dialog__form-group full">
+                  <label>Tên nhà xuất bản</label>
+                  <input type="text" id="update-publisher-name" placeholder="Nhập Tên nhà xuất bản" autofocus/>
+                </div>
               </div>
-            </div>
-            <div class="dialog__row">
-              <div class="dialog__form-group full">
-                <label>Trạng thái</label>
-                <select id="update-publisher-status" disabled>
-                  <option value="" selected>Chọn Trạng thái</option>
-                  <option value="1">Hoạt động</option>
-                  <option value="0">Tạm dừng</option>
-                </select>
+              <div class="dialog__row">
+                <div class="dialog__form-group full">
+                  <label>Trạng thái</label>
+                  <select id="update-publisher-status" disabled>
+                    <option value="" selected>Chọn Trạng thái</option>
+                    <option value="1">Hoạt động</option>
+                    <option value="0">Tạm dừng</option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="dialog__buttons">
-              <button id="update-publisher-button" class="update">Sửa</button>
-            </div>
-          `;
+              <div class="dialog__buttons">
+                <button id="update-publisher-button" class="update">Sửa</button>
+              </div>
+            </form >
+            `;
 
   // Thêm vào body
   document.body.appendChild(updateDialog);

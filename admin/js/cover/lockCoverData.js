@@ -22,15 +22,17 @@ export function lockCoverData(idCoverSelected) {
                   <i class="fa-solid fa-xmark"></i>
                 </button>
                 <div class="dialog__line"></div>
-                <div class="dialog__icons">
-                  <i class="fa-solid fa-lock"></i>
-                  <i class="fa-solid fa-arrow-right"></i>
-                  <i class="fa-solid fa-unlock"></i>
-                </div>
-                <div class="dialog__buttons">
-                  <button class="yes">Đồng ý</button>
-                  <button class="no">Từ chối</button>
-                </div>
+                <form method="post" class="dialog__form">
+                  <div class="dialog__icons">
+                    <i class="fa-solid fa-lock"></i>
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <div class="dialog__buttons">
+                    <button class="yes">Đồng ý</button>
+                    <button class="no">Từ chối</button>
+                  </div>
+                </form>
           `;
 
   // Thêm vào body

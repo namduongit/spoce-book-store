@@ -24,43 +24,45 @@ export function detailSuppliesData(idSuppliesSelected) {
               <i class="fa-solid fa-xmark"></i>
             </button>
             <div class="dialog__line"></div>
-            <div class="dialog__row">
-                <div class="dialog__form-group">
-                    <label>Mã nhà cung cấp</label>
-                    <input type="text" id="add-supplies-id" readonly />
+            <form method="get" class="dialog__form">
+                <div class="dialog__row">
+                    <div class="dialog__form-group">
+                        <label>Mã nhà cung cấp</label>
+                        <input type="text" id="add-supplies-id" readonly />
+                    </div>
+                    <div class="dialog__form-group">
+                        <label>Tên nhà cung cấp</label>
+                        <input type="text" id="add-supplies-name" readonly />
+                    </div>
                 </div>
-                <div class="dialog__form-group">
-                    <label>Tên nhà cung cấp</label>
-                    <input type="text" id="add-supplies-name" readonly />
+                <div class="dialog__row">
+                    <div class="dialog__form-group">
+                        <label>Số điện thoại</label>
+                        <input type="text" id="add-supplies-phone" readonly />
+                    </div>
+                    <div class="dialog__form-group">
+                        <label>Email</label>
+                        <input type="text" id="add-supplies-email" readonly />
+                    </div>
                 </div>
-            </div>
-            <div class="dialog__row">
-                <div class="dialog__form-group">
-                    <label>Số điện thoại</label>
-                    <input type="text" id="add-supplies-phone" readonly />
+                <div class="dialog__row">
+                    <div class="dialog__form-group full">
+                        <label>Địa chỉ</label>
+                        <input type="text" id="add-supplies-address"readonly />
+                    </div>
                 </div>
-                <div class="dialog__form-group">
-                    <label>Email</label>
-                    <input type="text" id="add-supplies-email" readonly />
+                <div class="dialog__row">
+                    <div class="dialog__form-group">
+                        <label>Trạng thái</label>
+                        <select id="add-supplies-status" disabled>
+                        <option value="" selected>Chọn Trạng thái</option>
+                        <option value="1">Hoạt động</option>
+                        <option value="0">Tạm dừng</option>
+                        </select>
+                    </div>
+                    <div class="dialog__form-group"></div>
                 </div>
-            </div>
-            <div class="dialog__row">
-                <div class="dialog__form-group full">
-                    <label>Địa chỉ</label>
-                    <input type="text" id="add-supplies-address"readonly />
-                </div>
-            </div>
-            <div class="dialog__row">
-                <div class="dialog__form-group">
-                    <label>Trạng thái</label>
-                    <select id="add-supplies-status" disabled>
-                    <option value="" selected>Chọn Trạng thái</option>
-                    <option value="1">Hoạt động</option>
-                    <option value="0">Tạm dừng</option>
-                    </select>
-                </div>
-                <div class="dialog__form-group"></div>
-            </div>
+            </form>
       `;
 
   // Thêm vào body
