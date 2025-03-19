@@ -4,101 +4,53 @@
   background-color: var(--topbar-color);
 }
 
-.userInformation_icon_container label:hover,
-.topbar__auth-btn:hover span,
-.topbar__contact-item:hover span {
-  color: var(--topbar-color-hover);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.userInformation_icon_containe{
+.topbar
+.topbar__auth {
   position: relative;
 }
 
-.information_and_logout_container{
-  padding: 10px;
-  gap: 10px;
-  display: flex;
-  flex-direction: column;
-  background-color: #044785;
+.topbar
+.topbar__auth
+.topbar__auth-list {
   position: absolute;
-  z-index: 100;
-  border: 5px solid #3498db;
-  border-radius: 5px;
-  box-sizing: border-box;
-  width: 170px;
+  z-index: 12;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  right: 0;
+  width: 100%;
+  top: 100%;
+  color: black;
+  margin-top: 1rem;
+  display: none;
+}
+
+.topbar
+.topbar__auth
+.topbar__auth-list li {
+  line-height: 1.5;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.8rem;
+  cursor: pointer;
+}
+
+.topbar
+.topbar__auth
+.topbar__auth-list li:hover {
+  font-weight: bold;
 }
 
 
-/* ------------ thông tin người dùng */
+.topbar
+.topbar__auth
+.topbar__auth-btn {
+  cursor: pointer;
+}
 
+.topbar__auth-btn.active + .topbar__auth-list {
+  display: block;
+}
 
-
-  .profile {
-      max-width: 80%;
-      margin: 50px auto;
-      padding: 20px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  }
-
-  .profile_body{
-
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: center;
-  }
-
-  .profile_container_title hr {
-      width: 80%;
-      margin: 10px auto;
-      border: 0;
-      height: 4px;
-      background: #044785;
-  }
-
-  .profile_container_title {
-      text-align: center;
-      font-size: 22px;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 15px;
-  }
-
-  .profile_item label{
-      width: 150px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      font-size: 15px;
-      line-height: 1.8;
-  }
-
-  .profile_item{
-      width: 80%;
-      display: flex;
-      justify-content: flex-start;
-      gap: 15px;
-  }
-
-  .profile_icon_exit{
-      font-size: 25px;
-      display: flex;
-      justify-content: flex-end;
-  }
-
-  .profile_item input{
-    width: 100%;
-    padding: 8px;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
-    transition: all 0.3s ease;
-
-  }
 
 
 /* -------------------------------------------------------------------------------- */
@@ -1976,4 +1928,79 @@
   font-weight: bold;
 }
 
-/*  */
+/* Phần hiển thị thông báo và confirm  */
+.confirmation-dialog {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9;
+  display: none;
+}
+
+.confirmation-dialog
+.confirmation-dialog__container {
+  width: 80%;
+  height: 80%;
+  max-width: 450px;
+  min-width: 200px;
+  max-height: 200px;
+  min-height: 100px;
+  height: 500px;
+  background-color: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 1.5rem;
+  position: relative;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  padding: 2rem 4rem;
+  animation: scaleUp 0.3s ease-out forwards;
+}
+.confirmation-dialog
+.confirmation-dialog__title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--topbar-color);
+}
+.confirmation-dialog
+.confirmation-dialog__desc {
+  color: gray;
+  margin-bottom: 3rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+.confirmation-dialog__content {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1rem;
+}
+.confirmation-dialog__content
+.confirmation-dialog__button {
+  padding: 1rem 2.5rem;
+  background-color: var(--topbar-color);
+  color: white;
+  border-radius: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+.confirmation-dialog__content
+.confirmation-dialog__button:hover {
+
+}
+
+.confirmation-dialog
+.confirmation-dialog__container i {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1.5rem 1.5rem 0 0;
+  cursor: pointer;
+  font-size: 2rem;
+}
+
+
+

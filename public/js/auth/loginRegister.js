@@ -1,8 +1,18 @@
-import {toast} from '../toast.js'
+import { toast } from '../toast.js';
+import { checkLogin } from './displayInfoUser.js';
+import { getUserLogin } from './displayInfoUser.js';
+import { updateTopBar } from './displayInfoUser.js';
 
-document.addEventListener("DOMContentLoaded", () => {
-    const params = new URLSearchParams();
+var currentUser = null;
 
+document.addEventListener("DOMContentLoaded", async () => {
+    showLoading();
+    const isLoggedIn = await checkLogin();
+    if (isLoggedIn) {
+        currentUser = await getUserLogin();
+    }
+    hideLoading();
+    updateTopBar(currentUser);
 });
 
 // Cập nhật URL khi chuyển đổi giữa đăng nhập & đăng ký
@@ -35,11 +45,11 @@ function showFormUser(object, text_spans) {
                 </div>
                 <form id="loginForm">
                     <div class="auth__group">
-                        <input type="text" id="login-username" name="username" class="auth__input" required>
+                        <input type="text" id="login-username" name="username" class="auth__input">
                         <label for="login-username" class="auth__label">Tên người dùng</label>
                     </div>
                     <div class="auth__group">
-                        <input type="password" id="login-password" name="password" class="auth__input" required>
+                        <input type="password" id="login-password" name="password" class="auth__input">
                         <label for="login-password" class="auth__label">Mật khẩu</label>
                     </div>
                     <button type="submit" class="auth__button">Đăng nhập</button>
@@ -57,19 +67,19 @@ function showFormUser(object, text_spans) {
                 </div>
                 <form id="registerForm">
                     <div class="auth__group">
-                        <input type="text" id="register-name" name="name" class="auth__input" required>
+                        <input type="text" id="register-name" name="name" class="auth__input">
                         <label for="register-name" class="auth__label">Họ và Tên</label>
                     </div>
                     <div class="auth__group">
-                        <input type="text" id="register-username" name="username" class="auth__input" required>
+                        <input type="text" id="register-username" name="username" class="auth__input">
                         <label for="register-username" class="auth__label">Tên người dùng</label>
                     </div>
                     <div class="auth__group">
-                        <input type="password" id="register-password" name="password" class="auth__input" required>
+                        <input type="password" id="register-password" name="password" class="auth__input">
                         <label for="register-password" class="auth__label">Mật khẩu</label>
                     </div>
                     <div class="auth__group">
-                        <input type="password" id="confirm-password" name="confirm_password" class="auth__input" required>
+                        <input type="password" id="confirm-password" name="confirm_password" class="auth__input">
                         <label for="confirm-password" class="auth__label">Xác nhận mật khẩu</label>
                     </div>
                     <button type="submit" class="auth__button">Đăng ký</button>
@@ -116,6 +126,62 @@ function showFormUser(object, text_spans) {
         registerForm.addEventListener("submit", function (event) {
             event.preventDefault();
 
+            // Kiểm tra đã có trường dữ liệu hay chưa để đăng ký
+            const name = document.getElementById("register-name").value;
+            const username = document.getElementById("register-username").value;
+            const password = document.getElementById("register-password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+            if (name === '' || username === '' || password === '' || confirmPassword === '') {
+                if (name === '') {
+                    toast({
+                        title: 'Thông báo',
+                        message: 'Họ và tên không được để trống',
+                        type: 'warning',
+                        duration: 3000
+                    });
+                    return;
+                }
+                if (username === '') {
+                    toast({
+                        title: 'Thông báo',
+                        message: 'Tên đăng nhập không được để trống',
+                        type: 'warning',
+                        duration: 3000
+                    });
+                    return;
+                }
+                if (password === '') {
+                    toast({
+                        title: 'Thông báo',
+                        message: 'Mật khẩu không được để trống',
+                        type: 'warning',
+                        duration: 3000
+                    });
+                    return;
+                }
+                if (confirmPassword === '') {
+                    toast({
+                        title: 'Thông báo',
+                        message: 'Nhập lại mật khẩu không trống',
+                        type: 'warning',
+                        duration: 3000
+                    });
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    toast({
+                        title: 'Thông báo',
+                        message: 'Mật khẩu và mật khẩu xác nhận phải giống nhau',
+                        type: 'warning',
+                        duration: 3000
+                    });
+                    return;
+                }
+                return;
+            }
+
+            showLoading();
+
             const formData = new URLSearchParams();
             formData.append("name", document.getElementById("register-name").value);
             formData.append("username", document.getElementById("register-username").value);
@@ -138,7 +204,15 @@ function showFormUser(object, text_spans) {
                     duration: 3000
                 });
             })
-            .catch(error => console.error("Lỗi fetch:", error));
+            .catch(error => {
+                console.log('Lỗi');
+            })
+            .finally(() => {
+                hideLoading();
+                // Ẩn cái form Đăng nhập/Đăng ký đi và hỏi có muốn đăng nhập bằng tài khoản đó không
+                document.querySelector('.auth').display = 'none';
+
+            });
         });
     }
 
@@ -147,6 +221,8 @@ function showFormUser(object, text_spans) {
     if (loginForm) {
         loginForm.addEventListener("submit", function (event) {
             event.preventDefault();
+
+            showLoading();
 
             const formData = new URLSearchParams();
             formData.append("username", document.getElementById("login-username").value);
@@ -163,13 +239,20 @@ function showFormUser(object, text_spans) {
             .then(data => {
                 toast({
                     title: "Thông báo",
-                    message: data.message,
-                    type: data.success === true ? 'success' : 'warning',
+                    message: data['message'],
+                    type: data['success'] === true ? 'success' : 'warning',
                     duration: 3000
                 });
-                
+                if (data['success'] === true) {
+                    setTimeout(() => {
+                        window.location.href = "/";
+                    }, 1000);
+                }
             })
-            .catch(error => console.error("Lỗi fetch:", error));
+            .catch(error => console.error("Lỗi fetch:", error))
+            .finally(() => {
+                hideLoading();
+            });
         });
     }
 

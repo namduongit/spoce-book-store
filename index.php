@@ -1,5 +1,5 @@
 <?php
-    // include_once './api/users/login.php';
+    // include_once './api/books/get.php';
     // die();
 ?>
 
@@ -18,12 +18,13 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <!-- Nhúng các thư viện Css -->
-    <link rel="stylesheet" href="public/css/animation.css">
     <link rel="stylesheet" href="public/css/reset.css">
+    <link rel="stylesheet" href="public/css/animation.css">
+    <link rel="stylesheet" href="public/css/toast.css">
+    <link rel="stylesheet" href="public/css/spinner.css">
     <link rel="stylesheet" href="public/css/base.css">
     <link rel="stylesheet" href="public/css/responsive.css">
     <link rel="stylesheet" href="public/css/style.css">
-    <link rel="stylesheet" href="public/css/toast.css">
 
     <!-- Nhúng các thư viện Js -->
     <script type="module"  src="public/js/auth/loginRegister.js" defer></script>
@@ -69,9 +70,6 @@
                     <i class="fa-solid fa-user-pen"></i>
                     <span id="register-form">Đăng&nbsp;ký</span>
                 </div>
-
-
-
             </div>
         </div>
 
@@ -868,8 +866,16 @@
     <div class="auth"></div>
 
     <!-- Ghi đè các thông tin -->
-    <div id="main_source"></div>
+    <div class="confirmation-dialog">
+    </div>
+
+
+    <!-- Spinner chờ trong khi lấy dữ liệu từ Server -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
 
 </body>
-
+    <script src="public/js/spinner.js"></script>
 </html>
