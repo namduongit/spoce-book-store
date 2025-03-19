@@ -1,3 +1,5 @@
+import {toast} from '../toast.js'
+
 document.addEventListener("DOMContentLoaded", () => {
     const URL = window.location.href;
     const regexSplit = URL.split('/');
@@ -28,6 +30,14 @@ function clearURL() {
 
 // Hiển thị form đăng nhập hoặc đăng ký
 function showFormUser(object, text_spans) {
+
+    toast({
+        title: "WARNING",
+        message: "Không tìm thấy sản phẩm",
+        type: "warning",
+        duration: 3000,
+      });
+    return;
     let form_html = ``;
     let text_span = object ? object.innerText.trim() : text_spans;
 
@@ -115,3 +125,4 @@ function close_auth_form() {
     clearURL();
 }
 
+window.showFormUser = showFormUser; 

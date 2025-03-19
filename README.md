@@ -49,6 +49,7 @@ Lớp `DBConnection` dùng để kết nối và thực hiện các thao tác tr
 ### 4️⃣ **Public** 🌐
 📌 Chứa các file **assets** như CSS, JavaScript, hình ảnh cho phần giao diện khách hàng.
 📌 **`index.php`** là file chính của website.
+📌 **`script:module`** Các hàm trong module nó không tự động gán biến toàn cục nên phải `window.functionName = functionName;`
 
 ### 5️⃣ **Router** 🔀 `Đã bỏ`
 📌 Xử lý điều hướng URL và chuyển đến đúng **Controller**.

@@ -141,11 +141,9 @@ function closeDetailProduct() {
 
 window.onpopstate = function(event) {
     if (event.state && event.state.product) {
-        // 🟢 Nếu có state (dữ liệu sản phẩm), hiển thị lại
         let productDetail = event.state.product;
         showDetailProduct(productDetail.id);
     } else {
-        // 🔴 Nếu không có dữ liệu, đóng trang sản phẩm
         closeDetailProduct();
     }
 };
