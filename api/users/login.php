@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 // Hiển thị các lỗi trực tiếp ra output (chỉ dùng khi phát triển)
 ini_set('display_errors', 1);
 // Khởi tạo phiên Session
-session_start();
+// session_start();
 // Thiết lập phản hồi dạng JSON
 header("Content-Type: application/json");
 require_once __DIR__ . '../../../app/config.php';
@@ -41,9 +41,9 @@ try {
         exit;
     }
 
-    $_SESSION["loggedin"] = true;
-    $_SESSION["username"] = $user["tenTaiKhoan"];
-    $_SESSION["user_id"] = $user["maNguoiDung"];
+    // $_SESSION["loggedin"] = true;
+    // $_SESSION["username"] = $user["tenTaiKhoan"];
+    // $_SESSION["user_id"] = $user["maNguoiDung"];
 
     http_response_code(200);
     echo json_encode([

@@ -62,11 +62,11 @@
                 </div>
             </div>
             <div class="topbar__auth d-flex ">
-                <div class="topbar__auth-btn topbar__auth-btn--login margin-right-medium" onclick="showFormUser(this, null)">
+                <div class="topbar__auth-btn topbar__auth-btn--login margin-right-medium" onclick="showFormUser('login')">
                     <i class="fa-solid fa-street-view"></i>
                     <span id="login-form">Đăng&nbsp;nhập</span>
                 </div>
-                <div class="topbar__auth-btn topbar__auth-btn--register margin-right-medium " onclick="showFormUser(this, null)">
+                <div class="topbar__auth-btn topbar__auth-btn--register margin-right-medium " onclick="showFormUser('register')">
                     <i class="fa-solid fa-user-pen"></i>
                     <span id="register-form">Đăng&nbsp;ký</span>
                 </div>
@@ -85,56 +85,6 @@
                 <div class="topbar__cart-detail">
                     <div class="topbar__cart-view">
                         <table>
-                            <tr>
-                                <td><img src="public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="bookimg"></td>
-                                <td>
-                                    <p class="topbar__product-info">
-                                        <a href="#">Người thắp lửa</a>
-                                        <span>893532502468 / Sách thiếu nhi / 220.000đ</span>
-                                    </p>
-
-                                    <div class="topbar__cart-view-amountprice-holder">
-                                        <span>1</span>
-                                        <div>220.000đ</div>
-                                    </div>
-
-                                    <div class="topbar__product-cancel"><i class="fa-solid fa-xmark"></i></div>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td><img src="public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="bookimg"></td>
-                                <td>
-                                    <p class="topbar__product-info">
-                                        <a href="#">Người thắp lửa</a>
-                                        <span>893532502468 / Sách thiếu nhi / 220.000đ</span>
-                                    </p>
-
-                                    <div class="topbar__cart-view-amountprice-holder">
-                                        <span>1</span>
-                                        <div>220.000đ</div>
-                                    </div>
-
-                                    <div class="topbar__product-cancel"><i class="fa-solid fa-xmark"></i></div>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td><img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="bookimg"></td>
-                                <td>
-                                    <p class="topbar__product-info">
-                                        <a href="#">Người thắp lửa</a>
-                                        <span>893532502468 / Sách thiếu nhi / 220.000đ</span>
-                                    </p>
-
-                                    <div class="topbar__cart-view-amountprice-holder">
-                                        <span>1</span>
-                                        <div>220.000đ</div>
-                                    </div>
-
-                                    <div class="topbar__product-cancel"><i class="fa-solid fa-xmark"></i></div>
-                                </td>
-                            </tr>
 
                             <tr>
                                 <td><img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="bookimg"></td>
