@@ -133,7 +133,7 @@ function closeDetailProduct() {
 
     let newUrl = url.pathname + (params.toString() ? '?' + params.toString() : '');
 
-    // 🟢 Thay vì pushState, dùng replaceState để tránh tạo lịch sử thừa
+
     window.history.replaceState({}, document.title, newUrl);
 }
 

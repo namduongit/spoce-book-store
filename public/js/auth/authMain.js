@@ -2,6 +2,8 @@ import { toast } from '../toast.js';
 import { resetToOriginParam } from '../common.js';
 import { isLogined } from './displayInfoUser.js';
 import { updateInfoTopBar } from './displayInfoUser.js';
+import { Validation } from '../validation.js';
+import { showConfirmationDialog } from "../question.js";
 
 /**
  * @URLSearchParams là dạng như Promise. Cung cấp các việc: tìm kiếm, lấy, đẩy, toString (lấy sau origin href), ...
@@ -69,6 +71,7 @@ function showFormUser(type) {
                     <div class="auth__group">
                         <input type="password" id="login-password" name="password" class="auth__input">
                         <label for="login-password" class="auth__label">Mật khẩu</label>
+                        <i class="fa-solid fa-eye-slash auth__icon"></i>
                     </div>
                     <button type="submit" class="auth__button">Đăng nhập</button>
                 </form>
@@ -96,10 +99,12 @@ function showFormUser(type) {
                     <div class="auth__group">
                         <input type="password" id="register-password" name="password" class="auth__input">
                         <label for="register-password" class="auth__label">Mật khẩu</label>
+                        <i class="fa-solid fa-eye-slash auth__icon"></i>
                     </div>
                     <div class="auth__group">
                         <input type="password" id="confirm-password" name="confirm_password" class="auth__input">
                         <label for="confirm-password" class="auth__label">Xác nhận mật khẩu</label>
+                        <i class="fa-solid fa-eye-slash auth__icon"></i>
                     </div>
                     <button type="submit" class="auth__button">Đăng ký</button>
                 </form>
@@ -113,10 +118,11 @@ function showFormUser(type) {
                 <img src="../../media/Logo/SPOCE_BOOK_STORE.png" alt="Logo Website">
             </div>
             <div class="auth__form-container">${formHTML}</div>
-            <div class="auth__container-close" onclick="close_auth_form()">X</div>
+            <div class="auth__container-close" onclick="closeAuthForm()">X</div>
         </div>
     `;
 
+    // Lấy cái tag auth class ở dưới gần cuối, nếu không có thì tự tạo
     let authElement = document.querySelector('.auth');
     if (!authElement) {
         authElement = document.createElement('div');
@@ -126,6 +132,21 @@ function showFormUser(type) {
 
     authElement.innerHTML = result_html;
     authElement.style.display = 'block';
+
+    // Sự kiện mấy cái nút ẩn đế hiển thị mất khẩu
+    document.querySelectorAll('.auth__icon').forEach(authIcon => {
+        authIcon.addEventListener('click', function () {
+            let lableText = this.previousElementSibling;
+            let passwordInput = lableText.previousElementSibling;
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                this.classList.replace('fa-eye-slash', 'fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                this.classList.replace('fa-eye', 'fa-eye-slash');
+            }
+        });
+    });
 
 
     // Kiểm tra đã có chữ trong input thì active cho label lên trên
@@ -151,7 +172,10 @@ function showFormUser(type) {
             const username = document.getElementById("register-username").value;
             const password = document.getElementById("register-password").value;
             const confirmPassword = document.getElementById("confirm-password").value;
-            if (name === '' || username === '' || password === '' || confirmPassword === '') {
+
+            const validation = new Validation();
+            const trueValidation = validation.isTrueUsername(username) == validation.isTruePassword(password) == validation.isTruePassword(password) == true;
+            if (name === '' || username === '' || password === '' || confirmPassword === '' || !trueValidation) {
                 if (name === '') {
                     toast({
                         title: 'Thông báo',
@@ -201,8 +225,37 @@ function showFormUser(type) {
                     });
                     return;
                 }
+                if (!validation.isTrueUsername(username)) {
+                    toast({
+                        title: 'Thông báo',
+                        message: 'Tài khoản phải có ít nhất 6 kí tự !',
+                        type: 'warning',
+                        duration: 3000
+                    });
+                    document.getElementById("register-username").focus();
+                    return;
+                }
+                if (!validation.isTruePassword(password)) {
+                    toast({
+                        title: 'Thông báo',
+                        message: 'Mật khẩu có ít nhất 8 kí tự bao gồm ít nhất 1 số !',
+                        type: 'warning',
+                        duration: 3000
+                    });
+                    document.getElementById("register-password").focus();
+                    return;
+                }
+                if (!validation.isTruePassword(confirmPassword)) {
+                    toast({
+                        title: 'Thông báo',
+                        message: 'Mật khẩu xác nhận có ít nhất 8 kí tự bao gồm ít nhất 1 số !',
+                        type: 'warning',
+                        duration: 3000
+                    });
+                    document.getElementById("confirm-password").focus();
+                    return;
+                }
             }
-
             showLoading();
 
             const formData = new URLSearchParams();
@@ -219,13 +272,32 @@ function showFormUser(type) {
                 body: formData.toString(),
             })
                 .then(response => response.json())
-                .then(data => {
+                .then(async data => {
+                    hideLoading();
                     toast({
                         title: "Thông báo",
                         message: data.message,
                         type: data.success === true ? 'success' : 'warning',
                         duration: 3000
                     });
+                    localStorage.setItem('justRegistered', username);
+
+                    if (data.success === true) {
+                        closeAuthForm();
+
+                        async function processConfirmation() {
+                            const result = await showConfirmationDialog(`Bạn có muốn đăng nhập tài khoản ${username} vừa tạo không?`);
+                            return result;
+                        }
+
+                        const resultAnswer = await processConfirmation();
+                        if (resultAnswer == true) {
+                            loginAfterRegister(username, password);
+                        } else {
+                            resetToOriginParam();
+                            window.location.href = '/';
+                        }
+                    }
                 })
                 .catch(error => {
                     console.log('Lỗi');
@@ -233,7 +305,6 @@ function showFormUser(type) {
                 .finally(() => {
                     hideLoading();
                     document.querySelector('.auth').display = 'none';
-
                 });
         });
     }
@@ -290,7 +361,7 @@ function showFormUser(type) {
                         duration: 3000
                     });
 
-                    if (data.success) {
+                    if (data.success === true) {
                         localStorage.setItem('token', data.token);
                         console.log('Đăng nhập thành công, token:', data.token);
                         setTimeout(() => {
@@ -310,7 +381,7 @@ function showFormUser(type) {
 
 }
 
-function close_auth_form() {
+function closeAuthForm() {
     let authElement = document.querySelector('.auth');
     if (authElement) {
         authElement.style.display = 'none';
@@ -327,10 +398,57 @@ function changeForm(HTMLObject) {
     }
 }
 
+
+function loginAfterRegister(username, password) {
+    const loginData = new URLSearchParams({
+        username: username,
+        password: password
+    });
+    showLoading();
+    fetch("api/users/login.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: loginData.toString(),
+    })
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+            if (data.success) {
+                localStorage.setItem('token', data.token);
+                console.log('Đăng nhập thành công, token:', data.token);
+                toast({
+                    title: "Đăng nhập thành công",
+                    message: `Chào mừng ${username} đến với SPOCE Book Store`,
+                    type: "success",
+                    duration: 3000
+                });
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000);
+            } else {
+                toast({
+                    title: "Lỗi",
+                    message: "Không thể đăng nhập tự động. Vui lòng thử lại.",
+                    type: "warning",
+                    duration: 3000
+                });
+                resetToOriginParam();
+                window.location.href = '/';
+            }
+        })
+        .catch(error => {
+            console.log('Lỗi đăng nhập:', error);
+        });
+        hideLoading();
+}
+
+
 window.updateURLAuth = updateURLAuth;
 window.clearURL = clearURL;
 window.showFormUser = showFormUser;
-window.close_auth_form = close_auth_form;
+window.closeAuthForm = closeAuthForm;
 window.changeForm = changeForm;
 
 

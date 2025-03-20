@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 // Hàm lấy dữ liệu từ API
-async function getAllBookProduct() {
+export async function getAllBookProduct() {
   try {
     let response = await fetch("api/books/get.php");
 
@@ -25,7 +25,7 @@ async function getAllBookProduct() {
 }
 
 // Cập nhật giao diện với danh sách sách
-function updateBookToMain(allproduct = []) {
+export function updateBookToMain(allproduct = []) {
   if (!Array.isArray(allproduct)) {
     console.log("Lỗi allProduct không phải là mảng");
     return;

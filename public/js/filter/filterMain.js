@@ -1,5 +1,6 @@
 import { formatMoney, getNameAuthorByID } from "../book/getDataBook.js";
-import { showConfirmationDialog } from "./question.js";
+import { showConfirmationDialog } from "../question.js";
+
 
 function toggleInfoMenuFilter(classList, classContent) {
     document.addEventListener("DOMContentLoaded", function() {
@@ -125,12 +126,10 @@ async function displayProduct(data) {
 }
 
 
-/**
-async function handleConfirmation() {
-    const result = await showConfirmationDialog('Bạn có chắc không?');
-    console.log('Người dùng chọn:', result);
-}
-handleConfirmation();
 
-Demo gọi Confirm Dialog
- */
+// async function handleConfirmation() {
+//     const result = await showConfirmationDialog('Bạn có chắc không?');
+//     console.log('Người dùng chọn:', result);
+// }
+// handleConfirmation();
+

@@ -1,5 +1,5 @@
 <?php
-    // include_once './api/books/get.php';
+    // include_once './api/authors/get.php';
     // include_once './api/users/checkLogin.php';
     // die();
 ?>
@@ -28,16 +28,14 @@
     <link rel="stylesheet" href="public/css/style.css">
 
     <!-- Nhúng các thư viện Js -->
-    <script type="module"  src="public/js/auth/loginRegister.js" defer></script>
+    <script type="module"  src="public/js/auth/authMain.js" defer></script>
+    <script type="module" src="public/js/book/bookMain.js" defer></script>
+    <script type="module" src="public/js/cart/cartMain.js" defer></script>
+    <script type="module" src="public/js/filter/filterMain.js" defer></script>
 
 
-    <script type="module" src="public/js/cart/cart.js" defer></script>
     <script type="module" src="public/js/cart/payment.js" defer></script>
-
-    <script type="module" src="public/js/book/detailProduct.js" defer></script>
     <script type="module" src="public/js/book/showBook.js" defer></script>
-
-    <script type="module" src="public/js/filter/filter.js" defer></script>
 
 </head>
 
