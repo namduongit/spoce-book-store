@@ -418,6 +418,7 @@ function loginAfterRegister(username, password) {
             if (data.success) {
                 localStorage.setItem('token', data.token);
                 console.log('Đăng nhập thành công, token:', data.token);
+                localStorage.removeItem('justRegistered');
                 toast({
                     title: "Đăng nhập thành công",
                     message: `Chào mừng ${username} đến với SPOCE Book Store`,
