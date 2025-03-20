@@ -4,8 +4,10 @@ import { resetToOriginParam } from "../common.js";
 
 export async function fetchData(URL) {
     try {
+        showLoading();
         let response = await fetch(URL);
         let dataResponse = await response.json();
+        hideLoading();
         return dataResponse;
     } catch (error) {
         return null;
@@ -14,8 +16,9 @@ export async function fetchData(URL) {
 
 export async function getUserByID(userId) {
     const URL = `api/users/get.php?userId=${userId}`;
-
+    showLoading();
     let response = await fetchData(URL);
+    hideLoading();
     let result = response[0];
     return result;
 }
@@ -29,6 +32,7 @@ export async function isLogined() {
     }
 
     try {
+        showLoading();
         const response = await fetch('/api/users/checkLogin.php', {
             method: 'GET',
             headers: {
@@ -46,6 +50,7 @@ export async function isLogined() {
         }
 
         const data = await response.json();
+        hideLoading();
         return data;
     } catch (error) {
         console.error('Lỗi khi kiểm tra đăng nhập:', error.message);
@@ -55,7 +60,9 @@ export async function isLogined() {
 
 
 export async function updateInfoTopBar(promiseResponse) {
+    showLoading();
     const currentUser = await getUserByID(promiseResponse.user['id']);
+    hideLoading();
     console.log(currentUser);
 
     // Cập nhật thanh công cụ của người dùng
@@ -110,6 +117,7 @@ export async function updateInfoTopBar(promiseResponse) {
         }
 
         try {
+            showLoading();
             const response = await fetch('/api/users/logout.php', {
                 method: 'POST', // Hoặc GET, tùy cấu hình backend
                 headers: {
@@ -119,6 +127,7 @@ export async function updateInfoTopBar(promiseResponse) {
             });
 
             const data = await response.json();
+            hideLoading();
             if (data['success']) {
                 localStorage.removeItem('token');
                 console.log('Đăng xuất thành công');
