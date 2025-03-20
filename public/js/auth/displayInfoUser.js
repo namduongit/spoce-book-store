@@ -1,145 +1,153 @@
+import { toast } from "../toast.js";
+import { resetToOriginParam } from "../common.js";
 
 
-// export async function checkLogin() {
-//     try {
-//         const response = await fetch('../../../api/users/checkLogin.php', {
-//             credentials: 'include'
-//         });
+export async function fetchData(URL) {
+    try {
+        let response = await fetch(URL);
+        let dataResponse = await response.json();
+        return dataResponse;
+    } catch (error) {
+        return null;
+    }
+}
 
-//         // Kiểm tra trạng thái phản hồi
-//         if (!response.ok) {
-//             if (response.status === 401) {
-//                 return false;
-//             }
-//             throw new Error(`HTTP error! Status: ${response.status}`);
-//         }
+export async function getUserByID(userId) {
+    const URL = `api/users/get.php?userId=${userId}`;
 
-//         const data = await response.json();
+    let response = await fetchData(URL);
+    let result = response[0];
+    return result;
+}
 
-//         if (data['success'] === true) {
-//             return true;
-//         } else {
-//             return false;
-//         }
-//     } catch (error) {
-//         console.log('Lỗi khi kiểm tra đăng nhập');
-//         return false;
-//     }
-// }
+export async function isLogined() {
+    const token = localStorage.getItem('token');
 
-// export async function getUserLogin() {
-//     try {
-//         const response = await fetch('../../../api/users/checkLogin.php', {
-//             credentials: 'include'
-//         });
+    if (!token) {
+        console.log('Không có token, chưa đăng nhập');
+        return false;
+    }
 
-//         // Kiểm tra trạng thái phản hồi
-//         if (!response.ok) {
-//             if (response.status === 401) {
-//                 return false;
-//             }
-//             throw new Error(`HTTP error! Status: ${response.status}`);
-//         }
+    try {
+        const response = await fetch('/api/users/checkLogin.php', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
 
-//         const data = await response.json();
+        if (!response.ok) {
+            if (response.status === 401) {
+                console.log('Token không hợp lệ hoặc hết hạn');
+                return false;
+            }
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
-//         if (data['success'] === true) {
-//             return data['user'];
-//         } else {
-//             return null;
-//         }
-//     } catch (error) {
-//         console.log('Lỗi khi lấy tài khoản đang đăng nhập');
-//         return false;
-//     }
-// }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Lỗi khi kiểm tra đăng nhập:', error.message);
+        return false;
+    }
+}
 
 
-// export function updateTopBar(currentUser) {
-//     const authContent = document.querySelector('.topbar .topbar__auth');
-//     if (!authContent) {
-//         console.log('Có lỗi xảy ra');
-//         return;
-//     }
+export async function updateInfoTopBar(promiseResponse) {
+    const currentUser = await getUserByID(promiseResponse.user['id']);
+    console.log(currentUser);
 
-//     if (currentUser !== null) {
-//         authContent.innerHTML = `
-//             <div class="topbar__auth-btn topbar__auth-btn--logined">
-//                 <i class="fa-solid fa-user-gear"></i>
-//                 <span>${currentUser['full_name']}</span>
-//                 <i class="fa-solid fa-caret-down"></i>
-//             </div>
-//             <ul class="topbar__auth-list">
-//                 <li>
-//                     <i class="fa-solid fa-user-gear"></i>
-//                     Thông tin
-//                 </li>
-//                 <li>
-//                     <i class="fa-solid fa-cart-shopping"></i>
-//                     Giỏ hàng
-//                 </li>
-//                 <li class="logout-current-account">
-//                     <i class="fa-solid fa-right-from-bracket"></i>
-//                     Đăng xuất
-//                 </li>
-//             </ul>
-//         `;
-//     } else {
-//         authContent.innerHTML = `
-//             <div class="topbar__auth-btn topbar__auth-btn--login margin-right-medium" onclick="showFormUser(this, null)">
-//                 <i class="fa-solid fa-street-view"></i>
-//                 <span id="login-form">Đăng&nbsp;nhập</span>
-//             </div>
-//             <div class="topbar__auth-btn topbar__auth-btn--register margin-right-medium" onclick="showFormUser(this, null)">
-//                 <i class="fa-solid fa-user-pen"></i>
-//                 <span id="register-form">Đăng&nbsp;ký</span>
-//             </div>
-//         `;
-//         return;
-//     }
+    // Cập nhật thanh công cụ của người dùng
+    const authTopBarContent = document.querySelector('.topbar .topbar__auth');
+    authTopBarContent.innerHTML = `
+                <div class="topbar__auth-btn topbar__auth-btn--logined">
+                    <i class="fa-solid fa-user-gear"></i>
+                    <span>${currentUser['full_name']}</span>
+                    <i class="fa-solid fa-caret-down"></i>
+                </div>
 
-//     const authBtn = authContent.querySelector('.topbar__auth-btn--logined');
-//     const logoutBtn = authContent.querySelector('.logout-current-account');
+                <ul class="topbar__auth-list">
+                    <li>
+                        <i class="fa-solid fa-user-gear"></i>
+                        Thông tin
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        Giỏ hàng
+                    </li>
+                    <li class="logout-current-account">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        Đăng xuất
+                    </li>
+            </ul>
+    `;
 
-//     if (authBtn) {
-//         authBtn.addEventListener('click', function () {
-//             const caretIcon = this.querySelectorAll('.fa-solid')[1];
+    // Thêm sự kiện khi ấn nút
+    const authLoginedButton = authTopBarContent.querySelector('.topbar__auth-btn--logined');
+    const logoutBtn = authTopBarContent.querySelector('.logout-current-account');
+    authLoginedButton.addEventListener('click', function () {
+        const caretIcon = this.querySelectorAll('.fa-solid')[1];
+        this.classList.toggle('active');
+        caretIcon.classList.toggle('fa-caret-up');
+        caretIcon.classList.toggle('fa-caret-down');
+    });
 
-//             this.classList.toggle('active');
-//             caretIcon.classList.toggle('fa-caret-up');
-//             caretIcon.classList.toggle('fa-caret-down');
-//         });
-//     }
+    logoutBtn.addEventListener('click', async function () {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            toast({
+                title: 'Thông báo',
+                message: 'Có lỗi hệ thống khi đăng xuất !',
+                type: 'warning',
+                duration: 3000
+            });
+            setTimeout(() => {
+                resetToOriginParam();
+                window.location.href = '/';
+            }, 1000);
+            return;
+        }
 
-//     if (logoutBtn) {
-//         logoutBtn.addEventListener('click', async function () {
-//             showLoading();
-//             try {
-//                 const response = await fetch('../../../api/users/logout.php');
-//                 const data = await response.json();
+        try {
+            const response = await fetch('/api/users/logout.php', {
+                method: 'POST', // Hoặc GET, tùy cấu hình backend
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
 
-//                 toast({
-//                     title: 'Thông báo',
-//                     message: data.message,
-//                     type: data.success === true ? 'success' : 'warning',
-//                     duration: 3000
-//                 });
+            const data = await response.json();
+            if (data['success']) {
+                localStorage.removeItem('token');
+                console.log('Đăng xuất thành công');
+                toast({
+                    title: 'Thông báo',
+                    message: 'Đăng xuất thành công !',
+                    type: 'success',
+                    duration: 3000
+                });
+                authTopBarContent.innerHTML = `
+                    <div class="topbar__auth-btn topbar__auth-btn--login margin-right-medium" onclick="showFormUser('login')">
+                        <i class="fa-solid fa-street-view"></i>
+                        <span id="login-form">Đăng&nbsp;nhập</span>
+                    </div>
+                    <div class="topbar__auth-btn topbar__auth-btn--register margin-right-medium " onclick="showFormUser('register')">
+                        <i class="fa-solid fa-user-pen"></i>
+                        <span id="register-form">Đăng&nbsp;ký</span>
+                    </div>
+                `;
 
-//                 setTimeout(() => {
-//                     window.location.href = "/";
-//                 }, 1000);
-//             } catch (error) {
-//                 console.log('Lỗi khi đăng xuất', error);
-//             } finally {
-//                 hideLoading();
-//             }
-//         });
-//     }
-// }
-
-
-// export function updateInfoSettings(currentUser) {
-
-// }
+                setTimeout(() => {
+                    resetToOriginParam();
+                    window.location.href = '/';
+                }, 1000);
+            }
+        } catch {
+            console.log('Có lỗi khi đăng xuất');
+        }
+    });
+}
 
 

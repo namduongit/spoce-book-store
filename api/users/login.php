@@ -1,35 +1,37 @@
 <?php
+
+include_once __DIR__ .'../../../app/config.php';
 // Bật báo cáo tất cả lỗi trong PHP
 error_reporting(E_ALL);
-// Hiển thị các lỗi trực tiếp ra output (chỉ dùng khi phát triển)
 ini_set('display_errors', 1);
-// Khởi tạo phiên Session
-// session_start();
+
 // Thiết lập phản hồi dạng JSON
 header("Content-Type: application/json");
-require_once __DIR__ . '../../../app/config.php';
 
 // Cấu hình CORS
 header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Credentials: true");
 
 // Chỉ chấp nhận phương thức POST
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    http_response_code(405); // Method Not Allowed
+    http_response_code(405);
     echo json_encode(["success" => false, "message" => "Chỉ hỗ trợ phương thức POST!"]);
     exit;
 }
 
-$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING) ?? '';
+$username = $_POST["username"] ?? '';
 $password = $_POST["password"] ?? '';
+
 
 if (empty($username) || empty($password)) {
     http_response_code(400);
     echo json_encode(["success" => false, "message" => "Vui lòng nhập đầy đủ thông tin!"]);
     exit;
 }
+
+require_once __DIR__ . '../../../vendor/autoload.php';
+use \Firebase\JWT\JWT;
 
 try {
     $user_model = new app_models_NguoiDung();
@@ -41,18 +43,34 @@ try {
         exit;
     }
 
-    // $_SESSION["loggedin"] = true;
-    // $_SESSION["username"] = $user["tenTaiKhoan"];
-    // $_SESSION["user_id"] = $user["maNguoiDung"];
+    $secret_key = "ThisIsSecretKeyByNamDuongit";
+    $issuer = "http://localhost:3000";
+    $issued_at = time();
+     // Token hết hạn trong 1 ngày
+    $expiration_time = $issued_at + 86400;
+
+    // Payload của token
+    $payload = [
+        "iss" => $issuer,
+        "iat" => $issued_at,
+        "exp" => $expiration_time,
+        "data" => [
+            "id" => $user["maNguoiDung"],
+            "username" => $user["tenTaiKhoan"]
+        ]
+    ];
+
+    $token = JWT::encode($payload, $secret_key, 'HS256');
 
     http_response_code(200);
     echo json_encode([
         "success" => true,
         "message" => "Đăng nhập thành công!",
+        "token" => $token,
         "user" => [
             "id" => $user["maNguoiDung"],
             "username" => $user["tenTaiKhoan"],
-            "name" => $user["hoVaTen"],
+            "name" => $user["hoVaTen"]
         ]
     ]);
 } catch (Exception $e) {

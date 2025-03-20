@@ -40,3 +40,6 @@ export async function isExitsUser(username) {
     return findUser;
 }
 
+export function resetToOriginParam() {
+    history.pushState({}, '', window.location.href.toString());
+}

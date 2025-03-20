@@ -1,18 +1,36 @@
 import { toast } from '../toast.js';
-// import { checkLogin } from './displayInfoUser.js';
-// import { getUserLogin } from './displayInfoUser.js';
-// import { updateTopBar } from './displayInfoUser.js';
+import { resetToOriginParam } from '../common.js';
+import { isLogined } from './displayInfoUser.js';
+import { updateInfoTopBar } from './displayInfoUser.js';
 
-var currentUser = null;
+/**
+ * @URLSearchParams là dạng như Promise. Cung cấp các việc: tìm kiếm, lấy, đẩy, toString (lấy sau origin href), ...
+ * @windowLocationHref cung cấp full URL
+ * @windowLocationOrigin cung cấp base URL không có bất cứ thứ gì
+ * @historyReplaceState thay thế trạng thái trang hiện tại. Không thể ấn back
+ * @historyPushState Lưu lịch sử, cho phép ấn back
+ */
 
 document.addEventListener("DOMContentLoaded", async () => {
-    let currentParams = new URLSearchParams(window.location.search);
-    let isLogin = false;
-    if (currentParams.has('auth') && isLogin === false) {
-        const typeForm = currentParams.get('auth');
-        showFormUser(typeForm);
+    showLoading();
+    const responseAPI = await isLogined();
+    hideLoading();
+    const currentParams = new URLSearchParams(window.location.search);
+    if (responseAPI === false) {
+        if (currentParams.has('auth')) {
+            showFormUser(currentParams.get('auth'))
+        }
     }
+    if (responseAPI !== false) {
+        showLoading();
+        updateInfoTopBar(responseAPI);
+        hideLoading();
+    }
+
 });
+
+
+
 
 function clearURL() {
     let currentParams = new URLSearchParams(window.location.search);
@@ -193,7 +211,7 @@ function showFormUser(type) {
             formData.append("password", document.getElementById("register-password").value);
             formData.append("confirm_password", document.getElementById("confirm-password").value);
 
-            fetch("../../../api/users/register.php", {
+            fetch("api/users/register.php", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
@@ -214,7 +232,6 @@ function showFormUser(type) {
                 })
                 .finally(() => {
                     hideLoading();
-                    // Ẩn cái form Đăng nhập/Đăng ký đi và hỏi có muốn đăng nhập bằng tài khoản đó không
                     document.querySelector('.auth').display = 'none';
 
                 });
@@ -233,7 +250,7 @@ function showFormUser(type) {
             if (username === '') {
                 toast({
                     title: 'Thông báo',
-                    message: 'Tài khoản không được để trống !',
+                    message: 'Tài khoản không được để trống!',
                     type: 'warning',
                     duration: 3000
                 });
@@ -243,7 +260,7 @@ function showFormUser(type) {
             if (password === '') {
                 toast({
                     title: 'Thông báo',
-                    message: 'Mật khẩu không được để trống !',
+                    message: 'Mật khẩu không được để trống!',
                     type: 'warning',
                     duration: 3000
                 });
@@ -254,24 +271,33 @@ function showFormUser(type) {
             showLoading();
 
             const formData = new URLSearchParams();
-            formData.append("username", document.getElementById("login-username").value);
-            formData.append("password", document.getElementById("login-password").value);
+            formData.append("username", username);
+            formData.append("password", password);
 
-            fetch("../../../api/users/login.php", {
+            fetch("api/users/login.php", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Content-Type": "application/x-www-form-urlencoded"
                 },
-                body: formData.toString(),
+                body: formData.toString()
             })
                 .then(response => response.json())
                 .then(data => {
                     toast({
                         title: "Thông báo",
-                        message: data['message'],
-                        type: data['success'] === true ? 'success' : 'warning',
+                        message: data.message,
+                        type: data.success ? 'success' : 'warning',
                         duration: 3000
                     });
+
+                    if (data.success) {
+                        localStorage.setItem('token', data.token);
+                        console.log('Đăng nhập thành công, token:', data.token);
+                        setTimeout(() => {
+                            resetToOriginParam();
+                            window.location.href = '/';
+                        }, 1000);
+                    }
                 })
                 .catch(error => {
                     console.log('Lỗi đăng nhập');
