@@ -21,7 +21,8 @@ function returnJSONCategory($categories) {
         $response[] = [
             "id" => $category['maTheLoai'],
             "name" => $category['tenTheLoai'],
-            "status" => $category['trangThai']
+            "status" => $category['trangThai'],
+            "updatedAt" => $category['ngayCapNhat']
         ];
     }
     echo json_encode($response);

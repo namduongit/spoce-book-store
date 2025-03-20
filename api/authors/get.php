@@ -21,7 +21,8 @@ function returnJSONAuthor($authors) {
         $response[] = [
             "id" => $author['maTacGia'],
             "name" => $author['tenTacGia'],
-            "status" => $author['trangThai']
+            "status" => $author['trangThai'],
+            "updatedAt" => $author['ngayCapNhat']
         ];
     }
     echo json_encode($response);

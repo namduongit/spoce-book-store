@@ -21,7 +21,8 @@ function returnJSONPublisher($publishers) {
         $response[] = [
             "id" => $publisher['maNXB'],
             "name" => $publisher['tenNXB'],
-            "status" => $publisher['trangThai']
+            "status" => $publisher['trangThai'],
+            "updatedAt" => $publisher['ngayCapNhat']
         ];
     }
     echo json_encode($response);

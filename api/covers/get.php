@@ -21,7 +21,8 @@ function returnJSONCoverType($coverTypes) {
         $response[] = [
             "id" => $cover['maLoaiBia'],
             "name" => $cover['tenLoaiBia'],
-            "status" => $cover['trangThai']
+            "status" => $cover['trangThai'],
+            "updatedAt" => $cover['ngayCapNhat']
         ];
     }
     echo json_encode($response);
