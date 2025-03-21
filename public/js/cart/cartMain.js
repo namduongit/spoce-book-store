@@ -1,5 +1,7 @@
 import { formatMoney } from "../book/getDataBook.js";
 import { getNameCategoryByID } from "../book/getDataBook.js";
+import { toast } from "../toast.js";
+import { getBookByID } from "../book/getDataBook.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     updateQuantityCardHolder();
@@ -32,18 +34,9 @@ function updateQuantityCardHolder() {
         </span>
     `;
 }
-/**
- *
- * if (localStorageProduct.length > 0) {
-        showLoading();
-    }
 
-    if (cartDetail.classList.contains("show")) {
-        hideLoading();
-        cartDetail.classList.remove("show");
-        return;
-    }
- */
+
+
 
 async function viewCart() {
     let cartDetail = document.querySelector(".topbar__cart-detail-holder");
@@ -64,7 +57,28 @@ async function viewCart() {
             <div class="topbar__cart-detail">
                 <div class="topbar__cart-view">
                     <div class="topbar__cart-title">Giỏ hàng trống</div>
+                    <div  class="topbar__cart-content">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <p>Uy tín vượt niềm tin</p>
+                        <p>Hãy mua Sách tại SPOCE BOOK STORE</p>
+                    </div>
                 </div>
+                <div class="topbar__cart-price">
+                    <table>
+                        <tr class="topbar__price-total">
+                            <td>TỔNG TIỀN:</td>
+                            <td>${0} VNĐ</td>
+                        </tr>
+                        <tr class="topbar__cart-btn">
+                            <td class="topbar__cart">
+                                <button onclick="showAllCart()">Xem giỏ hàng</button>
+                            </td>
+                            <td>
+                                <button onclick="billPayment()" class="topbar__checkout-btn">Thanh toán</button>
+                            </td>
+                        </tr>
+                    </table>
+            </div>
             </div>
         `;
         cartDetail.classList.add("show");
@@ -75,27 +89,30 @@ async function viewCart() {
     let totalPrice = 0;
 
     for (const item of localStorageProduct) {
-        let nameGenre = await getNameCategoryByID(item.genreId);
+        let productItem = await getBookByID(item.id);
+        productItem = productItem['books'][0];
+        let nameGenre = await getNameCategoryByID(productItem.genreId);
+
         cartHTML += `
             <tr>
-                <td><img src="../public/uploads/${item.image}" alt="${item.name}"></td>
+                <td><img src="../public/uploads/${productItem.image}" alt="${productItem.name}"></td>
                 <td>
                     <p class="topbar__product-info">
-                        <a href="#">${item.name}</a>
+                        <a href="#">${productItem.name}</a>
                         <br>
-                        <span>${item.id} / ${nameGenre} / ${formatMoney(item.price)}</span>
+                        <span>${productItem.id} / ${nameGenre} / ${formatMoney(productItem.sellingPrice)}</span>
                     </p>
                     <div class="topbar__cart-view-amountprice-holder">
                         <span>${item.quantity}</span>
-                        <div>${formatMoney(item.price * item.quantity)}</div>
+                        <div>${formatMoney(productItem.sellingPrice * item.quantity)}</div>
                     </div>
-                    <div class="topbar__product-cancel" onclick="removeFromCart(${item.id})">
+                    <div class="topbar__product-cancel" onclick="removeFromCart(${productItem.id})">
                         <i class="fa-solid fa-xmark"></i>
                     </div>
                 </td>
             </tr>
         `;
-        totalPrice += item.quantity * item.price;
+        totalPrice += item.quantity * productItem.sellingPrice;
     }
 
     let HTML = `
@@ -143,31 +160,45 @@ async function showAllCart() {
     const bodyMain = document.querySelector('.body');
 
     let localStorageProduct = JSON.parse(localStorage.getItem("cart")) || [];
-    console.log(localStorageProduct);
+    // console.log(localStorageProduct);
+    // if (localStorageProduct.length === 0) {
+    //     toast({
+    //         title: 'Thông báo',
+    //         message: `Giỏ hàng đang trống !`,
+    //         type: 'info',
+    //         duration: 3000
+    //     });
+    //     return;
+    // }
 
     let cartMainHTML = ``;
     let totalPrice = 0;
     showLoading();
 
     for (const item of localStorageProduct) {
-        let nameGenre = await getNameCategoryByID(item.genreId);
+        let productItem = await getBookByID(item.id);
+        productItem = productItem['books'][0];
+        let nameGenre = await getNameCategoryByID(productItem.genreId);
+
         cartMainHTML += `
             <div class="show-cart__item d-flex">
-                <img class="show-cart__img" src="../public/uploads/${item.image}" alt="product">
+                <img class="show-cart__img" src="../public/uploads/${productItem.image}" alt="product">
                 <div class="show-cart__detail d-flex">
-                    <div class="show-cart__bookname">${item.name}</div>
-                    <div class="show-cart__price">${item.id} / ${nameGenre} / ${formatMoney(item.price)}</div>
+                    <div class="show-cart__bookname">${productItem.name}</div>
+                    <div class="show-cart__price">${productItem.id} / ${nameGenre} / ${formatMoney(productItem.sellingPrice)}</div>
                 </div>
                 <div class="show-cart__amountbox">
                     <button class="show-cart__btn show-cart__btn--left">-</button>
                     <input type="text" name="product-amount" value="${item.quantity}">
                     <button class="show-cart__btn show-cart__btn--right">+</button>
                 </div>
-                <div class="show-cart__priceamount">${formatMoney(item.quantity * item.price)}</div>
-                <a href="#" class="show-cart__remove"><i class="fa-solid fa-trash-can"></i></a>
+                <div class="show-cart__priceamount">${formatMoney(item.quantity * productItem.sellingPrice)}</div>
+                <a href="#" class="show-cart__remove" onclick="deleteFromCart(${productItem.id})">
+                    <i class="fa-solid fa-trash-can"></i>
+                </a>
             </div>
         `;
-        totalPrice += item.quantity * item.price;
+        totalPrice += item.quantity * productItem.sellingPrice;
     }
 
     hideLoading();
@@ -205,8 +236,15 @@ async function showAllCart() {
     });
 }
 
+function deleteFromCart(bookId) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart = cart.filter(item => item.id != bookId);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateQuantityCardHolder();
+    showAllCart();
+}
 
-
+window.deleteFromCart = deleteFromCart;
 window.showAllCart = showAllCart;
 window.viewCart = viewCart;
 window.removeFromCart = removeFromCart;

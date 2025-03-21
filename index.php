@@ -122,17 +122,6 @@
 
     <div class="main">
         <div class="main__container container d-flex just-content-spbt">
-            <aside class="sidebar">
-                <h3 class="sidebar__title">Danh mục</h3>
-                <ul class="sidebar__list">
-                    <!--    <li class=\"sidebar__item d-flex just-content-spbt\" data-mode=\"$id_cate\">
-                            <a href=\"/?category=$id_cate\" onclick=\"\"> $name_cate</a>
-                            <i class=\"fa-solid fa-chevron-right\"></i>
-                        </li>
-                -->
-                </ul>
-            </aside>
-
             <section class="content">
                 <div class="slider">
                     <button class="slider__btn slider__btn--left">&#10094;</button>

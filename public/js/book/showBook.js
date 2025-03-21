@@ -1,3 +1,5 @@
+import { formatMoney } from "./getDataBook.js";
+
 let page = parseInt(localStorage.getItem("currentPage")) || 1;
 let pageSize = parseInt(localStorage.getItem("pageSize")) || 10;
 localStorage.setItem("pageSize", pageSize);
@@ -65,7 +67,7 @@ function updateBookToMain(allproduct = []) {
               <i class="fa-regular fa-star"></i>
           </div>
           <div class="book-category__item-status ${className} margin-top-small">${statusProduct}</div>
-          <div class="book-category__item-price">${product["sellingPrice"]} VND</div>
+          <div class="book-category__item-price">${formatMoney(product["sellingPrice"])}</div>
           <div class="book-category__item-add-to-cart margin-top-small">
               <i class="fa-solid fa-cart-plus book-category__item-button-icon"></i>
               <span class="book-category__item-button-text">Thêm vào giỏ hàng</span>

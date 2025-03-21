@@ -173,6 +173,7 @@ async function showDetailProduct(product_id) {
                 </div>
 
                 <div class="show-detail-product__purchase">
+
                     <div class="show-detail-product__header">
                         <h1 class="show-detail-product__title">${productDetail['name']}</h1>
                         <p class="show-detail-product__genre"> Mã sách:
@@ -190,6 +191,13 @@ async function showDetailProduct(product_id) {
                             <b class="show-detail-product__price--new">${formatMoney(productDetail['sellingPrice'])}</b>
                         </p>
                     </div>
+
+                    <div class="show-detail-product__quantity">
+                            <p class="quantity__button quantity__button-plus">+</p>
+                            <input type="text" class="quantity__input quantity__button-number" value=1 disabled>
+                            <p class="quantity__button quantity__button-min">-</p>
+                    </div>
+
                     <div class="show-detail-product__actions">
                         <button class="show-detail-product__btn show-detail-product__btn--buy-now">
                             <i class="fa-solid fa-bolt"></i>&nbsp;Mua ngay
@@ -228,23 +236,48 @@ async function showDetailProduct(product_id) {
     urlSource.set("bookID", `${productDetail['id']}`)
     urlSource.set("dislayBookName", `${productDetail['name']}`);
 
+
+    // Ấn tăng số
+    document.querySelector('.quantity__button-plus').addEventListener('click', function() {
+        let valueQuantity = parseInt(document.querySelector('.quantity__button-number').value);
+        if (valueQuantity === 99) {
+            toast({
+                title: 'Thông báo',
+                message: `Giới hạn là 99 cuốn 1 lần thêm vào giỏ hàng !`,
+                type: 'info',
+                duration: 3000
+            });
+            return;
+        } else document.querySelector('.quantity__button-number').value = valueQuantity + 1;
+    });
+
+    // Ấn giảm số
+    document.querySelector('.quantity__button-min').addEventListener('click', function() {
+        let valueQuantity = parseInt(document.querySelector('.quantity__button-number').value);
+        if (valueQuantity === 1) {
+            toast({
+                title: 'Thông báo',
+                message: `Tối thiểu là 1 cuốn !`,
+                type: 'info',
+                duration: 3000
+            });
+            return;
+        } else document.querySelector('.quantity__button-number').value = valueQuantity - 1;
+    });
+
     // Thêm vào giỏ hàng
     document.querySelector('.show-detail-product__btn--add-to-cart').addEventListener('click', function() {
         let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let valueQuantity = parseInt(document.querySelector('.quantity__button-number').value);
         let product = {
             id: `${product_id}`,
-            name: `${productDetail['name']}`,
-            price: `${productDetail['sellingPrice']}`,
-            genreId: `${productDetail['genreId']}`,
-            quantity: 1,
-            image: `${productDetail['image']}`
+            quantity: valueQuantity
         }
-
 
         let existingProduct = cart.find(item => item.id === product.id);
 
         if (existingProduct) {
-            existingProduct.quantity += 1;
+            existingProduct.quantity += valueQuantity;
         } else {
             cart.push(product);
         }
@@ -253,7 +286,7 @@ async function showDetailProduct(product_id) {
 
         toast({
             title: 'Thông báo',
-            message: `Đã thêm sản phẩm ${productDetail['name']} vào giỏ hàng !`,
+            message: `Đã thêm ${valueQuantity} sản phẩm ${productDetail['name']} vào giỏ hàng !`,
             type: 'success',
             duration: 3000
         });
@@ -305,17 +338,6 @@ function closeDetailProduct() {
     let newUrl = url.pathname + (params.toString() ? '?' + params.toString() : '');
     window.history.replaceState({}, document.title, newUrl);
 }
-
-
-
-// window.onpopstate = function(event) {
-//     if (event.state && event.state.product) {
-//         let productDetail = event.state.product;
-//         showDetailProduct(productDetail.id);
-//     } else {
-//         closeDetailProduct();
-//     }
-// };
 
 
 

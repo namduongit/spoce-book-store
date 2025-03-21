@@ -209,115 +209,8 @@
   margin-top: 8rem;
 }
 
-.main__container .sidebar {
-  width: 30%;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-  padding: 2rem 2rem;
-}
-
-.main__container .sidebar .sidebar__title {
-  width: fit-content;
-  margin: 0 auto;
-  margin-bottom: 2.5rem;
-  font-weight: bold;
-  font-size: 3rem;
-  color: rgba(0, 0, 0, 0.85);
-  transition: border-bottom 0.2s ease, color 0.3s ease, transform 0.2s ease;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.main__container .sidebar .sidebar__title::after {
-  content: "";
-  position: absolute;
-  bottom: -5px;
-  left: 50%;
-  width: 0%;
-  height: 3px;
-  background: linear-gradient(90deg, #1667b3, #1364b0);
-  transition: width 0.3s ease, left 0.3s ease;
-}
-.main__container .sidebar .sidebar__title:hover {
-  color: #1364b0;
-  transform: scale(1.05);
-  cursor: pointer;
-}
-.main__container .sidebar .sidebar__title:hover::after {
-  width: 100%;
-  left: 0;
-}
-
-.main__container .sidebar .sidebar__title:active {
-  animation: shake 0.2s ease-in-out;
-}
-.main__container .sidebar {
-  background-color: white;
-  padding: 1.5rem 0;
-  border-radius: 0.8rem;
-}
-
-.main__container .sidebar .sidebar__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.main__container .sidebar {
-  width: 100%;
-  max-width: 300px;
-  background-color: #fff;
-  padding: 1.5rem 1rem;
-  border-radius: 8px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-.main__container .sidebar .sidebar__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.main__container .sidebar .sidebar__list .sidebar__item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.2rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-bottom: 0.6rem;
-}
-
-.main__container .sidebar .sidebar__list .sidebar__item a {
-  flex: 1;
-  text-decoration: none;
-  color: black;
-  font-size: 1.6rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-}
-
-.main__container .sidebar .sidebar__list .sidebar__item i {
-  font-size: 1.8rem;
-  color: black;
-  transition: color 0.3s ease;
-}
-
-/* Hover */
-.main__container .sidebar .sidebar__list .sidebar__item:hover {
-  background-color: rgb(195, 195, 195);
-  transform: translateX(1.5rem);
-}
-
-.main__container .sidebar .sidebar__list .sidebar__item:hover a,
-.main__container .sidebar .sidebar__list .sidebar__item:hover i {
-  color: var(--topbar-color);
-}
-
 .main__container .content {
-  width: 65%;
+  width: 100%;
   position: relative;
 }
 .main__container .content .slider {
@@ -335,9 +228,10 @@
   max-height: 100%;
   object-fit: contain;
   display: block;
+
 }
 .main__container .content .slider .slider__btn {
-  z-index: 100;
+  z-index: 2;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -674,9 +568,6 @@
   color: var(--nhas-product);
 }
 
-.book-category__item-price::after {
-  content: "đ";
-}
 
 .book-category__item-add-to-cart {
   color: white;
@@ -695,7 +586,29 @@
 .topbar__cart-title {
   text-align: center;
   font-weight: bold;
+  font-size: 2rem;
 }
+.topbar__cart-content {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid gray;
+  border-top: 1px solid gray;
+  margin-top: 1rem;
+  i {
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    font-size: 5rem;
+  }
+  p {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: 400;
+    font-size: 1.5rem;
+    color: gray;
+  }
+}
+
 
 /* -------------------------------------------------------------------------------- */
 
@@ -776,6 +689,7 @@
 .show-detail-product__genre {
   font-size: 1.4rem;
   color: #222;
+  line-height: 1.4;
 }
 
 /* --------------------- Phần nội dung chính (Ảnh + Mua hàng) --------------------- */
@@ -801,6 +715,7 @@
   width: 45%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 .show-detail-product__price--old {
   text-decoration: line-through;
@@ -855,7 +770,7 @@
 .show-detail-product__actions {
   display: flex;
   flex-direction: row;
-  gap: 0 10px;
+  gap: 0 2rem;
 }
 .show-detail-product__btn {
   padding: 1rem;
@@ -877,6 +792,36 @@
 .show-detail-product__btn:hover {
   opacity: 0.8;
 }
+
+/* --------------------- Thêm số lượng --------------------- */
+.show-detail-product__quantity {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #eee;
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+}
+
+.show-detail-product__quantity .quantity__button {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+}
+
+.show-detail-product__quantity .quantity__button-number {
+  flex: 0 1 auto;
+  text-align: center;
+  padding: 0.5rem 0;
+  border: none;
+  outline: none;
+  width: 3rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
 
 /* --------------------- Tabs hiển thị Mô tả - Chi tiết - Đánh giá --------------------- */
 .show-detail-product__info {
