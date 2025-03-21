@@ -1,7 +1,7 @@
 <?php
-    // include_once './api/authors/get.php';
-    // include_once './api/users/checkLogin.php';
-    // die();
+// include_once './api/authors/get.php';
+// include_once './api/users/checkLogin.php';
+// die();
 ?>
 
 
@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="public/css/style.css">
 
     <!-- Nhúng các thư viện Js -->
-    <script type="module"  src="public/js/auth/authMain.js" defer></script>
+    <script type="module" src="public/js/auth/authMain.js" defer></script>
     <script type="module" src="public/js/book/bookMain.js" defer></script>
     <script type="module" src="public/js/cart/cartMain.js" defer></script>
     <script type="module" src="public/js/filter/filterMain.js" defer></script>
@@ -403,7 +403,7 @@
                     <div class="book-category__sort-item">
                         <label for="page-show-by">Hiển thị theo: </label>
                         <select name="" id="page-show-by">
-                            <option value="base" selected>Mặc định</option>
+                            <option value="10" selected>Mặc định</option>
                             <option value="15">15 sản phẩm</option>
                             <option value="20">20 sản phẩm</option>
                             <option value="25">25 sản phẩm</option>
@@ -826,5 +826,6 @@
 
 
 </body>
-    <script src="public/js/spinner.js"></script>
+<script src="public/js/spinner.js"></script>
+
 </html>

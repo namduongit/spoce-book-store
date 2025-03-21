@@ -1,9 +1,6 @@
-let page = localStorage.getItem("currentPage")
-  ? parseInt(localStorage.getItem("currentPage"))
-  : 1;
-let pageSize = localStorage.getItem("pageSize")
-  ? parseInt(localStorage.getItem("pageSize"))
-  : 10;
+let page = parseInt(localStorage.getItem("currentPage")) || 1;
+let pageSize = parseInt(localStorage.getItem("pageSize")) || 10;
+localStorage.setItem("pageSize", pageSize);
 document.getElementById("page-show-by").addEventListener("change", function () {
   pageSize = parseInt(this.value);
   localStorage.setItem("pageSize", pageSize);
@@ -15,6 +12,9 @@ window.addEventListener("load", function () {
   page = localStorage.getItem("currentPage")
     ? parseInt(localStorage.getItem("currentPage"))
     : 1;
+  pageSize = localStorage.getItem("pageSize")
+    ? parseInt(localStorage.getItem("pageSize"))
+    : 10;
   ajaxGetBook();
 });
 async function ajaxGetBook() {
