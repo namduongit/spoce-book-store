@@ -1,5 +1,4 @@
 import { formatMoney, getNameAuthorByID, getNameCategoryByID, getNameCoverByID, getNamePublisherByID } from "./getDataBook.js";
-import { getAllBookProduct } from "./showBook.js";
 import { toast } from '../toast.js'
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -138,7 +137,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function showDetailProduct(product_id) {
     const URL = `api/books/get.php?bookId=${product_id}`;
-
     showLoading();
     async function fetchData(URL) {
         try {
@@ -152,12 +150,14 @@ async function showDetailProduct(product_id) {
     }
 
     let productDetail = await fetchData(URL);
+    console.log(productDetail)
+
     if (!productDetail || productDetail.length === 0) {
         document.querySelector('.show-detail-product').innerHTML = `<p>Không tìm thấy sản phẩm.</p>`;
         return;
     }
 
-    productDetail = productDetail[0];
+    productDetail = productDetail.books[0];
 
     let nameCategory = await getNameCategoryByID(productDetail['genreId']);
     let nameAuthor = await getNameAuthorByID(productDetail['authorId']);
