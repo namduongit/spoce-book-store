@@ -320,10 +320,69 @@
   width: 65%;
   position: relative;
 }
-.main__container .content .slider button {
+.main__container .content .slider {
+  overflow: hidden;
+}
+.main__container .content .slider .slide-container {
+  display: flex;
+  transition: transform 0.3s ease;
+}
+.main__container .content .slider .slide-container .slide {
+  min-width: 100%;
+}
+.main__container .content .slider .slide-container .slide img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.main__container .content .slider .slider__btn {
+  z-index: 100;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  color: grey;
+  border: 0;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  text-align: center;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.main__container .content .slider .slide-position-btn-container {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1rem;
+}
+.main__container .content .slider .slide-position-btn-container .position-btn {
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  border: 0;
+  background-color:#3498db;
+  cursor: pointer;
+  position: relative;
+}
+.main__container .content .slider .slide-position-btn-container .position-btn.active span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: #0056b3;
+}
+.main__container .content .slider .slider__btn:hover {
+  width: 4rem;
+  height: 4rem;
+  font-size: 2rem;
+  color: #333;
 }
 .main__container .content .slider .slider__btn--left {
   left: 1rem;

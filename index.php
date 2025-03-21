@@ -32,6 +32,7 @@
     <script type="module" src="public/js/book/bookMain.js" defer></script>
     <script type="module" src="public/js/cart/cartMain.js" defer></script>
     <script type="module" src="public/js/filter/filterMain.js" defer></script>
+    <script type="module" src="public/js/slideshow.js" defer></script>
 
 
     <script type="module" src="public/js/cart/payment.js" defer></script>
@@ -135,8 +136,19 @@
             <section class="content">
                 <div class="slider">
                     <button class="slider__btn slider__btn--left">&#10094;</button>
-                    <img class="slider__image" src="../media/banner/banner_1.png" alt="Banner">
+                    <div class="slide-container">
+                        <div class="slide"><img class="slider__image" src="../media/banner/banner_1.png" alt="Banner"></div>
+                        <div class="slide"><img class="slider__image" src="../media/banner/banner_4.png" alt="Banner"></div>
+                        <div class="slide"><img class="slider__image" src="../media/banner/banner_7.png" alt="Banner"></div>
+                        <div class="slide"><img class="slider__image" src="../media/banner/banner_8.png" alt="Banner"></div>
+                    </div>
                     <button class="slider__btn slider__btn--right">&#10095;</button>
+                    <div class="slide-position-btn-container">
+                        <button class="position-btn" data-id="0"><span></span></button>
+                        <button class="position-btn" data-id="1"><span></span></button>
+                        <button class="position-btn" data-id="2"><span></span></button>
+                        <button class="position-btn" data-id="3"><span></span></button>
+                    </div>
                 </div>
                 <div class="banner d-flex just-content-spbt">
                     <img class="banner__image" src="../media/banner/banner_2.png" alt="">
