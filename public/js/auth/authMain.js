@@ -11,25 +11,42 @@ import { showConfirmationDialog } from "../question.js";
  * @windowLocationOrigin cung cấp base URL không có bất cứ thứ gì
  * @historyReplaceState thay thế trạng thái trang hiện tại. Không thể ấn back
  * @historyPushState Lưu lịch sử, cho phép ấn back
+ *
+ *
+ * ! new URL(window.location.href)
+ * + href: Lấy toàn bộ đường dẫn
+ * + search: lấy toàn bộ phía sau ?
+ * + origin: lấy Domain
  */
 
 document.addEventListener("DOMContentLoaded", async () => {
     showLoading();
     const responseAPI = await isLogined();
     hideLoading();
+
     const currentParams = new URLSearchParams(window.location.search);
+    const url = new URL(window.location.href);
+
+    // Ngăn chặn đã đăng nhập nhưng vẫn vào Form đăng ký/Đăng nhập
     if (responseAPI === false) {
         if (currentParams.has('auth')) {
-            showFormUser(currentParams.get('auth'))
+            showFormUser(currentParams.get('auth'));
         }
     }
+
     if (responseAPI !== false) {
         showLoading();
         updateInfoTopBar(responseAPI);
         hideLoading();
-    }
 
+        if (currentParams.has('auth')) {
+            currentParams.delete('auth');
+            url.search = currentParams.toString();
+            history.replaceState(null, "", url.toString());
+        }
+    }
 });
+
 
 
 

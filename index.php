@@ -1,6 +1,6 @@
 <?php
-    // include_once './api/authors/get.php';
-    // include_once './api/users/checkLogin.php';
+    // // include_once './api/authors/get.php';
+    // include_once './api/books/get.php';
     // die();
 ?>
 
@@ -73,56 +73,14 @@
         </div>
 
         <div class="topbart__cart-action">
-            <span class="topbar__cart-holder">
+            <span class="topbar__cart-holder" onclick="viewCart()">
                 <i class="fa-solid fa-cart-shopping topbar__cart-icon"></i>
                 <span class="topbar__count-holder">
                     <span class="topbar__count">0</span>
                 </span>
             </span>
 
-            <div class="topbar__cart-detail-holder">
-                <div class="topbar__cart-detail">
-                    <div class="topbar__cart-view">
-                        <table>
-
-                            <tr>
-                                <td><img src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="bookimg"></td>
-                                <td>
-                                    <p class="topbar__product-info">
-                                        <a href="#">Người thắp lửa</a>
-                                        <span>893532502468 / Sách thiếu nhi / 220.000đ</span>
-                                    </p>
-
-                                    <div class="topbar__cart-view-amountprice-holder">
-                                        <span>1</span>
-                                        <div>220.000đ</div>
-                                    </div>
-
-                                    <div class="topbar__product-cancel"><i class="fa-solid fa-xmark"></i></div>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <div class="topbar__cart-detail-divide"></div>
-
-                    <div class="topbar__cart-price">
-                        <table>
-                            <tr class="topbar__price-total">
-                                <td>TỔNG TIỀN:</td>
-                                <td>220.000đ</td>
-                            </tr>
-
-                            <tr class="topbar__cart-btn">
-                                <td class="topbar__cart"><button>Xem giỏ hàng</button></td>
-                                <td><button class="topbar__checkout-btn">Thanh toán</button></td>
-                            </tr>
-                        </table>
-                    </div>
-
-
-                </div>
-            </div>
+            <div class="topbar__cart-detail-holder"></div>
         </div>
     </div>
 
@@ -212,7 +170,7 @@
                             <p class="filter-group__title">Giá</p>
                             <i class="filter-group__toggle fa-solid fa-minus" onclick="showFilter(this)"></i>
                         </div>
-                        <div class="filter-group__content">
+                        <div class="filter-group__content list-price-content">
                             <div class="filter-group__inputs">
                                 <div class="input-wraper">
                                     <input type="text" class="filter-group__input" value="0">
@@ -363,8 +321,6 @@
             <section class="book-category">
                 <h2 class="book-category__title">Danh sách sản phẩm</h2>
 
-
-
                 <div class="book-category__sort d-flex">
 
                     <div class="book-category__sort-item">
@@ -413,8 +369,8 @@
 
 
                     <div class="book-category__button d-flex">
-                        <div class="btn sort-btn" onclick="consoleGetBook()">Lọc sách</div>
-                        <div class="btn reset-btn">Đặt lại</div>
+                        <div class="btn sort-btn" onclick="filterBookList()">Lọc sách</div>
+                        <div class="btn reset-btn" onclick="resetFilterBook()">Đặt lại</div>
                     </div>
                 </div>
 
@@ -429,26 +385,16 @@
         </div>
     </main>
 
-    <div class="show-cart">
+    <!-- ''''''''''''''''' NỘI DUNG LUÂN ĐÃ VIẾT Ở ĐÂY ''''''''''''''''' -->
+
+    <div class="show-cart hide-item">
         <div class="show-cart__container">
             <div class="show-cart__title">
                 GIỎ HÀNG
             </div>
+
             <div class="show-cart__cart">
-                <div class="show-cart__item d-flex">
-                    <img class="show-cart__img" src="../public/images/vo-van-kiet-nguoi-thap-lua-tb-2025.png" alt="product">
-                    <div class="show-cart__detail d-flex">
-                        <div class="show-cart__bookname">Người thắp lửa</div>
-                        <div class="show-cart__price">893532502468 / Sách thiếu nhi / 220.000đ</div>
-                    </div>
-                    <div class="show-cart__amountbox">
-                        <button class="show-cart__btn show-cart__btn--left">-</button>
-                        <input type="text" name="product-amount" value="1">
-                        <button class="show-cart__btn show-cart__btn--right">+</button>
-                    </div>
-                    <div class="show-cart__priceamount">220.000đ</div>
-                    <a href="#" class="show-cart__remove"><i class="fa-solid fa-trash-can"></i></a>
-                </div>
+                
             </div>
 
 
@@ -466,6 +412,9 @@
             </div>
         </div>
     </div>
+
+
+    <div class="self-infomation"></div>
 
     <div class="checkout hide-item">
         <div class="checkout__container">

@@ -44,21 +44,21 @@ function returnJSONBook($books) {
 
 $book_model = new app_models_Sach();
 
-$bookId = isset($_GET['bookId']) ? (int) $_GET['bookId'] : '';
+$bookId = isset($_GET['bookId']) ? $_GET['bookId'] : '';
 $bookName = isset($_GET['bookName']) ? trim($_GET['bookName']) : '';
 
-$min_price = isset($_GET['minPrice']) ? (float) $_GET['minPrice'] : 0;
-$max_price = isset($_GET['maxPrice']) ? (float) $_GET['maxPrice'] : null;
+$min_price = isset($_GET['minPrice']) ? $_GET['minPrice'] : 0;
+$max_price = isset($_GET['maxPrice']) ? $_GET['maxPrice'] : null;
 
 $order_by = isset($_GET['orderBy']) ? trim($_GET['orderBy']) : '';
 
-$categoryId = isset($_GET['cateId']) ? (int) $_GET['cateId'] : '';
-$authorId = isset($_GET['authorId']) ? (int) $_GET['authorId'] : '';
-$status = isset($_GET['bookStatus']) ? (int) $_GET['bookStatus'] : '';
+$categoryId = isset($_GET['cateId']) ? $_GET['cateId'] : '';
+$authorId = isset($_GET['authorId']) ? $_GET['authorId'] : '';
+$status = isset($_GET['bookStatus']) ? $_GET['bookStatus'] : '';
 
 $coverType = isset($_GET['coverType']) ? trim($_GET['coverType']) : '';
 $publisher = isset($_GET['publisher']) ? trim($_GET['publisher']) : '';
-$publishYear = isset($_GET['publishYear']) ? (int) $_GET['publishYear'] : '';
+$publishYear = isset($_GET['publishYear']) ? $_GET['publishYear'] : '';
 
 $books = $book_model->getBookByFilters(
     $min_price,

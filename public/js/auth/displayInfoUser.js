@@ -1,7 +1,6 @@
 import { toast } from "../toast.js";
 import { resetToOriginParam } from "../common.js";
 
-
 export async function fetchData(URL) {
     try {
         showLoading();
@@ -75,13 +74,13 @@ export async function updateInfoTopBar(promiseResponse) {
                 </div>
 
                 <ul class="topbar__auth-list">
-                    <li>
+                    <li onclick="showContentProfile('self-infomation')">
                         <i class="fa-solid fa-user-gear"></i>
                         Thông tin
                     </li>
-                    <li>
+                    <li  onclick="showContentProfile('purchase-order')">
                         <i class="fa-solid fa-cart-shopping"></i>
-                        Giỏ hàng
+                        Đơn hàng
                     </li>
                     <li class="logout-current-account">
                         <i class="fa-solid fa-right-from-bracket"></i>

@@ -633,6 +633,11 @@
   overflow: hidden;
 }
 
+.topbar__cart-title {
+  text-align: center;
+  font-weight: bold;
+}
+
 /* -------------------------------------------------------------------------------- */
 
 .footer {
@@ -1058,8 +1063,9 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 300px;
-  box-shadow: 0 1px 5px 2px rgba(0, 0, 0, 0.1);
+  width: 500px;
+
+box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   border-radius: 3px;
   display: none;
 }
@@ -1069,7 +1075,7 @@
 }
 
 .topbar__cart-detail {
-  padding: 20px 10px;
+  padding: 2rem 0 2rem 2rem;
 }
 
 .topbar__cart-view {
@@ -1080,7 +1086,7 @@
 }
 
 .topbar__cart-view::-webkit-scrollbar {
-  width: 4px;
+  width: 1px;
 }
 
 .topbar__cart-view::-webkit-scrollbar-track {
@@ -1099,6 +1105,7 @@
 
 .topbar__cart-view table tr {
   border-bottom: solid 1px #ebebeb;
+  width: fit-content;
 }
 
 .topbar__cart-view tr td {
@@ -1108,6 +1115,7 @@
 
 .topbar__cart-view img {
   width: 65px;
+  aspect-ratio: 2/3;
 }
 
 .topbar__cart-view tr td:last-child {
@@ -1119,6 +1127,8 @@
 .topbar__product-info a {
   font-weight: 600;
   font-size: 1.4rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 
 .topbar__product-info span {
@@ -1151,15 +1161,21 @@
 
 .topbar__product-cancel {
   position: absolute;
-  top: 15px;
+  top: 0px;
   right: 0px;
   cursor: pointer;
+}
+
+.topbar__price-total {
+  display: flex;
+  justify-content: space-between;
 }
 
 .topbar__price-total td:first-child {
   padding: 5px 10px 5px 10px;
   font-size: 1.6rem;
   color: #677279;
+  width: fit-content;
 }
 
 .topbar__price-total td:last-child {
@@ -1168,6 +1184,12 @@
   color: red;
   font-weight: 600;
   text-align: right;
+  width: fit-content;
+}
+
+.topbar__cart-btn {
+  display: flex;
+  justify-content: left;
 }
 
 .topbar__cart-btn td button {
@@ -1178,15 +1200,11 @@
   padding: 7px 12px;
   cursor: pointer;
   transition: all 0.15s;
+  margin-top: 1rem;
+  margin-right: 1.5rem;
 }
 
-.topbar__cart-btn td:first-child {
-  padding: 10px 10px 5px 10px;
-}
 
-.topbar__cart-btn td:last-child {
-  padding: 10px 0 5px 10px;
-}
 
 .topbar__cart-btn button:hover {
   background-color: var(--topbar-color);
@@ -1752,7 +1770,7 @@
 
 .checkout__product-quantity {
   position: absolute;
-  z-index: 11;
+  z-index: 8;
   top: -12%;
   right: -17%;
   background-color: rgba(153, 153, 153, 0.9);

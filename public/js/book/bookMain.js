@@ -1,9 +1,145 @@
-import { formatMoney, getBookByTrueName, getNameAuthorByID, getNameCategoryByID, getNameCoverByID, getNamePublisherByID } from "./getDataBook.js";
+import { formatMoney, getNameAuthorByID, getNameCategoryByID, getNameCoverByID, getNamePublisherByID } from "./getDataBook.js";
+import { getAllBookProduct } from "./showBook.js";
+import { toast } from '../toast.js'
+
+document.addEventListener("DOMContentLoaded", function () {
+    const currentParams = new URLSearchParams(window.location.search);
+    const url = new URL(window.location.href);
+
+    /* Lọc theo tác giả */
+    let authorListFilter = [];
+    const authorCheckBoxList = document.querySelectorAll('.body .filter-group .list-author-content .filter-group__option input');
+
+    let savedAuthors = JSON.parse(localStorage.getItem("selectedAuthors")) || [];
+    authorCheckBoxList.forEach(checkbox => {
+        if (savedAuthors.includes(checkbox.value)) {
+            checkbox.checked = true;
+        }
+    });
+
+    authorCheckBoxList.forEach(button => {
+        button.addEventListener('change', function () {
+            if (button.checked) {
+                authorListFilter.push(button.value);
+            } else {
+                authorListFilter = authorListFilter.filter(item => item !== button.value);
+            }
+
+            localStorage.setItem("selectedAuthors", JSON.stringify(authorListFilter));
+        });
+    });
+
+    /* Lọc theo nhà xuất bản */
+    let publisherListFilter = [];
+    const publisherCheckBoxList = document.querySelectorAll('.body .filter-group .list-publisher-content .filter-group__option input')
+
+    let savedPublishers = JSON.parse(localStorage.getItem("selectedPublishers")) || [];
+    publisherCheckBoxList.forEach(checkbox => {
+        if (savedPublishers.includes(checkbox.value)) {
+            checkbox.checked = true;
+        }
+    });
+
+    publisherCheckBoxList.forEach(button => {
+        button.addEventListener('change', function () {
+            if (button.checked) {
+                publisherListFilter.push(button.value);
+            } else {
+                publisherListFilter = publisherListFilter.filter(item => item !== button.value);
+            }
+
+            localStorage.setItem("selectedPublishers", JSON.stringify(publisherListFilter));
+        });
+    });
+
+    /* Lọc theo loại bìa */
+    let coverListFilter = [];
+    const coverCheckBoxList = document.querySelectorAll('.body .filter-group .list-cover-content .filter-group__option input');
+
+    let savedCovers = JSON.parse(localStorage.getItem("selectedCovers")) || [];
+    coverCheckBoxList.forEach(checkbox => {
+        if (savedCovers.includes(checkbox.value)) {
+            checkbox.checked = true;
+        }
+    });
+
+    coverCheckBoxList.forEach(button => {
+        button.addEventListener('change', function () {
+            if (button.checked) {
+                coverListFilter.push(button.value);
+            } else {
+                coverListFilter = coverListFilter.filter(item => item !== button.value);
+            }
+
+            localStorage.setItem("selectedCovers", JSON.stringify(coverListFilter));
+        });
+    });
+
+
+    /* Lọc theo thể loại */
+    let tyeCategory = "";
+    const categoryCombox = document.querySelector("#type-category");
+
+    if (categoryCombox) {
+        const savedCategory = localStorage.getItem("selectedCategory");
+        if (savedCategory) {
+            categoryCombox.value = savedCategory;
+        }
+
+        categoryCombox.addEventListener("change", function () {
+            tyeCategory = categoryCombox.value;
+            localStorage.setItem("selectedCategory", tyeCategory);
+        });
+    }
+
+
+    /* Lọc theo sắp xếp theo */
+    let typeOrderBy = "";
+    const orderByCombox = document.querySelector("#sort-combobox");
+
+    if (orderByCombox) {
+        const savedOrderBy = localStorage.getItem("selectedOrderBy");
+        if (savedOrderBy) {
+            orderByCombox.value = savedOrderBy;
+        }
+
+        orderByCombox.addEventListener("change", function () {
+            typeOrderBy = orderByCombox.value;
+            localStorage.setItem("selectedOrderBy", typeOrderBy);
+        });
+    }
+
+    /* Lọc theo hiển thị theo */
+    let typeVisible = "";
+    const visibleByCombox = document.querySelector("#page-show-by");
+
+    if (visibleByCombox) {
+        const savedVisible = localStorage.getItem("visibleBy");
+        if (savedVisible) {
+            visibleByCombox.value = savedVisible;
+        }
+
+        visibleByCombox.addEventListener("change", function () {
+            typeVisible = visibleByCombox.value;
+            localStorage.setItem("visibleBy", typeVisible);
+        });
+    }
+
+
+
+    // Hiển thị sách lên màn hình
+    if (currentParams.has('bookID') && currentParams.has('dislayBookName')) {
+        let bookID = currentParams.get('bookID');
+        showDetailProduct(bookID);
+    }
+});
+
 
 
 async function showDetailProduct(product_id) {
     const URL = `api/books/get.php?bookId=${product_id}`;
 
+    showLoading();
     async function fetchData(URL) {
         try {
             let response = await fetch(URL);
@@ -27,6 +163,7 @@ async function showDetailProduct(product_id) {
     let nameAuthor = await getNameAuthorByID(productDetail['authorId']);
     let nameCover = await getNameCoverByID(productDetail['coverTypeId']);
     let namePublisher = await getNamePublisherByID(productDetail['publisherId']);
+    hideLoading();
 
     let detail_html = `
         <div class="show-detail-product__container">
@@ -58,7 +195,7 @@ async function showDetailProduct(product_id) {
                             <i class="fa-solid fa-bolt"></i>&nbsp;Mua ngay
                         </button>
                         <button class="show-detail-product__btn show-detail-product__btn--add-to-cart">
-                            <i class="fa-solid fa-cart-plus"></i>&nbsp;Giỏ hàng
+                            <i class="fa-solid fa-cart-plus" data-id=${productDetail['id']}></i>&nbsp;Giỏ hàng
                         </button>
                     </div>
                 </div>
@@ -71,13 +208,13 @@ async function showDetailProduct(product_id) {
                 <div class="show-detail-product__desc">
                         <p>${productDetail['description']}</p>
                 </div>
-                 <ul class="show-detail-product__details hide-item">
-                    <li><strong>Số trang:</strong> ${productDetail['numberOfPages']} trang</li>
-                    <li><strong>Năm xuất bản:</strong> ${productDetail['publishYear']}</li>
-                    <li><strong>Kích thước:</strong> ${productDetail['size']}</li>
-                    <li><strong>Loại bìa:</strong>  ${nameCover}</li>
-                    <li><strong>Nhà xuất bản:</strong> ${namePublisher}</li>
-                </ul>
+                    <ul class="show-detail-product__details hide-item">
+                        <li><strong>Số trang:</strong> ${productDetail['numberOfPages']} trang</li>
+                        <li><strong>Năm xuất bản:</strong> ${productDetail['publishYear']}</li>
+                        <li><strong>Kích thước:</strong> ${productDetail['size']}</li>
+                        <li><strong>Loại bìa:</strong>  ${nameCover}</li>
+                        <li><strong>Nhà xuất bản:</strong> ${namePublisher}</li>
+                    </ul>
             </div>
             <div class="show-detail-product__close" onclick="closeDetailProduct()">X</div>
         </div>
@@ -88,9 +225,41 @@ async function showDetailProduct(product_id) {
     document.querySelector('.show-detail-product').style.display = 'block';
 
     let urlSource = new URLSearchParams();
-    urlSource.set("showBook", `${productDetail['id']}`);
+    urlSource.set("bookID", `${productDetail['id']}`)
+    urlSource.set("dislayBookName", `${productDetail['name']}`);
 
-    // 🟢 Lưu state với dữ liệu sản phẩm
+    // Thêm vào giỏ hàng
+    document.querySelector('.show-detail-product__btn--add-to-cart').addEventListener('click', function() {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let product = {
+            id: `${product_id}`,
+            name: `${productDetail['name']}`,
+            price: `${productDetail['sellingPrice']}`,
+            genreId: `${productDetail['genreId']}`,
+            quantity: 1,
+            image: `${productDetail['image']}`
+        }
+
+
+        let existingProduct = cart.find(item => item.id === product.id);
+
+        if (existingProduct) {
+            existingProduct.quantity += 1;
+        } else {
+            cart.push(product);
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        toast({
+            title: 'Thông báo',
+            message: `Đã thêm sản phẩm ${productDetail['name']} vào giỏ hàng !`,
+            type: 'success',
+            duration: 3000
+        });
+        updateQuantityCardHolder();
+    });
+
     history.pushState({ product: productDetail }, '', window.location.pathname + '?' + urlSource.toString());
 }
 
@@ -129,38 +298,24 @@ function closeDetailProduct() {
 
     let url = new URL(window.location.href);
     let params = new URLSearchParams(url.search);
-    params.delete('showBook');
-
+    if (params.has('bookID') && params.has('dislayBookName')) {
+        params.delete('bookID');
+        params.delete('dislayBookName');
+    }
     let newUrl = url.pathname + (params.toString() ? '?' + params.toString() : '');
-
-
     window.history.replaceState({}, document.title, newUrl);
 }
 
 
 
-window.onpopstate = function(event) {
-    if (event.state && event.state.product) {
-        let productDetail = event.state.product;
-        showDetailProduct(productDetail.id);
-    } else {
-        closeDetailProduct();
-    }
-};
-
-
-
-// Hiển thị lại sách nếu trong URL có
-document.addEventListener("DOMContentLoaded", async function () {
-    let url = new URL(window.location.href);
-    let params = new URLSearchParams(url.search);
-
-    if (params.has('showBook')) {
-        let bookId = params.get('showBook');
-        showDetailProduct(bookId);
-    }
-});
-
+// window.onpopstate = function(event) {
+//     if (event.state && event.state.product) {
+//         let productDetail = event.state.product;
+//         showDetailProduct(productDetail.id);
+//     } else {
+//         closeDetailProduct();
+//     }
+// };
 
 
 
@@ -198,6 +353,23 @@ $(function () {
     });
 });
 
+
+
+function filterBookList() {
+    // Lấy dữ liệu từ trong localStorage để đưa lên main
+}
+
+function resetFilterBook() {
+    if (localStorage.getItem('selectedAuthors')) localStorage.removeItem('selectedAuthors');
+    if (localStorage.getItem('selectedCovers')) localStorage.removeItem('selectedCovers');
+    if (localStorage.getItem('selectedPublishers')) localStorage.removeItem('selectedPublishers');
+
+}
+
+
+
+
 // gán hàm thành biến toàn cục (global scope)
 window.showDetailProduct = showDetailProduct;
 window.closeDetailProduct = closeDetailProduct;
+window.showOptionDetailProduct = showOptionDetailProduct;

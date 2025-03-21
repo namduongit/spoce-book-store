@@ -1,11 +1,3 @@
-document.addEventListener("DOMContentLoaded", async function () {
-  let allproduct = await getAllBookProduct();
-  if (Array.isArray(allproduct)) {
-    updateBookToMain(allproduct);
-  } else {
-    console.error("Dữ liệu allproduct không hợp lệ:", allproduct);
-  }
-});
 
 // Hàm lấy dữ liệu từ API
 export async function getAllBookProduct() {
@@ -23,6 +15,14 @@ export async function getAllBookProduct() {
     return [];
   }
 }
+
+
+export async function getListProductByFilter() {
+
+}
+
+
+
 
 // Cập nhật giao diện với danh sách sách
 export function updateBookToMain(allproduct = []) {
@@ -75,7 +75,7 @@ let allProducts = [];
 document.addEventListener("DOMContentLoaded", async function () {
   allProducts = await getAllBookProduct();
   if (Array.isArray(allProducts)) {
-    showProductList(currentPage); // Hiển thị trang đã lưu
+    showProductList(currentPage);
     setPagination();
   } else {
     console.error("Dữ liệu allproduct không hợp lệ:", allProducts);

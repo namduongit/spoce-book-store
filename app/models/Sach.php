@@ -62,16 +62,15 @@ class app_models_Sach extends app_libs_DBConnection {
         $maxPrice = null,
         $order_by = '',
         $category = '',
-        $author = '',
+        $author = [],
         $id = '',
         $status = '',
         $name = '',
-        $loaiBia = '',
-        $nhaXuatBan = '',
+        $loaiBia = [],
+        $nhaXuatBan = [],
         $namXuatBan = ''
     ) {
-
-        if ($id === '' && $name === '' && $author === '' && $category === '' && $loaiBia === '' && $nhaXuatBan === '' && $namXuatBan === '') {
+        if ($id === '' && $name === '' && empty($author) && $category === '' && empty($loaiBia) && empty($nhaXuatBan) && $namXuatBan === '') {
             return $this->building_queryParam()->select();
         }
 
@@ -101,8 +100,12 @@ class app_models_Sach extends app_libs_DBConnection {
         }
 
         if (!empty($author)) {
-            $conditions[] = 'maTacGia = ?';
-            $params[] = $author;
+            if (!is_array($author)) {
+                $author = explode(',', $author);
+            }
+            $placeholders = implode(',', array_fill(0, count($author), '?'));
+            $conditions[] = "maTacGia IN ($placeholders)";
+            $params = array_merge($params, $author);
         }
 
         if ($status !== '') {
@@ -116,13 +119,21 @@ class app_models_Sach extends app_libs_DBConnection {
         }
 
         if (!empty($loaiBia)) {
-            $conditions[] = 'maLoaiBia = ?';
-            $params[] = $loaiBia;
+            if (!is_array($loaiBia)) {
+                $loaiBia = explode(',', $loaiBia);
+            }
+            $placeholders = implode(',', array_fill(0, count($loaiBia), '?'));
+            $conditions[] = "maLoaiBia IN ($placeholders)";
+            $params = array_merge($params, $loaiBia);
         }
 
         if (!empty($nhaXuatBan)) {
-            $conditions[] = 'maNXB = ?';
-            $params[] = $nhaXuatBan;
+            if (!is_array($nhaXuatBan)) {
+                $nhaXuatBan = explode(',', $nhaXuatBan);
+            }
+            $placeholders = implode(',', array_fill(0, count($nhaXuatBan), '?'));
+            $conditions[] = "maNXB IN ($placeholders)";
+            $params = array_merge($params, $nhaXuatBan);
         }
 
         if (!empty($namXuatBan) && is_numeric($namXuatBan)) {
@@ -139,8 +150,6 @@ class app_models_Sach extends app_libs_DBConnection {
 
         return $this->building_queryParam($queryParams)->select();
     }
-
-
 
 }
 ?>
