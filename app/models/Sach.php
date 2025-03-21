@@ -1,14 +1,17 @@
 <?php
-class app_models_Sach extends app_libs_DBConnection {
+class app_models_Sach extends app_libs_DBConnection
+{
     protected $table_name = 'sach';
 
     // Lấy tất cả sách
-    public function getAllBooks() {
+    public function getAllBooks()
+    {
         return $this->building_queryParam()->select();
     }
 
     // Lấy sách theo ID
-    public function getBookById($maSach) {
+    public function getBookById($maSach)
+    {
         return $this->building_queryParam([
             'where' => 'maSach = ?',
             'params' => [$maSach]
@@ -16,14 +19,16 @@ class app_models_Sach extends app_libs_DBConnection {
     }
 
     // Thêm sách mới
-    public function insertBook($data) {
+    public function insertBook($data)
+    {
         return $this->building_queryParam([
             'field' => $data
         ])->insert();
     }
 
     // Cập nhật sách
-    public function updateBook($maSach, $data) {
+    public function updateBook($maSach, $data)
+    {
         return $this->building_queryParam([
             'value' => $data,
             'where' => 'maSach = ?',
@@ -32,7 +37,8 @@ class app_models_Sach extends app_libs_DBConnection {
     }
 
     // Xóa sách
-    public function deleteBook($maSach) {
+    public function deleteBook($maSach)
+    {
         return $this->building_queryParam([
             'where' => 'maSach = ?',
             'params' => [$maSach]
@@ -40,7 +46,8 @@ class app_models_Sach extends app_libs_DBConnection {
     }
 
     // Lấy sách theo mã loại
-    public function getBooksByCategory($id) {
+    public function getBooksByCategory($id)
+    {
         return $this->building_queryParam([
             'where' => 'maTheLoai = ?',
             'params' => [$id]
@@ -48,7 +55,8 @@ class app_models_Sach extends app_libs_DBConnection {
     }
 
     // Lấy sách theo khoảng giá
-    public function getBookByPrice($minPrice = 0, $maxPrice = INF) {
+    public function getBookByPrice($minPrice = 0, $maxPrice = INF)
+    {
         return $this->building_queryParam([
             'where' => 'giaBan >= ? and giaBan <= ?',
             'params' => [$minPrice, $maxPrice]
@@ -68,7 +76,9 @@ class app_models_Sach extends app_libs_DBConnection {
         $name = '',
         $loaiBia = '',
         $nhaXuatBan = '',
-        $namXuatBan = ''
+        $namXuatBan = '',
+        $pageSize = 10,  // trang mặc đinh là 10
+        $page = 1        // trang đầu tiên
     ) {
 
         if ($id === '' && $name === '' && $author === '' && $category === '' && $loaiBia === '' && $nhaXuatBan === '' && $namXuatBan === '') {
@@ -132,15 +142,85 @@ class app_models_Sach extends app_libs_DBConnection {
 
         $whereClause = count($conditions) > 0 ? implode(' AND ', $conditions) : '1';
 
+        //tính toán và OFFSET
+        $offset = ($page - 1) * $pageSize;
+
         $queryParams = [
             'where' => $whereClause,
-            'params' => $params
+            'params' => $params,
+            //thêm phân trang
+            'limit' => $pageSize,
+            'offset' => $offset
         ];
 
         return $this->building_queryParam($queryParams)->select();
     }
+    public function countBooks(
+        $minPrice = 0,
+        $maxPrice = null,
+        $order_by = '',
+        $category = '',
+        $author = '',
+        $id = '',
+        $status = '',
+        $name = '',
+        $loaiBia = '',
+        $nhaXuatBan = '',
+        $namXuatBan = ''
+    ) {
+        $conditions = [];
+        $params = [];
 
+        if ($minPrice > 0) {
+            $conditions[] = 'giaBan >= ?';
+            $params[] = $minPrice;
+        }
 
+        if ($maxPrice !== null) {
+            $conditions[] = 'giaBan <= ?';
+            $params[] = $maxPrice;
+        }
 
+        if (!empty($category)) {
+            $conditions[] = 'maTheLoai = ?';
+            $params[] = $category;
+        }
+
+        if (!empty($author)) {
+            $conditions[] = 'maTacGia = ?';
+            $params[] = $author;
+        }
+
+        if ($status !== '') {
+            $conditions[] = 'trangThai = ?';
+            $params[] = $status;
+        }
+
+        if (!empty($name)) {
+            $conditions[] = 'tenSach LIKE ?';
+            $params[] = "%$name%";
+        }
+
+        if (!empty($loaiBia)) {
+            $conditions[] = 'maLoaiBia = ?';
+            $params[] = $loaiBia;
+        }
+
+        if (!empty($nhaXuatBan)) {
+            $conditions[] = 'maNXB = ?';
+            $params[] = $nhaXuatBan;
+        }
+
+        if (!empty($namXuatBan) && is_numeric($namXuatBan)) {
+            $conditions[] = 'namXuatBan = ?';
+            $params[] = $namXuatBan;
+        }
+
+        $whereClause = count($conditions) > 0 ? implode(' AND ', $conditions) : '1';
+        return $this->building_queryParam([
+            'select' => 'COUNT(*) as total',
+            'where' => $whereClause,
+            'params' => $params
+        ])->select_one()['total'];
+    }
 }
-?>

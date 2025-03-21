@@ -7,7 +7,12 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
-function returnJSONBook($books) {
+//phân trang mặc đinh là 10
+$pageSize = isset($_GET['pageSize']) ? (int)$_GET['pageSize'] : 10;
+//mặc đinh là trang 1
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+function returnJSONBook($books, $pageSize, $page)
+{
     if (!$books) {
         echo json_encode(["error" => "Không tìm thấy sách!"]);
         exit();
@@ -17,6 +22,10 @@ function returnJSONBook($books) {
     if (!isset($books[0])) {
         $books = [$books];
     }
+
+    //tính offset để lấy số sách cần trong trang vd trang 1 từ 1->10, trang 2 11->20
+    $offset = ($page - 1) * $pageSize;
+    $books = array_slice($books, $offset, $pageSize);
 
     $response = [];
     foreach ($books as $book) {
@@ -38,8 +47,9 @@ function returnJSONBook($books) {
             "updatedAt" => $book['ngayCapNhat']
         ];
     }
-    echo json_encode($response);
+    return $response;
 }
+
 
 
 $book_model = new app_models_Sach();
@@ -60,7 +70,25 @@ $coverType = isset($_GET['coverType']) ? trim($_GET['coverType']) : '';
 $publisher = isset($_GET['publisher']) ? trim($_GET['publisher']) : '';
 $publishYear = isset($_GET['publishYear']) ? (int) $_GET['publishYear'] : '';
 
+
+
 $books = $book_model->getBookByFilters(
+    $min_price,
+    $max_price,
+    $order_by,
+    $categoryId,
+    $authorId,
+    $bookId,
+    $status,
+    $bookName,
+    $coverType,
+    $publisher,
+    $publishYear,
+    $pageSize,
+    $page
+);
+// Lấy tổng số sách
+$totalBooks = $book_model->countBooks(
     $min_price,
     $max_price,
     $order_by,
@@ -73,7 +101,11 @@ $books = $book_model->getBookByFilters(
     $publisher,
     $publishYear
 );
-
-
 // Trả về kết quả dưới dạng JSON
-returnJSONBook($books);
+$response = [
+    "books" => returnJSONBook($books, $pageSize, $page),
+    "totalBooks" => $totalBooks,
+    "currentPage" => $page,
+    "pageSize" => $pageSize
+];
+echo json_encode($response, JSON_UNESCAPED_UNICODE);

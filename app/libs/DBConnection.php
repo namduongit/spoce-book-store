@@ -7,7 +7,8 @@
  */
 
 
-class app_libs_DBConnection {
+class app_libs_DBConnection
+{
     protected $dsn = "mysql:host=128.199.154.64;port=3306;dbname=bookStore;charset=utf8";
     protected $username = "bookStore";
     protected $password = "bookStoreWeb";
@@ -18,12 +19,12 @@ class app_libs_DBConnection {
 
     protected static $connection = null;
 
-    public function open_connect() {
+    public function open_connect()
+    {
         if (self::$connection == null) {
             try {
                 self::$connection = new PDO($this->dsn, $this->username, $this->password);
                 self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             } catch (Exception $exception) {
                 echo "Lỗi khi kết nối cơ sở dữ liệu: " . $exception->getMessage() . "<br>";
             }
@@ -31,12 +32,14 @@ class app_libs_DBConnection {
         return self::$connection;
     }
 
-    public function close_connect() {
+    public function close_connect()
+    {
         self::$connection = null;
     }
 
     // Hàm xây dựng các param
-    public function building_queryParam($params = []) {
+    public function building_queryParam($params = [])
+    {
         $default = [
             'select' => '*',
             'where' => '',
@@ -50,7 +53,8 @@ class app_libs_DBConnection {
         return $this;
     }
 
-    public function building_condition($condition) {
+    public function building_condition($condition)
+    {
         return !empty($condition) ? 'WHERE ' . $condition : '';
     }
 
@@ -60,7 +64,8 @@ class app_libs_DBConnection {
      * Mọi người cập nhật ghi chú ở đây nhé
      */
 
-     public function query($sql, $param = []) {
+    public function query($sql, $param = [])
+    {
         if (self::$connection == null) self::$connection = $this->open_connect();
 
         $query = self::$connection->prepare($sql);
@@ -68,7 +73,8 @@ class app_libs_DBConnection {
         return $query;
     }
 
-    public function select() {
+    public function select()
+    {
         if (self::$connection == null) self::$connection = $this->open_connect();
 
         $sql = 'SELECT ' . $this->queryParam['select'] . ' FROM ' . $this->table_name;
@@ -86,7 +92,8 @@ class app_libs_DBConnection {
 
 
 
-    public function select_one() {
+    public function select_one()
+    {
         if (self::$connection == null) self::$connection = $this->open_connect();
 
         $this->queryParam['other'] = 'LIMIT 1';
@@ -95,7 +102,8 @@ class app_libs_DBConnection {
         return $data ? $data[0] : [];
     }
 
-    public function insert() {
+    public function insert()
+    {
         if (self::$connection == null) self::$connection = $this->open_connect();
 
         $fields = array_keys($this->queryParam['field']);
@@ -107,7 +115,8 @@ class app_libs_DBConnection {
         return self::$connection->lastInsertId();
     }
 
-    public function update() {
+    public function update()
+    {
         if (self::$connection == null) self::$connection = $this->open_connect();
 
         $fieldValues = [];
@@ -118,20 +127,18 @@ class app_libs_DBConnection {
         }
 
         $sql = 'UPDATE ' . $this->table_name . ' SET ' . implode(', ', $fieldValues) . ' ' .
-        $this->building_condition($this->queryParam['where']) . ' ' . $this->queryParam['other'];
+            $this->building_condition($this->queryParam['where']) . ' ' . $this->queryParam['other'];
 
         return $this->query($sql, $params);
     }
 
-    public function delete() {
+    public function delete()
+    {
         if (self::$connection == null) self::$connection = $this->open_connect();
 
         $sql = 'DELETE FROM ' . $this->table_name . ' ' .
-        $this->building_condition($this->queryParam['where']) . ' ' . $this->queryParam['other'];
+            $this->building_condition($this->queryParam['where']) . ' ' . $this->queryParam['other'];
 
         return $this->query($sql, []);
     }
 }
-
-
-
