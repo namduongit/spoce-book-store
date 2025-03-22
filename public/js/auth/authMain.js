@@ -4,6 +4,7 @@ import { isLogined } from './displayInfoUser.js';
 import { updateInfoTopBar } from './displayInfoUser.js';
 import { Validation } from '../validation.js';
 import { showConfirmationDialog } from "../question.js";
+import { setCookie } from '../common.js';
 
 /**
  * @URLSearchParams là dạng như Promise. Cung cấp các việc: tìm kiếm, lấy, đẩy, toString (lấy sau origin href), ...
@@ -379,7 +380,8 @@ function showFormUser(type) {
                     });
 
                     if (data.success === true) {
-                        localStorage.setItem('token', data.token);
+                        // localStorage.setItem('token', data.token);
+                        setCookie('token', data.token, 1);
                         console.log('Đăng nhập thành công, token:', data.token);
                         setTimeout(() => {
                             resetToOriginParam();
@@ -387,6 +389,7 @@ function showFormUser(type) {
                         }, 1000);
                     }
                 })
+
                 .catch(error => {
                     console.log('Lỗi đăng nhập');
                 })
@@ -433,7 +436,8 @@ function loginAfterRegister(username, password) {
         .then(data => {
             hideLoading();
             if (data.success) {
-                localStorage.setItem('token', data.token);
+                // localStorage.setItem('token', data.token);
+                setCookie('token', data.token, 1);
                 console.log('Đăng nhập thành công, token:', data.token);
                 localStorage.removeItem('justRegistered');
                 toast({

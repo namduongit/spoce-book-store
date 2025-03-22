@@ -44,7 +44,7 @@ try {
     }
 
     $secret_key = "ThisIsSecretKeyByNamDuongit";
-    $issuer = "http://localhost:3000";
+    $issuer = "https://namduong.id.vn/";
     $issued_at = time();
      // Token hết hạn trong 1 ngày
     $expiration_time = $issued_at + 86400;

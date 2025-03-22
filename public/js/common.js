@@ -29,6 +29,18 @@ export function setCookie(name, value, days) {
     document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/;`;
 }
 
+export function getCookie(name) {
+    let cookies = document.cookie.split('; ');
+    for (let i = 0; i < cookies.length; i++) {
+        let [key, value] = cookies[i].split('=');
+        if (key === name) return value;
+    } return null;
+}
+
+export function deleteCookie(name) {
+    document.cookie = name + "=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+}
+
 export async function isExitsUser(username) {
     async function getUserByUsername(username) {
         let response = await fetch(`../../api/users/get.php?username=${username}`);

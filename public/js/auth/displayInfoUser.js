@@ -1,5 +1,7 @@
 import { toast } from "../toast.js";
 import { resetToOriginParam } from "../common.js";
+import { getCookie } from "../common.js";
+import { deleteCookie } from "../common.js";
 
 export async function fetchData(URL) {
     try {
@@ -23,7 +25,8 @@ export async function getUserByID(userId) {
 }
 
 export async function isLogined() {
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
+    const token = getCookie('token');
 
     if (!token) {
         console.log('Không có token, chưa đăng nhập');
@@ -100,7 +103,8 @@ export async function updateInfoTopBar(promiseResponse) {
     });
 
     logoutBtn.addEventListener('click', async function () {
-        const token = localStorage.getItem('token');
+        // const token = localStorage.getItem('token');
+        const token = getCookie('token');
         if (!token) {
             toast({
                 title: 'Thông báo',
@@ -128,8 +132,8 @@ export async function updateInfoTopBar(promiseResponse) {
             const data = await response.json();
             hideLoading();
             if (data['success']) {
-                localStorage.removeItem('token');
-                console.log('Đăng xuất thành công');
+                // localStorage.removeItem('token');
+                deleteCookie('token');
                 toast({
                     title: 'Thông báo',
                     message: 'Đăng xuất thành công !',
