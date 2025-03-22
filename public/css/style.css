@@ -1423,6 +1423,8 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 
 .show-cart__continue-buy-btn {
   color: #3498db;
+  padding: 1rem 0 2rem 1rem;
+  cursor: pointer;
 }
 
 /* --------------------- Giao diện thanh toán --------------------- */
@@ -1774,7 +1776,7 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 
 .checkout__product-quantity {
   position: absolute;
-  z-index: 8;
+  z-index: 2;
   top: -12%;
   right: -17%;
   background-color: rgba(153, 153, 153, 0.9);

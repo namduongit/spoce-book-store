@@ -53,5 +53,5 @@ export async function isExitsUser(username) {
 }
 
 export function resetToOriginParam() {
-    history.pushState({}, '', window.location.href.toString());
+    history.replaceState(null, '', window.location.href.toString());
 }
