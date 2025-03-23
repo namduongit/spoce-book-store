@@ -3,6 +3,7 @@ import { resetToOriginParam } from "../common.js";
 import { getCookie } from "../common.js";
 import { deleteCookie } from "../common.js";
 import { showConfirmationDialog } from "../question.js";
+import { Validation } from '../validation.js';
 
 export async function fetchData(URL) {
     try {
@@ -288,12 +289,94 @@ function updateInfoAccountSection(user) {
         if (result == true) {
             showLoading();
             const formData = new URLSearchParams();
+            const validation = new Validation();
+            const fullname = document.querySelector('#info-fullname').value;
+            const numberphone = document.querySelector('#info-numberphone').value;
+            const email = document.querySelector('#info-email').value;
+            const password = document.querySelector('#info-newpassword').value;
+            const repeatpassword = document.querySelector('#info-repeatpassword').value;
+
+            if (fullname === '') {
+                toast({
+                    title: 'Thông báo',
+                    message: 'Họ và tên không được trống!',
+                    type: 'warning',
+                    duration: 3000
+                });
+                hideLoading();
+                return;
+            }
+
+            if (!validation.kiemtraSDT(numberphone)) {
+                toast({
+                    title: 'Thông báo',
+                    message: 'Số điện thoại không đúng định dạng!',
+                    type: 'warning',
+                    duration: 3000
+                });
+                hideLoading();
+                return;
+            }
+
+            if (!validation.kiemtraEmail(email)) {
+                toast({
+                    title: 'Thông báo',
+                    message: 'Email không đúng định dạng!',
+                    type: 'warning',
+                    duration: 3000
+                });
+                hideLoading();
+                return;
+            }
+
+            if (password !== '' && repeatpassword !== '') {
+                if (password !== confirmPassword) {
+                    toast({
+                        title: 'Thông báo',
+                        message: 'Mật khẩu và mật khẩu xác nhận phải giống nhau!',
+                        type: 'warning',
+                        duration: 3000
+                    });
+                    hideLoading();
+                    return;
+                }
+                if (!validation.isTruePassword(password)) {
+                    toast({
+                        title: 'Thông báo',
+                        message: 'Mật khẩu có ít nhất 8 kí tự bao gồm ít nhất 1 số!',
+                        type: 'warning',
+                        duration: 3000
+                    });
+                    hideLoading();
+                    return;
+                }
+                if (!validation.isTruePassword(repeatpassword)) {
+                    toast({
+                        title: 'Thông báo',
+                        message: 'Mật khẩu xác nhận có ít nhất 8 kí tự bao gồm ít nhất 1 số!',
+                        type: 'warning',
+                        duration: 3000
+                    });
+                    hideLoading();
+                    return;
+                }
+            } else if ((password !== '' && repeatpassword === '') || (password === '' && repeatpassword !== '')) {
+                toast({
+                    title: 'Thông báo',
+                    message: 'Vui lòng nhập đủ cả 2 ô mật khẩu!',
+                    type: 'warning',
+                    duration: 3000
+                });
+                hideLoading();
+                return;
+            }
+
             formData.append("id", userid);
-            formData.append("name", document.querySelector('#info-fullname').value);
-            formData.append("phone", document.querySelector('#info-numberphone').value);
-            formData.append("email", document.querySelector('#info-email').value);
-            formData.append("password", document.querySelector('#info-newpassword').value);
-            formData.append("confirm_password", document.querySelector('#info-repeatpassword').value);
+            formData.append("name", fullname);
+            formData.append("phone", numberphone);
+            formData.append("email", email);
+            formData.append("password", password);
+            formData.append("confirm_password", repeatpassword);
             console.log(formData.toString());
             fetch("api/users/update.php", {
                 method: "POST",

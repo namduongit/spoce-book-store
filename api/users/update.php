@@ -21,21 +21,11 @@ $xacNhanMatKhau = $_POST['confirm_password'] ?? '';
 $isChangingPassword = false;
 $currentTime = date('Y-m-d H-m-s');
 
-if (empty($hovaten)) {
-    http_response_code(400);
-    echo json_encode(["success" => false, "message" => "loi"]);
-    return;
-}
+
 if (empty($matKhau) && empty($xacNhanMatKhau)) {
     $isChangingPassword = false;
 } else {
     if ((empty($matKhau) && !empty($xacNhanMatKhau)) || (!empty($matKhau) && empty($xacNhanMatKhau))) {
-        http_response_code(400);
-        echo json_encode(["success" => false, "message" => "Mật khẩu không khớp!"]);
-        return;
-    }
-    
-    if ($matKhau !== $xacNhanMatKhau) {
         http_response_code(400);
         echo json_encode(["success" => false, "message" => "Mật khẩu không khớp!"]);
         return;

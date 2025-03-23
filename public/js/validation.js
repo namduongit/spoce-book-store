@@ -58,22 +58,22 @@ export var Validation = function () {
         var regexemail=/[^@]+@[^@]+\.[a-zA-Z]{2,6}/;
         var  pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\.[a-zA-Z]{2,}$/;
         if(regexemail.test(value) || pattern.test(value)){
-            document.querySelector(selector).style.display = "none";
+            // document.querySelector(selector).style.display = "none";
             return true;
         }
-        document.querySelector(selector).innerHTML = "Email không hợp lệ!";
-        document.querySelector(selector).style.display = "block";
+        // document.querySelector(selector).innerHTML = "Email không hợp lệ!";
+        // document.querySelector(selector).style.display = "block";
         return false;
     }
 
     this.kiemtraSDT=function(value, selector){
         let patternVN = /^(09|03|07|08|05)\d{8}$/;
         if(patternVN.test(value)){
-            document.querySelector(selector).style.display = "none";
+            // document.querySelector(selector).style.display = "none";
             return true;
         }
-        document.querySelector(selector).innerHTML = "Số điện thọai không hợp lệ";
-        document.querySelector(selector).style.display = "block";
+        // document.querySelector(selector).innerHTML = "Số điện thọai không hợp lệ";
+        // document.querySelector(selector).style.display = "block";
         return false;
     }
 
