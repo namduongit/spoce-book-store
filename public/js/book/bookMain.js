@@ -1,7 +1,7 @@
 import { formatMoney, getNameAuthorByID, getNameCategoryByID, getNameCoverByID, getNamePublisherByID } from "./getDataBook.js";
 import { toast } from '../toast.js'
 
-document.addEventListener("DOMContentLoaded", function () {
+window.onload = function() {
     const currentParams = new URLSearchParams(window.location.search);
     const url = new URL(window.location.href);
 
@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let bookID = currentParams.get('bookID');
         showDetailProduct(bookID);
     }
-});
+}
 
 
 
@@ -232,10 +232,6 @@ async function showDetailProduct(product_id) {
     document.querySelector('.show-detail-product').innerHTML = detail_html;
     document.querySelector('.show-detail-product').style.display = 'block';
 
-    let urlSource = new URLSearchParams();
-    urlSource.set("bookID", `${productDetail['id']}`)
-    urlSource.set("dislayBookName", `${productDetail['name']}`);
-
 
     // Ấn tăng số
     document.querySelector('.quantity__button-plus').addEventListener('click', function() {
@@ -291,9 +287,13 @@ async function showDetailProduct(product_id) {
             duration: 3000
         });
         updateQuantityCardHolder();
+        viewCart('Recursive');
     });
 
-    history.pushState({ product: productDetail }, '', window.location.pathname + '?' + urlSource.toString());
+    const urlSource = new URLSearchParams(window.location.search);
+    urlSource.set("bookID", productDetail["id"]);
+    urlSource.set("dislayBookName", productDetail["name"]);
+    window.history.replaceState(null, document.title, window.location.pathname + '?' + urlSource.toString());
 }
 
 
@@ -325,18 +325,15 @@ function showOptionDetailProduct(object) {
     });
 }
 
-
 function closeDetailProduct() {
     document.querySelector('.show-detail-product').style.display = 'none';
 
     let url = new URL(window.location.href);
     let params = new URLSearchParams(url.search);
-    if (params.has('bookID') && params.has('dislayBookName')) {
-        params.delete('bookID');
-        params.delete('dislayBookName');
-    }
+    params.delete('bookID');
+    params.delete('dislayBookName');
     let newUrl = url.pathname + (params.toString() ? '?' + params.toString() : '');
-    window.history.replaceState({}, document.title, newUrl);
+    window.history.replaceState(null, document.title, newUrl);
 }
 
 

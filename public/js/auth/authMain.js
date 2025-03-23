@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (currentParams.has('auth')) {
             currentParams.delete('auth');
             url.search = currentParams.toString();
-            history.replaceState(null, "", url.toString());
+            window.history.replaceState(null, document.title, url.toString());
         }
     }
 });
@@ -58,7 +58,7 @@ function clearURL() {
         currentParams.delete('auth');
     }
     const newURL = `${window.location.pathname}${currentParams.toString() ? '?' + currentParams.toString() : ''}`;
-    history.replaceState(null, '', newURL);
+    window.history.replaceState(null, document.title, newURL);
 }
 
 function updateURLAuth(type) {
@@ -67,7 +67,7 @@ function updateURLAuth(type) {
         currentParams.set('auth', type);
     }
     const newURL = `${window.location.pathname}${currentParams.toString() ? '?' + currentParams.toString() : ''}`;
-    history.replaceState(null, '', newURL);
+    window.history.replaceState(null, document.title, newURL);
 }
 
 function showFormUser(type) {
