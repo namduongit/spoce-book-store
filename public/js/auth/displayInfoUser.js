@@ -431,6 +431,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentParams = new URLSearchParams(window.location.search);
     if (currentParams.has('account')) {
         showContentProfile(currentParams.get('account'));
+    } else {
+        const infoPage = document.querySelector('.self-infomation');
+        if (!infoPage.classList.contains('hide-item')) {
+            infoPage.classList.add('hide-item');
+        }
     }
 });
 
