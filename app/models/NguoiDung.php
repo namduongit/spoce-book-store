@@ -32,10 +32,10 @@ class app_models_NguoiDung extends app_libs_DBConnection {
 
     // Cập nhật người dùng
     public function updateUser($maNguoiDung, $data) {
+        $data['maNguoiDung'] = $maNguoiDung;
         return $this->building_queryParam([
             'value' => $data,
-            'where' => 'maNguoiDung = ?',
-            'params' => [$maNguoiDung]
+            'where' => 'maNguoiDung = :maNguoiDung'
         ])->update();
     }
 

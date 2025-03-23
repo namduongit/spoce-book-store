@@ -2046,5 +2046,161 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   display: block;
 }
 
+.info__container {
+  padding: 15px 20px;
+  width: 90%;
+  min-height: 550px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2rem;
+  /* background-color: white;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; */
+  /* border-radius: 12px; */
+}
 
+.info__title {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5rem;
+  padding-bottom: 5px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 2.5rem;
+}
+
+.info__title::after {
+  display: block;
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -8px;
+  width: 80%;
+  height: 4px;
+  background-color: #000;
+}
+
+.info-content {
+  gap: 3rem;
+}
+
+.left-container {
+  width: 25%;
+  background-color: white;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 12px;
+  min-height: 150px;
+  max-height: 150px;
+  padding: 2rem 2.5rem;
+}
+
+.right-container {
+  width: 75%;
+  background-color: white;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 12px;
+  min-height: 400px;
+  padding: 2rem 2.5rem;
+  display: flex;
+  gap: 3rem;
+}
+
+.right-container > .left-content {
+  width: 50%;
+}
+
+.right-container > .right-content {
+  width: 50%;
+}
+
+.right-container > .right-content > p {
+  padding-top: 0.45em;
+}
+
+.right-container > .right-content > ul {
+  list-style-type: disc;
+  padding: 0 1.6rem;
+}
+
+.right-container .checkout__input-field {
+  width: 100%;
+}
+
+.right-container > .checkout__input-field:nth-child(2) input::placeholder {
+  color: black;
+}
+
+.right-container > .checkout__input-field:nth-child(2) label {
+  top: 1.75rem;
+  font-size: 1.3rem;
+}
+
+.left-container ul {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  list-style-type: disc;
+  padding: 0.5rem 1rem;
+}
+
+.left-container ul li {
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.left-container ul li:hover {
+  color:#3498db;
+}
+
+.change-password-btn {
+  color:#3498db;
+  cursor: pointer;
+  padding-left: 0.45em;
+  font-size: 1.4rem;
+  transition: all 0.15s ease;
+}
+
+.change-password-btn:hover {
+  color:#0056b3;
+
+}
+
+.account-info-btn {
+  margin-left: 0.45em;
+  margin-top: 1em;
+  border: 0;
+  padding: 8px 24px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  border-radius: 40px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.account-info-btn--blue {
+  background-color: var(--topbar-color);
+}
+
+.account-info-btn--blue:hover {
+  background-color: #3498db;
+}
+
+.account-info-btn--black {
+  background-color: #000;
+}
+
+.account-info-btn--black:hover {
+  background-color: #2b2b2b;
+}
+
+.change-password-container {
+  display: none;
+}
+
+.change-password-container.show {
+  display: block;
+}
 

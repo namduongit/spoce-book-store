@@ -2,6 +2,7 @@ import { toast } from "../toast.js";
 import { resetToOriginParam } from "../common.js";
 import { getCookie } from "../common.js";
 import { deleteCookie } from "../common.js";
+import { showConfirmationDialog } from "../question.js";
 
 export async function fetchData(URL) {
     try {
@@ -77,7 +78,7 @@ export async function updateInfoTopBar(promiseResponse) {
                 </div>
 
                 <ul class="topbar__auth-list">
-                    <li onclick="showContentProfile('self-infomation')">
+                    <li class="topbar__info-btn">
                         <i class="fa-solid fa-user-gear"></i>
                         Thông tin
                     </li>
@@ -100,6 +101,10 @@ export async function updateInfoTopBar(promiseResponse) {
         this.classList.toggle('active');
         caretIcon.classList.toggle('fa-caret-up');
         caretIcon.classList.toggle('fa-caret-down');
+    });
+
+    document.querySelector('.topbar__info-btn').addEventListener('click', async () => {
+        await showContentProfile('information');
     });
 
     logoutBtn.addEventListener('click', async function () {
@@ -161,5 +166,272 @@ export async function updateInfoTopBar(promiseResponse) {
         }
     });
 }
+
+function hideMainPage() {
+    const main = document.querySelector('.main');
+    const body = document.querySelector('.body');
+    const checkout = document.querySelector('.checkout');
+
+    if (!main.classList.contains('hide-item')) {
+        main.classList.add('hide-item');
+    }
+
+    if (!body.classList.contains('hide-item')) {
+        body.classList.add('hide-item');
+    }
+
+    if (!checkout.classList.contains('hide-item')) {
+        checkout.classList.add('hide-item');
+    }
+}
+
+async function showContentProfile(info) {
+    showLoading();
+    let url = new URLSearchParams();
+    const infoPage = document.querySelector('.self-infomation');
+    const responseAPI = await isLogined();
+    let user = null;
+
+    if (responseAPI !== false) {
+        user = await getUserByID(responseAPI.user['id']);
+        
+        console.log(user);
+    }
+
+    hideMainPage();
+    if (infoPage.classList.contains('hide-item')) {
+        infoPage.classList.remove('hide-item');
+    }
+
+    if (info === 'information') {
+        url.set("account", "information");
+        updateInfoAccountSection(user);
+    } else if (info === 'address') {
+        url.set("account", "address");
+        updateAddressAccountSection(user);
+    } else if (info === 'payment') {
+        url.set("account", "payment");
+        updatePaymentAccountSection(user);
+    }
+    hideLoading();
+    history.pushState(null, '', window.location.pathname + '?' + url.toString());
+}
+
+function updateInfoAccountSection(user) {
+    const container = document.querySelector('.right-container');
+    let userid = user['id'];
+    let fullName = user['full_name'] != null ? user['full_name'] : '';
+    let username = user['username']  != null ? user['username'] : '';
+    let phone = user['phone']  != null ? user['phone'] : '';
+    let email = user['email']  != null ? user['email'] : '';
+    container.innerHTML = `
+    <div class="left-content">
+        <div class="checkout__input-field">
+            <input type="text" id="info-username" name="info-username" value="${username}" disabled>
+            <label for="info-username">Tên tài khoản</label>
+        </div>
+
+        <div class="checkout__input-field">
+            <input type="text" id="info-password" name="info-password" value="*************" disabled>
+            <label for="info-password">Mật khẩu</label>
+        </div>
+        <span class="change-password-btn">Đổi mật khẩu</span>
+        <div class="change-password-container">
+            <div class="checkout__input-field">
+                <input type="password" id="info-newpassword" name="info-newpassword" placeholder=" ">
+                <label for="info-newpassword">Mật khẩu mới</label>
+            </div>
+            <div class="checkout__input-field">
+                <input type="password" id="info-repeatpassword" name="info-repeatpassword" placeholder=" ">
+                <label for="info-repeatpassword">Nhập lại mật khẩu mới</label>
+            </div>
+        </div>
+        <div class="checkout__input-field">
+            <input type="text" id="info-fullname" name="info-fullname" placeholder=" " value="${fullName}">
+            <label for="fullname">Họ và tên</label>
+        </div>
+
+        <div class="checkout__input-field">
+            <input type="text" id="info-numberphone" name="info-numberphone" placeholder=" " value="${phone}">
+            <label for="info-numberphone">Số điện thoại</label>
+        </div>
+
+        <div class="checkout__input-field">
+            <input type="text" id="info-email" name="info-email" placeholder=" " value="${email}">
+            <label for="info-email">Email</label>
+        </div>
+
+        <button class="account-info-btn account-info-btn--blue">Lưu</button>
+        <button class="account-info-btn account-info-btn--black">Đặt lại</button>
+    </div>
+
+    <div class="right-content">
+        <p>Để giữ cho tài khoản của bạn bảo mật an toàn chúng tôi khuyên bạn nên tránh việc tạo mật khẩu sử dụng có chứa:</p>
+        <br>
+        <ul>
+            <li>Từ đánh vần ngược, lỗi chính tả phổ biến và chữ viết tắt.</li><br>
+            <li>Các ký tự dễ đoán hoặc lặp đi lặp lại. Ví dụ: 12345678, 222222, abcdefg, hoặc các chữ cái liền kề trên bàn phím (qwerty).</li><br>
+            <li>Các thông tin cá nhân: Tên của bạn, ngày sinh, số giấy phép lái xe, số hộ chiếu, hoặc thông tin tương tự.</li>
+        </ul>
+    </div>
+    `;
+
+    document.querySelector('.change-password-btn').addEventListener('click', function () {
+        const changePassContainer = document.querySelector('.change-password-container');
+        if (!changePassContainer.classList.contains('show')) {
+            changePassContainer.classList.add('show');
+        }
+    });
+
+    document.querySelector('.account-info-btn--blue').addEventListener('click', async () => {
+        const result = await showConfirmationDialog('Bạn chắc chắn muốn đổi thông tin?');
+        if (result == true) {
+            showLoading();
+            const formData = new URLSearchParams();
+            formData.append("id", userid);
+            formData.append("name", document.querySelector('#info-fullname').value);
+            formData.append("phone", document.querySelector('#info-numberphone').value);
+            formData.append("email", document.querySelector('#info-email').value);
+            formData.append("password", document.querySelector('#info-newpassword').value);
+            formData.append("confirm_password", document.querySelector('#info-repeatpassword').value);
+            console.log(formData.toString());
+            fetch("api/users/update.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: formData.toString(),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.log("error");
+                }
+                return response.json();
+            })
+            .then(data => {
+                hideLoading();
+                toast({
+                    title: "Thông báo",
+                    message: data.message,
+                    type: data.success === true ? 'success' : 'warning',
+                    duration: 3000
+                });
+            })
+            .catch(error => {
+                hideLoading();
+                console.error("Fetch error:", error);
+            })
+        } else {
+            console.log("no");
+        }
+    });
+
+    document.querySelector('.account-info-btn--black').addEventListener('click', function () {
+        document.querySelector('#info-fullname').value = fullName;
+        document.querySelector('#info-numberphone').value = phone;
+        document.querySelector('#info-email').value = email;
+    });
+}
+
+function updateAddressAccountSection(user) {
+    const container = document.querySelector('.right-container');
+    container.innerHTML = `
+    <div class="left-content">
+        <div class="checkout__input-field">
+            <input type="text" id="address-number" name="address-number">
+            <label for="address-number">Số nhà, tên đường</label>
+        </div>
+        <div class="checkout__input-field checkout__address-select">
+            <label>Tỉnh / thành</label>
+            <select name="city" id="city">
+                <option value="default" selected>Chọn tỉnh / thành</option>
+            </select>
+            <p class="checkout__empty-field-warning-two hide-item">Vui lòng chọn tỉnh thành</p>
+        </div>
+        <div class="checkout__input-field checkout__address-select">
+            <label>Quận / huyện</label>
+            <select name="district" id="district">
+                <option value="default" selected>Chọn quận / huyện</option>
+            </select>
+            <p class="checkout__empty-field-warning-two hide-item">Vui lòng chọn quận huyện</p>
+        </div>
+        <div class="checkout__input-field checkout__address-select">
+            <label>Phường / xã</label>
+            <select name="ward" id="ward">
+                <option value="default" selected>Chọn phường / xã</option>
+            </select>
+            <p class="checkout__empty-field-warning-two hide-item">Vui lòng chọn phường xã</p>
+        </div>
+
+        <button class="account-info-btn account-info-btn--blue">Lưu</button>
+        <button class="account-info-btn account-info-btn--black">Đặt lại</button>
+    </div>
+
+    <div class="right-content">
+        <p>Để cho quá trình giao hàng được hoàn thành một cách tiện lợi và nhanh chóng đến khách hàng vui lòng:</p>
+        <br>
+        <ul>
+            <li>Cung cấp đầy đủ và chính xác thông tin địa chỉ giao hàng và số điện thoại liên lạc.</li><br>
+            <li>Vui lòng đảm bảo có người nhận hàng tại địa chỉ giao hàng trong thời gian dự kiến.</li><br>
+            <li>Vui lòng kiểm tra kỹ hàng hóa trước khi ký nhận.</li>
+        </ul>
+    </div>
+    `;
+}
+
+function updatePaymentAccountSection(user) {
+    const container = document.querySelector('.right-container');
+    container.innerHTML = `
+    <div class="left-content">
+        <div class="checkout__input-field">
+            <input type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" maxlength="19" id="card-number-field" name="card-number" placeholder="Số thẻ">
+            <label>Số thẻ (16 số)</label>
+        </div>
+
+        <div class="checkout__input-field">
+            <input type="tel" inputmode="numeric" maxlength="5" id="card-expiration-field" name="card-expiration" placeholder="Ngày hết hạn">
+            <label>Ngày hết hạn (MM/YY)</label>
+        </div>
+
+        <div class="checkout__input-field">
+            <input type="tel" inputmode="numeric" pattern="[0-9]{3}" maxlength="3" id="card-cvv-field" name="card-cvv" placeholder="Mã bảo mật">
+            <label>Mã bảo mật (3 số)</label>
+        </div>
+
+        <button class="account-info-btn account-info-btn--blue">Lưu</button>
+        <button class="account-info-btn account-info-btn--black">Đặt lại</button>
+    </div>
+
+    <div class="right-content">
+        <p>Chúng tôi chấp nhận các loại thẻ Visa, Mastercard, và American Express.</p>
+        <p>Để quá trình thanh toán bằng thẻ tín dụng được thực hiện thành công, Quý khách vui lòng:</p>
+        <br>
+        <ul>
+            <li>Cung cấp thông tin thẻ tín dụng chính xác và đầy đủ.</li><br>
+            <li>Đảm bảo số dư trong tài khoản thẻ đủ để thanh toán.</li><br>
+            <li>Xác nhận giao dịch theo yêu cầu của ngân hàng (nếu có).</li>
+        </ul>
+    </div>
+    `;
+}
+
+document.querySelector('.information').addEventListener('click', function () {
+    showContentProfile('information');
+});
+
+document.querySelector('.address').addEventListener('click', function () {
+    showContentProfile('address');
+});
+
+document.querySelector('.payment').addEventListener('click', function () {
+    showContentProfile('payment');
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const currentParams = new URLSearchParams(window.location.search);
+    if (currentParams.has('account')) {
+        showContentProfile(currentParams.get('account'));
+    }
+});
 
 

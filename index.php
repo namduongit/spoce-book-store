@@ -415,7 +415,24 @@
     </div>
 
 
-    <div class="self-infomation"></div>
+    <!-- Thông tin cá nhân khách hàng -->
+    <div class="self-infomation hide-item">
+        <div class="info__container">
+            <div class="info__title">THÔNG TIN TÀI KHOẢN</div>
+            <div class="info-content d-flex">
+                <div class="left-container">
+                    <ul>
+                        <li class="information">Tài khoản & Bảo mật</li>
+                        <li class="address">Địa chỉ</li>
+                        <li class="payment">Thẻ thanh toán</li>
+                    </ul>
+                </div>
+                <div class="right-container">
+
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="checkout hide-item">
         <div class="checkout__container">

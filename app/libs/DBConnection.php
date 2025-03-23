@@ -46,6 +46,7 @@ class app_libs_DBConnection
             'other' => '',
             'params' => '',
             'field' => '',
+            'value' => ''
         ];
         // Gộp 2 mảng theo key (nhận value theo key) mảng params đằng sau sẽ ghi đè lại theo key
         $this->queryParam = array_merge($default, $params);
