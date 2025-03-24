@@ -19,7 +19,7 @@ $email = $_POST["email"] ?? '';
 $matKhau = $_POST['password'] ?? '';
 $xacNhanMatKhau = $_POST['confirm_password'] ?? '';
 $isChangingPassword = false;
-$currentTime = date('Y-m-d H-m-s');
+$currentTime = date('Y-m-d H:i:s');
 
 
 if (empty($matKhau) && empty($xacNhanMatKhau)) {

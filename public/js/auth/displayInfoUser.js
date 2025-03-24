@@ -4,6 +4,7 @@ import { getCookie } from "../common.js";
 import { deleteCookie } from "../common.js";
 import { showConfirmationDialog } from "../question.js";
 import { Validation } from '../validation.js';
+import { updateAddressSelect } from '../../../api/address/updateAddressSelect.js';
 
 export async function fetchData(URL) {
     try {
@@ -172,6 +173,7 @@ function hideMainPage() {
     const main = document.querySelector('.main');
     const body = document.querySelector('.body');
     const checkout = document.querySelector('.checkout');
+    const menu = document.querySelector('.topbar__auth-list');
 
     if (!main.classList.contains('hide-item')) {
         main.classList.add('hide-item');
@@ -184,14 +186,32 @@ function hideMainPage() {
     if (!checkout.classList.contains('hide-item')) {
         checkout.classList.add('hide-item');
     }
+
+    if (menu !== null) {
+        if (!menu.classList.contains('hide-item')) {
+            menu.classList.add('hide-item');
+        }
+    }
 }
 
 async function showContentProfile(info) {
     showLoading();
     let url = new URLSearchParams();
+    let currentParams = new URLSearchParams(window.location.search);
     const infoPage = document.querySelector('.self-infomation');
     const responseAPI = await isLogined();
     let user = null;
+
+    if (responseAPI === false) {
+        if (currentParams.has('account')) {
+            if (!infoPage.classList.contains('hide-item')) {
+                infoPage.classList.add('hide-item');
+            }
+            currentParams.delete('account');
+            window.history.replaceState(null, '', window.location.pathname + currentParams.toString());
+            return;
+        }
+    }
 
     if (responseAPI !== false) {
         user = await getUserByID(responseAPI.user['id']);
@@ -330,7 +350,7 @@ function updateInfoAccountSection(user) {
             }
 
             if (password !== '' && repeatpassword !== '') {
-                if (password !== confirmPassword) {
+                if (password !== repeatpassword) {
                     toast({
                         title: 'Thông báo',
                         message: 'Mật khẩu và mật khẩu xác nhận phải giống nhau!',
@@ -421,7 +441,7 @@ function updateAddressAccountSection(user) {
     container.innerHTML = `
     <div class="left-content">
         <div class="checkout__input-field">
-            <input type="text" id="address-number" name="address-number">
+            <input type="text" id="address-number" name="address-number" placeholder=" ">
             <label for="address-number">Số nhà, tên đường</label>
         </div>
         <div class="checkout__input-field checkout__address-select">
@@ -467,17 +487,17 @@ function updatePaymentAccountSection(user) {
     container.innerHTML = `
     <div class="left-content">
         <div class="checkout__input-field">
-            <input type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" maxlength="19" id="card-number-field" name="card-number" placeholder="Số thẻ">
+            <input type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" maxlength="19" id="account-card-number-field" name="card-number" placeholder="Số thẻ">
             <label>Số thẻ (16 số)</label>
         </div>
 
         <div class="checkout__input-field">
-            <input type="tel" inputmode="numeric" maxlength="5" id="card-expiration-field" name="card-expiration" placeholder="Ngày hết hạn">
+            <input type="tel" inputmode="numeric" maxlength="5" id="account-card-expiration-field" name="card-expiration" placeholder="Ngày hết hạn">
             <label>Ngày hết hạn (MM/YY)</label>
         </div>
 
         <div class="checkout__input-field">
-            <input type="tel" inputmode="numeric" pattern="[0-9]{3}" maxlength="3" id="card-cvv-field" name="card-cvv" placeholder="Mã bảo mật">
+            <input type="tel" inputmode="numeric" pattern="[0-9]{3}" maxlength="3" id="account-card-cvv-field" name="card-cvv" placeholder="Mã bảo mật">
             <label>Mã bảo mật (3 số)</label>
         </div>
 
@@ -496,6 +516,35 @@ function updatePaymentAccountSection(user) {
         </ul>
     </div>
     `;
+
+    document.querySelector('#account-card-number-field').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, "");
+        let newValue = value.replace(/(\d{4})/g, "$1 ").trim();
+        e.target.value = newValue;
+    });
+
+    document.querySelector('#account-card-cvv-field').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, "");
+        e.target.value = value;
+    });
+
+    document.querySelector('#account-card-expiration-field').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, "");
+
+        if (value.length > 0 && !/^0|1/g.test(value)) {
+            value = value.substring(1);
+        }
+
+        if (/^1[3-9]/g.test(value)) {
+            value = value.substring(0,1);
+        }
+
+        if (value.length > 2) {
+            value = value.substring(0,2) + "/" + value.substring(2);
+        }
+
+        e.target.value = value;
+    });
 }
 
 document.querySelector('.information').addEventListener('click', function () {
