@@ -161,6 +161,8 @@ async function showAllCart(type) {
     const bodyMain = document.querySelector('.body');
     const checkoutMain = document.querySelector('.checkout');
     const productDetailMain = document.querySelector('.show-detail-product');
+    const footerInfo = document.querySelector('.footer-info');
+    const accountInfo = document.querySelector('.self-infomation');
 
     let localStorageProduct = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -242,6 +244,8 @@ async function showAllCart(type) {
     bodyMain.classList.add('hide-item');
     checkoutMain.classList.add('hide-item');
     productDetailMain.classList.add('hide-item');
+    footerInfo.classList.add('hide-item');
+    accountInfo.classList.add('hide-item');
     document.querySelector(".topbar__cart-detail-holder").classList.remove('show');
 
     document.querySelector('.show-cart__continue-buy-btn').addEventListener('click', function() {

@@ -33,7 +33,7 @@
     <script type="module" src="public/js/cart/cartMain.js" defer></script>
     <script type="module" src="public/js/filter/filterMain.js" defer></script>
     <script type="module" src="public/js/slideshow.js" defer></script>
-
+    <script type="module" src="public/js/footer.js" defer></script>
     <script type="module" src="public/js/book/showBook.js" defer></script>
 
 </head>
@@ -434,9 +434,72 @@
 
     <div class="checkout"></div>
 
+    <div class="footer-info hide-item">
+        <div class="footer-info__container">
+            
+        </div>
+    </div>
+
     <footer class="footer">
         <div class="footer__container container">
-            <p class="footer__text">&copy; 2025 Spoce Book Store. All rights reserved.</p>
+            <div class="footer__top">
+                <div class="footer__top-container">
+                    <div class="footer__top-item">
+                        <h3>VỀ CÔNG TY</h3>
+                        <ul>
+                            <li class="footer__aboutus">Giới thiệu công ty</li>
+                            <li class="footer__contact">Liên hệ</li>
+                            <li class="footer__warranty">Chính sách đổi trả</li>
+                            <li class="footer__security">Chính sách bảo mật</li>
+                        </ul>
+                    </div>
+                    <div class="footer__top-item">
+                        <h3>TRỢ GIÚP</h3>
+                        <ul>
+                            <li class="footer__howto">Hướng dẫn mua hàng</li>
+                            <li class="footer__shipment">Chính sách vận chuyển</li>
+                            <li class="footer__payment">Chính sách thanh toán</li>
+                        </ul>
+                    </div>
+                    <div class="footer__top-item">
+                        <h3>CHẤP NHẬN THANH TOÁN</h3>
+                        <div class="footer__payment-image-container">
+                            <img src="public/images/footer_logo_payment_1.png" alt="payment1"> 
+                            <img src="public/images/footer_logo_payment_2.png" alt="payment2"> 
+                            <img src="public/images/footer_logo_payment_3.png" alt="payment3"> 
+                            <img src="public/images/footer_logo_payment_4.png" alt="payment4"> 
+                            <img src="public/images/footer_logo_payment_5.png" alt="payment5"> 
+                            <img src="public/images/footer_logo_payment_6.png" alt="payment6"> 
+                        </div>
+                    </div>
+                    <div class="footer__top-item">
+                        <h3>ĐỐI TÁC VẬN CHUYỂN</h3>
+                        <div class="footer__payment-image-container-two">
+                            <img src="public/images/footer_logo_shipment_2.png" alt="shipment2"> 
+                            <img src="public/images/footer_logo_shipment_3.png" alt="shipment3"> 
+                        </div>
+                    </div>
+                    <div class="footer__top-item">
+                        <h3>ĐỐI TÁC BÁN HÀNG</h3>
+                        <div class="footer__payment-image-container-three">
+                            <img src="public/images/footer_logo_seller_1.png" alt="seller1"> 
+                            <img src="public/images/footer_logo_seller_2.png" alt="seller2"> 
+                            <img src="public/images/footer_logo_seller_3.png" alt="seller3"> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <div class="footer__bottom-container">
+                    <div>
+                        <img src="public/images/footer_logobct.png" alt="logobct">
+                    </div>
+                    <div>
+                        <h3>CÔNG TY CỔ PHẦN THƯƠNG MẠI DỊCH VỤ SPOCE GROUP</h3>
+                        <p>Địa chỉ: 273 An Dương Vương, P2, Q5, TP.HCM MST:0303615027 do Sở Kế Hoạch Và Đầu Tư Tp.HCM cấp ngày 10/03/2011 Tel: 0388.853.835 Email: spoce_bookstore@gmail.com</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
 

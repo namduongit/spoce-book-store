@@ -174,6 +174,8 @@ function hideMainPage() {
     const body = document.querySelector('.body');
     const checkout = document.querySelector('.checkout');
     const menu = document.querySelector('.topbar__auth-list');
+    const footer = document.querySelector('.footer-info');
+    const showCart = document.querySelector('.show-cart');
 
     if (!main.classList.contains('hide-item')) {
         main.classList.add('hide-item');
@@ -187,10 +189,12 @@ function hideMainPage() {
         checkout.classList.add('hide-item');
     }
 
-    if (menu !== null) {
-        if (!menu.classList.contains('hide-item')) {
-            menu.classList.add('hide-item');
-        }
+    if (!footer.classList.contains('hide-item')) {
+        footer.classList.add('hide-item');
+    }
+
+    if (!showCart.classList.contains('hide-item')) {
+        showCart.classList.add('hide-item');
     }
 }
 
