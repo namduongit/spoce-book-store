@@ -1,3 +1,5 @@
+import { renderBookTable } from "./renderBookTable.js";
+
 // Hàm thiết lập sự kiện lọc thông tin bảng Sách
 export function filterBookData() {
   // Biến chứa đối tượng thẻ input liên quan đến tìm kiếm thông tin
@@ -16,7 +18,7 @@ export function filterBookData() {
     // Loại bỏ giá trị mặc định
     e.preventDefault();
 
-    //
+    renderBookTable();
     console.log(idOrNameInput.value);
     console.log(sortSelect.value);
     console.log(typeSelect.value);

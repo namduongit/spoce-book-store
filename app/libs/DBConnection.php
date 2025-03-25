@@ -115,7 +115,6 @@ class app_libs_DBConnection
         $this->query($sql, array_values($this->queryParam['field']));
         return self::$connection->lastInsertId();
     }
-
     public function update()
     {
         if (self::$connection == null) self::$connection = $this->open_connect();
@@ -141,5 +140,68 @@ class app_libs_DBConnection
             $this->building_condition($this->queryParam['where']) . ' ' . $this->queryParam['other'];
 
         return $this->query($sql, []);
+    }
+
+    
+    // ===============================================================
+
+    public function joinTables($tables = [], $joins = [], $conditions = [], $orderBy = '', $orderType = 'ASC', $limit = null, $offset = null, $params = [], $columns = ['*']) {
+        if (self::$connection == null) self::$connection = $this->open_connect();
+    
+        if (empty($tables) || empty($joins)) {
+            return ["error" => "Thiếu thông tin bảng hoặc điều kiện JOIN"];
+        }
+    
+        $columnList = is_array($columns) ? implode(", ", $columns) : '*';
+
+        $sql = "SELECT $columnList FROM " . array_shift($tables);
+    
+        foreach ($tables as $index => $table) {
+            if (!isset($joins[$index])) {
+                return ["error" => "Thiếu điều kiện JOIN cho bảng " . $table];
+            }
+            $sql .= " INNER JOIN $table ON " . $joins[$index];
+        }
+    
+        // Thêm điều kiện WHERE nếu có
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(" AND ", $conditions);
+        }
+    
+        // Thêm ORDER BY nếu có
+        if (!empty($orderBy)) {
+            $sql .= " ORDER BY $orderBy $orderType";
+        }
+    
+        // Thêm LIMIT và OFFSET nếu có
+        if (!is_null($limit)) {
+            $sql .= " LIMIT :limit";
+            if (!is_null($offset)) {
+                $sql .= " OFFSET :offset";
+            }
+        }
+    
+    
+        try {
+            $stmt = self::$connection->prepare($sql);
+    
+            // Bind các tham số tránh SQL Injection
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value, is_numeric($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+            }
+    
+            // Bind limit và offset nếu có
+            if (!is_null($limit)) {
+                $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+            }
+            if (!is_null($offset)) {
+                $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+            }
+    
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return ["error" => "Lỗi SQL: " . $e->getMessage()];
+        }
     }
 }

@@ -26,12 +26,12 @@ export function addBookData() {
             <i class="fa-solid fa-xmark"></i>
         </button>
         <div class="dialog__line"></div>
-        <form method="post" class="dialog__form">
+        <form method="get" class="dialog__form">
             <div class="dialog__row">
                 <div class="dialog__form-group book image">
                     <label>Hình ảnh</label>
-                    <img src="" alt"book-image"></img>
-                    <input type="file" id="add-book-image" readonly />
+                    <img id="preview-image" src="" alt"book-image"></img>
+                    <input type="text" id="add-book-image" value="80.jpg" readonly   />
                     <button type="button" onclick="document.getElementById('add-book-image').click()">Tải hình ảnh</button>
                 </div>
                 <div class="dialog__form-group book"></div>
@@ -53,17 +53,27 @@ export function addBookData() {
                 <div class="dialog__form-group book">
                     <label>Tác giả</label>
                     <select id="add-book-author">
-                        <option value="" selected>Chọn Tác giả</option>
-                        <option value="1">Nguyễn Nhật Ánh</option>
-                        <option value="0">Nguyễn </option>
+                        <option selected value="1">Tiểu thuyếtNguyễn Nhật Ánh</option>
+                        <option value="2">J.K. Rowling</option>
+                        <option value="3">Haruki Murakami</option>
+                        <option value="4">George Orwell</option>
+                        <option value="5">Dan Brown</option>
+                        <option value="6">Trần Thị Huyên Thảo</option>
+                        <option value="7">Vương Kỳ</option>
+                        <option value="8">Hoàng Anh Tú</option>
+                        <option value="9">Elaine Lui</option>
+                        <option value="10">TChris Tompskin</option>
                     </select>
                 </div>
                 <div class="dialog__form-group book">
                     <label>Thể loại</label>
-                    <select id="add-book-type">
-                        <option value="" selected>Chọn Thể loại</option>
-                        <option value="1">Trinh thám</option>
-                        <option value="0">Tình cảm</option>
+                    <select id="add-book-type"> 
+                        <option selected value="1">Tiểu thuyết</option>
+                        <option  value="2">Trinh thám</option>
+                        <option value="3">Khoa học viễn tưởng</option>
+                        <option value="4">Kỹ năng sống</option>
+                        <option value="5">Kinh tế</option>
+                        <option value="6">Truyện</option>
                     </select>
                 </div>
             </div>
@@ -76,9 +86,12 @@ export function addBookData() {
                 <div class="dialog__form-group book">
                     <label>Loại bìa</label>
                     <select id="add-book-cover">
-                        <option value="" selected>Chọn Loại bìa</option>
-                        <option value="1">Bìa cứng</option>
-                        <option value="0">Bìa mềm</option>
+                        <option selected value="1">Bìa cứng</option>
+                        <option  value="2">Bìa mềm</option>
+                        <option value="3">Bìa gấp</option>
+                        <option value="4">Bìa bọc vải/bọc da </option>
+                        <option value="5">Bia bọc chống bụi </option>
+                        <option value="6">Bìa trượt </option>
                     </select>
                 </div>
             </div>
@@ -87,9 +100,12 @@ export function addBookData() {
                 <div class="dialog__form-group book">
                     <label>Nhà xuất bản</label>
                     <select id="add-book-publish-name">
-                        <option value="" selected>Chọn Nhà xuất bản</option>
-                        <option value="1">Nhà xuất bản 1</option>
-                        <option value="0">Nhà xuất bản 2</option>
+                        <option selected value="1">NXB Trẻ</option>
+                        <option  value="2">NXB Kim Đồng</option>
+                        <option value="3">NXB Văn Học</option>
+                        <option value="4">Nhà Xuất Bản Trẻ</option>
+                        <option value="5">Nhà Xuất Bản Văn Học</option>
+                        <option value="6">Nhà Xuất Bản Thông Tin và Truyền Thông</option>
                     </select>
                 </div>
                 <div class="dialog__form-group book">
@@ -121,13 +137,18 @@ export function addBookData() {
                 <div class="dialog__form-group book">
                     <label>Trạng thái</label>
                     <select id="add-book-status">
-                        <option value="" selected>Chọn Trạng thái</option>
-                        <option value="1">Hoạt động</option>
-                        <option value="0">Tạm dừng</option>
+                        <option selected value="Còn hàng">Còn hàng</option>
+                        <option  value="Tạm ngưng">Tạm ngưng</option>
+                
                     </select>
                 </div>
-                <div class="dialog__form-group book"></div>
+                <div class="dialog__form-group book">
+                    <label>Kích thước</label>
+                    <input type="text" id="add-book-size" placeholder="Nhập kích thước" />
+                
+                </div>
             </div>
+            
             <div class="dialog__buttons">
                 <button id="add-book-button" class="add">Thêm</button>
             </div>
@@ -164,37 +185,83 @@ export function addBookData() {
       console.log(imageInput.value);
     });
 
-    // Gán sự kiện cho nút "thêm" dialog
-    document.getElementById("add-book-button").addEventListener("click", () => {
-      // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-      const image = document.getElementById("add-book-image");
-      const id = document.getElementById("add-book-id");
-      const title = document.getElementById("add-book-title");
-      const author = document.getElementById("add-book-author");
-      const type = document.getElementById("add-book-type");
-      const pages = document.getElementById("add-book-pages");
-      const cover = document.getElementById("add-book-cover");
-      const publishName = document.getElementById("add-book-publish-name");
-      const publishYear = document.getElementById("add-book-publish-year");
-      const priceBase = document.getElementById("add-book-price-base");
-      const priceOrder = document.getElementById("add-book-price-order");
-      const description = document.getElementById("add-book-description");
-      const status = document.getElementById("add-book-status");
 
-      // ... (Xử lý tiếp ở đây)
-      console.log(image.value);
-      console.log(id.value);
-      console.log(title.value);
-      console.log(author.value);
-      console.log(type.value);
-      console.log(publishName.value);
-      console.log(pages.value);
-      console.log(publishYear.value);
-      console.log(cover.value);
-      console.log(priceBase.value);
-      console.log(priceOrder.value);
-      console.log(description.value);
-      console.log(status.value);
+    // thêm sự kiẹn chọn ảnh
+    let selectedImageName = ``; // Biến lưu tên ảnh
+
+    document.getElementById("add-book-image").addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            selectedImageName = file.name; 
+            // console.log( selectedImageName); 
+        
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const imgElement = document.getElementById("preview-image");
+                if (imgElement) {
+                    imgElement.src = e.target.result;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Gán sự kiện cho nút "thêm" dialog
+    document.getElementById("add-book-button").addEventListener("click", async (e) => {
+        e.preventDefault();
+      // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
+      const image = document.getElementById("add-book-image").value;
+      const id = document.getElementById("add-book-id").value;
+      const title = document.getElementById("add-book-title").value;
+      const author = document.getElementById("add-book-author").value;
+      const type = document.getElementById("add-book-type").value;
+      const pages = document.getElementById("add-book-pages").value;
+      const cover = document.getElementById("add-book-cover").value;
+      const publishName = document.getElementById("add-book-publish-name").value;
+      const publishYear = document.getElementById("add-book-publish-year").value;
+      const priceBase = document.getElementById("add-book-price-base").value;
+      const priceOrder = document.getElementById("add-book-price-order").value;
+      const description = document.getElementById("add-book-description").value;
+      const status = document.getElementById("add-book-status").value;
+      const size = document.getElementById("add-book-size").value;
+
+
+      
+    let params = new URLSearchParams();
+    params.append("image", image);
+    params.append("title", title);
+    params.append("authorId", author);
+    params.append("categoryId", type);
+    params.append("numOfpages", pages);
+    params.append("coverTypeId", cover);
+    params.append("publisherId", publishName);
+    params.append("publishYear", publishYear);
+    params.append("priceBase", priceBase);
+    params.append("priceOrder", priceOrder);
+    params.append("description", description);
+    params.append("status", status);
+    params.append("size", size);
+
+
+    let url = `api/books/create.php?${params.toString()}`;
+    console.log("Request URL:", url);
+
+
+    try {
+        const response = await fetch(url, { method: "GET" });
+    
+        const result = await response.json(); // Chuyển luôn về JSON
+    
+        if (result.success) {
+            alert("thêm sách thành công!");
+        } else {
+            alert("Lỗi thêm sách: " + (result.error || "Không rõ nguyên nhân"));
+        }
+    } catch (error) {
+        console.error("Lỗi fetch API:", error);
+        alert("Không thể kết nối đến server!");
+    }
+      
     });
 
     // Gán sự kiện cho nút "Đóng" dialog

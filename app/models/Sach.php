@@ -29,12 +29,22 @@ class app_models_Sach extends app_libs_DBConnection
     // Cập nhật sách
     public function updateBook($maSach, $data)
     {
-        return $this->building_queryParam([
-            'value' => $data,
-            'where' => 'maSach = ?',
-            'params' => [$maSach]
-        ])->update();
+        $fieldValues = [];
+        $params = [':maSach' => $maSach];
+    
+        foreach ($data as $field => $value) {
+            $fieldValues[] = "$field = :$field";
+            $params[":$field"] = $value;
+        }
+        // Câu SQL cập nhật
+        $sql = "UPDATE " . $this->table_name . " SET " . implode(", ", $fieldValues) . " WHERE maSach = :maSach";
+    
+        // Thực thi câu lệnh SQL
+        return $this->query($sql, $params);
     }
+    
+
+    
 
     // Xóa sách
     public function deleteBook($maSach)

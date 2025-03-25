@@ -1,15 +1,9 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 
 // Hàm thiết lập sự kiện Sửa một sách cho bảng
-export function updateBookData(idBookSelected) {
+export function updateBookData(book) {
   // Phải truy vấn từ CSDL thông qua idBookSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
-
-  // Biến chứa đối tượng là nút "Sửa"
-  const updateButton = document.getElementById("update-button-book");
-
-  // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
-  updateButton.classList.add("active");
 
   // Tạo một dialog để sửa một sách
   const updateDialog = document.createElement("dialog");
@@ -28,8 +22,8 @@ export function updateBookData(idBookSelected) {
             <div class="dialog__row">
                 <div class="dialog__form-group book image">
                     <label>Hình ảnh</label>
-                    <img src="" alt"book-image"></img>
-                    <input type="file" id="update-book-image" readonly />
+                    <img id="preview-image"  src="public/uploads/${book.image}" alt"book-image"></img>
+                    <input type="file" id="update-book-image" accept="image/*" style="display: none;" />
                     <button type="button" onclick="document.getElementById('update-book-image').click()">Tải hình ảnh</button>
                 </div>
                 <div class="dialog__form-group book"></div>
@@ -39,11 +33,11 @@ export function updateBookData(idBookSelected) {
                 <div class="dialog__form-group book"></div>
                 <div class="dialog__form-group book">
                     <label>Mã sách</label>  
-                    <input type="text" id="update-book-id" readonly />
+                    <input type="text" id="update-book-id" readonly value="${book.id}"/>
                 </div>
                 <div class="dialog__form-group book">
                     <label>Tiêu đề</label>
-                    <input type="text" id="update-book-title" placeholder="Nhập Tiêu đề" />
+                    <input type="text" id="update-book-title" placeholder="Nhập Tiêu đề" value="${book.name}" />
                 </div>
             </div>
             <div class="dialog__row">
@@ -51,17 +45,18 @@ export function updateBookData(idBookSelected) {
                 <div class="dialog__form-group book">
                     <label>Tác giả</label>
                     <select id="update-book-author">
-                        <option value="" selected>Chọn Tác giả</option>
+                        <option value="4" selected>${book.authorName}</option>
                         <option value="1">Nguyễn Nhật Ánh</option>
-                        <option value="0">Nguyễn </option>
+                        <option value="2">J.K. Rowling</option>
+                        <option value="3">Haruki Murakami</option>
                     </select>
                 </div>
                 <div class="dialog__form-group book">
                     <label>Thể loại</label>
                     <select id="update-book-type">
-                        <option value="" selected>Chọn Thể loại</option>
-                        <option value="1">Trinh thám</option>
-                        <option value="0">Tình cảm</option>
+                        <option value="1" selected>${book.genreName}</option>
+                        <option value="2">Trinh thám</option>
+                        <option value="3">Tình cảm</option>
                     </select>
                 </div>
             </div>
@@ -69,14 +64,14 @@ export function updateBookData(idBookSelected) {
                 <div class="dialog__form-group book"></div>
                 <div class="dialog__form-group book">
                     <label>Số trang</label>
-                    <input type="text" id="update-book-pages" placeholder="Nhập Số trang" />
+                    <input type="text" id="update-book-pages" placeholder="Nhập Số trang" value="${book.numberOfPages}" />
                 </div>
                 <div class="dialog__form-group book">
                     <label>Loại bìa</label>
                     <select id="update-book-cover">
-                        <option value="" selected>Chọn Loại bìa</option>
+                        <option value="2" selected>${book.coverTypeName}</option>
                         <option value="1">Bìa cứng</option>
-                        <option value="0">Bìa mềm</option>
+                        <option value="3">Bìa mềm</option>
                     </select>
                 </div>
             </div>
@@ -85,20 +80,20 @@ export function updateBookData(idBookSelected) {
                 <div class="dialog__form-group book">
                     <label>Nhà xuất bản</label>
                     <select id="update-book-publish-name">
-                        <option value="" selected>Chọn Nhà xuất bản</option>
+                        <option value="5" selected>${book.publisherName}</option>
                         <option value="1">Nhà xuất bản 1</option>
                         <option value="0">Nhà xuất bản 2</option>
                     </select>
                 </div>
                 <div class="dialog__form-group book">
                     <label>Năm xuất bản</label>
-                    <input type="text" id="update-book-publish-year" placeholder="Nhập Năm xuất bản" />
+                    <input type="text" id="update-book-publish-year" placeholder="Nhập Năm xuất bản" value="${book.publishYear}" />
                 </div>
             </div>
             <div class="dialog__row">
                 <div class="dialog__form-group book description">
                     <label>Mô tả</label>
-                    <textarea id="update-book-description" placeholder="Nhập Mô tả"></textarea>
+                    <textarea id="update-book-description" placeholder="Nhập Mô tả">${book.description}</textarea>
                 </div>
                 <div class="dialog__form-group book"></div>
                 <div class="dialog__form-group book"></div>
@@ -107,11 +102,11 @@ export function updateBookData(idBookSelected) {
                 <div class="dialog__form-group book"></div>
                 <div class="dialog__form-group book">
                     <label>Giá bìa</label>
-                    <input type="text" id="update-book-price-base" placeholder="Nhập Giá bìa" />
+                    <input type="text" id="update-book-price-base" placeholder="Nhập Giá bìa" value="${book.originalPrice}"/>
                 </div>
                 <div class="dialog__form-group book">
                     <label>Giá bán</label>
-                    <input type="text" id="update-book-price-order" placeholder="Nhập Giá bán" />
+                    <input type="text" id="update-book-price-order" placeholder="Nhập Giá bán" value="${book.sellPrice}" />
                 </div>
             </div>
             <div class="dialog__row">
@@ -119,12 +114,15 @@ export function updateBookData(idBookSelected) {
                 <div class="dialog__form-group book">
                     <label>Trạng thái</label>
                     <select id="update-book-status" disabled>
-                        <option value="" selected>Chọn Trạng thái</option>
-                        <option value="1">Hoạt động</option>
-                        <option value="0">Tạm dừng</option>
+                        <option value="4" selected>${book.status}</option>
+                        <option value="Còn hàng">Còn hàng</option>
+                        <option value="Tạm ngưng">Tạm ngưng</option>
                     </select>
                 </div>
-                <div class="dialog__form-group book"></div>
+                <div class="dialog__form-group book">
+                    <label>Giá bán</label>
+                    <input type="text" id="update-book-size" placeholder="Nhập Giá bán" value="${book.size}" />
+                </div>
             </div>
             <div class="dialog__buttons">
                 <button id="update-book-button" class="add">Sửa</button>
@@ -132,62 +130,106 @@ export function updateBookData(idBookSelected) {
         </form>
       `;
 
-  // Thêm vào body
-  document.body.appendChild(updateDialog);
-
-  // Hiển thị updateDialog
-  updateDialog.showModal();
-
-  // Sự kiện cho các thành phần trong dialog
-  // - Nếu các select đã được chọn giá trị khác mặc định thì đổi định dạng
-  const selectElement = document.querySelectorAll(
-    ".dialog__form-group > select"
+      
+      // Thêm vào body
+      document.body.appendChild(updateDialog);
+      
+      // Hiển thị updateDialog
+      updateDialog.showModal();
+      
+      // Sự kiện cho các thành phần trong dialog
+      // - Nếu các select đã được chọn giá trị khác mặc định thì đổi định dạng
+      const selectElement = document.querySelectorAll(
+          ".dialog__form-group > select"
   );
   selectElement.forEach((select) => {
-    isNotFirstItemSelected(select);
-  });
+      isNotFirstItemSelected(select);
+    });
+    
+    // thêm sự kiẹn chọn ảnh
+    let selectedImageName = `${book.image}`; // Biến lưu tên ảnh
+
+    document.getElementById("update-book-image").addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            selectedImageName = file.name; 
+            // console.log( selectedImageName); 
+        
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const imgElement = document.getElementById("preview-image");
+                if (imgElement) {
+                    imgElement.src = e.target.result;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    // console.log(selectedImageName);
 
   // Gán sự kiện cho nút "Sửa" dialog
   document
     .getElementById("update-book-button")
-    .addEventListener("click", () => {
-      // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-      const image = document.getElementById("update-book-image");
-      //   const id = document.getElementById("update-book-id");
-      const title = document.getElementById("update-book-title");
-      const author = document.getElementById("update-book-author");
-      const type = document.getElementById("update-book-type");
-      const pages = document.getElementById("update-book-pages");
-      const cover = document.getElementById("update-book-cover");
-      const publishName = document.getElementById("update-book-publish-name");
-      const publishYear = document.getElementById("update-book-publish-year");
-      const priceBase = document.getElementById("update-book-price-base");
-      const priceOrder = document.getElementById("update-book-price-order");
-      const description = document.getElementById("update-book-description");
-      //   const status = document.getElementById("update-book-status");
+    .addEventListener("click", async (e) => {
+        e.preventDefault();
 
-      // ... (Xử lý tiếp ở đây)
-      console.log(image.value);
-      //   console.log(id.value);
-      console.log(title.value);
-      console.log(author.value);
-      console.log(type.value);
-      console.log(pages.value);
-      console.log(cover.value);
-      console.log(publishName.value);
-      console.log(publishYear.value);
-      console.log(priceBase.value);
-      console.log(priceOrder.value);
-      console.log(description.value);
-      //   console.log(status.value);
-    });
+      // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
+        const image = document.getElementById("update-book-image").value;
+        const id = document.getElementById("update-book-id").value;
+        const title = document.getElementById("update-book-title").value;
+        const author = document.getElementById("update-book-author").value;
+        const type = document.getElementById("update-book-type").value;
+        const pages = document.getElementById("update-book-pages").value;
+        const cover = document.getElementById("update-book-cover").value;
+        const publishName = document.getElementById("update-book-publish-name").value;
+        const publishYear = document.getElementById("update-book-publish-year").value;
+        const priceBase = document.getElementById("update-book-price-base").value;
+        const priceOrder = document.getElementById("update-book-price-order").value;
+        const description = document.getElementById("update-book-description").value;
+        const size = document.getElementById("update-book-size").value;
+        //   const status = document.getElementById("update-book-status");
+
+        let params = new URLSearchParams();
+        params.append("id", id);
+        params.append("image", selectedImageName);
+        params.append("title", title);
+        params.append("authorId", author);
+        params.append("categoryId", type);
+        params.append("numOfpages", pages);
+        params.append("coverTypeId", cover);
+        params.append("publisherId", publishName);
+        params.append("publishYear", publishYear);
+        params.append("priceBase", priceBase);
+        params.append("priceOrder", priceOrder);
+        params.append("description", description);
+        params.append("size", size);
+
+        //  tạo url (thêm các tham số vào url)
+        let url = `api/books/update.php?${params.toString()}`;
+        console.log("Request URL:", url);
+
+
+        try {
+            const response = await fetch(url, { method: "GET" });
+        
+            const result = await response.json(); // Chuyển luôn về JSON
+        
+            if (result.success) {
+                alert("sửa sách thành công!");
+            } else {
+                alert("Lỗi thêm sách: " + (result.error || "Không rõ nguyên nhân"));
+            }
+        } catch (error) {
+            console.error("Lỗi fetch API:", error);
+            alert("Không thể kết nối đến server!");
+        }
+        
+        });
 
   // Gán sự kiện cho nút "Đóng" dialog
   document.getElementById("close-book-button").addEventListener("click", () => {
     // Xoá dialog
     updateDialog.remove();
 
-    // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
-    updateButton.classList.remove("active");
   });
 }

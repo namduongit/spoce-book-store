@@ -645,33 +645,44 @@ const mainContentMap = {
       </div>
       <div class="main__sort-slt main__select slt-form-1">
         <input required="" type="text" id="sort-slt-book" />
-        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Chọn Sắp xếp</span>
+        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
         <ul>
-          <li>ID tăng dần</li>
-          <li>ID giảm dần</li>
-          <li>Tiêu đề tăng dần</li>
-          <li>Tiêu đề giảm dần</li>
-          <li>Số lượng tăng dần</li>
-          <li>Số lượng giảm dần</li>
+          <li>Tăng dần</li>
+          <li>Giảm dần</li>
         </ul>
       </div>
+
+      <div class="main__sort_column-slt main__select slt-form-1">
+        <input required="" type="text" id="sort_column-slt-book" />
+        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp cột</span>
+        <ul>
+          <li>Mã sách</li>
+          <li>Tiêu đề</li>
+          <li>Tên thể loại</li>
+          <li>Năm xuất bản</li>
+        </ul>
+      </div>
+
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="type-slt-book" />
         <span><i class="fa-solid fa-font-awesome"></i>&nbsp;&nbsp;Chọn Thể loại</span>
         <ul>
-          <li>Thể loại 1</li>
-          <li>Thể loại 2</li>
+          <li>Tất cả</li>
+          <li>Tiểu thuyết</li>
+          <li>Trinh thám</li>
+          <li>Khoa học viễn tưởng</li>
         </ul>
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-book" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
-          <li>Hoạt động</li>
-          <li>Tạm dừng</li>
+          <li>Tất cả</li>
+          <li>Còn hàng</li>
+          <li>Tạm ngưng</li>
         </ul>
       </div>
-      <button class="main__filter-btn" id="filter-button-book">
+      <button type="submit" class="main__filter-btn" id="filter-button-book">
         <i class="fa-solid fa-filter"></i>
         <span>Lọc</span>
       </button>
@@ -679,7 +690,12 @@ const mainContentMap = {
         <i class="fa-solid fa-plus"></i>
         <span>Thêm</span>
       </button>
+    
+      
     </div>
+
+
+
     <div class="main__data">
       <table class="main__table book">
         <thead>
