@@ -75,10 +75,7 @@ class app_libs_DBConnection
         
         if (self::$connection == null) self::$connection = $this->open_connect();
          
-        echo "SQL: ";
-        var_dump($sql);
-        echo "Param: ";
-        var_dump($param);
+
         
         try {
             $query = self::$connection->prepare($sql);
