@@ -21,14 +21,24 @@ document.addEventListener("DOMContentLoaded", function () {
       // Lưu lại pageSize vào localStorage
       localStorage.setItem("pageSize", pageSizeValue);
       
-      let queryParams = new URLSearchParams({
-        page: page,
-        pageSize: pageSizeValue,
-      });
+      let baseUrl = window.location.origin + window.location.pathname;
 
-      if (categoryValue) queryParams.append("cateId", categoryValue); 
+      // Tạo một URLSearchParams mới
+      let queryParams = new URLSearchParams(window.location.search);
+      
+      // Xóa các query cũ nếu có (tránh trùng lặp)
+      queryParams.delete("cateId");
+      queryParams.delete("bookStatus");
+      queryParams.delete("orderBy");
+      
+      // Thêm giá trị mới nếu có
+      if (categoryValue) queryParams.append("cateId", categoryValue);
       if (statusValue) queryParams.append("bookStatus", statusValue === "has" ? "Còn hàng" : "Tạm ngưng");
       if (sortValue) queryParams.append("orderBy", sortValue);
+      
+      // Cập nhật URL đúng cách
+      let newUrl = baseUrl + (queryParams.toString() ? "?" + queryParams.toString() : "");
+      history.replaceState(null, document.title, newUrl);
 
       let apiUrl = `api/books/get.php?${queryParams.toString()}`;
 
@@ -36,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!response.ok) throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
 
       let data = await response.json();
-      console.log("Dữ liệu API nhận được:", data);
+      // console.log("Dữ liệu API nhận được:", data);
 
       updateBookToMain(data.books);
       updatePagination(data.totalBooks);
@@ -146,3 +156,5 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchBooks();
   });
 });
+
+

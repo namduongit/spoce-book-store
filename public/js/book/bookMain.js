@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 async function showDetailProduct(product_id) {
-    const URL = `api/books/get.php?bookId=${product_id}`;
+    const URL = `api/books/get.php?bookIDf=${product_id}`;
     showLoading();
     async function fetchData(URL) {
         try {

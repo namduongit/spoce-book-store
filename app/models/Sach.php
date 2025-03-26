@@ -84,99 +84,96 @@ class app_models_Sach extends app_libs_DBConnection
         $id = '',
         $status = '',
         $name = '',
-        $loaiBia = '',
-        $nhaXuatBan = '',
+        $loaiBia = [],
+        $nhaXuatBan = [],
         $namXuatBan = '',
-        $pageSize = 10,  // trang mặc đinh là 10
-        $page = 1        // trang đầu tiên
+        $pageSize = 10,
+        $page = 1
     ) {
-        if ($id === '' && $name === '' && empty($author) && $category === '' && empty($loaiBia) && empty($nhaXuatBan) && $namXuatBan === '') {
-            return $this->building_queryParam()->select();
-        }
-
         $conditions = [];
         $params = [];
-
+    
         if (!empty($id)) {
             return $this->building_queryParam([
                 'where' => 'maSach = ?',
                 'params' => [$id]
             ])->select_one();
         }
-
+    
         if ($minPrice > 0) {
             $conditions[] = 'giaBan >= ?';
             $params[] = $minPrice;
         }
-
-        if ($maxPrice !== null) {
+    
+        if (!is_null($maxPrice)) {
             $conditions[] = 'giaBan <= ?';
             $params[] = $maxPrice;
         }
-
+    
         if (!empty($category) && $category !== 'allproduct') {
             $conditions[] = 'maTheLoai = ?';
             $params[] = $category;
         }
-
+    
         if (!empty($author)) {
-            if (!is_array($author)) {
-                $author = explode(',', $author);
-            }
-            $placeholders = implode(',', array_fill(0, count($author), '?'));
-            $conditions[] = "maTacGia IN ($placeholders)";
-            $params = array_merge($params, $author);
-        }
 
-        if ($status !== '') {
+            $authorList = is_array($author) ? $author : explode(',', $author);
+            $placeholders = implode(',', array_fill(0, count($authorList), '?'));
+            $conditions[] = "maTacGia IN ($placeholders)";
+            $params = array_merge($params, $authorList);
+        }
+    
+        if (!empty($status)) {
             $conditions[] = 'trangThai = ?';
             $params[] = $status;
         }
-
+    
         if (!empty($name)) {
             $conditions[] = 'tenSach LIKE ?';
             $params[] = "%$name%";
         }
-
+    
         if (!empty($loaiBia)) {
-            if (!is_array($loaiBia)) {
-                $loaiBia = explode(',', $loaiBia);
-            }
-            $placeholders = implode(',', array_fill(0, count($loaiBia), '?'));
+            $loaiBiaList = is_array($loaiBia) ? $loaiBia : explode(',', $loaiBia);
+            $placeholders = implode(',', array_fill(0, count($loaiBiaList), '?'));
             $conditions[] = "maLoaiBia IN ($placeholders)";
-            $params = array_merge($params, $loaiBia);
+            $params = array_merge($params, $loaiBiaList);
         }
-
+    
         if (!empty($nhaXuatBan)) {
-            if (!is_array($nhaXuatBan)) {
-                $nhaXuatBan = explode(',', $nhaXuatBan);
-            }
-            $placeholders = implode(',', array_fill(0, count($nhaXuatBan), '?'));
+            $nhaXuatBanList = is_array($nhaXuatBan) ? $nhaXuatBan : explode(',', $nhaXuatBan);
+            $placeholders = implode(',', array_fill(0, count($nhaXuatBanList), '?'));
             $conditions[] = "maNXB IN ($placeholders)";
-            $params = array_merge($params, $nhaXuatBan);
+            $params = array_merge($params, $nhaXuatBanList);
         }
-
+    
         if (!empty($namXuatBan) && is_numeric($namXuatBan)) {
             $conditions[] = 'namXuatBan = ?';
             $params[] = $namXuatBan;
         }
-
+    
         $whereClause = count($conditions) > 0 ? implode(' AND ', $conditions) : '1';
-
-        //tính toán và OFFSET
+    
+        // Phân trang
         $offset = ($page - 1) * $pageSize;
 
+        $orderByClause = 'giaBan ' . (strtoupper($order_by) === 'DESC' ? 'DESC' : 'ASC');
+    
+        // Truy vấn
         $queryParams = [
             'where' => $whereClause,
             'params' => $params,
-
-            // Phân trang
-            'limit' => $pageSize,
-            'offset' => $offset
+            'other' => "ORDER BY $orderByClause LIMIT $pageSize OFFSET $offset"
         ];
 
+        // echo '<pre>';
+        // print_r($queryParams);
+        // echo '</pre>';
+        // die();
+    
         return $this->building_queryParam($queryParams)->select();
     }
+    
 
 
 
@@ -186,62 +183,66 @@ class app_models_Sach extends app_libs_DBConnection
         $maxPrice = null,
         $order_by = '',
         $category = '',
-        $author = '',
+        $author = '', // Đổi sang mảng để đồng nhất với getBookByFilters
         $id = '',
         $status = '',
         $name = '',
-        $loaiBia = '',
+        $loaiBia = '', // Đổi sang mảng
         $nhaXuatBan = '',
         $namXuatBan = ''
     ) {
         $conditions = [];
         $params = [];
-
+    
         if ($minPrice > 0) {
             $conditions[] = 'giaBan >= ?';
             $params[] = $minPrice;
         }
-
+    
         if ($maxPrice !== null) {
             $conditions[] = 'giaBan <= ?';
             $params[] = $maxPrice;
         }
-
+    
         if (!empty($category)) {
             $conditions[] = 'maTheLoai = ?';
             $params[] = $category;
         }
-
+    
         if (!empty($author)) {
-            $conditions[] = 'maTacGia = ?';
-            $params[] = $author;
+            $authorList = is_array($author) ? $author : explode(',', $author);
+            $placeholders = implode(',', array_fill(0, count($authorList), '?'));
+            $conditions[] = "maTacGia IN ($placeholders)";
+            $params = array_merge($params, $authorList);
         }
-
+    
         if ($status !== '') {
             $conditions[] = 'trangThai = ?';
             $params[] = $status;
         }
-
+    
         if (!empty($name)) {
             $conditions[] = 'tenSach LIKE ?';
             $params[] = "%$name%";
         }
-
+    
         if (!empty($loaiBia)) {
-            $conditions[] = 'maLoaiBia = ?';
-            $params[] = $loaiBia;
+            $loaiBiaList = is_array($loaiBia) ? $loaiBia : explode(',', $loaiBia);
+            $placeholders = implode(',', array_fill(0, count($loaiBiaList), '?'));
+            $conditions[] = "maLoaiBia IN ($placeholders)";
+            $params = array_merge($params, $loaiBiaList);
         }
-
+    
         if (!empty($nhaXuatBan)) {
             $conditions[] = 'maNXB = ?';
             $params[] = $nhaXuatBan;
         }
-
+    
         if (!empty($namXuatBan) && is_numeric($namXuatBan)) {
             $conditions[] = 'namXuatBan = ?';
             $params[] = $namXuatBan;
         }
-
+    
         $whereClause = count($conditions) > 0 ? implode(' AND ', $conditions) : '1';
         return $this->building_queryParam([
             'select' => 'COUNT(*) as total',

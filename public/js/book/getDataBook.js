@@ -54,8 +54,8 @@ export async function getBookByTrueName(bookName) {
 }
 
 
-export async function getBookByID(bookId) {
-    let response = await fetch(`api/books/get.php?bookId=${bookId}`);
+export async function getBookByID(bookID) {
+    let response = await fetch(`api/books/get.php?bookID=${bookID}`);
     if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
     }
