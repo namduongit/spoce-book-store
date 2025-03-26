@@ -69,7 +69,7 @@ function searchProduct(query) {
     fetch(`api/books/get.php?bookName=${query}`)
     .then(response => response.json())
     .then(data => {
-        displayProduct(data);
+        displayProduct(data['books']);
     })
     .catch(error => console.log("Lỗi tìm kiếm: "+ error));
 }
@@ -83,6 +83,7 @@ async function displayProduct(data) {
         document.querySelector('.result-search').style.height = 'fit-content';
         return;
     }
+    showLoading();
 
     searchResult.querySelector('.result-search__wrapper-title').innerHTML =
         `Kết quả tìm kiếm: <strong>${data.length} sản phẩm</strong>`;
@@ -123,6 +124,7 @@ async function displayProduct(data) {
     searchResult.querySelector('.result-search__list').innerHTML = HTMLBookList;
     document.querySelector('.result-search').style.height = '45rem';
     document.querySelector('.result-search').style.display = 'block';
+    hideLoading();
 }
 
 

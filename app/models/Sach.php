@@ -169,13 +169,18 @@ class app_models_Sach extends app_libs_DBConnection
         $queryParams = [
             'where' => $whereClause,
             'params' => $params,
-            //thêm phân trang
+
+            // Phân trang
             'limit' => $pageSize,
             'offset' => $offset
         ];
 
         return $this->building_queryParam($queryParams)->select();
     }
+
+
+
+
     public function countBooks(
         $minPrice = 0,
         $maxPrice = null,

@@ -1,7 +1,7 @@
 import { formatMoney, getNameAuthorByID, getNameCategoryByID, getNameCoverByID, getNamePublisherByID } from "./getDataBook.js";
 import { toast } from '../toast.js'
 
-window.onload = function() {
+document.addEventListener("DOMContentLoaded", function() {
     const currentParams = new URLSearchParams(window.location.search);
     const url = new URL(window.location.href);
 
@@ -124,15 +124,28 @@ window.onload = function() {
         });
     }
 
+    /* Lọc theo trạng thái */
+    let typeStatus = "";
+    const statusByCombox = document.querySelector("#book-status");
 
+    if (statusByCombox) {
+        const savedStatus = localStorage.getItem("statusProduct");
+        if (savedStatus) {
+            statusByCombox.value = savedStatus;
+        }
+
+        statusByCombox.addEventListener("change", function () {
+            typeStatus = statusByCombox.value;
+            localStorage.setItem("statusProduct", typeStatus);
+        });
+    }
 
     // Hiển thị sách lên màn hình
     if (currentParams.has('bookID') && currentParams.has('dislayBookName')) {
         let bookID = currentParams.get('bookID');
         showDetailProduct(bookID);
     }
-}
-
+});
 
 
 async function showDetailProduct(product_id) {

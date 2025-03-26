@@ -346,6 +346,17 @@
                             ?>
                         </select>
                     </div>
+                    
+                    <div class="book-category__sort-item">
+                        <label for="book-status">Trạng thái: </label>
+                        <select name="" id="book-status">
+                            <option value="base" selected>Tất cả</option>
+                            <option value="has">Còn hàng</option>
+                            <option value="nohas">Tạm ngưng</option>
+                        </select>
+                    </div>
+
+
                     <div class="book-category__sort-item">
                         <label for="sort-combobox">Sắp xếp theo: </label>
                         <select name="" id="sort-combobox">
@@ -364,13 +375,15 @@
                             <option value="25">25 sản phẩm</option>
                         </select>
                     </div>
+                    
 
 
 
-                    <div class="book-category__button d-flex">
+
+                    <!-- <div class="book-category__button d-flex">
                         <div class="btn sort-btn" onclick="filterBookList()">Lọc sách</div>
                         <div class="btn reset-btn" onclick="resetFilterBook()">Đặt lại</div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="book-category__list" id="book-list">

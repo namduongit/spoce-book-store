@@ -68,7 +68,7 @@ export async function updateInfoTopBar(promiseResponse) {
     showLoading();
     const currentUser = await getUserByID(promiseResponse.user['id']);
     hideLoading();
-    console.log(currentUser);
+    // console.log(currentUser);
 
     // Cập nhật thanh công cụ của người dùng
     const authTopBarContent = document.querySelector('.topbar .topbar__auth');
