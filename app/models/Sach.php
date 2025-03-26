@@ -179,75 +179,85 @@ class app_models_Sach extends app_libs_DBConnection
 
 
     public function countBooks(
-        $minPrice = 0,
-        $maxPrice = null,
+        $min_price = 0,
+        $max_price = null,
         $order_by = '',
-        $category = '',
-        $author = '', // Đổi sang mảng để đồng nhất với getBookByFilters
-        $id = '',
+        $categoryId = '',
+        $authorId = [],  // Chuyển sang mảng
+        $bookId = '',
         $status = '',
-        $name = '',
-        $loaiBia = '', // Đổi sang mảng
-        $nhaXuatBan = '',
-        $namXuatBan = ''
+        $bookName = '',
+        $coverType = [], // Chuyển sang mảng
+        $publisher = [], // Chuyển sang mảng
+        $publishYear = ''
     ) {
         $conditions = [];
         $params = [];
     
-        if ($minPrice > 0) {
+        if (!empty($bookId)) {
+            $conditions[] = 'maSach = ?';
+            $params[] = $bookId;
+        }
+    
+        if ($min_price > 0) {
             $conditions[] = 'giaBan >= ?';
-            $params[] = $minPrice;
+            $params[] = $min_price;
         }
     
-        if ($maxPrice !== null) {
+        if (!is_null($max_price)) {
             $conditions[] = 'giaBan <= ?';
-            $params[] = $maxPrice;
+            $params[] = $max_price;
         }
     
-        if (!empty($category)) {
+        if (!empty($categoryId)) {
             $conditions[] = 'maTheLoai = ?';
-            $params[] = $category;
+            $params[] = $categoryId;
         }
     
-        if (!empty($author)) {
-            $authorList = is_array($author) ? $author : explode(',', $author);
+        if (!empty($authorId)) {
+            $authorList = is_array($authorId) ? $authorId : explode(',', $authorId);
             $placeholders = implode(',', array_fill(0, count($authorList), '?'));
             $conditions[] = "maTacGia IN ($placeholders)";
             $params = array_merge($params, $authorList);
         }
     
-        if ($status !== '') {
+        if (!empty($status)) {
             $conditions[] = 'trangThai = ?';
             $params[] = $status;
         }
     
-        if (!empty($name)) {
+        if (!empty($bookName)) {
             $conditions[] = 'tenSach LIKE ?';
-            $params[] = "%$name%";
+            $params[] = "%$bookName%";
         }
     
-        if (!empty($loaiBia)) {
-            $loaiBiaList = is_array($loaiBia) ? $loaiBia : explode(',', $loaiBia);
-            $placeholders = implode(',', array_fill(0, count($loaiBiaList), '?'));
+        if (!empty($coverType)) {
+            $coverList = is_array($coverType) ? $coverType : explode(',', $coverType);
+            $placeholders = implode(',', array_fill(0, count($coverList), '?'));
             $conditions[] = "maLoaiBia IN ($placeholders)";
-            $params = array_merge($params, $loaiBiaList);
+            $params = array_merge($params, $coverList);
         }
     
-        if (!empty($nhaXuatBan)) {
-            $conditions[] = 'maNXB = ?';
-            $params[] = $nhaXuatBan;
+        if (!empty($publisher)) {
+            $publisherList = is_array($publisher) ? $publisher : explode(',', $publisher);
+            $placeholders = implode(',', array_fill(0, count($publisherList), '?'));
+            $conditions[] = "maNXB IN ($placeholders)";
+            $params = array_merge($params, $publisherList);
         }
     
-        if (!empty($namXuatBan) && is_numeric($namXuatBan)) {
+        if (!empty($publishYear) && is_numeric($publishYear)) {
             $conditions[] = 'namXuatBan = ?';
-            $params[] = $namXuatBan;
+            $params[] = $publishYear;
         }
     
         $whereClause = count($conditions) > 0 ? implode(' AND ', $conditions) : '1';
+        
         return $this->building_queryParam([
             'select' => 'COUNT(*) as total',
             'where' => $whereClause,
             'params' => $params
         ])->select_one()['total'];
     }
+    
+    
 }

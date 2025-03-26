@@ -254,17 +254,17 @@
                                 $hidden_class = $index >= $limit ? 'hide-item' : '';
 
                                 echo "
-                                            <div class=\"filter-group__option $hidden_class\">
-                                                <input type=\"checkbox\" class=\"filter-group__checkbox\" value=\"$publisher_id\"> $publisher_name
-                                            </div>";
+                                    <div class=\"filter-group__option $hidden_class\">
+                                        <input type=\"checkbox\" class=\"filter-group__checkbox\" value=\"$publisher_id\"> $publisher_name
+                                    </div>";
                             }
 
                             if ($total_authors > $limit) {
                                 echo '
-                                            <div class="show-list-publisher show-more margin-top-small">
-                                                <a href="#">Hiển thị tất cả (' . $total_publisher . ')</a>
-                                                <i class="fa-solid fa-chevron-down"></i>
-                                            </div>';
+                                    <div class="show-list-publisher show-more margin-top-small">
+                                        <a href="#">Hiển thị tất cả (' . $total_publisher . ')</a>
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </div>';
                             }
                             ?>
                         </div>

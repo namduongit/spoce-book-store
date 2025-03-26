@@ -1,6 +1,7 @@
 import { formatMoney, getNameAuthorByID, getNameCategoryByID, getNameCoverByID, getNamePublisherByID } from "./getDataBook.js";
 import { toast } from '../toast.js'
 
+// Lưu dữ liệu vào LocalStorage
 document.addEventListener("DOMContentLoaded", function() {
     const currentParams = new URLSearchParams(window.location.search);
     const url = new URL(window.location.href);
@@ -139,17 +140,23 @@ document.addEventListener("DOMContentLoaded", function() {
             localStorage.setItem("statusProduct", typeStatus);
         });
     }
+    
+
+
 
     // Hiển thị sách lên màn hình
-    if (currentParams.has('bookID') && currentParams.has('dislayBookName')) {
-        let bookID = currentParams.get('bookID');
-        showDetailProduct(bookID);
-    }
+    window.addEventListener("load", function() {
+        if (currentParams.has('bookID') && currentParams.has('dislayBookName')) {
+            let bookID = currentParams.get('bookID');
+            showDetailProduct(bookID);
+        }
+    });
+
 });
 
 
 async function showDetailProduct(product_id) {
-    const URL = `api/books/get.php?bookIDf=${product_id}`;
+    const URL = `api/books/get.php?bookID=${product_id}`;
     showLoading();
     async function fetchData(URL) {
         try {
@@ -350,40 +357,63 @@ function closeDetailProduct() {
 }
 
 
-
 $(function () {
+    let minInput = $(".filter-group__input").eq(0);
+    let maxInput = $(".filter-group__input").eq(1);
+    let minPriceText = $("#min-price");
+    let maxPriceText = $("#max-price");
+
+    // Lấy giá trị từ localStorage hoặc dùng giá trị mặc định
+    let storedMin = parseInt(localStorage.getItem("minPrice")) || 0;
+    let storedMax = parseInt(localStorage.getItem("maxPrice")) || 500000;
+
     $("#price-slider").slider({
         range: true,
         min: 0,
-        max: 2000000, // Giới hạn max là 2 triệu
-        values: [0, 500000], // Giá trị mặc định
+        max: 2000000,
+        values: [storedMin, storedMax], // Gán giá trị đã lưu vào slider
         slide: function (event, ui) {
-            $("#min-price").text(ui.values[0].toLocaleString());
-            $("#max-price").text(ui.values[1].toLocaleString());
+            minPriceText.text(ui.values[0].toLocaleString());
+            maxPriceText.text(ui.values[1].toLocaleString());
+            minInput.val(ui.values[0].toLocaleString());
+            maxInput.val(ui.values[1].toLocaleString());
 
-            // Cập nhật vào input
-            $(".filter-group__input").eq(0).val(ui.values[0].toLocaleString());
-            $(".filter-group__input").eq(1).val(ui.values[1].toLocaleString());
+            // Lưu giá trị vào localStorage
+            localStorage.setItem("minPrice", ui.values[0]);
+            localStorage.setItem("maxPrice", ui.values[1]);
         }
     });
 
-    // Cập nhật slider khi nhập giá trị vào input
-    $(".filter-group__input").on("input", function () {
-        let minVal = parseInt($(".filter-group__input").eq(0).val().replace(/\D/g, "")) || 0;
-        let maxVal = parseInt($(".filter-group__input").eq(1).val().replace(/\D/g, "")) || 2000000;
+    function updateSliderFromInput() {
+        let minVal = parseInt(minInput.val().replace(/\D/g, "")) || 0;
+        let maxVal = parseInt(maxInput.val().replace(/\D/g, "")) || 2000000;
 
-        // Đảm bảo giá trị hợp lệ
         if (minVal < 0) minVal = 0;
         if (maxVal > 2000000) maxVal = 2000000;
         if (minVal > maxVal) minVal = maxVal;
 
         $("#price-slider").slider("values", [minVal, maxVal]);
 
-        // Cập nhật lại UI
-        $("#min-price").text(minVal.toLocaleString());
-        $("#max-price").text(maxVal.toLocaleString());
-    });
+        minPriceText.text(minVal.toLocaleString());
+        maxPriceText.text(maxVal.toLocaleString());
+
+        // Lưu giá trị khi nhập vào input
+        localStorage.setItem("minPrice", minVal);
+        localStorage.setItem("maxPrice", maxVal);
+
+        console.log("Input giá thay đổi:", minVal, "-", maxVal);
+    }
+
+    // Cập nhật input với giá trị từ localStorage khi load trang
+    minInput.val(storedMin.toLocaleString());
+    maxInput.val(storedMax.toLocaleString());
+    minPriceText.text(storedMin.toLocaleString());
+    maxPriceText.text(storedMax.toLocaleString());
+
+    minInput.on("input change", updateSliderFromInput);
+    maxInput.on("input change", updateSliderFromInput);
 });
+
 
 
 

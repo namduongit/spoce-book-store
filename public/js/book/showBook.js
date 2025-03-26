@@ -4,11 +4,26 @@ let page = parseInt(localStorage.getItem("currentPage")) || 1;
 let pageSize = parseInt(localStorage.getItem("pageSize")) || 10;
 localStorage.setItem("pageSize", pageSize);
 
+function formatJSONListFilter(key) {
+  let list = JSON.parse(localStorage.getItem(key) || "[]");
+  return Array.isArray(list) && list.length > 0 ? list.join(",") : "";
+}
+
+
+function formatNumber(numberString) {
+  return numberString.replace(/\D/g, '');
+}
+
+
 document.addEventListener("DOMContentLoaded", function () {
   const categoryType = document.getElementById("type-category");
   const statusType = document.getElementById("book-status");
   const sortType = document.getElementById("sort-combobox");
   const pageSizeSelect = document.getElementById("page-show-by");
+  const minPrice = formatNumber(document.getElementById('min-price').innerText);
+  const maxPrice = formatNumber(document.getElementById('max-price').innerText);
+  console.log(minPrice)
+  console.log(maxPrice)
 
   // Hàm lấy danh sách sách từ API
   async function fetchBooks() {
@@ -18,43 +33,52 @@ document.addEventListener("DOMContentLoaded", function () {
       const sortValue = sortType.value !== "base" ? sortType.value : "";
       const pageSizeValue = parseInt(pageSizeSelect.value);
 
+      // Dữ liệu từ LocalStorage
+      const page = localStorage.getItem("currentPage") || 1;
+      const minPrice = localStorage.getItem("minPrice") || 0;
+      const maxPrice = localStorage.getItem("maxPrice") || 2000000;
+
+      const authorIDList = formatJSONListFilter("selectedAuthors");
+      const coverIDList = formatJSONListFilter("selectedCovers");
+      const publisherIDList = formatJSONListFilter("selectedPublishers");
+
       // Lưu lại pageSize vào localStorage
       localStorage.setItem("pageSize", pageSizeValue);
-      
-      let baseUrl = window.location.origin + window.location.pathname;
 
-      // Tạo một URLSearchParams mới
-      let queryParams = new URLSearchParams(window.location.search);
-      
-      // Xóa các query cũ nếu có (tránh trùng lặp)
-      queryParams.delete("cateId");
-      queryParams.delete("bookStatus");
-      queryParams.delete("orderBy");
-      
-      // Thêm giá trị mới nếu có
-      if (categoryValue) queryParams.append("cateId", categoryValue);
-      if (statusValue) queryParams.append("bookStatus", statusValue === "has" ? "Còn hàng" : "Tạm ngưng");
-      if (sortValue) queryParams.append("orderBy", sortValue);
-      
-      // Cập nhật URL đúng cách
-      let newUrl = baseUrl + (queryParams.toString() ? "?" + queryParams.toString() : "");
+      // Khởi tạo danh sách tham số
+      let queryParams = [];
+
+      if (categoryValue) queryParams.push(`cateId=${categoryValue}`);
+      if (statusValue) queryParams.push(`bookStatus=${statusValue === "has" ? "Còn hàng" : "Tạm ngưng"}`);
+      if (sortValue) queryParams.push(`orderBy=${sortValue}`);
+      if (pageSizeValue) queryParams.push(`pageSize=${pageSizeValue}`);
+      if (page) queryParams.push(`page=${page}`);
+      if (authorIDList) queryParams.push(`authorId=${authorIDList}`);
+      if (coverIDList) queryParams.push(`coverType=${coverIDList}`);
+      if (publisherIDList) queryParams.push(`publisherId=${publisherIDList}`);
+      if (minPrice) queryParams.push(`minPrice=${minPrice}`);
+      if (maxPrice) queryParams.push(`maxPrice=${maxPrice}`);
+
+      // Tạo URL mới (KHÔNG encode dấu `,`)
+      let newUrl = `${window.location.origin}${window.location.pathname}?${queryParams.join("&")}`;
+
+      // Cập nhật URL mà không load lại trang
       history.replaceState(null, document.title, newUrl);
-
-      let apiUrl = `api/books/get.php?${queryParams.toString()}`;
+      let apiUrl = `api/books/get.php?${queryParams.join("&")}`;
 
       let response = await fetch(apiUrl);
       if (!response.ok) throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
-
+      showLoading();
       let data = await response.json();
-      // console.log("Dữ liệu API nhận được:", data);
-
+      console.log("Dữ liệu API nhận được:", data);
+      hideLoading();
       updateBookToMain(data.books);
       updatePagination(data.totalBooks);
     } catch (error) {
-      console.error("Lỗi lấy dữ liệu:", error);
       document.getElementById("book-list").innerHTML = `<p class="error-message">Lỗi khi tải sách!</p>`;
     }
   }
+
 
   // Cập nhật danh sách sách vào giao diện
   function updateBookToMain(allproduct = []) {
@@ -101,17 +125,45 @@ document.addEventListener("DOMContentLoaded", function () {
     let paginationContainer = document.getElementById("pagination");
     paginationContainer.innerHTML = "";
 
-    if (maxPage <= 1) return; // Không hiển thị phân trang nếu chỉ có 1 trang
+    if (maxPage <= 1) return;
 
-    for (let i = 1; i <= maxPage; i++) {
+    let prevButton = document.createElement("button");
+    prevButton.textContent = "←";
+    prevButton.classList.add("pagination-btn");
+    if (page === 1) prevButton.disabled = true;
+    prevButton.addEventListener("click", function () {
+      if (page > 1) {
+        page--;
+        localStorage.setItem("currentPage", page);
+        fetchBooks();
+      }
+    });
+    paginationContainer.appendChild(prevButton);
+
+    if (page > 2) {
+      let firstPage = document.createElement("button");
+      firstPage.textContent = "1";
+      firstPage.classList.add("pagination-btn");
+      firstPage.addEventListener("click", function () {
+        page = 1;
+        localStorage.setItem("currentPage", page);
+        fetchBooks();
+      });
+      paginationContainer.appendChild(firstPage);
+    }
+
+    if (page > 3) {
+      let dots = document.createElement("span");
+      dots.textContent = "...";
+      dots.classList.add("pagination-dots");
+      paginationContainer.appendChild(dots);
+    }
+
+    for (let i = Math.max(1, page - 1); i <= Math.min(maxPage, page + 1); i++) {
       let button = document.createElement("button");
       button.textContent = i;
       button.classList.add("pagination-btn");
-
-      if (i === page) {
-        button.classList.add("active");
-      }
-
+      if (i === page) button.classList.add("active");
       button.addEventListener("click", function () {
         if (i !== page) {
           page = i;
@@ -119,14 +171,45 @@ document.addEventListener("DOMContentLoaded", function () {
           fetchBooks();
         }
       });
-
       paginationContainer.appendChild(button);
     }
+
+    if (page < maxPage - 2) {
+      let dots = document.createElement("span");
+      dots.textContent = " . . . ";
+      dots.classList.add("pagination-dots");
+      paginationContainer.appendChild(dots);
+    }
+
+    if (page < maxPage - 1) {
+      let lastPage = document.createElement("button");
+      lastPage.textContent = maxPage;
+      lastPage.classList.add("pagination-btn");
+      lastPage.addEventListener("click", function () {
+        page = maxPage;
+        localStorage.setItem("currentPage", page);
+        fetchBooks();
+      });
+      paginationContainer.appendChild(lastPage);
+    }
+
+    let nextButton = document.createElement("button");
+    nextButton.textContent = "→";
+    nextButton.classList.add("pagination-btn");
+    if (page === maxPage) nextButton.disabled = true;
+    nextButton.addEventListener("click", function () {
+      if (page < maxPage) {
+        page++;
+        localStorage.setItem("currentPage", page);
+        fetchBooks();
+      }
+    });
+    paginationContainer.appendChild(nextButton);
   }
 
-  // Xử lý sự kiện khi thay đổi bộ lọc
+  // Khi có thay đổi các combox thì tự động đưa về trang đầu
   categoryType.addEventListener("change", () => {
-    page = 1; // Reset trang về 1 khi thay đổi bộ lọc
+    page = 1;
     localStorage.setItem("currentPage", page);
     fetchBooks();
   });
@@ -148,6 +231,41 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.setItem("currentPage", page);
     fetchBooks();
   });
+
+  document.querySelectorAll('.list-author-content').forEach(boxItem => {
+    boxItem.addEventListener("change", function (event) {
+      if (event.target.classList.contains("filter-group__checkbox")) {
+        fetchBooks();
+      }
+    });
+  });
+
+  document.querySelectorAll('.list-publisher-content').forEach(boxItem => {
+    boxItem.addEventListener("change", function (event) {
+      if (event.target.classList.contains("filter-group__checkbox")) {
+        fetchBooks();
+      }
+    });
+  });
+
+  document.querySelectorAll('.list-cover-content').forEach(boxItem => {
+    boxItem.addEventListener("change", function (event) {
+      if (event.target.classList.contains("filter-group__checkbox")) {
+        fetchBooks();
+      }
+    });
+
+  $("#price-slider").on("slidechange", function () {
+    fetchBooks();
+  });
+
+  $(".filter-group__input").on("input change", function () {
+    fetchBooks();
+  });
+
+  });
+
+
 
   // Khi load trang lần đầu
   window.addEventListener("load", () => {

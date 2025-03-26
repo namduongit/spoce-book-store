@@ -48,6 +48,7 @@ function returnJSONBook($books)
 
 $book_model = new app_models_Sach();
 
+
 $bookId = isset($_GET['bookID']) ? $_GET['bookID'] : '';
 $bookName = isset($_GET['bookName']) ? trim($_GET['bookName']) : '';
 
@@ -68,10 +69,24 @@ if (!is_array($coverType)) {
     $coverType = explode(',', $coverType);
 }
 
-$publisher = isset($_GET['publisher']) ? $_GET['publisher'] : [];
+$publisher = isset($_GET['publisherId']) ? $_GET['publisherId'] : [];
 if (!is_array($publisher)) {
     $publisher = explode(',', $publisher);
 }
+
+$totalBooks = $book_model->countBooks(
+    $min_price,
+    $max_price,
+    $order_by,
+    $categoryId,
+    $authorId,
+    $bookId,
+    $status,
+    $bookName,
+    $coverType,
+    $publisher,
+    $publishYear
+);
 
 $books = $book_model->getBookByFilters(
     $min_price,

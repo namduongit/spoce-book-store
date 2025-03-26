@@ -72,7 +72,7 @@ async function viewCart(type) {
                                 <button onclick="showAllCart(null)">Xem giỏ hàng</button>
                             </td>
                             <td>
-                                <button class="topbar__checkout-btn">Thanh toán</button>
+                                <button onclick="checkOutBill()" class="topbar__checkout-btn">Thanh toán</button>
                             </td>
                         </tr>
                     </table>
@@ -156,6 +156,13 @@ function removeFromCart(bookId) {
 }
 
 async function showAllCart(type) {
+    let baseUrl = window.location.origin + window.location.pathname;
+    let queryParams = new URLSearchParams(window.location.search);
+    queryParams.delete('cart-holder');
+    let newUrl = baseUrl + (queryParams.toString() ? "?" + queryParams.toString() : "");
+    history.replaceState(null, document.title, newUrl);
+
+
     const cartMain = document.querySelector('.show-cart');
     const mainMain = document.querySelector('.main');
     const bodyMain = document.querySelector('.body');
@@ -202,7 +209,7 @@ async function showAllCart(type) {
                 </div>
                 <div class="show-cart__amountbox">
                     <button class="show-cart__btn show-cart__btn--left">-</button>
-                    <input type="text" name="product-amount" value="${item.quantity}">
+                    <input type="text" name="product-amount" value="${item.quantity}" disabled>
                     <button class="show-cart__btn show-cart__btn--right">+</button>
                 </div>
                 <div class="show-cart__priceamount">${formatMoney(item.quantity * productItem.sellingPrice)}</div>
@@ -232,7 +239,9 @@ async function showAllCart(type) {
                     <span>Bạn có thể nhập mã giảm giá ở trang thanh toán.</span>
                 </div>
                 <div class="show-cart__checkoutbox">
-                    <button class="show-cart__to-checkout-btn"><i class="fa-regular fa-circle-check"></i> Thanh toán</button>
+                    <button onclick="checkOutBill()" class="show-cart__to-checkout-btn">
+                        <i class="fa-regular fa-circle-check"></i> Thanh toán
+                    </button>
                     <button onclick="deleteAllCart()"><i class="fa-solid fa-circle-xmark"></i> Xóa tất cả</button>
                 </div>
             </div>
@@ -265,6 +274,11 @@ async function checkOutBill() {
             type: 'info',
             duration: 3000
         });
+        let baseUrl = window.location.origin + window.location.pathname;
+        let queryParams = new URLSearchParams(window.location.search);
+        queryParams.delete('cart-holder');
+        let newUrl = baseUrl + (queryParams.toString() ? "?" + queryParams.toString() : "");
+        history.replaceState(null, document.title, newUrl);
         return;
     }
 
