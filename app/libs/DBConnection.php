@@ -64,37 +64,20 @@ class app_libs_DBConnection
      * Nên truyền mảng param vào để tránh SQL Injection (Tiêm SQL)
      * Mọi người cập nhật ghi chú ở đây nhé
      */
+
     public function query($sql, $param = [])
     {
-        if (!is_string($sql)) {
-            throw new Exception("SQL phải là chuỗi, nhận được: " . gettype($sql));
-        }
-        if (!is_array($param)) {
-            throw new Exception("Param phải là mảng, nhận được: " . gettype($param));
-        }
-        
         if (self::$connection == null) self::$connection = $this->open_connect();
-         
+        // echo '<pre>';
+        // print_r($param);
+        // echo '</pre>';
+        // die();
+        // params là array
 
-        
-        try {
-            $query = self::$connection->prepare($sql);
-            if ($query === false) {
-                throw new Exception("Lỗi prepare SQL: " . implode(" - ", self::$connection->errorInfo()));
-            }
-             
-            $result = $query->execute($param);
-            if ($result === false) {
-                throw new Exception("Lỗi execute SQL: " . implode(" - ", $query->errorInfo()));
-            }
-             
-            return $query;
-        } catch (Exception $e) {
-            $errorMessage = "Lỗi: " . $e->getMessage() . 
-                            " với SQL: " . (is_array($sql) ? print_r($sql, true) : $sql) . 
-                            " và Param: " . (is_array($param) ? print_r($param, true) : json_encode($param));
-            throw new Exception($errorMessage);
-        }
+
+        $query = self::$connection->prepare($sql);
+        $query->execute(is_array($param) ? $param : []);
+        return $query;
     }
 
     public function select()
