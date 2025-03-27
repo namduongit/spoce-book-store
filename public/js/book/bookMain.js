@@ -189,7 +189,7 @@ async function showDetailProduct(product_id) {
         <div class="show-detail-product__container">
             <div class="show-detail-product__content d-flex just-content-spbt">
                 <div class="show-detail-product__image">
-                    <img src="public/uploads/${productDetail['image']}" alt="Hình ảnh sách">
+                    <img src="public/uploads/books/${productDetail['image']}" alt="Hình ảnh sách">
                 </div>
 
                 <div class="show-detail-product__purchase">

@@ -102,13 +102,13 @@ async function displayProduct(data) {
         let author = authors[index]; // Lấy dữ liệu tác giả tương ứng
 
         let statusProduct = element['status'];
-        let className = (statusProduct === 'Còn hàng')
+        let className = (statusProduct === 'ACTIVE')
             ? 'book-category__item-status--true'
             : 'book-category__item-status--false';
 
         return `
             <div class="result-search__item" onclick="showDetailProduct(${element['id']})">
-                <img class="result-search__item-image" src="public/uploads/${element['image']}" alt="Sản phẩm">
+                <img class="result-search__item-image" src="public/uploads/books/${element['image']}" alt="Sản phẩm">
 
                 <div class="result-search__item-info">
                     <h3 class="result-search__item-name"><strong>${element.name}</strong></h3>

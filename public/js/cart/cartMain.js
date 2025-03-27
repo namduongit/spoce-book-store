@@ -93,7 +93,7 @@ async function viewCart(type) {
 
         cartHTML += `
             <tr>
-                <td><img src="../public/uploads/${productItem.image}" alt="${productItem.name}"></td>
+                <td><img src="../public/uploads/books/${productItem.image}" alt="${productItem.name}"></td>
                 <td>
                     <p class="topbar__product-info">
                         <a href="#">${productItem.name}</a>
@@ -202,7 +202,7 @@ async function showAllCart(type) {
 
         cartMainHTML += `
             <div class="show-cart__item d-flex">
-                <img class="show-cart__img" src="../public/uploads/${productItem.image}" alt="product">
+                <img class="show-cart__img" src="../public/uploads/books/${productItem.image}" alt="product">
                 <div class="show-cart__detail d-flex">
                     <div class="show-cart__bookname">${productItem.name}</div>
                     <div class="show-cart__price">${productItem.id} / ${nameGenre} / ${formatMoney(productItem.sellingPrice)}</div>
@@ -305,7 +305,7 @@ async function checkOutBill() {
                 <td class="checkout__product-thumbnail">
                     <div class="checkout__product-image">
                         <div class="checkout__product-image-holder">
-                            <img src="../public/uploads/${productItem.image}" alt="product-image">
+                            <img src="../public/uploads/books/${productItem.image}" alt="product-image">
                         </div>
                         <span class="checkout__product-quantity">${item.quantity}</span>
                     </div>

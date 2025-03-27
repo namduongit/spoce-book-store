@@ -93,13 +93,13 @@ document.addEventListener("DOMContentLoaded", function () {
     allproduct.forEach((product) => {
       let statusProduct = product["status"];
       let className =
-        statusProduct === "Còn hàng"
+        statusProduct === "ACTIVE"
           ? "book-category__item-status--true"
           : "book-category__item-status--false";
 
       bookList.innerHTML += `
         <div class="book-category__item" onclick="showDetailProduct(${product["id"]})">
-            <img src="public/uploads/${product["image"]}" class="book-category__item-image"></img>
+            <img src="public/uploads/books/${product["image"]}" class="book-category__item-image"></img>
             <div class="book-category__item-name">${product["name"]}</div>
             <div class="book-category-rate d-flex margin-top-small">
                 <i class="fa-regular fa-star"></i>

@@ -708,7 +708,8 @@
   left: 50%;
   top: 50%;
   width: 50%;
-  height: 80%;
+  min-height: fit-content;
+  
   background-color: white;
   border-radius: 1rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
