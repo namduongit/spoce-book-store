@@ -16,6 +16,7 @@ import { updateAuthorTable } from "./author/updateAuthorTable.js";
 import { updateCategoryTable } from "./category/updateCategoryTable.js";
 import { updateCoverTable } from "./cover/updateCoverTable.js";
 import { updatePublisherTable } from "./publisher/updatePublisherTable.js";
+import { getAllCategoryData } from "./category/renderCategoryTable.js";
 
 // import { renderPrivilegeTable } from "./privilege/renderPrivilegeTable.js";
 import { updatePrivilegeTable } from "./privilege/updatePrivilegeTable.js";
@@ -663,7 +664,7 @@ const mainContentMap = {
         </ul>
       </div>
 
-      <div class="main__status-slt main__select slt-form-1">
+      <div class="main__sort_category-slt main__select slt-form-1">
         <input required="" type="text" id="type-slt-book" />
         <span><i class="fa-solid fa-font-awesome"></i>&nbsp;&nbsp;Chọn Thể loại</span>
         <ul>
@@ -678,8 +679,9 @@ const mainContentMap = {
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
           <li>Tất cả</li>
-          <li>Còn hàng</li>
-          <li>Tạm ngưng</li>
+          <li>ACTIVE</li>
+          <li>INACTIVE</li>
+          <li>SUSPENDED</li>
         </ul>
       </div>
       <button type="submit" class="main__filter-btn" id="filter-button-book">
@@ -736,14 +738,23 @@ const mainContentMap = {
         <input required="" type="text" id="find-inp-author" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên tác giả</span>
       </div>
+
       <div class="main__sort-slt main__select slt-form-1">
         <input required="" type="text" id="sort-slt-author" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Chọn Sắp xếp</span>
         <ul>
-          <li>ID tăng dần</li>
-          <li>ID giảm dần</li>
-          <li>Tên tác giả tăng dần</li>
-          <li>Tên tác giả giảm dần</li>
+          <li>ID </li>
+          <li>Tên tác giả</li>
+        </ul>
+      </div>
+
+
+      <div class="main__sort-slt main__select slt-form-1">
+        <input required="" type="text" id="sort-slt-author" />
+        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Chọn Sắp xếp</span>
+        <ul>
+          <li>Tăng dần</li>
+          <li>Giảm dần</li>
         </ul>
       </div>
       <div class="main__status-slt main__select slt-form-1">
@@ -985,6 +996,8 @@ const mainContentMap = {
       </button>
     </div>
   `,
+
+  
 };
 
 // Biến dùng để chuyển nội dung chính tương ứng với từng trang
@@ -1056,6 +1069,7 @@ menuInSideBar.forEach((item, i) => {
         updateInputTicketTable();
       } else if (mainContentKey === "book") {
         updateBookTable();
+        showCategory();
       } else if (mainContentKey === "author") {
         updateAuthorTable();
       } else if (mainContentKey === "category") {
@@ -1076,3 +1090,29 @@ window.addEventListener("load", function () {
   printProfitDashboardTicket();
   updateProfitDashboardTable();
 });
+
+
+
+// dùng để hiển thị vào input để chọn để tìm kiếm
+async function showCategory() {
+  let listCategory = await getAllCategoryData(); // Chờ dữ liệu từ API
+  console.log("Dữ liệu nhận được từ API:", listCategory);
+
+  if (!Array.isArray(listCategory)) {
+      console.error(" Lỗi: Dữ liệu không đúng định dạng (phải là mảng).");
+      return;
+  }
+
+  const ulElement = document.querySelector('.main__sort_category-slt ul');
+  ulElement.innerHTML = ''; 
+  let li = document.createElement('li');
+  li.textContent = 'Tất cả';
+   ulElement.appendChild(li);
+  listCategory.forEach(category => {
+      let li = document.createElement('li');
+      li.textContent = category.name;
+      ulElement.appendChild(li);
+  });
+}
+
+

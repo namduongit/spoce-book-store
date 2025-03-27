@@ -23,6 +23,25 @@ let data = [
   },
 ];
 
+
+export async function getAllAuthorData(){
+    let url = `api/authors/get.php`;
+    console.log("Request URL:", url);
+    try {
+      let response = await fetch(url);
+      if (!response.ok) {
+            throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
+        }
+        let data = await response.json();
+        console.log("Dữ liệu nhận được:", data);
+        return data;
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu:", error);
+        alert("Lỗi khi lấy dữ liệu: " + error.message);
+        return [];
+      }
+}
+
 // Hàm cập nhật lại dữ liệu cho bảng Thể loại
 export function renderAuthorTable() {
   // Biến chứa đối tượng bảng Thể loại

@@ -9,13 +9,13 @@ export function lockBookData(book) {
   lockDialog.style.width = "400px";
   // - Ghi nội dung dialog
   lockDialog.innerHTML = `
-    <h1 class="dialog__title">${book.status === 'Còn hàng' ? 'Khoá sách' : 'Mở sách'}</h1>
+    <h1 class="dialog__title">${book.status === 'ACTIVE' ? 'Khoá sách' : 'Mở sách'}</h1>
     <button id="close-book-button" class="dialog__close">
       <i class="fa-solid fa-xmark"></i>
     </button>
     <div class="dialog__line"></div>
     <form method="get" class="dialog__form">
-      <div class="dialog__icons" style="display: flex; flex-direction: ${book.status === 'Còn hàng' ? 'row-reverse' : 'row'};">
+      <div class="dialog__icons" style="display: flex; flex-direction: ${book.status == 'ACTIVE' ? 'row-reverse' : 'row'};">
         <input type="text" id="idBookInput" name="idInput" value="${book.id}" style="display: none;">
         <input type="text" id="statusBookInput" name="statusInput" value="${book.status}" style="display: none;">
         <i class="fa-solid fa-lock"></i>
@@ -56,8 +56,9 @@ export function lockBookData(book) {
 
         if (result.success) {
             alert("Cập nhật trạng thái thành công!");
+            
         } else {
-            alert("Lỗi khi cập nhật trạng thái: " + (result.error || "Không rõ nguyên nhân"));
+            alert("Lỗi khi cập nhật trạng thái: " + (result.false || "Không rõ nguyên nhân"));
         }
     } catch (error) {
         console.error("Lỗi fetch API:", error);

@@ -22,7 +22,7 @@ export function updateBookData(book) {
             <div class="dialog__row">
                 <div class="dialog__form-group book image">
                     <label>Hình ảnh</label>
-                    <img id="preview-image"  src="public/uploads/${book.image}" alt"book-image"></img>
+                    <img id="preview-image"  src="public/uploads/books/${book.image}" alt"book-image"></img>
                     <input type="file" id="update-book-image" accept="image/*" style="display: none;" />
                     <button type="button" onclick="document.getElementById('update-book-image').click()">Tải hình ảnh</button>
                 </div>

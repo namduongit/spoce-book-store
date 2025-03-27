@@ -33,7 +33,7 @@ async function getAllBookData(){
         
         let status = '';
         if(statusBook !== 'Tất cả') status = statusBook;
-
+        
   
         // Xây dựng URL động, chỉ thêm tham số nếu có giá trị
         let params = new URLSearchParams();
@@ -88,19 +88,19 @@ export async function renderBookTable() {
     html += `
       <tr>
           <td>${book.id}</td>
-          <td><img src="public/uploads/${book.image}" alt="" width="90%" height="80%"/></td>
+          <td><img src="public/uploads/books/${book.image}" alt="" width="90%" height="80%"/></td>
           <td>${book.name}</td>
           <td>${book.genreName}</td>
           <td>${book.numberOfPages}</td>
           <td>
-              <span class="${book.status === "Còn hàng" ? "green" : "red"}">
+              <span class="${book.status === "ACTIVE" ? "green" : "red"}">
                   ${book.status}
               </span>
           </td>
           <td>
               <i class="fa-solid fa-circle-info detail-button-book"></i>  
               <i class="fa-solid fa-pen-to-square update-button-book"></i>
-              <i class="fa-solid fa-${book.status === "Còn hàng" ? "" : "un"}lock lock-button-book"></i>
+              <i class="fa-solid fa-${book.status === "ACTIVE" ? "" : "un"}lock lock-button-book"></i>
           </td>
       </tr>`;
   });
