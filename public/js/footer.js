@@ -469,6 +469,7 @@ function hideMainPage() {
     const menu = document.querySelector('.topbar__auth-list');
     const selfinformation = document.querySelector('.self-infomation');
     const mainCart = document.querySelector('.show-cart');
+    const order = document.querySelector('.order-history');
 
     if (!main.classList.contains('hide-item')) {
         main.classList.add('hide-item');
@@ -488,6 +489,10 @@ function hideMainPage() {
 
     if (!mainCart.classList.contains('hide-item')) {
         mainCart.classList.add('hide-item');
+    }
+
+    if (!order.classList.contains('hide-item')) {
+        order.classList.add('hide-item');
     }
 }
 

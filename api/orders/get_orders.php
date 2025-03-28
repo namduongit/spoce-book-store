@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../../app/config.php';
+require_once __DIR__ . '../../../app/config.php';
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -66,3 +66,4 @@ try {
         'message' => $e->getMessage()
     ]);
 }
+?>

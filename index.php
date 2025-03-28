@@ -445,6 +445,11 @@
         </div>
     </div>
 
+    <!-- Lịch sử mua hàng của khách hàng -->
+    <div class="order-history hide-item">
+        
+    </div>
+
     <div class="checkout"></div>
 
     <div class="footer-info hide-item">
