@@ -34,6 +34,7 @@ export async function getAllAuthorData(){
     ".main__data > .main__table.author > tbody"
   );
 
+  
   // Chuyển đổi dữ liệu thành các thẻ html
   let html = ``;
   for (let i = 0; i < data.length; i++) {
@@ -54,6 +55,14 @@ export async function getAllAuthorData(){
       `;
   }
 
+  if(data.length == 0){
+    html = `
+            <tr>
+            <td></td>
+            <td> DANH SÁCH TRỐNG</td>
+          </tr>`;
+  }
+
   // Cập nhật lại giao diện
   bodyInAuthorTable.innerHTML = html;
 
@@ -72,22 +81,25 @@ export async function getAllAuthorData(){
     // Id của đối tượng đã được chọn để thao tác
     const idAuthorSelected = idColumnInTable.item(row);
 
-    // Gán sự kiện hiện dialog sửa thể loại
-    updateButton.addEventListener("click", (e) => {
-      // Loại bỏ giá trị mặc định
-      e.preventDefault();
+    if(data.length > 0){
 
-      // Gọi hàm sự kiện
-      updateAuthorData(author);
-    });
-
-    // Gán sự kiện hiện dialog khoá / mở khoá thể loại
-    lockButton.addEventListener("click", (e) => {
-      // Loại bỏ giá trị mặc định
-      e.preventDefault();
-
-      // Gọi hàm sự kiện
-      lockAuthorData(author);
-    });
+      // Gán sự kiện hiện dialog sửa thể loại
+      updateButton.addEventListener("click", (e) => {
+        // Loại bỏ giá trị mặc định
+        e.preventDefault();
+  
+        // Gọi hàm sự kiện
+        updateAuthorData(author);
+      });
+  
+      // Gán sự kiện hiện dialog khoá / mở khoá thể loại
+      lockButton.addEventListener("click", (e) => {
+        // Loại bỏ giá trị mặc định
+        e.preventDefault();
+  
+        // Gọi hàm sự kiện
+        lockAuthorData(author);
+      });
+    }
   });
 }

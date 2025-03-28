@@ -1,7 +1,7 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 
 // Hàm thiết lập sự kiện Sửa một loại bìa cho bảng
-export function updateCoverData(idCoverSelected) {
+export function updateCoverData(cover) {
   // Phải truy vấn từ CSDL thông qua idCoverSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
 
@@ -28,13 +28,13 @@ export function updateCoverData(idCoverSelected) {
             <div class="dialog__row">
               <div class="dialog__form-group full">
                 <label>Mã loại bìa</label>
-                <input type="text" id="update-cover-id" readonly />
+                <input type="text" id="update-cover-id"  value="${cover.id}" readonly />
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group full">
                 <label>Tên loại bìa</label>
-                <input type="text" id="update-cover-name" placeholder="Nhập Tên loại bìa" autofocus/>
+                <input type="text" id="update-cover-name" placeholder="Nhập Tên loại bìa"  value="${cover.name}" autofocus/>
               </div>
             </div>
             <div class="dialog__row">
@@ -42,8 +42,10 @@ export function updateCoverData(idCoverSelected) {
                 <label>Trạng thái</label>
                 <select id="update-cover-status" disabled>
                   <option value="" selected>Chọn Trạng thái</option>
-                  <option value="1">Hoạt động</option>
-                  <option value="0">Tạm dừng</option>
+                  <option selected value="${cover.status}">${cover.status}</option>
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="INACTIVE">INACTIVE</option>
+                  <option value="SUSPENDED">SUSPENDED</option>
                 </select>
               </div>
             </div>
@@ -71,14 +73,44 @@ export function updateCoverData(idCoverSelected) {
   // Gán sự kiện cho nút "Sửa" dialog
   document
     .getElementById("update-cover-button")
-    .addEventListener("click", () => {
+    .addEventListener("click", async (e) => {
+      e.preventDefault();
       // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-      const name = document.getElementById("update-cover-name");
-      const status = document.getElementById("update-cover-status");
+      const coverId = document.getElementById("update-cover-id").value.trim();
+      const coverName = document.getElementById("update-cover-name").value.trim();
+      const coverStatus = document.getElementById("update-cover-status").value.trim();
+      console.log(coverId, coverName, coverStatus);
+      if(coverName === ''){
+        alert("Hãy nhập tên đầy đủ");
+      }else{
 
-      // ... (Xử lý tiếp ở đây)
-      console.log(name.value);
-      console.log(status.value);
+        try {
+          const response = await fetch("api/covers/update.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              coverId: coverId,
+              coverName: coverName,
+              coverStatus: coverStatus,
+            }),
+          });
+  
+          const result = await response.json();
+          console.log("Server Response:", result);
+  
+          if (result.success) {
+            alert("Cập nhật trạng thái thành công!");
+          } else {
+            alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+          }
+        } catch (error) {
+          console.error("Lỗi fetch API:", error);
+          alert("Không thể kết nối đến server!");
+        }
+        updateDialog.remove();
+      }
     });
 
   // Gán sự kiện cho nút "Đóng" dialog

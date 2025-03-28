@@ -54,12 +54,19 @@ class app_models_NhaXuatBan extends app_libs_DBConnection {
 
     // Cập nhật thông tin nhà xuất bản
     public function updatePublisher($maNXB, $data) {
-        return $this->building_queryParam([
-            'value' => $data,
-            'where' => 'maNXB = ?',
-            'params' => [$maNXB]
-        ])->update();
+        $fieldValues = [];
+        $params = [':maNXB' => $maNXB];
+    
+        foreach ($data as $field => $value) {
+            $fieldValues[] = "$field = :$field";
+            $params[":$field"] = $value;  // Chỉ dùng tham số có tên
+        }
+        // Tạo câu SQL UPDATE
+        $sql = "UPDATE " . $this->table_name . " SET " . implode(", ", $fieldValues) . " WHERE maNXB = :maNXB";
+        // Thực thi câu lệnh SQL
+        return $this->query($sql, $params);
     }
+    
 
     // Xóa nhà xuất bản
     public function deletePublisher($maNXB) {

@@ -1,7 +1,7 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 
 // Hàm thiết lập sự kiện Sửa một thể loại cho bảng
-export function updateCategoryData(idCategorySelected) {
+export function updateCategoryData(category) {
   // Phải truy vấn từ CSDL thông qua idCategorySelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
 
@@ -28,13 +28,13 @@ export function updateCategoryData(idCategorySelected) {
             <div class="dialog__row">
               <div class="dialog__form-group full">
                 <label>Mã thể loại</label>
-                <input type="text" id="update-category-id" readonly />
+                <input type="text" id="update-category-id"  value="${category.id}" readonly />
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group full">
                 <label>Tên thể loại</label>
-                <input type="text" id="update-category-name" placeholder="Nhập Tên thể loại" autofocus/>
+                <input type="text" id="update-category-name" placeholder="Nhập Tên thể loại"  value="${category.name}" autofocus/>
               </div>
             </div>
             <div class="dialog__row">
@@ -42,8 +42,10 @@ export function updateCategoryData(idCategorySelected) {
                 <label>Trạng thái</label>
                 <select id="update-category-status" disabled>
                   <option value="" selected>Chọn Trạng thái</option>
-                  <option value="1">Hoạt động</option>
-                  <option value="0">Tạm dừng</option>
+                  <option selected value="${category.status}">${category.status}</option>
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="INACTIVE">INACTIVE</option>
+                  <option value="SUSPENDED">SUSPENDED</option>
                 </select>
               </div>
             </div>
@@ -71,14 +73,45 @@ export function updateCategoryData(idCategorySelected) {
   // Gán sự kiện cho nút "Sửa" dialog
   document
     .getElementById("update-category-button")
-    .addEventListener("click", () => {
+    .addEventListener("click", async (e) => {
       // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-      const name = document.getElementById("update-category-name");
-      const status = document.getElementById("update-category-status");
+      e.preventDefault();
+      // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
+      const categoryId = document.getElementById("update-category-id").value.trim();
+      const categoryName = document.getElementById("update-category-name").value.trim();
+      const categoryStatus = document.getElementById("update-category-status").value.trim();
+      console.log(categoryId, categoryName, categoryStatus);
+      if(categoryName === ''){
+        alert("Hãy nhập tên đầy đủ");
+      }else{
 
-      // ... (Xử lý tiếp ở đây)
-      console.log(name.value);
-      console.log(status.value);
+        try {
+          const response = await fetch("api/categories/update.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              categoryId: categoryId,
+              categoryName: categoryName,
+              categoryStatus: categoryStatus,
+            }),
+          });
+  
+          const result = await response.json();
+          console.log("Server Response:", result);
+  
+          if (result.success) {
+            alert("Cập nhật trạng thái thành công!");
+          } else {
+            alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+          }
+        } catch (error) {
+          console.error("Lỗi fetch API:", error);
+          alert("Không thể kết nối đến server!");
+        }
+        updateDialog.remove();
+      }
     });
 
   // Gán sự kiện cho nút "Đóng" dialog

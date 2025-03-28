@@ -44,8 +44,9 @@ export function addCoverData() {
                       <label>Trạng thái</label>
                       <select id="add-cover-status">
                         <option value="" selected>Chọn Trạng thái</option>
-                        <option value="1">Hoạt động</option>
-                        <option value="0">Tạm dừng</option>
+                        <option selected value="ACTIVE">ACTIVE</option>
+                        <option value="INACTIVE">INACTIVE</option>
+                        <option value="SUSPENDED">SUSPENDED</option>
                       </select>
                     </div>
                   </div>
@@ -73,16 +74,42 @@ export function addCoverData() {
     // Gán sự kiện cho nút "Thêm" dialog
     document
       .getElementById("add-cover-button")
-      .addEventListener("click", () => {
+      .addEventListener("click", async (e) => {
+        e.preventDefault();
         // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-        const id = document.getElementById("add-cover-id");
-        const name = document.getElementById("add-cover-name");
-        const status = document.getElementById("add-cover-status");
-
-        // ... (Xử lý tiếp ở đây)
-        console.log(id.value);
-        console.log(name.value);
-        console.log(status.value);
+        const coverName = document.getElementById("add-cover-name").value;
+        const coverStatus = document.getElementById("add-cover-status").value;
+          console.log(coverName, coverStatus);
+        if(coverName === ''){
+          alert("Hãy nhập tên đầy đủ");
+        }else{
+  
+          try {
+            const response = await fetch("api/covers/create.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: new URLSearchParams({
+                coverName: coverName,
+                coverStatus: coverStatus,
+              }),
+            });
+    
+            const result = await response.json();
+            console.log("Server Response:", result);
+    
+            if (result.success) {
+              alert("thêm bìa sách thành công!");
+            } else {
+              alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+            }
+          } catch (error) {
+            console.error("Lỗi fetch API:", error);
+            alert("Không thể kết nối đến server!");
+          }
+          addDialog.remove();
+        }
       });
 
     // Gán sự kiện cho nút "Đóng" dialog

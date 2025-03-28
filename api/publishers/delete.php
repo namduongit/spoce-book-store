@@ -8,23 +8,27 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Nhận dữ liệu từ POST
-$categoryStatus = isset($_POST['categoryStatus']) ? $_POST['categoryStatus'] : '';
-$categoryName = isset($_POST['categoryName']) ? $_POST['categoryName'] : '';
-$updateDateTime = date("Y-m-d H:i:s");
+$publisherInput = isset($_POST['publisherInput']) ? $_POST['publisherInput'] : 'ACTIVE';
+$idInput = isset($_POST['idInput']) ? $_POST['idInput'] : '1';
+
+// Kiểm tra idInput có hợp lệ không
+if (empty($idInput)) {
+    echo json_encode(["success" => false, "message" => "Thiếu ID tác giả."]);
+    exit;
+}
+
+// Chuyển trạng thái tác giả
+$publisherInput = ($publisherInput === 'ACTIVE') ? 'INACTIVE' : 'ACTIVE';
 
 try {
-   
-    $category_model = new app_models_TheLoai();
+    // Khởi tạo model tác giả
+    $author_model = new app_models_NhaXuatBan();
 
     // Cập nhật trạng thái tác giả trong database
-    $result = $category_model->insertCategory(
-        [  "tenTheLoai" => $categoryName,
-            "ngayCapNhat" => $updateDateTime,
-            "trangThai" => $categoryStatus
-        ]);
+    $result = $author_model->updatePublisher($idInput, ["trangThai" => $publisherInput]);
 
-    
-    if ($result  > 0) {
+    // Kiểm tra số dòng bị ảnh hưởng
+    if ($result && $result->rowCount() > 0) {
         echo json_encode(["success" => true, "message" => "Cập nhật trạng thái thành công."]);
     } else {
         echo json_encode(["success" => false, "message" => "Không có thay đổi hoặc ID không tồn tại."]);

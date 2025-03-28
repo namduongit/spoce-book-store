@@ -1,7 +1,7 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 
 // Hàm thiết lập sự kiện Sửa một nhà xuất bản cho bảng
-export function updatePublisherData(idPublisherSelected) {
+export function updatePublisherData(publisher) {
   // Phải truy vấn từ CSDL thông qua idpublisherSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
 
@@ -28,22 +28,23 @@ export function updatePublisherData(idPublisherSelected) {
               <div class="dialog__row">
                 <div class="dialog__form-group full">
                   <label>Mã nhà xuất bản</label>
-                  <input type="text" id="update-publisher-id" readonly />
+                  <input type="text" id="update-publisher-id"  value="${publisher.id}" readonly />
                 </div>
               </div>
               <div class="dialog__row">
                 <div class="dialog__form-group full">
                   <label>Tên nhà xuất bản</label>
-                  <input type="text" id="update-publisher-name" placeholder="Nhập Tên nhà xuất bản" autofocus/>
+                  <input type="text" id="update-publisher-name" placeholder="Nhập Tên nhà xuất bản"  value="${publisher.name}" autofocus/>
                 </div>
               </div>
               <div class="dialog__row">
                 <div class="dialog__form-group full">
                   <label>Trạng thái</label>
                   <select id="update-publisher-status" disabled>
-                    <option value="" selected>Chọn Trạng thái</option>
-                    <option value="1">Hoạt động</option>
-                    <option value="0">Tạm dừng</option>
+                    <option selected value="${publisher.status}">${publisher.status}</option>
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="INACTIVE">INACTIVE</option>
+                    <option value="SUSPENDED">SUSPENDED</option>
                   </select>
                 </div>
               </div>
@@ -71,14 +72,44 @@ export function updatePublisherData(idPublisherSelected) {
   // Gán sự kiện cho nút "Sửa" dialog
   document
     .getElementById("update-publisher-button")
-    .addEventListener("click", () => {
+    .addEventListener("click", async (e) => {
+      e.preventDefault();
       // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-      const name = document.getElementById("update-publisher-name");
-      const status = document.getElementById("update-publisher-status");
+      const publisherId = document.getElementById("update-publisher-id").value.trim();
+      const publisherName = document.getElementById("update-publisher-name").value.trim();
+      const publisherStatus = document.getElementById("update-publisher-status").value.trim();
+      console.log(publisherId, publisherName, publisherStatus);
+      if(publisherName === ''){
+        alert("Hãy nhập tên đầy đủ");
+      }else{
 
-      // ... (Xử lý tiếp ở đây)
-      console.log(name.value);
-      console.log(status.value);
+        try {
+          const response = await fetch("api/publishers/update.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              publisherId: publisherId,
+              publisherName: publisherName,
+              publisherStatus: publisherStatus,
+            }),
+          });
+  
+          const result = await response.json();
+          console.log("Server Response:", result);
+  
+          if (result.success) {
+            alert("Cập nhật nhà xuất thành công!");
+          } else {
+            alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+          }
+        } catch (error) {
+          console.error("Lỗi fetch API:", error);
+          alert("Không thể kết nối đến server!");
+        }
+        updateDialog.remove();
+      }
     });
 
   // Gán sự kiện cho nút "Đóng" dialog

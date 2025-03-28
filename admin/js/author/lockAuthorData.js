@@ -31,6 +31,7 @@ export function lockAuthorData(author) {
   document.body.appendChild(lockDialog);
   lockDialog.showModal();
 
+  //  them sự kiện khi nhấn nút đòng ý
   document.querySelector(".yes").addEventListener("click", async (e) => {
     e.preventDefault();
 

@@ -50,12 +50,20 @@ class app_models_LoaiBia extends app_libs_DBConnection {
 
     // Cập nhật loại bìa
     public function updateCover($maLoaiBia, $data) {
-        return $this->building_queryParam([
-            'value' => $data,
-            'where' => 'maLoaiBia = ?',
-            'params' => [$maLoaiBia]
-        ])->update();
+        $fieldValues = [];
+        $params = [':maLoaiBia' => $maLoaiBia];
+    
+        foreach ($data as $field => $value) {
+            $fieldValues[] = "$field = :$field";
+            $params[":$field"] = $value;  // Chỉ dùng tham số có tên
+        }
+    
+        // Tạo câu SQL UPDATE
+        $sql = "UPDATE " . $this->table_name . " SET " . implode(", ", $fieldValues) . " WHERE maLoaiBia = :maLoaiBia";
+        // Thực thi câu lệnh SQL
+        return $this->query($sql, $params);
     }
+    
 
     // Xóa loại bìa
     public function deleteCover($maLoaiBia) {

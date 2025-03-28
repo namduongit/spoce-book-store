@@ -43,9 +43,9 @@ export function addCategoryData() {
                 <div class="dialog__form-group full">
                   <label>Trạng thái</label>
                   <select id="add-category-status">
-                    <option value="" selected>Chọn Trạng thái</option>
-                    <option value="1">Hoạt động</option>
-                    <option value="0">Tạm dừng</option>
+                    <option selected value="ACTIVE">ACTIVE</option>
+                    <option value="INACTIVE">INACTIVE</option>
+                    <option value="SUSPENDED">SUSPENDED</option>
                   </select>
                 </div>
               </div>
@@ -73,16 +73,46 @@ export function addCategoryData() {
     // Gán sự kiện cho nút "thêm" dialog
     document
       .getElementById("add-category-button")
-      .addEventListener("click", () => {
+      .addEventListener("click", async (e) => {
+        e.preventDefault();
         // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-        const id = document.getElementById("add-category-id");
-        const name = document.getElementById("add-category-name");
-        const status = document.getElementById("add-category-status");
+        const categoryName = document.getElementById("add-category-name").value;
+        const categoryStatus = document.getElementById("add-category-status").value;
 
-        // ... (Xử lý tiếp ở đây)
-        console.log(id.value);
-        console.log(name.value);
-        console.log(status.value);
+          console.log(categoryName, categoryStatus);
+        if(categoryName === ''){
+          alert("Hãy nhập tên đầy đủ");
+        }else{
+  
+          try {
+            const response = await fetch("api/categories/create.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: new URLSearchParams({
+                categoryName: categoryName,
+                categoryStatus: categoryStatus,
+              }),
+            });
+    
+            const result = await response.json();
+            console.log("Server Response:", result);
+    
+            if (result.success) {
+              alert("thêm thể loại thành công!");
+            } else {
+              alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+            }
+          } catch (error) {
+            console.error("Lỗi fetch API:", error);
+            alert("Không thể kết nối đến server!");
+          }
+          addDialog.remove();
+        }
+
+        console.log(categoryName, categoryStatus);
+
       });
 
     // Gán sự kiện cho nút "Đóng" dialog

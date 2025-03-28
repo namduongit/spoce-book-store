@@ -28,7 +28,7 @@ export function filterAuthorData() {
     // Giá trị sắp xếp tăng/giảm
     const sortSelect = document.getElementById("sort-slt-author").value.trim().toLowerCase();
 
-    // 1️ **LỌC DỮ LIỆU**
+    // 1️ **lọc**
     authorList = authorList.filter((author) => {
       let nameMatch = author.name.toLowerCase().includes(idOrNameInput);
       let idMatch = String(author.id).includes(idOrNameInput);
@@ -36,8 +36,7 @@ export function filterAuthorData() {
       return (nameMatch || idMatch) && statusMatch;
     });
 
-    // *SẮP XẾP DỮ LIỆU**
-    
+    // sắp xếp
     if (columnSelect === "tên tác giả") {
       authorList.sort((a, b) => (sortSelect === "tăng dần" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)));
     }else{
@@ -46,7 +45,7 @@ export function filterAuthorData() {
     }
     
 
-    // 3️ **HIỂN THỊ LẠI DỮ LIỆU**
+    // hiẻne thị
     renderAuthorTable(authorList);
   });
 }
