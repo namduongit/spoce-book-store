@@ -739,8 +739,8 @@ const mainContentMap = {
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên tác giả</span>
       </div>
 
-      <div class="main__sort-slt main__select slt-form-1">
-        <input required="" type="text" id="sort-slt-author" />
+      <div class="main__column-slt main__select slt-form-1">
+        <input required="" type="text" id="column-slt-author" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Chọn Sắp xếp</span>
         <ul>
           <li>ID </li>
@@ -761,8 +761,10 @@ const mainContentMap = {
         <input required="" type="text" id="status-slt-author" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
-          <li>Hoạt động</li>
-          <li>Tạm dừng</li>
+          <li>Tất cả</li>
+          <li>ACTIVE</li>
+          <li>INACTIVE</li>
+          <li>SUSPENDED</li>
         </ul>
       </div>
       <button class="main__filter-btn" id="filter-button-author">

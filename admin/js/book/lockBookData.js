@@ -65,8 +65,6 @@ export function lockBookData(book) {
         alert("Không thể kết nối đến server!");
     }
     lockDialog.remove();
-
-
 });
 
 

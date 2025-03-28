@@ -1,22 +1,52 @@
+import { getAllAuthorData, renderAuthorTable } from "./renderAuthorTable.js";
+
 // Hàm thiết lập sự kiện lọc thông tin bảng Tác giả
 export function filterAuthorData() {
-  // Biến chứa đối tượng thẻ input liên quan đến tìm kiếm thông tin
-  const idOrNameInput = document.getElementById("find-inp-author");
-  // Biến chứa đối tượng thẻ select liên quan đến sắp xếp thông tin
-  const sortSelect = document.getElementById("sort-slt-author");
-  // Biến chứa đối tượng thẻ select liên quan đến lọc trạng thái
-  const statusSelect = document.getElementById("status-slt-author");
   // Biến chứa đối tượng là nút "Lọc"
   const filterButton = document.getElementById("filter-button-author");
 
   // Gán sự kiện khi nhấn nút "Lọc"
-  filterButton.addEventListener("click", (e) => {
-    // Loại bỏ giá trị mặc định
-    e.preventDefault();
+  filterButton.addEventListener("click", async (e) => {
+    e.preventDefault(); // Ngăn form submit mặc định
 
-    //
-    console.log(idOrNameInput.value);
-    console.log(sortSelect.value);
-    console.log(statusSelect.value);
+    // Lấy danh sách tất cả tác giả từ API
+    let authorList = await getAllAuthorData();
+    if (!authorList || authorList.length === 0) {
+      console.warn("Không có dữ liệu tác giả");
+      return;
+    }
+
+    // Biến chứa giá trị tìm kiếm từ input
+    const idOrNameInput = document.getElementById("find-inp-author").value.trim().toLowerCase();
+    
+    // Giá trị lọc trạng thái
+    const statusSelect = document.getElementById("status-slt-author").value.trim().toLowerCase();
+    
+    // Giá trị cột cần sắp xếp
+    const columnSelect = document.getElementById("column-slt-author").value.trim().toLowerCase();
+    
+    // Giá trị sắp xếp tăng/giảm
+    const sortSelect = document.getElementById("sort-slt-author").value.trim().toLowerCase();
+
+    // 1️ **LỌC DỮ LIỆU**
+    authorList = authorList.filter((author) => {
+      let nameMatch = author.name.toLowerCase().includes(idOrNameInput);
+      let idMatch = String(author.id).includes(idOrNameInput);
+      let statusMatch = statusSelect === "tất cả" || author.status.toLowerCase() === statusSelect;
+      return (nameMatch || idMatch) && statusMatch;
+    });
+
+    // *SẮP XẾP DỮ LIỆU**
+    
+    if (columnSelect === "tên tác giả") {
+      authorList.sort((a, b) => (sortSelect === "tăng dần" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)));
+    }else{
+      authorList.sort((a, b) => (sortSelect == "tăng dần" ? (a.id) - (b.id) : (b.id) - (a.id)));
+
+    }
+    
+
+    // 3️ **HIỂN THỊ LẠI DỮ LIỆU**
+    renderAuthorTable(authorList);
   });
 }

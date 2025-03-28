@@ -1,7 +1,7 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 
 // Hàm thiết lập sự kiện Sửa một tác giả cho bảng
-export function updateAuthorData(idAuthorSelected) {
+export function updateAuthorData(author) {
   // Phải truy vấn từ CSDL thông qua idAuthorSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
 
@@ -28,22 +28,25 @@ export function updateAuthorData(idAuthorSelected) {
             <div class="dialog__row">
               <div class="dialog__form-group full">
                 <label>Mã tác giả</label>
-                <input type="text" id="update-author-id" readonly />
+                <input type="text" id="update-author-id" value="${author.id}" readonly />
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group full">
                 <label>Tên tác giả</label>
-                <input type="text" id="update-author-name" placeholder="Nhập Tên tác giả" autofocus/>
+                <input type="text" id="update-author-name" placeholder="Nhập Tên tác giả" value="${author.name}" autofocus/>
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group full">
                 <label>Trạng thái</label>
-                <select id="update-author-status" disabled>
+                <select id="update-author-status" >
                   <option value="" selected>Chọn Trạng thái</option>
-                  <option value="1">Hoạt động</option>
-                  <option value="0">Tạm dừng</option>
+                  
+                  <option selected value="${author.status}">${author.status}</option>
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="INACTIVE">INACTIVE</option>
+                  <option value="SUSPENDED">SUSPENDED</option>
                 </select>
               </div>
             </div>
@@ -71,14 +74,44 @@ export function updateAuthorData(idAuthorSelected) {
   // Gán sự kiện cho nút "Sửa" dialog
   document
     .getElementById("update-author-button")
-    .addEventListener("click", () => {
+    .addEventListener("click", async (e) => {
+      e.preventDefault();
       // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-      const name = document.getElementById("update-author-name");
-      const status = document.getElementById("update-author-status");
+      const authorId = document.getElementById("update-author-id").value.trim();
+      const authorName = document.getElementById("update-author-name").value.trim();
+      const authorStatus = document.getElementById("update-author-status").value.trim();
+      console.log(authorId, authorName, authorStatus);
+      if(authorName === ''){
+        alert("Hãy nhập tên đầy đủ");
+      }else{
 
-      // ... (Xử lý tiếp ở đây)
-      console.log(name.value);
-      console.log(status.value);
+        try {
+          const response = await fetch("api/authors/update.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              authorId: authorId,
+              authorName: authorName,
+              authorStatus: authorStatus,
+            }),
+          });
+  
+          const result = await response.json();
+          console.log("Server Response:", result);
+  
+          if (result.success) {
+            alert("Cập nhật trạng thái thành công!");
+          } else {
+            alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+          }
+        } catch (error) {
+          console.error("Lỗi fetch API:", error);
+          alert("Không thể kết nối đến server!");
+        }
+        updateDialog.remove();
+      }
     });
 
   // Gán sự kiện cho nút "Đóng" dialog

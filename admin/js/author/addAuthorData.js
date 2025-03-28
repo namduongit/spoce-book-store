@@ -43,9 +43,9 @@ export function addAuthorData() {
                 <div class="dialog__form-group full">
                   <label>Trạng thái</label>
                   <select id="add-author-status">
-                    <option value="" selected>Chọn Trạng thái</option>
-                    <option value="1">Hoạt động</option>
-                    <option value="0">Tạm dừng</option>
+                    <option selected value="ACTIVE">ACTIVE</option>
+                    <option value="INACTIVE">INACTIVE</option>
+                    <option value="SUSPENDED">SUSPENDED</option>
                   </select>
                 </div>
               </div>
@@ -73,16 +73,45 @@ export function addAuthorData() {
     // Gán sự kiện cho nút "thêm" dialog
     document
       .getElementById("add-author-button")
-      .addEventListener("click", () => {
+      .addEventListener("click", async (e) => {
+        e.preventDefault();
         // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-        const id = document.getElementById("add-author-id");
-        const name = document.getElementById("add-author-name");
-        const status = document.getElementById("add-author-status");
+        const authorName = document.getElementById("add-author-name").value;
+        const authorStatus = document.getElementById("add-author-status").value;
+          console.log(authorName, authorStatus);
+        if(authorName === ''){
+          alert("Hãy nhập tên đầy đủ");
+        }else{
+  
+          try {
+            const response = await fetch("api/authors/create.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: new URLSearchParams({
+                authorName: authorName,
+                authorStatus: authorStatus,
+              }),
+            });
+    
+            const result = await response.json();
+            console.log("Server Response:", result);
+    
+            if (result.success) {
+              alert("thêm tác giả thành công!");
+            } else {
+              alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+            }
+          } catch (error) {
+            console.error("Lỗi fetch API:", error);
+            alert("Không thể kết nối đến server!");
+          }
+          addDialog.remove();
+        }
 
-        // ... (Xử lý tiếp ở đây)
-        console.log(id.value);
-        console.log(name.value);
-        console.log(status.value);
+        console.log(authorName);
+        console.log(authorStatus);
       });
 
     // Gán sự kiện cho nút "Đóng" dialog

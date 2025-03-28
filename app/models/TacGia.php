@@ -24,12 +24,22 @@ class app_models_TacGia extends app_libs_DBConnection {
 
     // Cập nhật thông tin tác giả
     public function updateAuthor($maTacGia, $data) {
-        return $this->building_queryParam([
-            'value' => $data,
-            'where' => 'maTacGia = ?',
-            'params' => [$maTacGia]
-        ])->update();
+        $fieldValues = [];
+        $params = [':maTacGia' => $maTacGia];
+    
+        foreach ($data as $field => $value) {
+            $fieldValues[] = "$field = :$field";
+            $params[":$field"] = $value;
+        }
+    
+        // Tạo câu SQL UPDATE
+        $sql = "UPDATE " . $this->table_name . " SET " . implode(", ", $fieldValues) . " WHERE maTacGia = :maTacGia";
+    
+        // Thực thi câu lệnh SQL
+        return $this->query($sql, $params);
     }
+    
+    
 
     // Xóa tác giả
     public function deleteAuthor($maTacGia) {
