@@ -8,7 +8,7 @@ header('Access-Control-Allow-Headers: Content-Type');
 
 try {
     $donHang = new app_models_DonHang();
-    
+
     // Lấy các tham số từ query string
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
@@ -58,7 +58,6 @@ try {
         'status' => 'success',
         'data' => $result
     ]);
-
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode([
@@ -66,4 +65,3 @@ try {
         'message' => $e->getMessage()
     ]);
 }
-?>
