@@ -1,7 +1,7 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 
 // Hàm thiết lập sự kiện Sửa một nhà cung cấp cho bảng
-export function detailSuppliesData(idSuppliesSelected) {
+export function detailSuppliesData(supplier) {
   // Phải truy vấn từ CSDL thông qua idSuppliesSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
 
@@ -28,34 +28,34 @@ export function detailSuppliesData(idSuppliesSelected) {
                 <div class="dialog__row">
                     <div class="dialog__form-group">
                         <label>Mã nhà cung cấp</label>
-                        <input type="text" id="add-supplies-id" readonly />
+                        <input type="text" id="add-supplies-id" value="${supplier.id}" readonly />
                     </div>
                     <div class="dialog__form-group">
                         <label>Tên nhà cung cấp</label>
-                        <input type="text" id="add-supplies-name" readonly />
+                        <input type="text" id="add-supplies-name" value="${supplier.name}" readonly />
                     </div>
                 </div>
                 <div class="dialog__row">
                     <div class="dialog__form-group">
                         <label>Số điện thoại</label>
-                        <input type="text" id="add-supplies-phone" readonly />
+                        <input type="text" id="add-supplies-phone" value="${supplier.phone}" readonly />
                     </div>
                     <div class="dialog__form-group">
                         <label>Email</label>
-                        <input type="text" id="add-supplies-email" readonly />
+                        <input type="text" id="add-supplies-email" value="${supplier.email}" readonly />
                     </div>
                 </div>
                 <div class="dialog__row">
                     <div class="dialog__form-group full">
                         <label>Địa chỉ</label>
-                        <input type="text" id="add-supplies-address"readonly />
+                        <input type="text" id="add-supplies-address" value="${supplier.address}" readonly />
                     </div>
                 </div>
                 <div class="dialog__row">
                     <div class="dialog__form-group">
                         <label>Trạng thái</label>
                         <select id="add-supplies-status" disabled>
-                        <option value="" selected>Chọn Trạng thái</option>
+                        <option value="" selected>${supplier.status}</option>
                         <option value="1">Hoạt động</option>
                         <option value="0">Tạm dừng</option>
                         </select>

@@ -1,5 +1,5 @@
 //
-export function lockSuppliesData(idSuppliesSelected) {
+export function lockSuppliesData(supplier) {
   // Phải truy vấn từ CSDL thông qua idSuppliesSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
 
@@ -17,13 +17,15 @@ export function lockSuppliesData(idSuppliesSelected) {
   lockDialog.style.width = "400px";
   // - Ghi nội dung dialog
   lockDialog.innerHTML = `
-                <h1 class="dialog__title">Khoá nhà cung cấp</h1>
+                <h1 class="dialog__title">${supplier.status === 'ACTIVE' ? 'Khoá nhà cung cấp' : 'Mở khoá'}</h1>
                 <button id="close-supplies-button" class="dialog__close">
                   <i class="fa-solid fa-xmark"></i>
                 </button>
                 <div class="dialog__line"></div>
                 <form method="post" class="dialog__form">
-                  <div class="dialog__icons">
+                  <div class="dialog__icons" style="display: flex; flex-direction: ${supplier.status === 'ACTIVE' ? 'row-reverse' : 'row'};">
+                    <input type="hidden" id="idSupplierInput" name="idSupplierInput" value="${supplier.id}">
+                    <input type="hidden" id="statusSupplierInput" name="statusSupplierInput" value="${supplier.status}">     
                     <i class="fa-solid fa-lock"></i>
                     <i class="fa-solid fa-arrow-right"></i>
                     <i class="fa-solid fa-unlock"></i>
@@ -40,6 +42,45 @@ export function lockSuppliesData(idSuppliesSelected) {
 
   // Hiển thị lockDialog
   lockDialog.showModal();
+
+
+    //  them sự kiện khi nhấn nút đòng ý
+    document.querySelector(".yes").addEventListener("click", async (e) => {
+      e.preventDefault();
+  
+      const idInput = document.getElementById("idSupplierInput").value;
+      const statusInput = document.getElementById("statusSupplierInput").value;
+      
+      console.log("ID:", idInput, "Status:", statusInput);
+  
+      try {
+        const response = await fetch("api/supplies/delete.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            idInput: idInput,
+            statusInput: statusInput,
+          }),
+        });
+  
+        const result = await response.json();
+        console.log("Server Response:", result);
+  
+        if (result.success) {
+          alert("Cập nhật trạng thái thành công!");
+        } else {
+          alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+        }
+      } catch (error) {
+        console.error("Lỗi fetch API:", error);
+        alert("Không thể kết nối đến server!");
+      }
+  
+      lockDialog.remove();
+    });
+
 
   // Gán sự kiện cho nút "Đóng" dialog
   document

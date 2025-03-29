@@ -109,9 +109,6 @@ export function addAuthorData() {
           }
           addDialog.remove();
         }
-
-        console.log(authorName);
-        console.log(authorStatus);
       });
 
     // Gán sự kiện cho nút "Đóng" dialog

@@ -500,22 +500,34 @@ const mainContentMap = {
         <input required="" type="text" id="find-inp-supplies" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên nhà cung cấp</span>
       </div>
+
+      <div class="main__sort-slt main__select slt-form-1">
+        <input required="" type="text" id="column-slt-supplies" />
+        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp cột</span>
+        <ul>
+          <li>ID</li>
+          <li>Tên nhà cung cấp</li>
+        </ul>
+      </div>
+
+
       <div class="main__sort-slt main__select slt-form-1">
         <input required="" type="text" id="sort-slt-supplies" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Chọn Sắp xếp</span>
         <ul>
-          <li>ID tăng dần</li>
-          <li>ID giảm dần</li>
-          <li>Tên nhà cung cấp tăng dần</li>
-          <li>Tên nhà cung cấp giảm dần</li>
+          <li>Tăng dần</li>
+          <li>Giảm dần</li>
         </ul>
       </div>
+
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-supplies" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
-          <li>Hoạt động</li>
-          <li>Tạm dừng</li>
+          <li>Tất cả</li>
+          <li>ACTIVE</li>
+          <li>INACTIVE</li>
+          <li>SUSPENDED</li>
         </ul>
       </div>
       <button class="main__filter-btn" id="filter-button-supplies">

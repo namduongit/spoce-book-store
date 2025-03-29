@@ -28,7 +28,7 @@ export function filterAuthorData() {
     // Giá trị sắp xếp tăng/giảm
     const sortSelect = document.getElementById("sort-slt-author").value.trim().toLowerCase();
 
-    // 1️ **lọc**
+    // 1️ lọc
     authorList = authorList.filter((author) => {
       let nameMatch = author.name.toLowerCase().includes(idOrNameInput);
       let idMatch = String(author.id).includes(idOrNameInput);
