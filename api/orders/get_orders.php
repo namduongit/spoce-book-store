@@ -18,41 +18,33 @@ try {
     $maKhachHang = isset($_GET['maKhachHang']) ? $_GET['maKhachHang'] : '';
     $ngayBatDau = isset($_GET['ngayBatDau']) ? $_GET['ngayBatDau'] : '';
     $ngayKetThuc = isset($_GET['ngayKetThuc']) ? $_GET['ngayKetThuc'] : '';
+    // Lấy danh sách đơn hàng với các bộ lọc
+    $result = $donHang->getOrderByFilters(
+        $maDonHang,
+        $maKhachHang,
+        $status,
+        $ngayBatDau,
+        $ngayKetThuc,
+        $limit,
+        $page
+    );
 
-    // Nếu có mã đơn hàng, lấy chi tiết đơn hàng
-    if (!empty($maDonHang)) {
-        $result = $donHang->getById($maDonHang);
-        if (!$result) {
-            throw new Exception('Không tìm thấy đơn hàng');
-        }
-    } else {
-        // Lấy danh sách đơn hàng với các bộ lọc
-        $result = $donHang->getOrderByFilters(
-            $maDonHang,
-            $maKhachHang,
-            $status,
-            $ngayBatDau,
-            $ngayKetThuc,
-            $limit,
-            $page
-        );
+    // Lấy tổng số đơn hàng theo bộ lọc
+    $total = $donHang->countOrders(
+        $maKhachHang,
+        $status,
+        $ngayBatDau,
+        $ngayKetThuc
+    );
 
-        // Lấy tổng số đơn hàng theo bộ lọc
-        $total = $donHang->countOrders(
-            $maKhachHang,
-            $status,
-            $ngayBatDau,
-            $ngayKetThuc
-        );
+    $result = [
+        'total' => $total,
+        'list' => $result,
+        'page' => $page,
+        'limit' => $limit,
+        'total_pages' => ceil($total / $limit)
+    ];
 
-        $result = [
-            'total' => $total,
-            'list' => $result,
-            'page' => $page,
-            'limit' => $limit,
-            'total_pages' => ceil($total / $limit)
-        ];
-    }
 
     echo json_encode([
         'status' => 'success',

@@ -13,7 +13,7 @@ function splitAddressToShip(address) {
 async function fetchOrders() {
   try {
     // Sử dụng đường dẫn tuyệt đối từ thư mục gốc
-    const response = await fetch("/BookStore/api/orders/get_orders.php");
+    const response = await fetch("/api/orders/get_orders.php");
 
     // Kiểm tra response status
     if (!response.ok) {
@@ -27,8 +27,9 @@ async function fetchOrders() {
     }
 
     const result = await response.json();
+    console.log(result); // Kiểm tra kết quả trả về từ API
 
-    if (result.success) {
+    if (result.status) {
       console.log("Danh sách đơn hàng:", result.data);
       return result.data;
     } else {
@@ -46,7 +47,7 @@ export async function renderOrderTable() {
   try {
     // Lấy dữ liệu từ API
     const orders = await fetchOrders();
-
+    console.log(orders.list); // Kiểm tra kết quả trả về từ API
     // Biến chứa đối tượng bảng Đơn hàng
     const bodyInOrderTable = document.querySelector(
       ".main__data > .main__table.order > tbody"
@@ -63,31 +64,28 @@ export async function renderOrderTable() {
       html =
         '<tr><td colspan="9" class="text-center">Không có đơn hàng nào</td></tr>';
     } else {
-      orders.forEach((order) => {
+      orders.list.forEach((order) => {
         html += `
-          <tr>
-            <td>${order.maDonHang}</td>
-            <td>${order.maKhachHang}</td>
-            <td>${order.tenKhachHang || ""}</td>
-            <td>${order.soDTKhachHang || ""}</td>
-            <td>${splitAddressToShip(order.diaChiGiao)}</td>
-            <td>${vietnamMoneyFormat(order.tongTienThu)}</td>
-            <td><span ${
-              order.trangThai === "Đã giao"
-                ? 'class="purple"'
-                : order.trangThai === "Đã xác nhận"
-                ? 'class="green"'
-                : order.trangThai === "Chờ xác nhận"
-                ? 'class="gray"'
-                : 'class="red"'
-            }>${order.trangThai}</span></td>
-            <td>${order.ngayTaoDon}</td>
-            <td>
-              <i id="update-button-order" class="fa-solid fa-pen-to-square"></i>
-              <i id="print-button-order" class="fa-solid fa-print"></i>
-            </td>
-          </tr>
-        `;
+            <tr>
+              <td>${order.maDonHang}</td>
+              <td>${order.ngayTaoDon}</td>
+              <td>${splitAddressToShip(order.diaChiGiao)}</td>
+              <td>${vietnamMoneyFormat(order.tongTienThu)}</td>
+              <td><span ${
+                order.trangThai === "Đã giao"
+                  ? 'class="purple"'
+                  : order.trangThai === "Đã xác nhận"
+                  ? 'class="green"'
+                  : order.trangThai === "Chờ xác nhận"
+                  ? 'class="gray"'
+                  : 'class="red"'
+              }>${order.trangThai}</span></td>
+              <td>
+                <i id="update-button-order" class="fa-solid fa-pen-to-square"></i>
+                <i id="print-button-order" class="fa-solid fa-print"></i>
+              </td>
+            </tr>
+          `;
       });
     }
 
