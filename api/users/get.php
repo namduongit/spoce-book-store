@@ -26,7 +26,6 @@ function returnJSONUser($users) {
             "full_name" => $user['hoVaTen'],
             "phone" => $user['soDT'],
             "email" => $user['email'],
-            "address" => $user['diaChi'],
             "username" => $user['tenTaiKhoan'],
             "role_id" => $user['maQuyen'],
             "status" => $user['trangThai'],

@@ -1,10 +1,9 @@
 import { toast } from "../toast.js";
-import { resetToOriginParam } from "../common.js";
-import { getCookie } from "../common.js";
-import { deleteCookie } from "../common.js";
 import { showConfirmationDialog } from "../question.js";
 import { Validation } from '../validation.js';
 import { updateAddressSelect } from '../../../api/address/updateAddressSelect.js';
+import { autoSelectAddressByName } from "../../../api/address/updateAddressSelect.js";
+import { getRoleById } from "../common.js";
 
 export async function fetchData(URL) {
     try {
@@ -18,8 +17,8 @@ export async function fetchData(URL) {
     }
 }
 
-export async function getUserByID(userId) {
-    const URL = `api/users/get.php?userId=${userId}`;
+export async function getUserByID(userID) {
+    const URL = `api/users/get.php?userId=${userID}`;
     showLoading();
     let response = await fetchData(URL);
     hideLoading();
@@ -27,38 +26,51 @@ export async function getUserByID(userId) {
     return result;
 }
 
+
+export async function getAddressByID(addressID) {
+    const URL = `api/address/getOnly.php`;
+    let formData = new URLSearchParams();
+    formData.append('idAddress', addressID);
+    showLoading();
+    let response = fetch(URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formData.toString()
+    })
+    .then(response => response.json())
+    .then(data => {
+        return data;
+    });
+    hideLoading();
+    return response;
+}
+
+
 export async function isLogined() {
-    // const token = localStorage.getItem('token');
-    const token = getCookie('token');
-
-    if (!token) {
-        console.log('Không có token, chưa đăng nhập');
-        return false;
-    }
-
+    if (!localStorage.getItem('isLogin')) return false;
     try {
         showLoading();
         const response = await fetch('/api/users/checkLogin.php', {
             method: 'GET',
+            credentials: 'include', // Gửi cookie session cùng request
             headers: {
-                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             }
         });
-
         if (!response.ok) {
             if (response.status === 401) {
-                console.log('Token không hợp lệ hoặc hết hạn');
+                console.log('Chưa đăng nhập hoặc phiên đã hết hạn');
                 return false;
             }
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
         const data = await response.json();
         hideLoading();
         return data;
     } catch (error) {
-        console.error('Lỗi khi kiểm tra đăng nhập:', error.message);
+        console.log('Lỗi khi kiểm tra đăng nhập:');
         return false;
     }
 }
@@ -110,28 +122,11 @@ export async function updateInfoTopBar(promiseResponse) {
     });
 
     logoutBtn.addEventListener('click', async function () {
-        // const token = localStorage.getItem('token');
-        const token = getCookie('token');
-        if (!token) {
-            toast({
-                title: 'Thông báo',
-                message: 'Có lỗi hệ thống khi đăng xuất !',
-                type: 'warning',
-                duration: 3000
-            });
-            setTimeout(() => {
-                resetToOriginParam();
-                window.location.href = '/';
-            }, 1000);
-            return;
-        }
-
         try {
             showLoading();
             const response = await fetch('/api/users/logout.php', {
-                method: 'POST', // Hoặc GET, tùy cấu hình backend
+                method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
@@ -139,8 +134,7 @@ export async function updateInfoTopBar(promiseResponse) {
             const data = await response.json();
             hideLoading();
             if (data['success']) {
-                // localStorage.removeItem('token');
-                deleteCookie('token');
+                localStorage.removeItem('isLogin');
                 toast({
                     title: 'Thông báo',
                     message: 'Đăng xuất thành công !',
@@ -219,8 +213,6 @@ async function showContentProfile(info) {
 
     if (responseAPI !== false) {
         user = await getUserByID(responseAPI.user['id']);
-        
-        console.log(user);
     }
 
     hideMainPage();
@@ -242,18 +234,26 @@ async function showContentProfile(info) {
     history.pushState(null, '', window.location.pathname + '?' + url.toString());
 }
 
-function updateInfoAccountSection(user) {
+async function updateInfoAccountSection(user) {
     const container = document.querySelector('.right-container');
     let userid = user['id'];
     let fullName = user['full_name'] != null ? user['full_name'] : '';
-    let username = user['username']  != null ? user['username'] : '';
-    let phone = user['phone']  != null ? user['phone'] : '';
-    let email = user['email']  != null ? user['email'] : '';
+    let username = user['username'] != null ? user['username'] : '';
+    let phone = user['phone'] != null ? user['phone'] : '';
+    let email = user['email'] != null ? user['email'] : '';
+    let responseRole = await getRoleById(user['role_id']);
+    let nameRole = responseRole['role'].name;
+
     container.innerHTML = `
-    <div class="left-content">
+    <div class="left-container__warpper">
         <div class="checkout__input-field">
             <input type="text" id="info-username" name="info-username" value="${username}" disabled>
             <label for="info-username">Tên tài khoản</label>
+        </div>
+
+        <div class="checkout__input-field">
+            <input type="text" id="info-role" name="info-username" value="${nameRole}" disabled>
+            <label for="info-role">Quyền hạn</label>
         </div>
 
         <div class="checkout__input-field">
@@ -290,7 +290,7 @@ function updateInfoAccountSection(user) {
         <button class="account-info-btn account-info-btn--black">Đặt lại</button>
     </div>
 
-    <div class="right-content">
+    <div class="right-content__warpper">
         <p>Để giữ cho tài khoản của bạn bảo mật an toàn chúng tôi khuyên bạn nên tránh việc tạo mật khẩu sử dụng có chứa:</p>
         <br>
         <ul>
@@ -409,25 +409,25 @@ function updateInfoAccountSection(user) {
                 },
                 body: formData.toString(),
             })
-            .then(response => {
-                if (!response.ok) {
-                    console.log("error");
-                }
-                return response.json();
-            })
-            .then(data => {
-                hideLoading();
-                toast({
-                    title: "Thông báo",
-                    message: data.message,
-                    type: data.success === true ? 'success' : 'warning',
-                    duration: 3000
-                });
-            })
-            .catch(error => {
-                hideLoading();
-                console.error("Fetch error:", error);
-            })
+                .then(response => {
+                    if (!response.ok) {
+                        console.log("error");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    hideLoading();
+                    toast({
+                        title: "Thông báo",
+                        message: data.message,
+                        type: data.success === true ? 'success' : 'warning',
+                        duration: 3000
+                    });
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.log("Fetch error:");
+                })
         } else {
             console.log("no");
         }
@@ -440,10 +440,256 @@ function updateInfoAccountSection(user) {
     });
 }
 
-function updateAddressAccountSection(user) {
+async function showAddressInCurrentUser(userId) {
+    try {
+        let response = await fetch('../../../api/address/getAddress.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `maNguoiDung=${userId}`
+        });
+
+        let data = await response.json();
+
+        if (data.success) {
+            return data;
+        } else {
+            console.log('Không có địa chỉ:', data.message);
+            return null;
+        }
+    } catch (error) {
+        console.log('Lỗi khi gọi API');
+        return null;
+    }
+}
+
+async function goBackShowAddress(user) {
     const container = document.querySelector('.right-container');
+    showLoading();
+    const currentAddress = await showAddressInCurrentUser(user.id);
+    hideLoading();
+
+    let addressContent = ``;
+    if (currentAddress) {
+        const datas = currentAddress.data;
+        datas.forEach(element => {
+            console.log(element)
+            addressContent += `
+                <div class="left-container__content-item">
+                    <div class="left-container__info">
+                        <div class="left-container__content-province">
+                            Tỉnh thành: <strong>${element.province}</strong>
+                        </div>
+                        <div class="left-container__content-district">
+                            ${element.district} / ${element.ward} / ${element.street}
+                        </div>
+                    </div>
+                    <div class="left-container__action">
+                        <div class="left-container__button left-container__button-update" data-id=${element.id} onclick="updateAddressById(this, ${user.id})">Cập nhật địa chỉ</div>
+                        <div class="left-container__button left-container__button-delete" data-id=${element.id} onclick="deleteAddressById(this, ${user.id})">Xóa địa chỉ</div>
+                    </div>
+                </div>`;
+        });
+    }
+
     container.innerHTML = `
-    <div class="left-content">
+    <div class="left-container__warpper">
+        <div class="left-container__header">
+            <div class="left-container__title">Địa chỉ của tôi</div>
+            <div class="left-container__button left-container__button-addaddress">
+                <i class="fa-solid fa-plus"></i> Thêm địa chỉ mới
+            </div>
+        </div>
+
+        <div class="left-container__content">
+            ${addressContent}     
+        </div>
+    </div>
+
+    <div class="right-content__warpper">
+        <p>Để cho quá trình giao hàng được hoàn thành một cách tiện lợi và nhanh chóng đến khách hàng vui lòng:</p>
+        <br>
+        <ul>
+            <li>Cung cấp đầy đủ và chính xác thông tin địa chỉ giao hàng và số điện thoại liên lạc.</li><br>
+            <li>Vui lòng đảm bảo có người nhận hàng tại địa chỉ giao hàng trong thời gian dự kiến.</li><br>
+            <li>Vui lòng kiểm tra kỹ hàng hóa trước khi ký nhận.</li>
+        </ul>
+    </div>
+    `;
+
+    document.querySelector('.left-container__button-addaddress').addEventListener('click', () => {
+        container.innerHTML = `
+            <div class="left-container__warpper">
+                <div class="left-container__button-backaddress" onclick='goBackShowAddress(${JSON.stringify(user)})'>
+                    <i class="fa-solid fa-people-pulling"></i>
+                    Quay trở lại
+                </div>
+                <div class="checkout__input-field">
+                    <input type="text" id="address-number" name="address-number" placeholder=" ">
+                    <label for="address-number">Số nhà, tên đường</label>
+                </div>
+                <div class="checkout__input-field checkout__address-select">
+                    <label>Tỉnh / thành</label>
+                    <select name="city" id="city">
+                        <option value="default" selected>Chọn tỉnh / thành</option>
+                    </select>
+                    <p class="checkout__empty-field-warning-two hide-item">Vui lòng chọn tỉnh thành</p>
+                </div>
+                <div class="checkout__input-field checkout__address-select">
+                    <label>Quận / huyện</label>
+                    <select name="district" id="district">
+                        <option value="default" selected>Chọn quận / huyện</option>
+                    </select>
+                    <p class="checkout__empty-field-warning-two hide-item">Vui lòng chọn quận huyện</p>
+                </div>
+                <div class="checkout__input-field checkout__address-select">
+                    <label>Phường / xã</label>
+                    <select name="ward" id="ward">
+                        <option value="default" selected>Chọn phường / xã</option>
+                    </select>
+                    <p class="checkout__empty-field-warning-two hide-item">Vui lòng chọn phường xã</p>
+                </div>
+
+                <button class="account-info-btn account-info-btn--blue account-info-btn__confirm-address">Lưu</button>
+            </div>
+
+            <div class="right-content__warpper">
+                <p>Để cho quá trình giao hàng được hoàn thành một cách tiện lợi và nhanh chóng đến khách hàng vui lòng:</p>
+                <br>
+                <ul>
+                    <li>Cung cấp đầy đủ và chính xác thông tin địa chỉ giao hàng và số điện thoại liên lạc.</li><br>
+                    <li>Vui lòng đảm bảo có người nhận hàng tại địa chỉ giao hàng trong thời gian dự kiến.</li><br>
+                    <li>Vui lòng kiểm tra kỹ hàng hóa trước khi ký nhận.</li>
+                </ul>
+            </div>`;
+
+
+        updateAddressSelect("city", "district", "ward");
+
+
+        const confirmButton = document.querySelector('.account-info-btn__confirm-address');
+
+        confirmButton.addEventListener("click", function () {
+            const addressNumberValue = document.getElementById('address-number').value.trim();
+
+            const citySelect = document.getElementById('city');
+            const districtSelect = document.getElementById('district');
+            const wardSelect = document.getElementById('ward');
+
+            const cityValue = citySelect.options[citySelect.selectedIndex].text.trim();
+            const districtValue = districtSelect.options[districtSelect.selectedIndex].text.trim();
+            const wardValue = wardSelect.options[wardSelect.selectedIndex].text.trim();
+
+            const invalid = (
+                addressNumberValue === '' ||
+                cityValue.includes('Chọn') ||
+                districtValue.includes('Chọn') ||
+                wardValue.includes('Chọn')
+            );
+
+            if (invalid) {
+                toast({
+                    title: 'Thông báo',
+                    message: 'Vui lòng nhập đầy đủ thông tin!',
+                    type: 'warning',
+                    duration: 3000
+                });
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('idUser', user['id']);
+            formData.append('province', cityValue);
+            formData.append('city', districtValue);
+            formData.append('ward', wardValue);
+            formData.append('numberHouse', addressNumberValue);
+
+            fetch('../../../api/address/insertAddress.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        toast({
+                            title: 'Thành công',
+                            message: 'Tạo địa chỉ mới thành công!',
+                            type: 'success',
+                            duration: 3000
+                        });
+                        goBackShowAddress(user);
+                    } else {
+                        toast({
+                            title: 'Lỗi',
+                            message: data.message,
+                            type: 'error',
+                            duration: 3000
+                        });
+                    }
+                })
+                .catch(error => {
+                    toast({
+                        title: 'Lỗi',
+                        message: 'Lỗi kết nối đến server!',
+                        type: 'error',
+                        duration: 3000
+                    });
+                });
+        });
+    });
+
+
+}
+
+async function deleteAddressById(object, userID) {
+    async function processConfirmation() {
+        const result = await showConfirmationDialog(`Bạn có chắc chắn muốn xóa địa chỉ này không ?`);
+        return result;
+    }
+    const resultAnswer = await processConfirmation()
+    if (resultAnswer == true) {
+        let formData = new URLSearchParams();
+        formData.append('idAddress', object.dataset.id);
+        formData.append('idUser', userID);
+        fetch('api/address/deleteAddress.php', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: formData.toString()
+        })
+            .then(response => response.json())
+            .then(async data => {
+                toast({
+                    title: 'Thông báo',
+                    type: data.success ? 'success' : warrning,
+                    message: data.message,
+                    duration: 3000
+                });
+                let currentUser = await getUserByID(userId);
+                goBackShowAddress(currentUser);
+            })
+            .catch(() => {
+                console.log('Có lỗi trong khi xóa địa chỉ');
+            })
+    } else {
+        return;
+    }
+}
+
+
+async function updateAddressById(object, userID) {
+    // console.log(object.dataset.id)
+    const currentAddress = await getAddressByID(object.dataset.id);
+    const currentUser = await getUserByID(userID);
+    console.log(currentAddress);
+    const leftContainer = document.querySelector('.right-container').querySelector('.left-container__warpper');
+    leftContainer.innerHTML = `
+        <div class="left-container__button-backaddress" onclick='goBackShowAddress(${JSON.stringify(currentUser)})'>
+            <i class="fa-solid fa-people-pulling"></i>
+            Quay trở lại
+        </div>
         <div class="checkout__input-field">
             <input type="text" id="address-number" name="address-number" placeholder=" ">
             <label for="address-number">Số nhà, tên đường</label>
@@ -470,26 +716,90 @@ function updateAddressAccountSection(user) {
             <p class="checkout__empty-field-warning-two hide-item">Vui lòng chọn phường xã</p>
         </div>
 
-        <button class="account-info-btn account-info-btn--blue">Lưu</button>
-        <button class="account-info-btn account-info-btn--black">Đặt lại</button>
-    </div>
-
-    <div class="right-content">
-        <p>Để cho quá trình giao hàng được hoàn thành một cách tiện lợi và nhanh chóng đến khách hàng vui lòng:</p>
-        <br>
-        <ul>
-            <li>Cung cấp đầy đủ và chính xác thông tin địa chỉ giao hàng và số điện thoại liên lạc.</li><br>
-            <li>Vui lòng đảm bảo có người nhận hàng tại địa chỉ giao hàng trong thời gian dự kiến.</li><br>
-            <li>Vui lòng kiểm tra kỹ hàng hóa trước khi ký nhận.</li>
-        </ul>
-    </div>
+        <button class="account-info-btn account-info-btn--blue account-info-btn__confirm-address">Lưu</button>
+        <button class="account-info-btn account-info-btn--black account-info-btn__replace-address">Đặt lại</button>
     `;
+
+    autoSelectAddressByName("city", "district", "ward", currentAddress['address'].province, currentAddress['address'].city, currentAddress['address'].ward);
+    document.getElementById('address-number').value = currentAddress['address'].house;
+
+    document.querySelector('.account-info-btn__replace-address').addEventListener('click', function() {
+        updateAddressById(object, userID);
+    });
+
+    document.querySelector('.account-info-btn__confirm-address').addEventListener('click', function() {
+        const addressNumberValue = document.getElementById('address-number').value.trim();
+
+        const citySelect = document.getElementById('city');
+        const districtSelect = document.getElementById('district');
+        const wardSelect = document.getElementById('ward');
+
+        const cityValue = citySelect.options[citySelect.selectedIndex].text.trim();
+        const districtValue = districtSelect.options[districtSelect.selectedIndex].text.trim();
+        const wardValue = wardSelect.options[wardSelect.selectedIndex].text.trim();
+
+        const invalid = (
+            addressNumberValue === '' ||
+            cityValue.includes('Chọn') ||
+            districtValue.includes('Chọn') ||
+            wardValue.includes('Chọn')
+        );
+
+        if (invalid) {
+            toast({
+                title: 'Thông báo',
+                message: 'Vui lòng nhập đầy đủ thông tin!',
+                type: 'warning',
+                duration: 3000
+            });
+            return;
+        }
+
+        let formData = new URLSearchParams();
+        formData.append('idAddress', object.dataset.id);
+        formData.append('houseAddress', addressNumberValue);
+        formData.append('provinceAddress', cityValue);
+        formData.append('cityAddress', districtValue);
+        formData.append('wardAddress', wardValue);
+
+        fetch('api/address/updateAddress.php', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: formData.toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+            toast({
+                title: 'Thông báo',
+                message: data.message,
+                type: data.success ? 'success' : 'warning',
+                duration: 3000
+            });
+            goBackShowAddress(currentUser);
+            return;
+        })
+        .catch(() => {
+            console.log('Có lỗi trong khi cập nhật lại địa chỉ');
+        })
+    });
 }
+
+function updateAddressAccountSection(user) {
+
+    console.log(user);
+    if (typeof user === "string") {
+        user = JSON.parse(user);
+    }
+    goBackShowAddress(user);
+}
+
 
 function updatePaymentAccountSection(user) {
     const container = document.querySelector('.right-container');
     container.innerHTML = `
-    <div class="left-content">
+    <div class="left-container__warpper">
         <div class="checkout__input-field">
             <input type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" maxlength="19" id="account-card-number-field" name="card-number" placeholder="Số thẻ">
             <label>Số thẻ (16 số)</label>
@@ -509,7 +819,7 @@ function updatePaymentAccountSection(user) {
         <button class="account-info-btn account-info-btn--black">Đặt lại</button>
     </div>
 
-    <div class="right-content">
+    <div class="right-content__warpper">
         <p>Chúng tôi chấp nhận các loại thẻ Visa, Mastercard, và American Express.</p>
         <p>Để quá trình thanh toán bằng thẻ tín dụng được thực hiện thành công, Quý khách vui lòng:</p>
         <br>
@@ -540,11 +850,11 @@ function updatePaymentAccountSection(user) {
         }
 
         if (/^1[3-9]/g.test(value)) {
-            value = value.substring(0,1);
+            value = value.substring(0, 1);
         }
 
         if (value.length > 2) {
-            value = value.substring(0,2) + "/" + value.substring(2);
+            value = value.substring(0, 2) + "/" + value.substring(2);
         }
 
         e.target.value = value;
@@ -576,3 +886,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+window.goBackShowAddress = goBackShowAddress
+window.deleteAddressById = deleteAddressById;
+window.updateAddressById = updateAddressById;

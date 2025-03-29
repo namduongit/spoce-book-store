@@ -1,3 +1,5 @@
+import { fetchData } from "./book/getDataBook.js";
+
 export function createExpiresDate(numberOfDay) {
     const date = new Date();
     date.setTime(date.getTime() + (numberOfDay * 24 * 60 * 60 * 1000));
@@ -54,4 +56,10 @@ export async function isExitsUser(username) {
 
 export function resetToOriginParam() {
     history.replaceState(null, '', window.location.href.toString());
+}
+
+export async function getRoleById(roleId) {
+    const URL = `api/roles/get.php?roleId=${roleId}`;
+    let response = await fetchData(URL);
+    return response;
 }

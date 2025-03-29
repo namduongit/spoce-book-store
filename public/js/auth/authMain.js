@@ -318,7 +318,7 @@ function showFormUser(type) {
                     }
                 })
                 .catch(error => {
-                    console.log('Lỗi');
+                    console.log('Lỗi khi đăng ký tài khoản');
                 })
                 .finally(() => {
                     hideLoading();
@@ -332,10 +332,10 @@ function showFormUser(type) {
     if (loginForm) {
         loginForm.addEventListener("submit", function (event) {
             event.preventDefault();
-
-            const username = document.getElementById("login-username").value;
-            const password = document.getElementById("login-password").value;
-
+            const username = document.getElementById("login-username").value.trim();
+            const password = document.getElementById("login-password").value.trim();
+    
+            // Kiểm tra dữ liệu đầu vào
             if (username === '') {
                 toast({
                     title: 'Thông báo',
@@ -356,13 +356,11 @@ function showFormUser(type) {
                 document.getElementById("login-password").focus();
                 return;
             }
-
             showLoading();
-
             const formData = new URLSearchParams();
             formData.append("username", username);
             formData.append("password", password);
-
+    
             fetch("api/users/login.php", {
                 method: "POST",
                 headers: {
@@ -370,7 +368,12 @@ function showFormUser(type) {
                 },
                 body: formData.toString()
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     toast({
                         title: "Thông báo",
@@ -378,27 +381,29 @@ function showFormUser(type) {
                         type: data.success ? 'success' : 'warning',
                         duration: 3000
                     });
-
+    
                     if (data.success === true) {
-                        // localStorage.setItem('token', data.token);
-                        setCookie('token', data.token, 1);
-                        console.log('Đăng nhập thành công, token:', data.token);
+                        localStorage.setItem('isLogin', true);
                         setTimeout(() => {
                             resetToOriginParam();
                             window.location.href = '/';
                         }, 1000);
                     }
                 })
-
                 .catch(error => {
                     console.log('Lỗi đăng nhập');
+                    toast({
+                        title: "Lỗi",
+                        message: "Đã có lỗi xảy ra khi đăng nhập. Vui lòng thử lại!",
+                        type: 'error',
+                        duration: 3000
+                    });
                 })
                 .finally(() => {
                     hideLoading();
                 });
         });
     }
-
 }
 
 function closeAuthForm() {
@@ -436,10 +441,7 @@ function loginAfterRegister(username, password) {
         .then(data => {
             hideLoading();
             if (data.success) {
-                // localStorage.setItem('token', data.token);
-                setCookie('token', data.token, 1);
-                console.log('Đăng nhập thành công, token:', data.token);
-                localStorage.removeItem('justRegistered');
+                localStorage.setItem('isLogin', true);
                 toast({
                     title: "Đăng nhập thành công",
                     message: `Chào mừng ${username} đến với SPOCE Book Store`,
@@ -461,9 +463,9 @@ function loginAfterRegister(username, password) {
             }
         })
         .catch(error => {
-            console.log('Lỗi đăng nhập:', error);
+            console.log('Lỗi đăng nhập tự động');
         });
-        hideLoading();
+    hideLoading();
 }
 
 
@@ -472,5 +474,3 @@ window.clearURL = clearURL;
 window.showFormUser = showFormUser;
 window.closeAuthForm = closeAuthForm;
 window.changeForm = changeForm;
-
-

@@ -118,7 +118,7 @@ class app_libs_DBConnection
 
         $sql = 'INSERT INTO ' . $this->table_name . ' (' . implode(', ', $fields) . ') VALUES (' . implode(', ', $placeholders) . ')';
 
-        $this->query($sql, array_values($this->queryParam['field']));
+        $this->query($sql, \array_values($this->queryParam['field']));
         return self::$connection->lastInsertId();
     }
     public function update()
@@ -141,12 +141,13 @@ class app_libs_DBConnection
     public function delete()
     {
         if (self::$connection == null) self::$connection = $this->open_connect();
-
+    
         $sql = 'DELETE FROM ' . $this->table_name . ' ' .
-            $this->building_condition($this->queryParam['where']) . ' ' . $this->queryParam['other'];
-
-        return $this->query($sql, []);
+            $this->building_condition($this->queryParam['where']);
+    
+        return $this->query($sql, $this->queryParam['params']);
     }
+    
 
     
     // ===============================================================
