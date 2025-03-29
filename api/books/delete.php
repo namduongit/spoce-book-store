@@ -7,7 +7,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
-$statusInput = isset($_GET['statusInput']) ? $_GET['statusInput'] : 'Còn hàng';
+$statusInput = isset($_GET['statusInput']) ? $_GET['statusInput'] : 'ACTIVE';
 $idInput = isset($_GET['idInput']) ? $_GET['idInput'] : '';
 
 // Kiểm tra idInput có hợp lệ không
@@ -17,7 +17,7 @@ if (empty($idInput)) {
 }
 
 // Chuyển trạng thái sách
-$statusInput = ($statusInput === 'Còn hàng') ? 'Tạm ngưng' : 'Còn hàng';
+$statusInput = ($statusInput === 'ACTIVE') ? 'INACTIVE' : 'ACTIVE';
 
 try {
     // Khởi tạo model sách

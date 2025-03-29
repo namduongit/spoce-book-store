@@ -1,32 +1,40 @@
 <?php
-class app_models_NhaXuatBan extends app_libs_DBConnection {
-    protected $table_name = 'nhaXuatBan';
+class app_models_NhaCungCap extends app_libs_DBConnection {
+    protected $table_name = 'nhaCungCap';
 
     // Lấy tất cả nhà xuất bản
-    public function getAllPublishers() {
+    public function getAllSupplier() {
         return $this->building_queryParam()->select();
     }
 
     // Lấy nhà xuất bản theo ID
-    public function getPublisherById($maNXB) {
+    public function getSupplierById($maNCC) {
         return $this->building_queryParam([
-            'where' => 'maNXB = ?',
-            'params' => [$maNXB]
+            'where' => 'maNCC = ?',
+            'params' => [$maNCC]
         ])->select_one();
     }
 
-    // Lọc nhà xuất bản theo ID, tên, địa chỉ, trạng thái
-    public function getPublisherByFilter($id = '', $name = '', $address = '', $status = '') {
+    // Lọc nhà cung cấp theo ID, tên, địa chỉ, trạng thái
+    public function getSupplierByFilter($id = '', $name = '' , $phone ='', $email = '', $address = '', $status = '') {
         $conditions = [];
         $params = [];
 
         if (!empty($id)) {
-            $conditions[] = 'maNXB = ?';
+            $conditions[] = 'maNCC = ?';
             $params[] = $id;
         }
         if (!empty($name)) {
-            $conditions[] = 'tenNXB LIKE ?';
+            $conditions[] = 'tenNCC LIKE ?';
             $params[] = "%$name%";
+        }
+        if (!empty($phone)) {
+            $conditions[] = 'soDT = ?';
+            $params[] = $phone;
+        }
+        if (!empty($email)) {
+            $conditions[] = 'email = ?';
+            $params[] = $email;
         }
         if (!empty($address)) {
             $conditions[] = 'diaChi LIKE ?';
@@ -46,33 +54,33 @@ class app_models_NhaXuatBan extends app_libs_DBConnection {
     }
 
     // Thêm nhà xuất bản mới
-    public function insertPublisher($data) {
+    public function insertSupplier($data) {
         return $this->building_queryParam([
             'field' => $data
         ])->insert();
     }
 
     // Cập nhật thông tin nhà xuất bản
-    public function updatePublisher($maNXB, $data) {
+    public function updateSupplier($maNCC, $data) {
         $fieldValues = [];
-        $params = [':maNXB' => $maNXB];
+        $params = [':maNCC' => $maNCC];
     
         foreach ($data as $field => $value) {
             $fieldValues[] = "$field = :$field";
             $params[":$field"] = $value;  // Chỉ dùng tham số có tên
         }
         // Tạo câu SQL UPDATE
-        $sql = "UPDATE " . $this->table_name . " SET " . implode(", ", $fieldValues) . " WHERE maNXB = :maNXB";
+        $sql = "UPDATE " . $this->table_name . " SET " . implode(", ", $fieldValues) . " WHERE maNCC = :maNCC";
         // Thực thi câu lệnh SQL
         return $this->query($sql, $params);
     }
     
 
     // Xóa nhà xuất bản
-    public function deletePublisher($maNXB) {
+    public function deleteSuplier($maNCC) {
         return $this->building_queryParam([
-            'where' => 'maNXB = ?',
-            'params' => [$maNXB]
+            'where' => 'maNCC = ?',
+            'params' => [$maNCC]
         ])->delete();
     }
 }

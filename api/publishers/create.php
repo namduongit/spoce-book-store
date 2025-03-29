@@ -8,19 +8,19 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Nhận dữ liệu từ POST
-$categoryStatus = isset($_POST['categoryStatus']) ? $_POST['categoryStatus'] : '';
-$categoryName = isset($_POST['categoryName']) ? $_POST['categoryName'] : '';
+$publisherStatus = isset($_POST['publisherStatus']) ? $_POST['publisherStatus'] : '';
+$publisherName = isset($_POST['publisherName']) ? $_POST['publisherName'] : '';
 $updateDateTime = date("Y-m-d H:i:s");
 
 try {
    
-    $category_model = new app_models_TheLoai();
+    $publisher_model = new app_models_NhaXuatBan();
 
     // Cập nhật trạng thái tác giả trong database
-    $result = $category_model->insertCategory(
-        [  "tenTheLoai" => $categoryName,
+    $result = $publisher_model->insertPublisher(
+        [  "tenNXB" => $publisherName,
             "ngayCapNhat" => $updateDateTime,
-            "trangThai" => $categoryStatus
+            "trangThai" => $publisherStatus
         ]);
 
     

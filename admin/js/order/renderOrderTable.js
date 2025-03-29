@@ -6,39 +6,38 @@ import { printOrderTicket } from "./printOrderTicket.js";
 function splitAddressToShip(address) {
   if (!address) return "Không có địa chỉ";
   const info = address.split(",");
-  return info.length === 4
-    ? info[2].trim() + ", " + info[3].trim()
-    : address;
+  return info.length === 4 ? info[2].trim() + ", " + info[3].trim() : address;
 }
 
 // Hàm lấy dữ liệu đơn hàng từ API
 async function fetchOrders() {
   try {
     // Sử dụng đường dẫn tuyệt đối từ thư mục gốc
-    const response = await fetch('/BookStore/api/orders/get_orders.php');
-    
+    const response = await fetch("/api/orders/get_orders.php");
+
     // Kiểm tra response status
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     // Kiểm tra content type
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
       throw new TypeError("Response không phải là JSON!");
     }
-    
+
     const result = await response.json();
-    
-    if (result.success) {
-      console.log('Danh sách đơn hàng:', result.data);
+    console.log(result); // Kiểm tra kết quả trả về từ API
+
+    if (result.status) {
+      console.log("Danh sách đơn hàng:", result.data);
       return result.data;
     } else {
-      console.error('Lỗi khi lấy dữ liệu:', result.message);
+      console.error("Lỗi khi lấy dữ liệu:", result.message);
       return [];
     }
   } catch (error) {
-    console.error('Lỗi khi gọi API:', error);
+    console.error("Lỗi khi gọi API:", error);
     return [];
   }
 }
@@ -48,47 +47,45 @@ export async function renderOrderTable() {
   try {
     // Lấy dữ liệu từ API
     const orders = await fetchOrders();
-    
+    console.log(orders.list); // Kiểm tra kết quả trả về từ API
     // Biến chứa đối tượng bảng Đơn hàng
     const bodyInOrderTable = document.querySelector(
       ".main__data > .main__table.order > tbody"
     );
 
     if (!bodyInOrderTable) {
-      console.error('Không tìm thấy bảng đơn hàng trong DOM');
+      console.error("Không tìm thấy bảng đơn hàng trong DOM");
       return;
     }
 
     // Chuyển đổi dữ liệu thành các thẻ html
     let html = ``;
     if (!orders || orders.length === 0) {
-      html = '<tr><td colspan="9" class="text-center">Không có đơn hàng nào</td></tr>';
+      html =
+        '<tr><td colspan="9" class="text-center">Không có đơn hàng nào</td></tr>';
     } else {
-      orders.forEach(order => {
+      orders.list.forEach((order) => {
         html += `
-          <tr>
-            <td>${order.maDonHang}</td>
-            <td>${order.maKhachHang}</td>
-            <td>${order.tenKhachHang || ''}</td>
-            <td>${order.soDTKhachHang || ''}</td>
-            <td>${splitAddressToShip(order.diaChiGiao)}</td>
-            <td>${vietnamMoneyFormat(order.tongTienThu)}</td>
-            <td><span ${
-              order.trangThai === "Đã giao"
-                ? 'class="purple"'
-                : order.trangThai === "Đã xác nhận"
-                ? 'class="green"'
-                : order.trangThai === "Chờ xác nhận"
-                ? 'class="gray"'
-                : 'class="red"'
-            }>${order.trangThai}</span></td>
-            <td>${order.ngayTaoDon}</td>
-            <td>
-              <i id="update-button-order" class="fa-solid fa-pen-to-square"></i>
-              <i id="print-button-order" class="fa-solid fa-print"></i>
-            </td>
-          </tr>
-        `;
+            <tr>
+              <td>${order.maDonHang}</td>
+              <td>${order.ngayTaoDon}</td>
+              <td>${splitAddressToShip(order.diaChiGiao)}</td>
+              <td>${vietnamMoneyFormat(order.tongTienThu)}</td>
+              <td><span ${
+                order.trangThai === "Đã giao"
+                  ? 'class="purple"'
+                  : order.trangThai === "Đã xác nhận"
+                  ? 'class="green"'
+                  : order.trangThai === "Chờ xác nhận"
+                  ? 'class="gray"'
+                  : 'class="red"'
+              }>${order.trangThai}</span></td>
+              <td>
+                <i id="update-button-order" class="fa-solid fa-pen-to-square"></i>
+                <i id="print-button-order" class="fa-solid fa-print"></i>
+              </td>
+            </tr>
+          `;
       });
     }
 
@@ -128,6 +125,6 @@ export async function renderOrderTable() {
       });
     });
   } catch (error) {
-    console.error('Lỗi khi render bảng đơn hàng:', error);
+    console.error("Lỗi khi render bảng đơn hàng:", error);
   }
 }

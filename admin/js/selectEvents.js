@@ -28,7 +28,7 @@ export function selectFormEvents() {
           inputInSelect.value = item.textContent;
         });
       }
-
+      
       // Duyệt qua từng mục có cùng giá trị với giá trị của thẻ input hiện tại
       for (let i = 0; i < ulInSelect.childElementCount; i++) {
         const item = ulInSelect.children[i];
@@ -41,6 +41,11 @@ export function selectFormEvents() {
         }
       }
     });
+    if (ulInSelect.querySelectorAll("li").length > 0) {
+      inputInSelect.value = ulInSelect.children[0].textContent;
+      ulInSelect.children[0].classList.add("select");
+  }
+  
   });
 }
 

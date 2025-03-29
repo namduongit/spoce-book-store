@@ -2431,4 +2431,105 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   padding: 10px;
 }
 
+.order-history__container {
+  padding: 15px 20px;
+  width: 90%;
+  min-height: 550px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2rem;
+}
 
+.order-history__content {
+  padding: 0 18rem;
+}
+
+.order-history__account-info {
+  text-transform: uppercase;
+  border-bottom: 2px solid #dee2e6;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding-bottom: 1rem;
+}
+
+.order-history__account-name {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  font-size: 1.8rem;
+  color: #4b4848;
+}
+
+.order-history__account-phone {
+  color: #4b4848;
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.order-history__content {
+  min-height: 400px;
+}
+
+.order-history__table {
+  width: 100%;
+}
+
+.order-history__table td {
+  border-top: 2px solid #dee2e6;
+}
+
+.order-history__table thead td {
+  font-weight: 600;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.order-history__table tbody td {
+  padding: 2rem 0;
+}
+
+.order-history__order {
+  text-align: center;
+}
+
+.order-history__order:last-child {
+  border-bottom: 2px solid #dee2e6;
+}
+
+.order-history__detail-btn {
+  cursor: pointer;
+  border: 0;
+  padding: 1rem 2rem;
+  background-color: #3498db;
+  color: white;
+  font-weight: 500;
+  border-radius: 7px;
+  transition: all 0.15s ease;
+  margin-right: 1rem;
+}
+
+.order-history__detail-btn:hover {
+  background-color: var(--topbar-color);
+}
+
+.order-history__cancel-btn {
+  cursor: pointer;
+  border: 0;
+  padding: 1rem 2rem;
+  background-color: red;
+  color: white;
+  font-weight: 500;
+  border-radius: 7px;
+  transition: all 0.15s ease;
+}
+
+.order-history__cancel-btn:hover {
+  background-color: rgb(180, 0, 0)
+}
+
+.order-history__order-unknown td {
+  text-align: center;
+  font-weight: 500;
+  font-size: 2rem;
+  color: #4b4848;
+}

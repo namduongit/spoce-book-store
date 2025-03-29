@@ -8,19 +8,19 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Nhận dữ liệu từ POST
-$categoryStatus = isset($_POST['categoryStatus']) ? $_POST['categoryStatus'] : '';
-$categoryName = isset($_POST['categoryName']) ? $_POST['categoryName'] : '';
+$coverStatus = isset($_POST['coverStatus']) ? $_POST['coverStatus'] : '';
+$coverName = isset($_POST['coverName']) ? $_POST['coverName'] : '';
 $updateDateTime = date("Y-m-d H:i:s");
 
 try {
    
-    $category_model = new app_models_TheLoai();
+    $cover_model = new app_models_LoaiBia();
 
     // Cập nhật trạng thái tác giả trong database
-    $result = $category_model->insertCategory(
-        [  "tenTheLoai" => $categoryName,
+    $result = $cover_model->insertCover(
+        [  "tenLoaiBia" => $coverName,
             "ngayCapNhat" => $updateDateTime,
-            "trangThai" => $categoryStatus
+            "trangThai" => $coverStatus
         ]);
 
     

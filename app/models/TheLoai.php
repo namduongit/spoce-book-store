@@ -24,13 +24,21 @@ class app_models_TheLoai extends app_libs_DBConnection {
 
     // Cập nhật thể loại
     public function updateCategory($maTheLoai, $data) {
-        return $this->building_queryParam([
-            'value' => $data,
-            'where' => 'maTheLoai = ?',
-            'params' => [$maTheLoai]
-        ])->update();
+        $fieldValues = [];
+        $params = [':maTheLoai' => $maTheLoai];
+    
+        foreach ($data as $field => $value) {
+            $fieldValues[] = "$field = :$field";
+            $params[":$field"] = $value;
+        }
+    
+        // Tạo câu SQL UPDATE
+        $sql = "UPDATE " . $this->table_name . " SET " . implode(", ", $fieldValues) . " WHERE maTheLoai = :maTheLoai";
+    
+        // Thực thi câu lệnh SQL
+        return $this->query($sql, $params);
     }
-
+    
     // Xóa thể loại
     public function deleteCategory($maTheLoai) {
         return $this->building_queryParam([

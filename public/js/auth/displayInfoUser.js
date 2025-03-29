@@ -96,7 +96,7 @@ export async function updateInfoTopBar(promiseResponse) {
                         <i class="fa-solid fa-user-gear"></i>
                         Thông tin
                     </li>
-                    <li  onclick="showContentProfile('purchase-order')">
+                    <li class="topbar__history-order-btn">
                         <i class="fa-solid fa-cart-shopping"></i>
                         Đơn hàng
                     </li>
@@ -119,6 +119,10 @@ export async function updateInfoTopBar(promiseResponse) {
 
     document.querySelector('.topbar__info-btn').addEventListener('click', async () => {
         await showContentProfile('information');
+    });
+
+    document.querySelector(".topbar__history-order-btn").addEventListener('click', async () => {
+        await showOrderHistory();
     });
 
     logoutBtn.addEventListener('click', async function () {
@@ -170,6 +174,7 @@ function hideMainPage() {
     const menu = document.querySelector('.topbar__auth-list');
     const footer = document.querySelector('.footer-info');
     const showCart = document.querySelector('.show-cart');
+    const orderPage = document.querySelector('.order-history');
 
     if (!main.classList.contains('hide-item')) {
         main.classList.add('hide-item');
@@ -189,6 +194,10 @@ function hideMainPage() {
 
     if (!showCart.classList.contains('hide-item')) {
         showCart.classList.add('hide-item');
+    }
+
+    if (!orderPage.classList.contains('hide-item')) {
+        orderPage.classList.add('hide-item');
     }
 }
 

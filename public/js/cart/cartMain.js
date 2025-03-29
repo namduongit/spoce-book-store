@@ -170,6 +170,7 @@ async function showAllCart(type) {
     const productDetailMain = document.querySelector('.show-detail-product');
     const footerInfo = document.querySelector('.footer-info');
     const accountInfo = document.querySelector('.self-infomation');
+    const orderInfo = document.querySelector('.order-history');
 
     let localStorageProduct = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -255,6 +256,7 @@ async function showAllCart(type) {
     productDetailMain.classList.add('hide-item');
     footerInfo.classList.add('hide-item');
     accountInfo.classList.add('hide-item');
+    orderInfo.classList.add('hide-item');
     document.querySelector(".topbar__cart-detail-holder").classList.remove('show');
 
     document.querySelector('.show-cart__continue-buy-btn').addEventListener('click', function() {
@@ -291,6 +293,7 @@ async function checkOutBill() {
     const mainMain = document.querySelector('.main');
     const bodyMain = document.querySelector('.body');
     const productDetailMain = document.querySelector('.show-detail-product');
+    const orderPage = document.querySelector('.order-history');
 
     let HTMLCheckOut = ``;
     let totalPrice = 0;
@@ -599,6 +602,7 @@ async function checkOutBill() {
     cartMain.classList.add('hide-item');
     mainMain.classList.add('hide-item');
     bodyMain.classList.add('hide-item');
+    orderPage.classList.add('hide-item')
     productDetailMain.classList.add('hide-item');
     checkoutMain.classList.remove('hide-item');
     document.querySelector(".topbar__cart-detail-holder").classList.remove('show');

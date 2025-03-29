@@ -29,10 +29,10 @@ class app_models_DonHang extends app_libs_DBConnection
     // Cập nhật đơn hàng
     public function updateOrder($maDonHang, $data)
     {
+        $data['maDonHang'] = $maDonHang;
         return $this->building_queryParam([
             'value' => $data,
-            'where' => 'maDonHang = ?',
-            'params' => [$maDonHang]
+            'where' => 'maDonHang = :maDonHang'
         ])->update();
     }
 

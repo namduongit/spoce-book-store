@@ -43,9 +43,9 @@ export function addPublisherData() {
                   <div class="dialog__form-group full">
                     <label>Trạng thái</label>
                     <select id="add-publisher-status">
-                      <option value="" selected>Chọn Trạng thái</option>
-                      <option value="1">Hoạt động</option>
-                      <option value="0">Tạm dừng</option>
+                      <option selected value="ACTIVE">ACTIVE</option>
+                      <option value="INACTIVE">INACTIVE</option>
+                      <option value="SUSPENDED">SUSPENDED</option>
                     </select>
                   </div>
                 </div>
@@ -73,16 +73,42 @@ export function addPublisherData() {
     // Gán sự kiện cho nút "thêm" dialog
     document
       .getElementById("add-publisher-button")
-      .addEventListener("click", () => {
+      .addEventListener("click", async () => {
+        e.preventDefault();
         // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-        const id = document.getElementById("add-publisher-id");
-        const name = document.getElementById("add-publisher-name");
-        const status = document.getElementById("add-publisher-status");
-
-        // ... (Xử lý tiếp ở đây)
-        console.log(id.value);
-        console.log(name.value);
-        console.log(status.value);
+        const publisherName = document.getElementById("add-publisher-name").value;
+        const publisherStatus = document.getElementById("add-publisher-status").value;
+          console.log(publisherName, publisherStatus);
+        if(publisherName === ''){
+          alert("Hãy nhập tên đầy đủ");
+        }else{
+  
+          try {
+            const response = await fetch("api/publishers/create.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: new URLSearchParams({
+                publisherName: publisherName,
+                publisherStatus: publisherStatus,
+              }),
+            });
+    
+            const result = await response.json();
+            console.log("Server Response:", result);
+    
+            if (result.success) {
+              alert("thêm tác giả thành công!");
+            } else {
+              alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+            }
+          } catch (error) {
+            console.error("Lỗi fetch API:", error);
+            alert("Không thể kết nối đến server!");
+          }
+          addDialog.remove();
+        }
       });
 
     // Gán sự kiện cho nút "Đóng" dialog
