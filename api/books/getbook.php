@@ -46,6 +46,7 @@ $joins = [
 ];
 
 $id_or_bookName = isset($_GET['id_or_bookName']) ? trim($_GET['id_or_bookName']) : '';
+$bookId = $_GET['bookId'] ?? '';
 $statusBook = isset($_GET['statusBook']) ? trim($_GET['statusBook']) : '';
 $categoryBook = isset($_GET['categoryBook']) ? trim($_GET['categoryBook']) : '';
 // echo $status;
@@ -55,6 +56,11 @@ $params = [];
 if (!empty($id_or_bookName)) {
     $conditions[] = "(sach.tenSach LIKE :name or sach.maSach like :name)";
     $params[':name'] = "%$id_or_bookName%";  
+}
+
+if (!empty($bookId)) {
+    $conditions[] = 'sach.maSach = :maSach';
+    $params[':maSach'] = $bookId;
 }
 
 if (!empty($statusBook)) {
