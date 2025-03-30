@@ -21,7 +21,7 @@ class app_models_TacGia extends app_libs_DBConnection {
             'field' => $data
         ])->insert();
     }
-
+ 
     // Cập nhật thông tin tác giả
     public function updateAuthor($maTacGia, $data) {
         $fieldValues = [];
