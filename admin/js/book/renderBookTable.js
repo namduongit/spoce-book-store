@@ -91,7 +91,7 @@ export async function renderBookTable() {
           <td><img src="public/uploads/books/${book.image}" alt="" width="90%" height="80%"/></td>
           <td>${book.name}</td>
           <td>${book.genreName}</td>
-          <td>${book.numberOfPages}</td>
+          <td>${book.quantity}</td>
           <td>
               <span class="${book.status === "ACTIVE" ? "green" : "red"}">
                   ${book.status}

@@ -13,6 +13,7 @@ function returnJSONBook($filters) {
             "id" => $filter['maSach'] ?? '',
             "name" => $filter['tenSach'] ?? '',
             "numberOfPages" => $filter['soTrang'] ?? 0,
+            "quantity" => $filter['soLuong'] ?? 0,
             "size" => $filter['kichThuoc'] ?? '',
             "description" => $filter['moTa'] ?? '',
             "authorId" => $filter['maTacGia'] ?? '',

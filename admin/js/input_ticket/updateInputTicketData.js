@@ -5,25 +5,54 @@ import {
   defaultDateSelected,
 } from "../others.js";
 
-const data = [
-  {
-    bookId: "SP00001",
-    bookName: "Tên sách 1", // Thực tế phải truy vấn để lấy ra tiêu đề sách
-    priceBase: 200000,
-    priceInput: 350000,
-    quantityInput: 2,
-  },
-  {
-    bookId: "SP00005",
-    bookName: "Tên sách 5",
-    priceBase: 228000,
-    priceInput: 400000,
-    quantityInput: 10,
-  },
-];
+// const data = [
+//   {
+//     bookId: "SP00001",
+//     bookName: "Tên sách 1", // Thực tế phải truy vấn để lấy ra tiêu đề sách
+//     priceBase: 200000,
+//     priceInput: 350000,
+//     quantityInput: 2,
+//   },
+//   {
+//     bookId: "SP00005",
+//     bookName: "Tên sách 5",
+//     priceBase: 228000,
+//     priceInput: 400000,
+//     quantityInput: 10,
+//   },
+// ];
+
+function formatDateForInput(dateString) {
+  let date = new Date(dateString);
+  let year = date.getFullYear();
+  let month = (date.getMonth() + 1).toString().padStart(2, '0');
+  let day = date.getDate().toString().padStart(2, '0');
+
+  return `${year}-${month}-${day}`; // Định dạng chuẩn cho input date
+}
+
+export async function getAllInputTicketDetailByInputticketId(id){
+  let url = `api/input_ticket_detail/get.php?inputTicketId=${id}`;
+  console.log("Request URL:", url);
+    try {
+      let response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
+      }
+        let data = await response.json();
+        console.log("Dữ liệu nhận được:", data);
+        return data;
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu:", error);
+        alert("Lỗi khi lấy dữ liệu: " + error.message);
+        return [];
+      }
+}
+ 
+
 
 // Hàm cập nhật lại dữ liệu cho bảng Chi tiết phiếu nhập
-function renderInputTicketDetailTable() {
+function renderInputTicketDetailTable(data) {
   // Biến chứa đối tượng bảng Chi tiết phiếu nhập
   const bodyInInputTicketDetailTable = document.querySelector(
     ".dialog__form-group > table > tbody"
@@ -36,11 +65,11 @@ function renderInputTicketDetailTable() {
           <tr>
               <td>${data[i].bookId}</td>
               <td class="name">${data[i].bookName}</td>
-              <td>${vietnamMoneyFormat(data[i].priceBase)}</td>
-              <td>${vietnamMoneyFormat(data[i].priceInput)}</td>
-              <td>${data[i].quantityInput}</td>
+              <td>${vietnamMoneyFormat(data[i].basePrice)}</td>
+              <td>${vietnamMoneyFormat(data[i].sellingPrice)}</td>
+              <td>${data[i].quantity}</td>
               <td class="total">${vietnamMoneyFormat(
-                data[i].quantityInput * data[i].priceInput
+                data[i].quantity * data[i].sellingPrice
               )}</td>
               <td>
                 <i id="update-remove-trash-input_ticket" class="fa-solid fa-trash"
@@ -156,7 +185,7 @@ function updateInputTicketDetailTable() {
       });
 
       // Cập nhật lại giao diện hiển thị
-      renderInputTicketDetailTable();
+      // renderInputTicketDetailTable(data);
 
       // Xoá dialog
       updateDetailDialog.remove();
@@ -167,9 +196,8 @@ function updateInputTicketDetailTable() {
 }
 
 // Hàm thiết lập sự kiện hiện thêm một phiếu nhập
-export function updateInputTicketData(idInputTicketSelected) {
-  // Phải truy vấn từ CSDL thông qua idInputTicketSelected để lấy được dữ liệu của đối tượng hiện tại
-  // ...
+export async function updateInputTicketData(idInputTicketSelected) {
+  const AllDetail = await getAllInputTicketDetailByInputticketId(idInputTicketSelected);
 
   // Biến chứa đối tượng là nút "thêm"
   const updateButton = document.getElementById("update-button-input_ticket");
@@ -194,34 +222,34 @@ export function updateInputTicketData(idInputTicketSelected) {
             <div class="dialog__row">
               <div class="dialog__form-group input_ticket half">
                 <label>Mã phiếu nhập</label>
-                <input type="text" id="update-input_ticket-id" readonly />
+                <input type="text" id="update-input_ticket-id" value="${AllDetail[0].inputTicketId}" readonly />
               </div>
               <div class="dialog__form-group input_ticket half">
                 <label>Mã nhân viên</label>
-                <input type="text" id="update-input_ticket-customer" readonly />
+                <input type="text" id="update-input_ticket-customer"  value="${AllDetail[0].employeeUserName}"  readonly />
               </div>
               <div class="dialog__form-group input_ticket">
                 <label>Tổng thanh toán (VNĐ)</label>
-                <input type="text" id="update-input_ticket-cost" readonly />
+                <input type="text" id="update-input_ticket-cost"  value="${AllDetail[0].inputTicketId}"  readonly />
               </div>
               <div class="dialog__form-group input_ticket">
                 <label>Trạng thái</label>
-                <input type="text" id="update-input_ticket-status" readonly />
+                <input type="text" id="update-input_ticket-status"  value="${AllDetail[0].status}"  readonly />
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group input_ticket half">
                 <label>Ngày tạo phiếu</label>
-                <input type="date" id="update-input_ticket-date-create" />
+                <input type="date" id="update-input_ticket-date-create"  value="${formatDateForInput(AllDetail[0].dateCreate)}"  />
               </div>
               <div class="dialog__form-group input_ticket half">
                 <label>Ngày hợp đồng</label>
-                <input type="date" id="update-input_ticket-date-contract" />
+                <input type="date" id="update-input_ticket-date-contract" value="${formatDateForInput(AllDetail[0].dateCreate)}"  />
               </div>
               <div class="dialog__form-group input_ticket full">
                 <label>Nhà cung cấp</label>
                 <select id="update-author-status">
-                  <option value="" selected>Chọn Nhà cung cấp</option>
+                  <option value="" selected>${AllDetail[0].suplierName}</option>
                   <option value="1">NCC00001 - Nhà cung cấp 01</option>
                   <option value="0">NCC00002 - Nhà cung cấp 02</option>
                 </select>
@@ -244,6 +272,7 @@ export function updateInputTicketData(idInputTicketSelected) {
                     </tr>
                   </thead>
                   <tbody>
+
                   </tbody>
                 </table>
               </div>
@@ -286,7 +315,7 @@ export function updateInputTicketData(idInputTicketSelected) {
     updateInputTicketDetailTable();
   });
   // -
-  renderInputTicketDetailTable();
+  renderInputTicketDetailTable(AllDetail[0].allDetail);
 
   // Gán sự kiện cho nút "Đóng" dialog
   document
