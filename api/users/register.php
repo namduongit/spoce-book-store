@@ -1,6 +1,17 @@
 <?php
 require_once __DIR__ . '../../../app/config.php';
 
+if (!function_exists('http_response_code')) {
+    function http_response_code($code = null) {
+        static $http_code = 200;
+        if ($code !== null) {
+            $http_code = $code;
+            header('X-PHP-Response-Code: ' . $http_code, true, $http_code);
+        }
+        return $http_code;
+    }
+}
+
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");

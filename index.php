@@ -2,6 +2,15 @@
 // include_once './api/authors/get.php';
 // include_once './api/users/checkLogin.php';
 // die();
+
+// include_once './app/models/DiaChiNguoiDung.php';
+// include_once './app/config.php';
+// $address_model = new app_models_DiaChiNguoiDung();
+// echo $address_model->open_connect() != null ? "Thành công" : "Thất bại";
+// die();
+
+// include 'api/users/insertAddress.php';
+// die();
 ?>
 
 
@@ -17,6 +26,7 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <!-- Nhúng các thư viện Css -->
     <link rel="stylesheet" href="public/css/reset.css">
@@ -202,7 +212,7 @@
 
                             $author_model = new app_models_TacGia();
                             $authors = $author_model->getAllAuthors();
-                            $total_authors = count($authors);
+                            $total_authors = is_array($authors) ? count($authors) : 0;
                             $limit = 5;
 
                             foreach ($authors as $index => $author) {
@@ -375,10 +385,6 @@
                             <option value="25">25 sản phẩm</option>
                         </select>
                     </div>
-                    
-
-
-
 
                     <!-- <div class="book-category__button d-flex">
                         <div class="btn sort-btn" onclick="filterBookList()">Lọc sách</div>
@@ -451,6 +457,9 @@
     </div>
 
     <div class="checkout"></div>
+
+
+
 
     <div class="footer-info hide-item">
         <div class="footer-info__container">
@@ -528,10 +537,11 @@
     <!-- Hiển thị bảng nhập thông tin đăng nhập hoặc đăng xuất -->
     <div class="auth"></div>
 
-    <!-- Ghi đè các thông tin -->
-    <div class="confirmation-dialog">
-    </div>
+    <!-- Hiển thị hỏi Yes/No -->
+    <div class="confirmation-dialog"></div>
 
+
+    <!-- Hiển thị thông tin thêm địa chỉ mới -->
 
     <!-- Spinner chờ trong khi lấy dữ liệu từ Server -->
     <div class="loading-overlay" id="loading-overlay">

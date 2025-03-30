@@ -58,9 +58,9 @@ export function addSuppliesData() {
             <div class="dialog__form-group">
               <label>Trạng thái</label>
               <select id="add-supplies-status">
-                <option value="" selected>Chọn Trạng thái</option>
-                <option value="1">Hoạt động</option>
-                <option value="0">Tạm dừng</option>
+                  <option selected value="ACTIVE">ACTIVE</option>
+                  <option value="INACTIVE">INACTIVE</option>
+                  <option value="SUSPENDED">SUSPENDED</option>
               </select>
             </div>
             <div class="dialog__form-group"></div>
@@ -89,22 +89,49 @@ export function addSuppliesData() {
     // Gán sự kiện cho nút "Thêm" dialog
     document
       .getElementById("add-supplies-button")
-      .addEventListener("click", () => {
+      .addEventListener("click", async (e) => {
+        e.preventDefault();
         // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-        const id = document.getElementById("add-supplies-id");
-        const name = document.getElementById("add-supplies-name");
-        const phone = document.getElementById("add-supplies-phone");
-        const email = document.getElementById("add-supplies-email");
-        const address = document.getElementById("add-supplies-address");
-        const status = document.getElementById("add-supplies-status");
+        const supplierName = document.getElementById("add-supplies-name").value.trim();
+        const supplierPhone = document.getElementById("add-supplies-phone").value.trim();
+        const supplierEmail = document.getElementById("add-supplies-email").value.trim();
+        const supplierAddress = document.getElementById("add-supplies-address").value.trim();
+        const supplierStatus = document.getElementById("add-supplies-status").value.trim();
 
-        // ... (Xử lý tiếp ở đây)
-        console.log(id.value);
-        console.log(name.value);
-        console.log(phone.value);
-        console.log(email.value);
-        console.log(address.value);
-        console.log(status.value);
+          // console.log(suppliername, supplierphone, supplieremail, supplieraddress, supplierstatus);
+          if(supplierName === '' || supplierName == '' || supplierPhone == '' || supplierEmail == '' || supplierAddress == ''|| supplierStatus == '' ){
+          alert("Hãy nhập tên đầy đủ");
+        }else{
+  
+          try {
+            const response = await fetch("api/supplies/create.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: new URLSearchParams({
+              supplierName: supplierName,
+              supplierPhone: supplierPhone,
+              supplierEmail: supplierEmail,
+              supplierAddress: supplierAddress,
+              supplierStatus: supplierStatus,
+              }),
+            });
+    
+            const result = await response.json();
+            console.log("Server Response:", result);
+    
+            if (result.success) {
+              alert("thêm nhà cung cấp thành công!");
+            } else {
+              alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+            }
+          } catch (error) {
+            console.error("Lỗi fetch API:", error);
+            alert("Không thể kết nối đến server!");
+          }
+          addDialog.remove();
+        }
       });
 
     // Gán sự kiện cho nút "Đóng" dialog

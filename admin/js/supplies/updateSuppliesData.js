@@ -1,7 +1,7 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 
 // Hàm thiết lập sự kiện Sửa một nhà cung cấp cho bảng
-export function updateSuppliesData(idSuppliesSelected) {
+export function updateSuppliesData(supplier) {
   // Phải truy vấn từ CSDL thông qua idSuppliesSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
 
@@ -28,37 +28,38 @@ export function updateSuppliesData(idSuppliesSelected) {
               <div class="dialog__row">
                   <div class="dialog__form-group">
                       <label>Mã nhà cung cấp</label>
-                      <input type="text" id="add-supplies-id" readonly />
+                      <input type="text" id="update-supplies-id" value="${supplier.id}"  readonly />
                   </div>
                   <div class="dialog__form-group">
                       <label>Tên nhà cung cấp</label>
-                      <input type="text" id="add-supplies-name" placeholder="Nhập Tên nhà cung cấp" autofocus/>
+                      <input type="text" id="update-supplies-name" placeholder="Nhập Tên nhà cung cấp" value="${supplier.name}" autofocus/>
                   </div>
               </div>
               <div class="dialog__row">
                   <div class="dialog__form-group">
                       <label>Số điện thoại</label>
-                      <input type="text" id="add-supplies-phone" placeholder="Nhập Số điện thoại" />
+                      <input type="text" id="update-supplies-phone" placeholder="Nhập Số điện thoại" value="${supplier.phone}" />
                   </div>
                   <div class="dialog__form-group">
                       <label>Email</label>
-                      <input type="text" id="add-supplies-email" placeholder="Nhập Email"/>
+                      <input type="text" id="update-supplies-email" placeholder="Nhập Email" value="${supplier.email}"/>
                   </div>
               </div>
               <div class="dialog__row">
                   <div class="dialog__form-group full">
                       <label>Địa chỉ</label>
-                      <input type="text" id="add-supplies-address" placeholder="Nhập Địa chỉ" />
+                      <input type="text" id="update-supplies-address" placeholder="Nhập Địa chỉ" value="${supplier.address}" />
                       <button>Chọn địa chỉ</button>
                   </div>
               </div>
               <div class="dialog__row">
                   <div class="dialog__form-group">
                       <label>Trạng thái</label>
-                      <select id="add-supplies-status" disabled>
-                      <option value="" selected>Chọn Trạng thái</option>
-                      <option value="1">Hoạt động</option>
-                      <option value="0">Tạm dừng</option>
+                      <select id="update-supplies-status" disabled>
+                        <option selected value="${supplier.status}">${supplier.status}</option>
+                        <option value="ACTIVE">ACTIVE</option>
+                        <option value="INACTIVE">INACTIVE</option>
+                        <option value="SUSPENDED">SUSPENDED</option>
                       </select>
                   </div>
                   <div class="dialog__form-group"></div>
@@ -87,25 +88,53 @@ export function updateSuppliesData(idSuppliesSelected) {
   // Gán sự kiện cho nút "Sửa" dialog
   document
     .getElementById("update-supplies-button")
-    .addEventListener("click", () => {
+    .addEventListener("click", async (e) => {
+      e.preventDefault();
       // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-      const fullname = document.getElementById("update-supplies-fullname");
-      const phone = document.getElementById("update-supplies-phone");
-      const email = document.getElementById("update-supplies-email");
-      const address = document.getElementById("update-supplies-address");
-      const password = document.getElementById("update-supplies-password");
-      const privilege = document.getElementById("update-supplies-privilege");
-      // - Chi tiết quyền
+      const supplierId = document.getElementById("update-supplies-id").value.trim();
+      const suppliername = document.getElementById("update-supplies-name").value.trim();
+      const supplierphone = document.getElementById("update-supplies-phone").value.trim();
+      const supplieremail = document.getElementById("update-supplies-email").value.trim();
+      const supplieraddress = document.getElementById("update-supplies-address").value.trim();
+      const supplierStatus = document.getElementById("update-supplies-status").value.trim();
+     
 
-      // ... (Xử lý tiếp ở đây)
-      console.log(fullname.value);
-      console.log(phone.value);
-      console.log(email.value);
-      console.log(address.value);
-      console.log(password.value);
-      console.log(phone.value);
-      console.log(email.value);
-      console.log(privilege.value);
+
+      console.log(supplierId, suppliername, supplierphone, supplieremail, supplieraddress, supplierStatus);
+      if(suppliername === '' || suppliername == '' || supplierphone == '' || supplieremail == '' || supplieraddress == ''|| supplierStatus == '' ){
+        alert("Hãy nhập đầy đủ thông tin");
+      }else{
+
+        try {
+          const response = await fetch("api/supplies/update.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              supplierId: supplierId,
+              supplierName: suppliername,
+              supplierPhone: supplierphone,
+              supplierEmail: supplieremail,
+              supplierAddress: supplieraddress,
+              supplierStatus: supplierStatus,
+            }),
+          });
+  
+          const result = await response.json();
+          console.log("Server Response:", result);
+  
+          if (result.success) {
+            alert("Cập nhật nhà cung cấp thành công!");
+          } else {
+            alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+          }
+        } catch (error) {
+          console.error("Lỗi fetch API:", error);
+          alert("Không thể kết nối đến server!");
+        }
+        updateDialog.remove();
+      }
     });
 
   // Gán sự kiện cho nút "Đóng" dialog

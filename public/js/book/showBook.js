@@ -22,8 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const pageSizeSelect = document.getElementById("page-show-by");
   const minPrice = formatNumber(document.getElementById('min-price').innerText);
   const maxPrice = formatNumber(document.getElementById('max-price').innerText);
-  console.log(minPrice)
-  console.log(maxPrice)
 
   // Hàm lấy danh sách sách từ API
   async function fetchBooks() {
@@ -70,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!response.ok) throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
       showLoading();
       let data = await response.json();
-      console.log("Dữ liệu API nhận được:", data);
+      // console.log("Dữ liệu API nhận được:", data);
       hideLoading();
       updateBookToMain(data.books);
       updatePagination(data.totalBooks);

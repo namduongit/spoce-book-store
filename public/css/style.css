@@ -2017,6 +2017,85 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   padding-left: 0.3em;
 }
 
+
+/* Phần Nam Dương sửa cho Luân chỗ Địa chỉ */
+.left-container__warpper .left-container__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+.left-container__warpper
+.left-container__content-item {
+  border-bottom: 1px solid rgba(0, 0, 0, .09);
+  margin-top: 1rem;
+}
+
+.left-container__warpper .left-container__header
+.left-container__title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.left-container__warpper .left-container__header
+.left-container__button {
+  display: flex;
+  width: fit-content;
+  padding: 0.5rem 1.5rem;
+  background-color: var(--topbar-color);
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.left-container__warpper .left-container__header
+.left-container__button:hover {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  transition: all 0.3s ease;
+}
+
+.left-container__content-item
+.left-container__action {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  cursor: pointer;
+}
+
+.left-container__content-item
+.left-container__action 
+.left-container__button-update {
+  color: #08f;
+  margin-right: 2.5rem;
+  cursor: pointer;
+}
+
+.left-container__content-item
+.left-container__action 
+.left-container__button-delete {
+  background-color: #ee4d2d;
+  color: white;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.left-container__content-item
+.left-container__action 
+.left-container__button-delete:hover {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  transition: all 0.3s ease;
+}
+
+.left-container__button-backaddress {
+  margin-bottom: 1.5rem;
+  color: #08f;
+  padding: 0.45em;
+  cursor: pointer;
+}
+
 /* phân trang */
 .pagination {
   display: flex;
@@ -2175,6 +2254,7 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   padding: 2rem 2.5rem;
 }
 
+
 .right-container {
   width: 75%;
   background-color: white;
@@ -2186,12 +2266,12 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   gap: 3rem;
 }
 
-.right-container > .left-content {
-  width: 50%;
+.right-container .right-container__warpper {
+  width: 30%;
 }
 
-.right-container > .right-content {
-  width: 50%;
+.right-container .left-container__warpper {
+  width: 70%;
 }
 
 .right-container > .right-content > p {
@@ -2214,6 +2294,11 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 .right-container > .checkout__input-field:nth-child(2) label {
   top: 1.75rem;
   font-size: 1.3rem;
+}
+
+.right-container ul {
+  list-style-type: disc;
+  padding: 0 1.6rem;
 }
 
 .left-container ul {
