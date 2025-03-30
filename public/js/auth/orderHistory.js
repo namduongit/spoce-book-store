@@ -148,6 +148,7 @@ export async function showOrderHistory() {
                         type: data.success === true ? 'success' : 'warning',
                         duration: 3000
                     });
+                    showOrderHistory();
                 })
                 .catch(error => {
                     hideLoading();

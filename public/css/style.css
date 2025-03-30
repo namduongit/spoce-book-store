@@ -2420,7 +2420,7 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   font-weight: 500;
   border-radius: 7px;
   transition: all 0.15s ease;
-  margin-right: 1rem;
+
 }
 
 .order-history__detail-btn:hover {
@@ -2435,6 +2435,7 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   color: white;
   font-weight: 500;
   border-radius: 7px;
+  margin-left: 1rem;
   transition: all 0.15s ease;
 }
 
