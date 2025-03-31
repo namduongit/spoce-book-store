@@ -11,6 +11,7 @@ window.onload = async function() {
     const currentParams = new URLSearchParams(window.location.search);
     updateQuantityCardHolder();
     showLoading();
+    // Điều hướng xem giỏ hàng hoặc trang thanh toán
     if (currentParams.has('page-action')) {
         if (currentParams.get('page-action') === 'check-out') {
             checkOutBill();
@@ -22,6 +23,7 @@ window.onload = async function() {
     }
     hideLoading();
 
+    //  Hiển thị lại cái card holder (Xem giỏ hàng Mini)
     if (currentParams.has('cart-holder') && currentParams.get('cart-holder') === 'true') {
         showLoading();
         await viewCart('Recursive');
@@ -818,7 +820,7 @@ async function checkOutBill() {
         }
 
 
-        
+
         
 
         console.log('Địa chỉ nhận hàng: ', pickUpAddress);
