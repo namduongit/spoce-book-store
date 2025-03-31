@@ -87,9 +87,35 @@ class app_models_PhieuGiamGia extends app_libs_DBConnection
     // Thêm phiếu giảm giá mới
     public function insertDiscount($data)
     {
-        return $this->building_queryParam([
-            'field' => $data
-        ])->insert();
+        // Kiểm tra dữ liệu đầu vào
+        if (!is_array($data) || empty($data)) {
+            throw new Exception('Dữ liệu không hợp lệ');
+        }
+
+        // Kiểm tra các trường bắt buộc
+        $requiredFields = ['tenPGG', 'type', 'toiThieu', 'toiDa', 'ngayBatDau', 'ngayKetThuc', 'trangThai'];
+        foreach ($requiredFields as $field) {
+            if (!isset($data[$field]) || $data[$field] === '') {
+                throw new Exception("Thiếu trường dữ liệu: $field");
+            }
+        }
+
+        try {
+            return $this->building_queryParam([
+                'field' => [
+                    'tenPGG' => $data['tenPGG'],
+                    'type' => $data['type'],
+                    'phanTram' => $data['phanTram'],
+                    'toiThieu' => $data['toiThieu'],
+                    'toiDa' => $data['toiDa'],
+                    'ngayBatDau' => $data['ngayBatDau'],
+                    'ngayKetThuc' => $data['ngayKetThuc'],
+                    'trangThai' => $data['trangThai']
+                ]
+            ])->insert();
+        } catch (Exception $e) {
+            throw new Exception('Lỗi khi thêm phiếu giảm giá: ' . $e->getMessage());
+        }
     }
     // Cập nhật thông tin phiếu giảm giá
     public function updateDiscount($maPhieuGiamGia, $data)
