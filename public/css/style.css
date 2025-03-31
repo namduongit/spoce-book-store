@@ -2653,6 +2653,37 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   font-weight: 600;
 }
 
+.order-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+
+.order-history__status-select-container {
+  display: flex;
+  align-items: start;
+  gap: 5rem;
+  margin-bottom: 2rem;
+}
+
+.order-history__status-selection {
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.order-history__status-selection:hover {
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid black;
+}
+
+.status-selection-active {
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid black;
+  font-weight: 600
+} 
+
 
 
 
