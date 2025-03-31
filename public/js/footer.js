@@ -236,7 +236,7 @@ function showFooterInfo(info) {
         <img src="public/images/howto3.png" alt="howto3">
         <p>o  Khách hàng nhấn nút "Thanh Toán" để thực hiện bước kế tiếp.</p>
         <p>o  Nếu khách hàng chưa đăng nhập hệ thống Spoce sẽ hiện trang yêu cầu đăng nhập.</p>
-        <p>o  Nếu khách hàng chưa có tài khoản trên hệ thống Vinabook, khách hàng có thể đăng ký tài khoản trên hệ thống.</p>
+        <p>o  Nếu khách hàng chưa có tài khoản trên hệ thống Spoce Book Store, khách hàng có thể đăng ký tài khoản trên hệ thống.</p>
         <h1>3.  Cung cấp thông tin giao hàng và lựa chọn dịch vụ kèm theo:</h1>
         <p>o  Khách hàng điền địa chỉ giao hàng đầy đủ.</p>
         <img src="public/images/howto4.png" alt="howto4">
