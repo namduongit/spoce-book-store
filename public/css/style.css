@@ -1589,6 +1589,28 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   box-shadow: 0 0 0 2px #3498db;
 }
 
+.checkout__address-btn-child {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-right: 1rem;
+  border-bottom: 2px solid transparent;
+  transition: border-bottom 0.3s ease;
+}
+
+.checkout__address-btn-child.active {
+  border-bottom: 2px solid var(--topbar-color);
+  border-left: 2px solid var(--topbar-color);
+  font-weight: bold;
+  transition: all 0.3s all;
+}
+
+.checkout__address-field-one .checkout__address-btn {
+  display: flex;
+  width: fit-content;
+  padding: 0.45em;
+}
+
+
 .checkout__address-field-two {
   width: 100%;
   display: flex;
@@ -1718,7 +1740,7 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   background-color: #fff;
   box-shadow: 0 0 0 1px #d9d9d9;
   border-radius: 4px;
-  min-height: 230px;
+  min-height: fit-content;
   padding: 1.5em;
   display: flex;
   gap: 10px;
@@ -1785,10 +1807,9 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
 .checkout__qrcode-text {
-  text-align: center;
+  text-align: left;
   white-space: pre-line;
   padding: 0.45em;
-  border-bottom: 1px solid #aaa;
 }
 
 .checkout__payment-method-content {
@@ -1821,10 +1842,14 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 
 .checkout__qrcode-method-holder {
   display: none;
+  width: 100%;
 }
 
 .checkout__qrcode-method-holder.show {
   display: block;
+}
+.checkout__qrcode-method-holde-wrapper {
+  display: flex;
 }
 
 .checkout__cart-table tr > td {
@@ -2249,9 +2274,8 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   background-color: white;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   border-radius: 12px;
-  min-height: 150px;
-  max-height: 150px;
   padding: 2rem 2.5rem;
+  height: fit-content;
 }
 
 

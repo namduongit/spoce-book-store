@@ -1,8 +1,10 @@
 import { formatMoney, getNameAuthorByID, getNameCategoryByID, getNameCoverByID, getNamePublisherByID } from "./getDataBook.js";
 import { toast } from '../toast.js'
+import { getCurrentUser } from "../auth/displayInfoUser.js";
+import { showConfirmationDialog } from '../question.js';
 
 // Lưu dữ liệu vào LocalStorage
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", async function() {
     const currentParams = new URLSearchParams(window.location.search);
     const url = new URL(window.location.href);
 
@@ -141,8 +143,42 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
     
+    const currentUser = await getCurrentUser();
+    //  Kiểm tra có giỏ hàng tồn dư không
+    if (localStorage.getItem('cart') && currentUser !== null) {
+        const productList = JSON.parse(localStorage.getItem('cart'));
+        console.log(productList);
+        
+        const resultAnswer = await showConfirmationDialog('Chúng tôi thấy giỏ hàng có sản phẩm lúc bạn chưa đăng nhập. Bạn có muốn thêm vào giỏ chính không ?');
+        if (resultAnswer == true) {
+            productList.forEach(product => {
+                let formData = new URLSearchParams();
+                formData.append('maNguoiDung', currentUser['user'].id);
+                formData.append('maSach', product.id);
+                formData.append('soLuong', product.quantity);
+                fetch('api/carts/add.php', {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: formData.toString()
+                })
+                .then(response => response.json())
+                .then(data => {
+                    toast({
+                        title: 'Thông báo',
+                        message: data.message,
+                        type: data.success ? 'success' : 'warning',
+                        duration: 3000
+                    });
+                })
+            });
+            localStorage.removeItem('cart');
+        } else {
+            localStorage.removeItem('cart');
+        }
+    }
 
-
+    updateQuantityCardHolder();
+    viewCart('Recursive');
 
     // Hiển thị sách lên màn hình
     window.addEventListener("load", function() {
@@ -170,7 +206,7 @@ async function showDetailProduct(product_id) {
     }
 
     let productDetail = await fetchData(URL);
-    console.log(productDetail)
+    console.log('Đang hiển thị sản phẩm', productDetail);
 
     if (!productDetail || productDetail.length === 0) {
         document.querySelector('.show-detail-product').innerHTML = `<p>Không tìm thấy sản phẩm.</p>`;
@@ -252,8 +288,7 @@ async function showDetailProduct(product_id) {
     document.querySelector('.show-detail-product').innerHTML = detail_html;
     document.querySelector('.show-detail-product').style.display = 'block';
 
-
-    // Ấn tăng số
+    //  Xử lý thêm/ Mua hàng
     document.querySelector('.quantity__button-plus').addEventListener('click', function() {
         let valueQuantity = parseInt(document.querySelector('.quantity__button-number').value);
         if (valueQuantity === 99) {
@@ -267,7 +302,6 @@ async function showDetailProduct(product_id) {
         } else document.querySelector('.quantity__button-number').value = valueQuantity + 1;
     });
 
-    // Ấn giảm số
     document.querySelector('.quantity__button-min').addEventListener('click', function() {
         let valueQuantity = parseInt(document.querySelector('.quantity__button-number').value);
         if (valueQuantity === 1) {
@@ -281,25 +315,53 @@ async function showDetailProduct(product_id) {
         } else document.querySelector('.quantity__button-number').value = valueQuantity - 1;
     });
 
-    // Thêm vào giỏ hàng
-    document.querySelector('.show-detail-product__btn--add-to-cart').addEventListener('click', function() {
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    document.querySelector('.show-detail-product__btn--add-to-cart').addEventListener('click',async function() {
         let valueQuantity = parseInt(document.querySelector('.quantity__button-number').value);
-        let product = {
-            id: `${product_id}`,
-            quantity: valueQuantity
-        }
 
-        let existingProduct = cart.find(item => item.id === product.id);
+        let currentUser = await getCurrentUser();
+        if (currentUser !== null) { 
+            const currentUserId = currentUser['user'].id;
+            let formData = new URLSearchParams();
+            formData.append('maNguoiDung', currentUserId);
+            formData.append('maSach', product_id);
+            formData.append('soLuong', valueQuantity);
 
-        if (existingProduct) {
-            existingProduct.quantity += valueQuantity;
+            fetch('api/carts/add.php', {
+                method: 'POST',
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: formData.toString()
+            })
+            .then(response => response.json())
+            .then(data => {
+                toast({
+                    title: 'Thông báo',
+                    message: data.message,
+                    type: data.success ? 'success' : 'warning',
+                    duration: 3000
+                });
+            })
+            .catch(() => {
+                console.log('Có lỗi trong khi thêm sản phẩm vào giỏ');
+            })
+
         } else {
-            cart.push(product);
+
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let valueQuantity = parseInt(document.querySelector('.quantity__button-number').value);
+            let product = {
+                id: `${product_id}`,
+                quantity: valueQuantity
+            }
+            let existingProduct = cart.find(item => item.id === product.id);
+
+            if (existingProduct) {
+                existingProduct.quantity += valueQuantity;
+            } else {
+                cart.push(product);
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
         }
-
-        localStorage.setItem("cart", JSON.stringify(cart));
-
         toast({
             title: 'Thông báo',
             message: `Đã thêm ${valueQuantity} sản phẩm ${productDetail['name']} vào giỏ hàng !`,
@@ -310,6 +372,7 @@ async function showDetailProduct(product_id) {
         viewCart('Recursive');
     });
 
+   
     const urlSource = new URLSearchParams(window.location.search);
     urlSource.set("bookID", productDetail["id"]);
     urlSource.set("dislayBookName", productDetail["name"]);
