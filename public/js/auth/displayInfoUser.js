@@ -3,7 +3,8 @@ import { showConfirmationDialog } from "../question.js";
 import { Validation } from '../validation.js';
 import { updateAddressSelect } from '../../../api/address/updateAddressSelect.js';
 import { autoSelectAddressByName } from "../../../api/address/updateAddressSelect.js";
-import { getRoleById } from "../common.js";
+import { deleteCookie, getRoleById } from "../common.js";
+import { getCookie } from "../common.js";
 
 export async function fetchData(URL) {
     try {
@@ -24,6 +25,41 @@ export async function getUserByID(userID) {
     hideLoading();
     let result = response[0];
     return result;
+}
+
+export async function isLogined() {
+    if (!getCookie('isLogin')) return false;
+    if (getCookie('isLogined') != null) return false;
+    try {
+        showLoading();
+        const response = await fetch('/api/users/checkLogin.php', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            if (response.status === 401) {
+                console.log('Chưa đăng nhập hoặc phiên đã hết hạn');
+                return false;
+            }
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        hideLoading();
+        return data;
+    } catch (error) {
+        console.log('Lỗi khi kiểm tra đăng nhập:');
+        return false;
+    }
+}
+
+export async function getCurrentUser() {
+    const dataPromise = await isLogined();
+    if (dataPromise !== false) {
+        return dataPromise;
+    } return null;
 }
 
 
@@ -47,42 +83,10 @@ export async function getAddressByID(addressID) {
     return response;
 }
 
-
-export async function isLogined() {
-    if (!localStorage.getItem('isLogin')) return false;
-    try {
-        showLoading();
-        const response = await fetch('/api/users/checkLogin.php', {
-            method: 'GET',
-            credentials: 'include', // Gửi cookie session cùng request
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        if (!response.ok) {
-            if (response.status === 401) {
-                console.log('Chưa đăng nhập hoặc phiên đã hết hạn');
-                return false;
-            }
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        hideLoading();
-        return data;
-    } catch (error) {
-        console.log('Lỗi khi kiểm tra đăng nhập:');
-        return false;
-    }
-}
-
-
 export async function updateInfoTopBar(promiseResponse) {
     showLoading();
     const currentUser = await getUserByID(promiseResponse.user['id']);
     hideLoading();
-    // console.log(currentUser);
-
-    // Cập nhật thanh công cụ của người dùng
     const authTopBarContent = document.querySelector('.topbar .topbar__auth');
     authTopBarContent.innerHTML = `
                 <div class="topbar__auth-btn topbar__auth-btn--logined">
@@ -138,7 +142,8 @@ export async function updateInfoTopBar(promiseResponse) {
             const data = await response.json();
             hideLoading();
             if (data['success']) {
-                localStorage.removeItem('isLogin');
+                // Xóa Session cũ và login cũ
+                deleteCookie('isLogin');
                 toast({
                     title: 'Thông báo',
                     message: 'Đăng xuất thành công !',
@@ -157,7 +162,6 @@ export async function updateInfoTopBar(promiseResponse) {
                 `;
 
                 setTimeout(() => {
-                    resetToOriginParam();
                     window.location.href = '/';
                 }, 1000);
             }
@@ -167,7 +171,7 @@ export async function updateInfoTopBar(promiseResponse) {
     });
 }
 
-function hideMainPage() {
+export function hideMainPage() {
     const main = document.querySelector('.main');
     const body = document.querySelector('.body');
     const checkout = document.querySelector('.checkout');
@@ -219,25 +223,19 @@ async function showContentProfile(info) {
             return;
         }
     }
-
     if (responseAPI !== false) {
         user = await getUserByID(responseAPI.user['id']);
     }
-
     hideMainPage();
     if (infoPage.classList.contains('hide-item')) {
         infoPage.classList.remove('hide-item');
     }
-
     if (info === 'information') {
         url.set("account", "information");
         updateInfoAccountSection(user);
     } else if (info === 'address') {
         url.set("account", "address");
         updateAddressAccountSection(user);
-    } else if (info === 'payment') {
-        url.set("account", "payment");
-        updatePaymentAccountSection(user);
     }
     hideLoading();
     history.pushState(null, '', window.location.pathname + '?' + url.toString());
@@ -449,7 +447,7 @@ async function updateInfoAccountSection(user) {
     });
 }
 
-async function showAddressInCurrentUser(userId) {
+export async function showAddressInCurrentUser(userId) {
     try {
         let response = await fetch('../../../api/address/getAddress.php', {
             method: 'POST',
@@ -458,9 +456,7 @@ async function showAddressInCurrentUser(userId) {
             },
             body: `maNguoiDung=${userId}`
         });
-
         let data = await response.json();
-
         if (data.success) {
             return data;
         } else {
@@ -473,6 +469,7 @@ async function showAddressInCurrentUser(userId) {
     }
 }
 
+
 async function goBackShowAddress(user) {
     const container = document.querySelector('.right-container');
     showLoading();
@@ -483,7 +480,6 @@ async function goBackShowAddress(user) {
     if (currentAddress) {
         const datas = currentAddress.data;
         datas.forEach(element => {
-            console.log(element)
             addressContent += `
                 <div class="left-container__content-item">
                     <div class="left-container__info">
@@ -575,10 +571,7 @@ async function goBackShowAddress(user) {
 
 
         updateAddressSelect("city", "district", "ward");
-
-
         const confirmButton = document.querySelector('.account-info-btn__confirm-address');
-
         confirmButton.addEventListener("click", function () {
             const addressNumberValue = document.getElementById('address-number').value.trim();
 
@@ -689,10 +682,8 @@ async function deleteAddressById(object, userID) {
 
 
 async function updateAddressById(object, userID) {
-    // console.log(object.dataset.id)
     const currentAddress = await getAddressByID(object.dataset.id);
     const currentUser = await getUserByID(userID);
-    console.log(currentAddress);
     const leftContainer = document.querySelector('.right-container').querySelector('.left-container__warpper');
     leftContainer.innerHTML = `
         <div class="left-container__button-backaddress" onclick='goBackShowAddress(${JSON.stringify(currentUser)})'>
@@ -796,7 +787,6 @@ async function updateAddressById(object, userID) {
 }
 
 function updateAddressAccountSection(user) {
-
     console.log(user);
     if (typeof user === "string") {
         user = JSON.parse(user);
@@ -804,71 +794,6 @@ function updateAddressAccountSection(user) {
     goBackShowAddress(user);
 }
 
-
-function updatePaymentAccountSection(user) {
-    const container = document.querySelector('.right-container');
-    container.innerHTML = `
-    <div class="left-container__warpper">
-        <div class="checkout__input-field">
-            <input type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" maxlength="19" id="account-card-number-field" name="card-number" placeholder="Số thẻ">
-            <label>Số thẻ (16 số)</label>
-        </div>
-
-        <div class="checkout__input-field">
-            <input type="tel" inputmode="numeric" maxlength="5" id="account-card-expiration-field" name="card-expiration" placeholder="Ngày hết hạn">
-            <label>Ngày hết hạn (MM/YY)</label>
-        </div>
-
-        <div class="checkout__input-field">
-            <input type="tel" inputmode="numeric" pattern="[0-9]{3}" maxlength="3" id="account-card-cvv-field" name="card-cvv" placeholder="Mã bảo mật">
-            <label>Mã bảo mật (3 số)</label>
-        </div>
-
-        <button class="account-info-btn account-info-btn--blue">Lưu</button>
-        <button class="account-info-btn account-info-btn--black">Đặt lại</button>
-    </div>
-
-    <div class="right-content__warpper">
-        <p>Chúng tôi chấp nhận các loại thẻ Visa, Mastercard, và American Express.</p>
-        <p>Để quá trình thanh toán bằng thẻ tín dụng được thực hiện thành công, Quý khách vui lòng:</p>
-        <br>
-        <ul>
-            <li>Cung cấp thông tin thẻ tín dụng chính xác và đầy đủ.</li><br>
-            <li>Đảm bảo số dư trong tài khoản thẻ đủ để thanh toán.</li><br>
-            <li>Xác nhận giao dịch theo yêu cầu của ngân hàng (nếu có).</li>
-        </ul>
-    </div>
-    `;
-
-    document.querySelector('#account-card-number-field').addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, "");
-        let newValue = value.replace(/(\d{4})/g, "$1 ").trim();
-        e.target.value = newValue;
-    });
-
-    document.querySelector('#account-card-cvv-field').addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, "");
-        e.target.value = value;
-    });
-
-    document.querySelector('#account-card-expiration-field').addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, "");
-
-        if (value.length > 0 && !/^0|1/g.test(value)) {
-            value = value.substring(1);
-        }
-
-        if (/^1[3-9]/g.test(value)) {
-            value = value.substring(0, 1);
-        }
-
-        if (value.length > 2) {
-            value = value.substring(0, 2) + "/" + value.substring(2);
-        }
-
-        e.target.value = value;
-    });
-}
 
 document.querySelector('.information').addEventListener('click', function () {
     showContentProfile('information');
@@ -878,9 +803,6 @@ document.querySelector('.address').addEventListener('click', function () {
     showContentProfile('address');
 });
 
-document.querySelector('.payment').addEventListener('click', function () {
-    showContentProfile('payment');
-});
 
 document.addEventListener("DOMContentLoaded", function () {
     const currentParams = new URLSearchParams(window.location.search);

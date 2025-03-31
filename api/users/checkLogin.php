@@ -37,16 +37,23 @@
 // }
 
 ?>
-
 <?php
-session_start(); // Khởi động session
+// Thiết lập session
+session_start();
 
 header("Content-Type: application/json");
+
+// Kiểm tra nếu session không hoạt động
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    http_response_code(500);
+    echo json_encode(["success" => false, "message" => "Lỗi session!"]);
+    exit;
+}
 
 // Kiểm tra nếu user chưa đăng nhập
 if (!isset($_SESSION["user"])) {
     http_response_code(401);
-    echo json_encode(["success" => false, "message" => "Bạn chưa đăng nhập"]);
+    echo json_encode(["success" => false, "message" => "Bạn chưa đăng nhập", "logged_in" => false]);
     exit;
 }
 
@@ -54,6 +61,8 @@ http_response_code(200);
 echo json_encode([
     "success" => true,
     "message" => "Đã đăng nhập",
+    "logged_in" => true,
+    "session_id" => session_id(),
     "user" => $_SESSION["user"]
 ]);
 ?>

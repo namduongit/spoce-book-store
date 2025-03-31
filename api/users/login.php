@@ -80,7 +80,23 @@
 // }
 ?>
 <?php
+// Thiết lập session tồn tại trong 1 ngày (86400 giây)
+session_set_cookie_params([
+    'lifetime' => 86400,  // 1 ngày
+    'path' => '/',
+    'domain' => '',       // Dùng trên cùng một domain
+    'secure' => false,    // Đặt true nếu dùng HTTPS
+    'httponly' => true,   // Ngăn JavaScript truy cập session cookie
+    'samesite' => 'Lax'   // Chống tấn công CSRF
+]);
 session_start();
+
+// Kiểm tra session có hoạt động không
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    http_response_code(500);
+    echo json_encode(["success" => false, "message" => "Không thể khởi động session!"]);
+    exit;
+}
 
 include_once '../../app/config.php';
 
@@ -107,12 +123,8 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit;
 }
 
-// Lấy dữ liệu từ form
 $username = $_POST["username"] ?? '';
 $password = $_POST["password"] ?? '';
-
-// Log dữ liệu sau khi lấy từ $_POST
-error_log("Username: $username, Password: $password");
 
 if (empty($username) || empty($password)) {
     http_response_code(400);
@@ -130,7 +142,10 @@ try {
         exit;
     }
 
-    // Bảo vệ session chống tấn công session hijacking
+    // Xóa session cũ, tạo session mới để bảo mật
+    session_unset();
+    session_destroy();
+    session_start();
     session_regenerate_id(true);
 
     // Lưu thông tin người dùng vào session
@@ -145,6 +160,7 @@ try {
     echo json_encode([
         "success" => true,
         "message" => "Đăng nhập thành công!",
+        "session_id" => session_id(), // Debug session ID
         "user" => $_SESSION["user"]
     ]);
 } catch (Exception $e) {

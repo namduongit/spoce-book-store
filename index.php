@@ -441,7 +441,6 @@
                     <ul>
                         <li class="information">Tài khoản & Bảo mật</li>
                         <li class="address">Địa chỉ</li>
-                        <li class="payment">Thẻ thanh toán</li>
                     </ul>
                 </div>
                 <div class="right-container">

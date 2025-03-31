@@ -50,8 +50,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 
-
-
 function clearURL() {
     let currentParams = new URLSearchParams(window.location.search);
     if (currentParams.has('auth')) {
@@ -298,7 +296,6 @@ function showFormUser(type) {
                         type: data.success === true ? 'success' : 'warning',
                         duration: 3000
                     });
-                    localStorage.setItem('justRegistered', username);
 
                     if (data.success === true) {
                         closeAuthForm();
@@ -383,7 +380,7 @@ function showFormUser(type) {
                     });
     
                     if (data.success === true) {
-                        localStorage.setItem('isLogin', true);
+                        setCookie('isLogin', 'd48c6bc91a28e768df710085e917db05', 1);
                         setTimeout(() => {
                             resetToOriginParam();
                             window.location.href = '/';
@@ -441,7 +438,7 @@ function loginAfterRegister(username, password) {
         .then(data => {
             hideLoading();
             if (data.success) {
-                localStorage.setItem('isLogin', true);
+                setCookie('isLogin', 'd48c6bc91a28e768df710085e917db05', 1);
                 toast({
                     title: "Đăng nhập thành công",
                     message: `Chào mừng ${username} đến với SPOCE Book Store`,

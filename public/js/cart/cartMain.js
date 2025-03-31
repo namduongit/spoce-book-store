@@ -2,6 +2,9 @@ import { formatMoney } from "../book/getDataBook.js";
 import { getNameCategoryByID } from "../book/getDataBook.js";
 import { toast } from "../toast.js";
 import { getBookByID } from "../book/getDataBook.js";
+import { showAddressInCurrentUser } from "../auth/displayInfoUser.js";
+import { getCurrentUser } from "../auth/displayInfoUser.js";
+import { updateAddressSelect } from "../../../api/address/updateAddressSelect.js";
 
 
 window.onload = async function() {
@@ -29,7 +32,38 @@ window.onload = async function() {
 
 async function viewCart(type) {
     let cartDetail = document.querySelector(".topbar__cart-detail-holder");
-    let localStorageProduct = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const currentUser = await getCurrentUser();
+    console.log('Người dùng hiện tại: ', currentUser);
+    let currentCartUser = null;
+
+    if (currentUser == null) {
+        currentCartUser = JSON.parse(localStorage.getItem("cart")) || [];
+    } else {
+        async function getAllProductFromCart() {
+            let formData = new URLSearchParams();
+            formData.append('maNguoiDung', currentUser['user'].id);
+            try {
+                let response = await fetch('api/carts/get.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: formData.toString()
+                });
+        
+                let data = await response.json();
+                return data;
+            } catch (error) {
+                console.error("Lỗi khi lấy giỏ hàng:", error);
+                return null; 
+            }
+        }        
+        currentCartUser = await getAllProductFromCart();
+        currentCartUser = currentCartUser['data'] || [];
+    }
+
+    console.log('Giỏ hàng hiện tại',currentCartUser);
 
     const url = new URL(window.location.href)
     const currentParams = new URLSearchParams(url.search);
@@ -37,7 +71,7 @@ async function viewCart(type) {
     let newUrl = url.pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');
     window.history.replaceState(null, document.title, newUrl);
 
-    if (localStorageProduct.length > 0) {
+    if (currentCartUser.length > 0) {
         showLoading();
     }
 
@@ -50,7 +84,7 @@ async function viewCart(type) {
         return;
     }
 
-    if (localStorageProduct.length === 0) {
+    if (currentCartUser.length === 0) {
         cartDetail.innerHTML = `
             <div class="topbar__cart-detail">
                 <div class="topbar__cart-view">
@@ -86,31 +120,30 @@ async function viewCart(type) {
     let cartHTML = '';
     let totalPrice = 0;
 
-    for (const item of localStorageProduct) {
-        let productItem = await getBookByID(item.id);
-        productItem = productItem['books'][0];
-        let nameGenre = await getNameCategoryByID(productItem.genreId);
-
+    for (const productItem of currentCartUser) {
+        let product = await getBookByID(currentUser != null ? productItem['bookId'] : productItem['id']);
+        product = product['books'][0];
+        let nameGenre = await getNameCategoryByID(product.genreId);
         cartHTML += `
             <tr>
-                <td><img src="../public/uploads/books/${productItem.image}" alt="${productItem.name}"></td>
+                <td><img src="../public/uploads/books/${product.image}" alt="${product.name}"></td>
                 <td>
                     <p class="topbar__product-info">
-                        <a href="#">${productItem.name}</a>
+                        <a href="#">${product.name}</a>
                         <br>
-                        <span>${productItem.id} / ${nameGenre} / ${formatMoney(productItem.sellingPrice)}</span>
+                        <span>${product.id} / ${nameGenre} / ${formatMoney(product.sellingPrice)}</span>
                     </p>
                     <div class="topbar__cart-view-amountprice-holder">
-                        <span>${item.quantity}</span>
-                        <div>${formatMoney(productItem.sellingPrice * item.quantity)}</div>
+                        <span>${productItem.quantity}</span>
+                        <div>${formatMoney(product.sellingPrice * productItem.quantity)}</div>
                     </div>
-                    <div class="topbar__product-cancel" onclick="removeFromCart(${productItem.id})">
+                    <div class="topbar__product-cancel" onclick="removeFromCart(${product.id})">
                         <i class="fa-solid fa-xmark"></i>
                     </div>
                 </td>
             </tr>
         `;
-        totalPrice += item.quantity * productItem.sellingPrice;
+        totalPrice += productItem.quantity * product.sellingPrice;
     }
 
     let HTML = `
@@ -139,18 +172,43 @@ async function viewCart(type) {
         </div>
     `;
 
-
-
-
     cartDetail.innerHTML = HTML;
     hideLoading();
     cartDetail.classList.add("show");
 }
 
-function removeFromCart(bookId) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart = cart.filter(item => item.id != bookId);
-    localStorage.setItem("cart", JSON.stringify(cart));
+
+
+
+async function removeFromCart(bookId) {
+    const currentUser = await getCurrentUser();
+    if (currentUser == null) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart = cart.filter(item => item.id != bookId);
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
+    else {
+        let formData = new URLSearchParams();
+        formData.append('maNguoiDung', currentUser['user'].id);
+        formData.append('maSach', bookId);
+        fetch('api/carts/remove.php', {
+            method: 'POST',
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: formData.toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+            toast({
+                title: 'Thông báo',
+                message: data.message,
+                type: data.success ? 'success' : 'warning',
+                duration: 3000
+            });
+        })
+        .catch(error => {
+            console.error('Lỗi khi xóa sản phẩm: ', error);
+        })
+    }
     viewCart('Recursive');
     updateQuantityCardHolder();
 }
@@ -172,10 +230,39 @@ async function showAllCart(type) {
     const accountInfo = document.querySelector('.self-infomation');
     const orderInfo = document.querySelector('.order-history');
 
-    let localStorageProduct = JSON.parse(localStorage.getItem("cart")) || [];
+    let currentCartUser = null;
+    let currentUser = await getCurrentUser();
+    if (currentUser == null) {
+        currentCartUser = JSON.parse(localStorage.getItem("cart")) || [];
+    } else {
+        async function getAllProductFromCart() {
+            let formData = new URLSearchParams();
+            formData.append('maNguoiDung', currentUser['user'].id);
+            try {
+                let response = await fetch('api/carts/get.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: formData.toString()
+                });
+        
+                let data = await response.json();
+                return data;
+            } catch (error) {
+                console.error("Lỗi khi lấy giỏ hàng:", error);
+                return null; 
+            }
+        }        
+        currentCartUser = await getAllProductFromCart();
+        currentCartUser = currentCartUser['data'] || [];
+    }
 
-    if (localStorageProduct.length === 0) {
+
+
+    if (currentCartUser.length === 0) {
         document.querySelector(".topbar__cart-detail-holder").classList.remove('show');
+        // Này dùng để khi xóa sản phẩm thì nó không bị ẩn và thông báo giỏ hàng trống
         if (type !== 'Recursive') {
             toast({
                 title: 'Thông báo',
@@ -196,8 +283,8 @@ async function showAllCart(type) {
 
     showLoading();
 
-    for (const item of localStorageProduct) {
-        let productItem = await getBookByID(item.id);
+    for (const item of currentCartUser) {
+        let productItem = await getBookByID(currentUser != null ? item['bookId'] : item['id']);
         productItem = productItem['books'][0];
         let nameGenre = await getNameCategoryByID(productItem.genreId);
 
@@ -209,9 +296,9 @@ async function showAllCart(type) {
                     <div class="show-cart__price">${productItem.id} / ${nameGenre} / ${formatMoney(productItem.sellingPrice)}</div>
                 </div>
                 <div class="show-cart__amountbox">
-                    <button class="show-cart__btn show-cart__btn--left">-</button>
+                    <button class="show-cart__btn show-cart__btn--left" onclick="minsQuantity(${item.bookId})">-</button>
                     <input type="text" name="product-amount" value="${item.quantity}" disabled>
-                    <button class="show-cart__btn show-cart__btn--right">+</button>
+                    <button class="show-cart__btn show-cart__btn--right" onclick="plusQuantity(${item.bookId})">+</button>
                 </div>
                 <div class="show-cart__priceamount">${formatMoney(item.quantity * productItem.sellingPrice)}</div>
                 <a href="#" class="show-cart__remove" onclick="deleteFromCart(${productItem.id})">
@@ -264,12 +351,54 @@ async function showAllCart(type) {
     });
 }
 
+function minsQuantity(bookId) {
+
+}
+
+function plusQuantity(bookId) {
+
+}
+
 async function checkOutBill() {
+    // Kiểm tra đã đăng nhập chưa nếu chưa thì không cho mua hàng
+    const currentUser = await getCurrentUser();
+
+    if (currentUser == null) {
+        toast({
+            title: 'Thông báo',
+            message: 'Vui lòng đăng nhập để thực hiện tính năng mua hàng',
+            type: 'warning',
+            duration: 3000
+        });
+        return;
+    }
+    async function getAllProductFromCart() {
+        let formData = new URLSearchParams();
+        formData.append('maNguoiDung', currentUser['user'].id);
+        try {
+            let response = await fetch('api/carts/get.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData.toString()
+            });
+    
+            let data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("Lỗi khi lấy giỏ hàng:", error);
+            return null; 
+        }
+    }
+
+    let currentCart = await getAllProductFromCart();
+    currentCart = currentCart['data'];
+
     let cartDetail = document.querySelector(".topbar__cart-detail-holder");
-    let localStorageProduct = JSON.parse(localStorage.getItem("cart")) || [];
 
     cartDetail.classList.remove('show');
-    if (localStorageProduct.length === 0) {
+    if (currentCart.length === 0) {
         toast({
             title: 'Thông báo',
             message: `Giỏ hàng đang trống !`,
@@ -288,18 +417,24 @@ async function checkOutBill() {
     url.search = "?page-action=check-out";
     window.history.replaceState(null, document.title, url);
 
+    let currentAddress = null;
+    if (currentUser) {
+        currentAddress = await showAddressInCurrentUser(currentUser['user'].id);
+    }
+
     const checkoutMain = document.querySelector('.checkout');
     const cartMain = document.querySelector('.show-cart');
     const mainMain = document.querySelector('.main');
     const bodyMain = document.querySelector('.body');
     const productDetailMain = document.querySelector('.show-detail-product');
     const orderPage = document.querySelector('.order-history');
+    const infoPage = document.querySelector('.self-infomation');
 
     let HTMLCheckOut = ``;
     let totalPrice = 0;
     showLoading();
-    for (const item of localStorageProduct) {
-        let productItem = await getBookByID(item.id);
+    for (const item of currentCart) {
+        let productItem = await getBookByID(item.bookId);
         productItem = productItem['books'][0];
         let nameGenre = await getNameCategoryByID(productItem.genreId);
 
@@ -394,15 +529,20 @@ async function checkOutBill() {
                 <p>Thông tin giao hàng</p>
                 <div class="checkout__customer-address-field">
                     <div class="checkout__address-field-one">
-                        <div class="checkout__input-field checkout__address-select">
 
-                            <select name="address-holder" id="address-holder">
-                                <option value="default" selected>Địa chỉ đã lưu trữ</option>
-                            </select>
-                            <label for="address-holder">Thêm địa chỉ mới</label>
+                        <div class="checkout__input-field checkout__address-btn">
+                            <div class="checkout__address-btn-child checkout__address-btn-child-select active">Chọn địa chỉ đã lưu</div>
+                            <div class="checkout__address-btn-child checkout__address-btn-child-inoput">Chọn địa chỉ mới</div>
                         </div>
-                        <div class="checkout__input-field">
 
+                        <div class="checkout__input-field checkout__address-select">
+                            <select name="address-holder" id="address-holder">
+                                <option value="default" selected disabled>Địa chỉ đã lưu trữ</option>
+                            </select>
+                            <label for="address-holder">Địa chỉ của bạn</label>
+                        </div>
+
+                        <div class="checkout__input-field">
                             <input type="text" id="fullname" name="fullname" placeholder=" ">
                             <label for="fullname">Họ và tên</label>
                         </div>
@@ -413,8 +553,9 @@ async function checkOutBill() {
                             <label for="numberphone">Số điện thoại</label>
                         </div>
                         <p class="checkout__empty-field-warning hide-item">Vui lòng nhập số điện thoại</p>
+                        
                         <p class="checkout__empty-field-warning hide-item">Số điện thoại không hợp lệ (độ dài 10 kí tự, không chứa ký tự đặc biệt và khoảng trắng)</p>
-                        <div class="checkout__input-field">
+                        <div class="checkout__input-field checkout__input-field-input-address">
 
                             <input type="text" id="address" name="address" placeholder=" ">
                             <label for="address">Địa chỉ</label>
@@ -531,28 +672,14 @@ async function checkOutBill() {
                     </label>
 
                     <div class="checkout__qrcode-method-holder">
-                        <div class="checkout__qrcode-text">• NGÂN HÀNG THƯƠNG MẠI CỔ PHẦN NGOẠI THƯƠNG VIỆT NAM (VIETCOMBANK) - CHI NHÁNH SÀI GÒN
-                            • SỐ TÀI KHOẢN: 1013999802
-                            • TÊN TÀI KHOẢN: CTY CP TMDV SPOCE BOOK STORE
-                        </div>
-                    </div>
-
-                    <label class="checkout__payment-method-option" for="credit">
-                        <div class="checkout__payment-method-radiobtn">
-
-                            <label class="checkout__payment-radiobtn-holder">
-                                <input type="radio" id="credit" name="payment" value="credit">
-                                <span></span>
-                            </label>
-                        </div>
-                        <div class="checkout__payment-method-content">
-                            <img src="../public/images/credit-card-removebg-preview.png" alt="payment_image">
-                            <div class="checkout__credit-content-holder">
-                                <p>Thẻ Visa/Master/JCB/Amex/CUP</p>
-                                <img src="../public/images/visa_master_jcb_amex_cup.svg" alt="credit-cards">
+                        <div class="checkout__qrcode-method-holde-wrapper">
+                            <div class="checkout__qrcode-text">
+                                • <strong>NGÂN HÀNG: </strong> TMCP Kỹ THƯƠNG VIỆT NAM (TECHCOMBANK)
+                                • <strong>SỐ TÀI KHOẢN: </strong> 8685.8888.888
+                                • <strong>TÊN TÀI KHOẢN: </strong> CTY CP TMDV SPOCE BOOK STORE
                             </div>
                         </div>
-                    </label>
+                    </div>
 
                     <div class="checkout__credit-method-holder">
                         <div class="checkout__input-field">
@@ -589,11 +716,6 @@ async function checkOutBill() {
         document.querySelector('.checkout__credit-method-holder').style.display = 'none';
     });
 
-    document.getElementById('credit').addEventListener('click', function() {
-        document.querySelector('.checkout__qrcode-method-holder').style.display = 'none';
-        document.querySelector('.checkout__credit-method-holder').style.display = 'block';
-    });
-
     document.getElementById('qrcode').addEventListener('click', function() {
         document.querySelector('.checkout__qrcode-method-holder').style.display = 'block';
         document.querySelector('.checkout__credit-method-holder').style.display = 'none';
@@ -602,12 +724,111 @@ async function checkOutBill() {
     cartMain.classList.add('hide-item');
     mainMain.classList.add('hide-item');
     bodyMain.classList.add('hide-item');
-    orderPage.classList.add('hide-item')
+    orderPage.classList.add('hide-item');
+    infoPage.classList.add('hide-item');
     productDetailMain.classList.add('hide-item');
     checkoutMain.classList.remove('hide-item');
     document.querySelector(".topbar__cart-detail-holder").classList.remove('show');
-}
 
+    // Render dữ liệu vào select đầu tiên do nút địa chỉ được lưu có trước
+    function renderBaseAddress() {
+        if (currentAddress.success) {
+            const selectOption = document.getElementById('address-holder');
+            let index = 0;
+            currentAddress.data.forEach(element => {
+                const valueAddress = element.province + ' / ' + element.district + ' / ' + element.ward + ' / ' + element.street;
+                if (index == 0) {
+                    selectOption.innerHTML += `
+                    <option value="${element.id}" selected>${valueAddress}</option>
+                    `;
+                }
+                else {
+                    selectOption.innerHTML += `
+                    <option value="${element.id}">${valueAddress}</option>
+                    `;
+                }
+                index += 1;
+            });
+        }
+        document.querySelector('.checkout__input-field-input-address').classList.add('hide-item');
+        document.querySelector('.checkout__address-field-two').classList.add('hide-item');
+
+    }
+    renderBaseAddress();
+
+    // Xử lí render dữ liệu ở đây
+    document.querySelectorAll('.checkout__address-btn-child').forEach(btn => {
+        btn.addEventListener('click', function() {
+            let isSelectSaved = this.classList.contains('checkout__address-btn-child-select');
+
+            document.querySelector('.checkout__address-select').classList.toggle('hide-item', !isSelectSaved);
+            document.querySelector('.checkout__input-field-input-address').classList.toggle('hide-item', isSelectSaved);
+            document.querySelector('.checkout__address-field-two').classList.toggle('hide-item', isSelectSaved);
+
+            document.querySelectorAll('.checkout__address-btn-child').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+        });
+    });
+
+    updateAddressSelect('city', 'district', 'ward');
+    
+    // Submit gửi đơn hàng lên Server
+    document.querySelector('.checkout__submit-btn-final').addEventListener('click', function() {
+        console.log('Đã ấn hoàn tất đơn hàng');
+        let pickUpAddress = null;
+        let customerName = null;
+        let customerNumberphone = null;
+        let shipMethod = null;
+        let paymentMethod = null;
+        let couponsCode = null;
+
+        //  Xử lí địa chỉ
+        document.querySelectorAll('.checkout__address-field-one .checkout__address-btn .checkout__address-btn-child').forEach(element => {
+            if (element.classList.contains('active') && element.classList.contains('checkout__address-btn-child-select')) {
+                pickUpAddress = document.getElementById('address-holder').options[document.getElementById('address-holder').selectedIndex].text;
+            } else if (element.classList.contains('active') && element.classList.contains('checkout__address-btn-child-inoput')) {
+                const provinceSelect = document.querySelector('.checkout__address-field-two #city');
+                const citySelect = document.querySelector('.checkout__address-field-two #district');
+                const wardSelect = document.querySelector('.checkout__address-field-two #ward');
+                const addressInput = document.querySelector('.checkout__input-field-input-address #address');
+
+                const selectedProvince = provinceSelect.options[provinceSelect.selectedIndex]?.dataset.name || "";
+                const selectedCity = citySelect.options[citySelect.selectedIndex]?.dataset.name || "";
+                const selectedWard = wardSelect.options[wardSelect.selectedIndex]?.dataset.name || "";
+                const address = addressInput.value.trim();
+
+                pickUpAddress = `${selectedProvince} / ${selectedCity} / ${selectedWard} / ${address}`;
+            }
+        });
+        // Xử lí họ tên và số điện thoại
+        customerName = document.getElementById('fullname').value.trim();
+        customerNumberphone = document.getElementById('numberphone').value.trim();
+
+        // Xử lí phương thức vận chuyển
+        const selectedShipping = document.querySelector('input[name="shipping-method"]:checked');
+        if (selectedShipping) {
+            shipMethod = selectedShipping.value; 
+        }
+
+        // Xử lí phương thức thanh toán
+        const selectedPayment = document.querySelector('input[name="payment"]:checked');
+        if (selectedPayment) {
+            paymentMethod = selectedPayment.value;
+        }
+
+
+        
+        
+
+        console.log('Địa chỉ nhận hàng: ', pickUpAddress);
+        console.log('Người nhận hàng: ', customerName);
+        console.log('Điện thoại nhận hàng: ', customerNumberphone);
+        console.log('Phương thức thanh toán: ', paymentMethod);
+        console.log('Phương thức vận chuyển: ', shipMethod);
+        console.log('Mã giảm giá: ', couponsCode);
+    });
+}
 
 
 function deleteFromCart(bookId) {
@@ -618,13 +839,29 @@ function deleteFromCart(bookId) {
     showAllCart('Recursive');
 }
 
-function updateQuantityCardHolder() {
+
+async function updateQuantityCardHolder() {
+    const currentUser = await getCurrentUser();
     let cartButton = document.querySelector(".topbar__cart-holder");
-    let allProductInCart = JSON.parse(localStorage.getItem('cart')) || [];
     let totalQuantity = 0;
-    allProductInCart.forEach(item => {
-        totalQuantity += item.quantity;
-    });
+
+    if (currentUser == null) {
+        let allProductInCart = JSON.parse(localStorage.getItem('cart')) || [];
+        allProductInCart.forEach(item => {
+            totalQuantity += item.quantity;
+        });
+    } else {
+        try {
+            const response = await fetch(`api/carts/quantity.php?maNguoiDung=${currentUser['user'].id}`, {
+                method: 'GET'
+            });
+            const data = await response.json();
+            totalQuantity = data.totalQuantity || 0;
+        } catch (error) {
+            console.error('Lỗi:', error);
+        }
+    }
+
     cartButton.innerHTML = `
         <i class="fa-solid fa-cart-shopping topbar__cart-icon"></i>
         <span class="topbar__count-holder">
@@ -658,4 +895,5 @@ window.showAllCart = showAllCart;
 window.viewCart = viewCart;
 window.removeFromCart = removeFromCart;
 window.updateQuantityCardHolder = updateQuantityCardHolder;
-
+window.minsQuantity = minsQuantity;
+window.plusQuantity = plusQuantity;
