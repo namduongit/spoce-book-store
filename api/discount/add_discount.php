@@ -50,11 +50,10 @@ try {
     } else {
         throw new Exception('Không thể thêm phiếu giảm giá');
     }
-
 } catch (Exception $e) {
     http_response_code(400);
     echo json_encode([
         'status' => 'error',
         'message' => $e->getMessage()
     ]);
-} 
+}

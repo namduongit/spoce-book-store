@@ -151,9 +151,9 @@ export function addDiscountData() {
           const valueNum = parseFloat(value);
           if (isNaN(valueNum)) {
             errorMessage += "Giá trị phải là số!\n";
-          } else if (type === "1" && (valueNum <= 0 || valueNum > 100)) {
+          } else if (type === "PERCENTAGE" && (valueNum <= 0 || valueNum > 100)) {
             errorMessage += "Giá trị phần trăm phải từ 0 đến 100!\n";
-          } else if (type === "0" && valueNum <= 0) {
+          } else if (type === "FIXED_AMOUNT" && valueNum <= 0) {
             errorMessage += "Giá trị tiền phải lớn hơn 0!\n";
           }
         }
@@ -249,7 +249,6 @@ export function addDiscountData() {
             addDialog.remove();
             // Xoá class active
             addButton.classList.remove("active");
-            //   // Tải lại trang để cập nhật danh sách
             window.location.reload();
           } else {
             alert(result.message || "Có lỗi xảy ra khi thêm khuyến mãi!");
