@@ -10,11 +10,11 @@ class app_models_PhieuGiamGia extends app_libs_DBConnection
     }
 
     // Lấy phiếu giảm giá theo ID
-    public function getDiscountById($maPhieuGiamGia)
+    public function getDiscountById($maPGG)
     {
         return $this->building_queryParam([
-            'where' => 'maPhieuGiamGia = ?',
-            'params' => [$maPhieuGiamGia]
+            'where' => 'maPGG = ?',
+            'params' => [$maPGG]
         ])->select_one();
     }
 
@@ -26,7 +26,7 @@ class app_models_PhieuGiamGia extends app_libs_DBConnection
         $params = [];
 
         if (!empty($id)) {
-            $conditions[] = 'maPhieuGiamGia = ?';
+            $conditions[] = 'maPGG = ?';
             $params[] = $id;
         }
         if (!empty($maKhachHang)) {
@@ -116,6 +116,7 @@ class app_models_PhieuGiamGia extends app_libs_DBConnection
         try {
             return $this->building_queryParam([
                 'field' => [
+                    'maPGG' => $data['maPGG'],
                     'tenPGG' => $data['tenPGG'],
                     'type' => $data['type'],
                     'phanTram' => $data['phanTram'],
@@ -132,10 +133,10 @@ class app_models_PhieuGiamGia extends app_libs_DBConnection
         }
     }
     // Cập nhật thông tin phiếu giảm giá
-    public function updateDiscount($maPhieuGiamGia, $data)
+    public function updateDiscount($maPGG, $data)
     {
         $fieldValues = [];
-        $params = [':maPhieuGiamGia' => $maPhieuGiamGia];
+        $params = [':maPGG' => $maPGG];
 
         foreach ($data as $field => $value) {
             $fieldValues[] = "$field = :$field";
@@ -145,29 +146,29 @@ class app_models_PhieuGiamGia extends app_libs_DBConnection
         $fieldValuesString = implode(', ', $fieldValues);
 
         return $this->building_queryParam([
-            'where' => 'maPhieuGiamGia = :maPhieuGiamGia',
+            'where' => 'maPGG = :maPGG',
             'params' => $params,
             'field' => $fieldValuesString
         ])->update();
     }
     // Xóa phiếu giảm giá
-    public function deleteDiscount($maPhieuGiamGia)
+    public function deleteDiscount($maPGG)
     {
         return $this->building_queryParam([
-            'where' => 'maPhieuGiamGia = ?',
-            'params' => [$maPhieuGiamGia]
+            'where' => 'maPGG = ?',
+            'params' => [$maPGG]
         ])->delete();
     }
     // Lấy mã phiếu giảm giá mới
     public function getNewDiscountCode()
     {
         $result = $this->building_queryParam([
-            'order' => 'maPhieuGiamGia DESC',
+            'order' => 'maPGG DESC',
             'limit' => 1
         ])->select_one();
 
         if ($result) {
-            $lastCode = $result['maPhieuGiamGia'];
+            $lastCode = $result['maPGG'];
             $newCode = (int)substr($lastCode, 2) + 1;
             return 'PG' . str_pad($newCode, 5, '0', STR_PAD_LEFT);
         } else {

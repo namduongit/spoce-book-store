@@ -1,6 +1,44 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 import { clickToShowDatePicker, defaultDateSelected } from "../others.js";
 
+// Hàm load dữ liệu khuyến mãi
+async function loadDiscountData() {
+  try {
+    const response = await fetch("/api/discount/get_discount.php");
+    const data = await response.json();
+    
+    if (data.status === "success") {
+      const tbody = document.querySelector(".table__body");
+      tbody.innerHTML = ""; // Xóa dữ liệu cũ
+      
+      data.data.list.forEach((discount) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${discount.maPGG}</td>
+          <td>${discount.tenPGG}</td>
+          <td>${discount.type === "PERCENTAGE" ? discount.phanTram + "%" : discount.giaTriGiam.toLocaleString() + "đ"}</td>
+          <td>${discount.toiThieu.toLocaleString()}đ</td>
+          <td>${discount.toiDa.toLocaleString()}đ</td>
+          <td>${discount.ngayBatDau}</td>
+          <td>${discount.ngayKetThuc}</td>
+          <td>${discount.trangThai}</td>
+          <td>
+            <button class="edit" data-id="${discount.maPGG}">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button class="delete" data-id="${discount.maPGG}">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+  } catch (error) {
+    console.error("Lỗi khi tải dữ liệu:", error);
+  }
+}
+
 // Hàm thiết lập sự kiện Thêm một khuyến mãi cho bảng
 export function addDiscountData() {
   // Biến chứa đối tượng là nút "Thêm"
@@ -250,7 +288,8 @@ export function addDiscountData() {
             addDialog.remove();
             // Xoá class active
             addButton.classList.remove("active");
-            window.location.reload();
+            // Cập nhật dữ liệu bảng
+            await loadDiscountData();
           } else {
             alert(result.message || "Có lỗi xảy ra khi thêm khuyến mãi!");
           }

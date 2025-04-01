@@ -39,13 +39,22 @@ try {
     // Tạo đối tượng PhieuGiamGia
     $phieuGiamGia = new app_models_PhieuGiamGia();
 
+    // Lấy mã giảm giá mới
+    $maPGG = $phieuGiamGia->getNewDiscountCode();
+    
+    // Thêm mã giảm giá vào dữ liệu
+    $data['maPGG'] = $maPGG;
+
     // Thêm phiếu giảm giá mới
     $result = $phieuGiamGia->insertDiscount($data);
 
     if ($result) {
         echo json_encode([
             'status' => 'success',
-            'message' => 'Thêm phiếu giảm giá thành công'
+            'message' => 'Thêm phiếu giảm giá thành công',
+            'data' => [
+                'maPGG' => $maPGG
+            ]
         ]);
     } else {
         throw new Exception('Không thể thêm phiếu giảm giá');
