@@ -100,12 +100,26 @@ class app_models_PhieuGiamGia extends app_libs_DBConnection
             }
         }
 
+        // Kiểm tra và xử lý giá trị theo loại khuyến mãi
+        if ($data['type'] === 'PERCENTAGE') {
+            if (!isset($data['phanTram']) || $data['phanTram'] === null || $data['phanTram'] < 0 || $data['phanTram'] > 100) {
+                throw new Exception('Giá trị phần trăm không hợp lệ (0-100)');
+            }
+            $data['giaTriGiam'] = null;
+        } else if ($data['type'] === 'FIXED_AMOUNT') {
+            if (!isset($data['giaTriGiam']) || $data['giaTriGiam'] === null || $data['giaTriGiam'] <= 0) {
+                throw new Exception('Giá trị tiền giảm không hợp lệ');
+            }
+            $data['phanTram'] = null;
+        }
+
         try {
             return $this->building_queryParam([
                 'field' => [
                     'tenPGG' => $data['tenPGG'],
                     'type' => $data['type'],
                     'phanTram' => $data['phanTram'],
+                    'giaTriGiam' => $data['giaTriGiam'],
                     'toiThieu' => $data['toiThieu'],
                     'toiDa' => $data['toiDa'],
                     'ngayBatDau' => $data['ngayBatDau'],

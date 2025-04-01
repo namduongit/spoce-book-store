@@ -211,7 +211,8 @@ export function addDiscountData() {
           const discountData = {
             tenPGG: name,
             type: type,
-            phanTram: parseInt(value),
+            phanTram: type === "PERCENTAGE" ? parseInt(value) : null,
+            giaTriGiam: type === "FIXED_AMOUNT" ? parseInt(value) : null,
             toiThieu: parseInt(minCost),
             toiDa: parseInt(maxDiscount),
             ngayBatDau: dateStart,
