@@ -1,78 +1,50 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
+import { fetchData } from "../../../public/js/book/getDataBook.js";
+import { getAllSupplierData } from "../../js/supplies/renderSuppliesTable.js";
+
 import {
   vietnamMoneyFormat,
   clickToShowDatePicker,
   defaultDateSelected,
 } from "../others.js";
 
-// const data = [
-//   {
-//     bookId: "SP00001",
-//     bookName: "Tên sách 1", // Thực tế phải truy vấn để lấy ra tiêu đề sách
-//     priceBase: 200000,
-//     priceInput: 350000,
-//     quantityInput: 2,
-//   },
-//   {
-//     bookId: "SP00005",
-//     bookName: "Tên sách 5",
-//     priceBase: 228000,
-//     priceInput: 400000,
-//     quantityInput: 10,
-//   },
-// ];
+let data = [] ;
 
-function formatDateForInput(dateString) {
-  let date = new Date(dateString);
-  let year = date.getFullYear();
-  let month = (date.getMonth() + 1).toString().padStart(2, '0');
-  let day = date.getDate().toString().padStart(2, '0');
-
-  return `${year}-${month}-${day}`; // Định dạng chuẩn cho input date
-}
-
-export async function getAllInputTicketDetailByInputticketId(id){
-  let url = `api/input_ticket_detail/get.php?inputTicketId=${id}`;
+export async function getAllInputTicketDetailById(inputTicketId){
+  let url = `api/input_ticket_detail/get.php?inputTicketId=${inputTicketId}`;
   console.log("Request URL:", url);
     try {
       let response = await fetch(url);
       if (!response.ok) {
         throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
       }
-        let data = await response.json();
-        console.log("Dữ liệu nhận được:", data);
-        return data;
-      } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu:", error);
-        alert("Lỗi khi lấy dữ liệu: " + error.message);
-        return [];
-      }
+      let data = await response.json();
+      console.log("Dữ liệu nhận được:", data);
+      return data;
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu:", error);
+      alert("Lỗi khi lấy dữ liệu: " + error.message);
+      return [];
+    }
 }
- 
+function renderInputTicketDetailTable() {
+  const bodyInInputTicketDetailTable = document.querySelector(".dialog__form-group > table > tbody");
 
-
-// Hàm cập nhật lại dữ liệu cho bảng Chi tiết phiếu nhập
-function renderInputTicketDetailTable(data) {
-  // Biến chứa đối tượng bảng Chi tiết phiếu nhập
-  const bodyInInputTicketDetailTable = document.querySelector(
-    ".dialog__form-group > table > tbody"
-  );
-
-  // Chuyển đổi dữ liệu thành các thẻ html
   let html = ``;
+  let total = 0;
   for (let i = 0; i < data.length; i++) {
+    total += Number(data[i].inputPrice) * Number(data[i].quantity);
+
     html += `
           <tr>
               <td>${data[i].bookId}</td>
               <td class="name">${data[i].bookName}</td>
               <td>${vietnamMoneyFormat(data[i].basePrice)}</td>
-              <td>${vietnamMoneyFormat(data[i].sellingPrice)}</td>
+              <td>${vietnamMoneyFormat(data[i].inputPrice)}</td>
               <td>${data[i].quantity}</td>
-              <td class="total">${vietnamMoneyFormat(
-                data[i].quantity * data[i].sellingPrice
-              )}</td>
+              <td class="total">${vietnamMoneyFormat(data[i].quantity * data[i].inputPrice)}</td>
               <td>
-                <i id="update-remove-trash-input_ticket" class="fa-solid fa-trash"
+                <i class="fa-solid fa-trash remove-icon" data-index="${i}"
                   style="color: red; text-align: center;">
                 </i>
               </td>
@@ -80,12 +52,29 @@ function renderInputTicketDetailTable(data) {
       `;
   }
 
-  // Cập nhật lại giao diện
+  // Cập nhật bảng
   bodyInInputTicketDetailTable.innerHTML = html;
+
+
+  let totalElement = document.querySelector("#update-input_ticket-cost");
+  if(totalElement){
+    totalElement.value = total;
+  }
+
+  // Sau khi cập nhật bảng, mới thêm sự kiện
+  let removeList = document.querySelectorAll(".remove-icon");
+  removeList.forEach((removeIcon) => {
+    removeIcon.addEventListener("click", () => {
+      let index = removeIcon.getAttribute("data-index"); // Lấy index từ thuộc tính data
+      data.splice(index, 1); // Xóa phần tử khỏi mảng
+      renderInputTicketDetailTable(); // Cập nhật lại bảng sau khi xóa
+    });
+  });
 }
 
+
 // Hàm thiết lập sự kiện thêm sách cho chi tiết phiếu
-function updateInputTicketDetailTable() {
+async function updateInputTicketDetailTable() {
   // Tạo một dialog để thêm một sách cho chi tiết phiếu
   const updateDetailDialog = document.createElement("dialog");
   // - Định dạng dialog
@@ -148,6 +137,30 @@ function updateInputTicketDetailTable() {
       // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
       updateDetailDialog.classList.remove("active");
     });
+
+
+      // get sachs
+      const bookList = await fetchData(`api/books/getbook.php`);
+
+      let html = ``;
+      bookList.forEach(book => {
+        html += `<option value="${book.id}">${book.id}</option>`;
+      });
+    
+      const selectElement = document.querySelector("#update-input_ticket-detail-id");
+      selectElement.innerHTML = html;
+    
+      selectElement.addEventListener("change", async function () {
+        const bookId = this.value;
+        const book = await fetchData(`api/books/get.php?bookID=${bookId}`);
+        const cover = await fetchData(`api/covers/get.php?coverId=${book.books[0].genreId}`);
+        document.querySelector("#update-input_ticket-detail-name").value = book.books[0].name;
+        document.querySelector("#update-input_ticket-detail-price-base").value = cover[0].price;
+    
+      });
+      
+      
+
   // Gán sự kiện cho nút "Đóng" dialog
   document
     .getElementById("update-input_ticket-detail-button")
@@ -166,26 +179,33 @@ function updateInputTicketDetailTable() {
       );
 
       // ... xử lý (chưa kiểm tra tính hợp lệ)
-      //   let isExists = false;
-      //   for (let i = 0; i < data.length; i++) {
-      //     if (item.id == id.value) {
-      //       isExists = true;
-      //       break;
-      //     }
-      //   }
-      //   if (!isExists) {
-      //   } else {
-      //   }
-      data.push({
-        bookId: id.value,
-        bookName: name.value,
-        priceBase: Number(priceBase.value),
-        priceInput: Number(priceInput.value),
-        quantityInput: Number(quantityInput.value),
-      });
+      let isExists = false;
+      for (let i = 0; i < data.length; i++) {
+          isExists = false;
+          if (data[i].id == id.value) {
+            isExists = true;
+            break;
+          }
+        }
+        if (isExists) {
+          alert("Sách này đã được thêm");
+        } else {
+          if(id.value == '' || name.value == '' || priceInput.value =='' || quantityInput.value ==''){
+            alert("hãy điền đủ thong tin");
+          }else{
+            data.push({
+              bookId: id.value,
+              bookName: name.value,
+              basePrice: Number(priceBase.value),
+              inputPrice: Number(priceInput.value),
+              quantity: Number(quantityInput.value),
+            });
+          }
+        }
+
 
       // Cập nhật lại giao diện hiển thị
-      // renderInputTicketDetailTable(data);
+      renderInputTicketDetailTable();
 
       // Xoá dialog
       updateDetailDialog.remove();
@@ -197,8 +217,9 @@ function updateInputTicketDetailTable() {
 
 // Hàm thiết lập sự kiện hiện thêm một phiếu nhập
 export async function updateInputTicketData(idInputTicketSelected) {
-  const AllDetail = await getAllInputTicketDetailByInputticketId(idInputTicketSelected);
-
+  // Phải truy vấn từ CSDL thông qua idInputTicketSelected để lấy được dữ liệu của đối tượng hiện tại
+  let detailList = await getAllInputTicketDetailById(idInputTicketSelected);
+  data = detailList.allDetail;
   // Biến chứa đối tượng là nút "thêm"
   const updateButton = document.getElementById("update-button-input_ticket");
 
@@ -222,36 +243,35 @@ export async function updateInputTicketData(idInputTicketSelected) {
             <div class="dialog__row">
               <div class="dialog__form-group input_ticket half">
                 <label>Mã phiếu nhập</label>
-                <input type="text" id="update-input_ticket-id" value="${AllDetail[0].inputTicketId}" readonly />
+                <input type="text" id="update-input_ticket-id" value="${detailList.inputTicketId}" readonly />
               </div>
               <div class="dialog__form-group input_ticket half">
                 <label>Mã nhân viên</label>
-                <input type="text" id="update-input_ticket-customer"  value="${AllDetail[0].employeeUserName}"  readonly />
+                <input type="text" id="update-input_ticket-customer" value="${detailList.employeeUserName}" readonly />
               </div>
               <div class="dialog__form-group input_ticket">
                 <label>Tổng thanh toán (VNĐ)</label>
-                <input type="text" id="update-input_ticket-cost"  value="${AllDetail[0].inputTicketId}"  readonly />
+                <input type="text" id="update-input_ticket-cost" value="${detailList.total}" readonly />
               </div>
               <div class="dialog__form-group input_ticket">
                 <label>Trạng thái</label>
-                <input type="text" id="update-input_ticket-status"  value="${AllDetail[0].status}"  readonly />
+                <input type="text" id="update-input_ticket-status" value="${detailList.status}" readonly />
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group input_ticket half">
                 <label>Ngày tạo phiếu</label>
-                <input type="date" id="update-input_ticket-date-create"  value="${formatDateForInput(AllDetail[0].dateCreate)}"  />
+                <input type="date" id="update-input_ticket-date-create" value="${detailList.dateCreate}" />
               </div>
               <div class="dialog__form-group input_ticket half">
                 <label>Ngày hợp đồng</label>
-                <input type="date" id="update-input_ticket-date-contract" value="${formatDateForInput(AllDetail[0].dateCreate)}"  />
+                <input type="date" id="update-input_ticket-date-contract"  value="${detailList.dateCreate}" />
               </div>
               <div class="dialog__form-group input_ticket full">
                 <label>Nhà cung cấp</label>
-                <select id="update-author-status">
-                  <option value="" selected>${AllDetail[0].suplierName}</option>
-                  <option value="1">NCC00001 - Nhà cung cấp 01</option>
-                  <option value="0">NCC00002 - Nhà cung cấp 02</option>
+                <select id="update-input_ticket-suplier">
+                  <option value="${detailList.suplierId}" selected> ${detailList.suplierName}</option>
+                  
                 </select>
               </div>
             </div>
@@ -272,7 +292,6 @@ export async function updateInputTicketData(idInputTicketSelected) {
                     </tr>
                   </thead>
                   <tbody>
-
                   </tbody>
                 </table>
               </div>
@@ -289,6 +308,17 @@ export async function updateInputTicketData(idInputTicketSelected) {
 
   // Hiển thị updateDialog
   updateDialog.showModal();
+
+
+  let suplierList = await getAllSupplierData();
+  let htmlSuplier = ``;
+  suplierList.forEach(suplier =>{
+    htmlSuplier +=`<option value="${suplier.id}">${suplier.name}</option>`;
+  });
+
+  document.querySelector("#update-input_ticket-suplier").innerHTML +=htmlSuplier;
+
+
 
   // Sự kiện cho các thành phần trong dialog
   // - Nếu các select đã được chọn giá trị khác mặc định thì đổi định dạng
@@ -315,8 +345,116 @@ export async function updateInputTicketData(idInputTicketSelected) {
     updateInputTicketDetailTable();
   });
   // -
-  renderInputTicketDetailTable(AllDetail[0].allDetail);
+  renderInputTicketDetailTable();
 
+  
+  
+  // Gán sự kiện cho nút hoàn thành
+
+    document
+    .querySelector(".confirm-status")
+    .addEventListener("click", async (e) => {
+      e.preventDefault();
+      //  update PNhapja
+      try {
+        const dateCreate = document.querySelector("#update-input_ticket-date-create").value;
+        const suplierId = document.querySelector("#update-input_ticket-suplier").value;
+        const totalPrice = document.querySelector("#update-input_ticket-cost").value;
+        const status = document.querySelector("#update-input_ticket-status").value;
+        const response = await fetch("api/input_ticket/update.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            inputTicketId: idInputTicketSelected,
+            dateCreate: dateCreate,
+            suplierId: suplierId,
+            totalPrice: totalPrice,
+            status: status,
+
+          }),
+        });
+        
+        const result = await response.json();
+        console.log("Server Response:", result);
+        
+        if (result.success) {
+          alert("update phiếu nhập thành công!");
+        } else {
+          alert("Lỗi cập nhật phiếu nhập: " + (result.message || "Không rõ nguyên nhân"));
+        }
+      } catch (error) {
+        console.error("Lỗi fetch API:", error);
+        // alert("Không thể kết nối đến server!");
+      }
+
+
+      // Xoá CTPN
+      try {
+        const response = await fetch("api/input_ticket_detail/delete.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            inputTicketId: idInputTicketSelected,
+          }),
+        });
+        
+        const result = await response.json();
+        console.log("Server Response:", result);
+        
+        if (result.success) {
+          // alert("xoá tất cả chi tiết phiếu nhập thành công!");
+        } else {
+          alert("Lỗi khi xoá các chi tiết phiếu nhập: " + (result.message || "Không rõ nguyên nhân"));
+        }
+      } catch (error) {
+        console.error("Lỗi fetch API:", error);
+        // alert("Không thể kết nối đến server!");
+      }
+      console.log("id pn", idInputTicketSelected);
+      // Thêm CTPN
+      let check = true;
+      data.forEach(async detail =>{
+        try {
+          const response = await fetch("api/input_ticket_detail/create.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              inputTicketId: idInputTicketSelected,
+              bookId: detail.bookId,
+              inputPrice: detail.inputPrice,
+              quantity : detail.quantity,
+            }),
+          });
+          
+          const result = await response.json();
+          console.log("Server Response:", result);
+          
+          if (result.success) {
+            check = true;
+          } else {
+            check = false;
+          }
+        } catch (error) {
+          console.error("Lỗi fetch API:", error);
+          alert("Không thể kết nối đến server!");
+        }
+      });
+      if(check){
+        alert("thêm các chi tiết thành công");
+      }else{
+        alert("Lỗithêm các chi tiết phiếu nhập: " + (result.message || "Không rõ nguyên nhân"));
+      }
+       // Xoá dialog
+       updateDialog.remove();
+       updateButton.classList.remove("active");
+    
+    });
   // Gán sự kiện cho nút "Đóng" dialog
   document
     .getElementById("close-input_ticket-button")
@@ -327,4 +465,6 @@ export async function updateInputTicketData(idInputTicketSelected) {
       // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
       updateButton.classList.remove("active");
     });
+
+
 }

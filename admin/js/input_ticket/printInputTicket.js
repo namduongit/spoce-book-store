@@ -1,77 +1,79 @@
 import { vietnamMoneyFormat } from "../others.js";
+import { getAllInputTicketDetailById } from "./updateInputTicketData.js";
 
-let data = {
-  ticketId: 1,
-  customerId: 1,
-  dateCreate: "28/02/2025",
-  dateContract: "28/01/2025",
-  inputDetail: [
-    {
-      bookId: "SP00001",
-      bookName: "Tên sách 1",
-      quantity: 2,
-      price: 285000,
-    },
-    {
-      bookId: "SP00005",
-      bookName: "Tên sách 5",
-      quantity: 10,
-      price: 200000,
-    },
-    {
-      bookId: "SP00001",
-      bookName: "Tên sách 1",
-      quantity: 2,
-      price: 285000,
-    },
-    {
-      bookId: "SP00005",
-      bookName: "Tên sách 5",
-      quantity: 10,
-      price: 200000,
-    },
+let data = [];
+//  {
+//   ticketId: 1,
+//   customerId: 1,
+//   dateCreate: "28/02/2025",
+//   dateContract: "28/01/2025",
+//   inputDetail: [
+//     {
+//       bookId: "SP00001",
+//       bookName: "Tên sách 1",
+//       quantity: 2,
+//       price: 285000,
+//     },
+//     {
+//       bookId: "SP00005",
+//       bookName: "Tên sách 5",
+//       quantity: 10,
+//       price: 200000,
+//     },
+//     {
+//       bookId: "SP00001",
+//       bookName: "Tên sách 1",
+//       quantity: 2,
+//       price: 285000,
+//     },
+//     {
+//       bookId: "SP00005",
+//       bookName: "Tên sách 5",
+//       quantity: 10,
+//       price: 200000,
+//     },
 
-    {
-      bookId: "SP00001",
-      bookName: "Tên sách 1",
-      quantity: 2,
-      price: 285000,
-    },
-    {
-      bookId: "SP00005",
-      bookName: "Tên sách 5",
-      quantity: 10,
-      price: 200000,
-    },
-    {
-      bookId: "SP00001",
-      bookName: "Tên sách 1",
-      quantity: 2,
-      price: 285000,
-    },
-    {
-      bookId: "SP00005",
-      bookName: "Tên sách 5",
-      quantity: 10,
-      price: 200000,
-    },
-    {
-      bookId: "SP00001",
-      bookName: "Tên sách 1",
-      quantity: 2,
-      price: 285000,
-    },
-    {
-      bookId: "SP00005",
-      bookName: "Tên sách 5",
-      quantity: 10,
-      price: 200000,
-    },
-  ],
-  totalPrice: 2570000,
-  status: "Đã hoàn thành",
-  dateUpdate: "",
-};
+//     {
+//       bookId: "SP00001",
+//       bookName: "Tên sách 1",
+//       quantity: 2,
+//       price: 285000,
+//     },
+//     {
+//       bookId: "SP00005",
+//       bookName: "Tên sách 5",
+//       quantity: 10,
+//       price: 200000,
+//     },
+//     {
+//       bookId: "SP00001",
+//       bookName: "Tên sách 1",
+//       quantity: 2,
+//       price: 285000,
+//     },
+//     {
+//       bookId: "SP00005",
+//       bookName: "Tên sách 5",
+//       quantity: 10,
+//       price: 200000,
+//     },
+//     {
+//       bookId: "SP00001",
+//       bookName: "Tên sách 1",
+//       quantity: 2,
+//       price: 285000,
+//     },
+//     {
+//       bookId: "SP00005",
+//       bookName: "Tên sách 5",
+//       quantity: 10,
+//       price: 200000,
+//     },
+//   ],
+//   totalPrice: 2570000,
+//   status: "Đã hoàn thành",
+//   dateUpdate: "",
+// };
 
 function renderInputDetailTable() {
   // Biến chứa đối tượng bảng Chi tiết đơn hàng
@@ -81,15 +83,15 @@ function renderInputDetailTable() {
 
   // Chuyển đổi dữ liệu thành các thẻ html
   let html = ``;
-  for (let i = 0; i < data.inputDetail.length; i++) {
+  for (let i = 0; i < data.allDetail.length; i++) {
     html += `
           <tr>
-              <td>${data.inputDetail[i].bookId}</td>
-              <td>${data.inputDetail[i].bookName}</td>
-              <td>${data.inputDetail[i].quantity}</td>
-              <td>${vietnamMoneyFormat(data.inputDetail[i].price)}</td>
+              <td>${data.allDetail[i].bookId}</td>
+              <td>${data.allDetail[i].bookName}</td>
+              <td>${data.allDetail[i].quantity}</td>
+              <td>${vietnamMoneyFormat(data.allDetail[i].inputPrice)}</td>
               <td>${vietnamMoneyFormat(
-                data.inputDetail[i].quantity * data.inputDetail[i].price
+                data.allDetail[i].quantity * data.allDetail[i].inputPrice
               )}</td>
           </tr>
       `;
@@ -100,9 +102,9 @@ function renderInputDetailTable() {
 }
 
 //
-export function printInputTicket(idInputTicketSelected) {
-  //
-
+export async function printInputTicket(idInputTicketSelected) {
+  data = await getAllInputTicketDetailById(idInputTicketSelected);
+  console.log(data.total);
   const printButton = document.getElementById("print-button-input_ticket");
 
   // Lấy ra ngày hiện tại
@@ -137,17 +139,17 @@ export function printInputTicket(idInputTicketSelected) {
               </header>
               <main class="ticket__body input_ticket">
                   <h1 class="ticket__title">PHIẾU NHẬP HÀNG</h1>
-                  <p class="ticket__info"><b>Nhân viên lập phiếu:</b> ${vietnamMoneyFormat(
-                    data.customerId
-                  )}</p>
-                  <p class="ticket__info"><b>Ngày lập phiếu:</b> ${vietnamMoneyFormat(
+                  <p class="ticket__info"><b>Nhân viên lập phiếu:</b> ${
+                    data.employeeUserName
+                  }</p>
+                  <p class="ticket__info"><b>Ngày lập phiếu:</b> ${
                     data.dateCreate
-                  )}</p>
-                  <p class="ticket__info"><b>Ngày hợp đồng:</b> ${vietnamMoneyFormat(
-                    data.dateContract
-                  )}</p>
+                  }</p>
+                  <p class="ticket__info"><b>Ngày hợp đồng:</b> ${
+                    data.dateCreate
+                  }</p>
                   <p class="ticket__info"><b>Tổng thanh toán (VNĐ):</b> ${vietnamMoneyFormat(
-                    data.totalPrice
+                    data.total
                   )} đ</p>
                   <p class="ticket__info"><b>Trạng thái phiếu nhập:</b> ${
                     data.status

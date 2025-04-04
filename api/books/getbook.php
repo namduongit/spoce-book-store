@@ -75,7 +75,7 @@ if (!empty($categoryBook)) {
 
 // Kiểm soát biến orderBy để tránh SQL Injection
 $validOrderColumns = ['tenSach', 'tenSach', 'namXuatBan', 'maSach', 'tenTheLoai'];
-$orderByBook = isset($_GET['orderByBook']) && in_array($_GET['orderByBook'], $validOrderColumns) ? $_GET['orderByBook'] : 'sach.tenSach';
+$orderByBook = isset($_GET['orderByBook']) && in_array($_GET['orderByBook'], $validOrderColumns) ? $_GET['orderByBook'] : 'sach.maSach';
 
 // Kiểm soát biến orderType (ASC/DESC)
 $orderTypeBook = (isset($_GET['orderTypeBook']) && strtoupper($_GET['orderTypeBook']) === 'DESC') ? 'DESC' : 'ASC';

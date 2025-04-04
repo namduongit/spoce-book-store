@@ -17,19 +17,38 @@ class app_models_PhieuNhap extends app_libs_DBConnection {
 
     // Thêm tác giả mới
     public function insertInputTicket($data) {
-        return $this->building_queryParam([
-            'field' => $data
-        ])->insert();
+        if (self::$connection == null) self::$connection = $this->open_connect();
+    
+        $fields = array_keys($data);
+        $placeholders = array_map(fn($field) => ":$field", $fields);
+    
+        $sql = "INSERT INTO " . $this->table_name . " (" . implode(", ", $fields) . ") VALUES (" . implode(", ", $placeholders) . ")";
+    
+        try {
+            $query = self::$connection->prepare($sql);
+            if ($query->execute($data)) {
+                return self::$connection->lastInsertId(); // Trả về ID nếu thành công
+            }
+            return false; // Nếu execute() thất bại, trả về false
+        } catch (PDOException $e) {
+            return false; // Trả về false nếu có lỗi SQL
+        }
     }
+    
 
     // Cập nhật thông tin tác giả
     public function updateInputTicket($maPhieuNhap, $data) {
         $fieldValues = [];
         $params = [':maPhieuNhap' => $maPhieuNhap];
     
+        // Duyệt qua các trường trong mảng $data
         foreach ($data as $field => $value) {
-            $fieldValues[] = "$field = :$field";
-            $params[":$field"] = $value;
+            // Kiểm tra nếu giá trị không phải là chuỗi rỗng
+            if ($value != '') {
+                // Thêm vào mảng $fieldValues chỉ khi giá trị không rỗng
+                $fieldValues[] = "$field = :$field";
+                $params[":$field"] = $value;
+            }
         }
     
         // Tạo câu SQL UPDATE
@@ -38,6 +57,7 @@ class app_models_PhieuNhap extends app_libs_DBConnection {
         // Thực thi câu lệnh SQL
         return $this->query($sql, $params);
     }
+    
     
     
 

@@ -22,6 +22,7 @@ function returnJSONCoverType($coverTypes) {
             "id" => $cover['maLoaiBia'],
             "name" => $cover['tenLoaiBia'],
             "status" => $cover['trangThai'],
+            "price" => $cover['giaBia'],
             "updatedAt" => $cover['ngayCapNhat']
         ];
     }

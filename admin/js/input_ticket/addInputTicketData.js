@@ -1,4 +1,8 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
+import { fetchData } from "../../../public/js/book/getDataBook.js";
+import { getAllSupplierData } from "../../js/supplies/renderSuppliesTable.js";
+
+
 import {
   vietnamMoneyFormat,
   clickToShowDatePicker,
@@ -6,20 +10,20 @@ import {
 } from "../others.js";
 
 const data = [
-  {
-    bookId: "SP00001",
-    bookName: "Tên sách 1", // Thực tế phải truy vấn để lấy ra tiêu đề sách
-    priceBase: 200000,
-    priceInput: 350000,
-    quantityInput: 2,
-  },
-  {
-    bookId: "SP00005",
-    bookName: "Tên sách 5",
-    priceBase: 228000,
-    priceInput: 400000,
-    quantityInput: 10,
-  },
+  // {
+  //   bookId: "SP00001",
+  //   bookName: "Tên sách 1", // Thực tế phải truy vấn để lấy ra tiêu đề sách
+  //   priceBase: 200000,
+  //   priceInput: 350000,
+  //   quantityInput: 2,
+  // },
+  // {
+  //   bookId: "SP00005",
+  //   bookName: "Tên sách 5",
+  //   priceBase: 228000,
+  //   priceInput: 400000,
+  //   quantityInput: 10,
+  // },
 ];
 
 // Hàm cập nhật lại dữ liệu cho bảng Chi tiết phiếu nhập
@@ -31,7 +35,10 @@ function renderInputTicketDetailTable() {
 
   // Chuyển đổi dữ liệu thành các thẻ html
   let html = ``;
+    total += Number(data[i].priceInput) * Number(data[i].quantityInput);
+  let total = 0;
   for (let i = 0; i < data.length; i++) {
+    total += Number(data[i].priceInput) * Number(data[i].quantityInput);
     html += `
           <tr>
               <td>${data[i].bookId}</td>
@@ -43,7 +50,7 @@ function renderInputTicketDetailTable() {
                 data[i].quantityInput * data[i].priceInput
               )}</td>
               <td>
-                <i id="update-remove-trash-input_ticket" class="fa-solid fa-trash"
+                <i id="update-remove-trash-input_ticket" class="fa-solid fa-trash remove-icon" data-index="${i}"
                   style="color: red; text-align: center;">
                 </i>
               </td>
@@ -53,10 +60,26 @@ function renderInputTicketDetailTable() {
 
   // Cập nhật lại giao diện
   bodyIninput_ticketDetailTable.innerHTML = html;
+
+  let totalElement = document.querySelector("#add-input_ticket-cost");
+  if(totalElement){
+    totalElement.value = total;
+  }
+
+  // Sau khi cập nhật bảng, mới thêm sự kiện
+  let removeList = document.querySelectorAll(".remove-icon");
+  removeList.forEach((removeIcon) => {
+    removeIcon.addEventListener("click", () => {
+      let index = removeIcon.getAttribute("data-index"); // Lấy index từ thuộc tính data
+      data.splice(index, 1); // Xóa phần tử khỏi mảng
+      renderInputTicketDetailTable(); // Cập nhật lại bảng sau khi xóa
+    });
+  });
+
 }
 
 // Hàm thiết lập sự kiện thêm sách cho chi tiết phiếu
-function addInputTicketDetailTable() {
+async function addInputTicketDetailTable() {
   // Tạo một dialog để thêm một sách cho chi tiết phiếu
   const addDetailDialog = document.createElement("dialog");
   // - Định dạng dialog
@@ -73,8 +96,6 @@ function addInputTicketDetailTable() {
           <label>Mã sách</label>
           <select id="add-input_ticket-detail-id">
             <option value="" selected>Chọn Mã sách</option>
-            <option value="SA00001">SA00001</option>
-            <option value="SA00002">SA00002</option>
           </select>
       </div>
       <div class="dialog__form-group">
@@ -109,6 +130,27 @@ function addInputTicketDetailTable() {
   // Hiển thị addDetailDialog
   addDetailDialog.showModal();
 
+
+  // get sachs
+  const bookList = await fetchData(`api/books/getbook.php`);
+
+  let html = ``;
+  bookList.forEach(book => {
+    html += `<option value="${book.id}">${book.id} - ${book.name} </option>`;
+  });
+  const selectElementBokID = document.querySelector("#add-input_ticket-detail-id");
+  selectElementBokID.innerHTML += html;
+
+  selectElementBokID.addEventListener("change", async function () {
+    const bookId = this.value;
+    const book = await fetchData(`api/books/get.php?bookID=${bookId}`);
+    const cover = await fetchData(`api/covers/get.php?coverId=${book.books[0].genreId}`);
+    document.querySelector("#add-input_ticket-detail-name").value = book.books[0].name;
+    document.querySelector("#add-input_ticket-detail-price-base").value = cover[0].price;
+
+  });
+
+
   // Gán sự kiện cho nút "Đóng" dialog
   document
     .getElementById("close-input_ticket-detail-button")
@@ -126,34 +168,36 @@ function addInputTicketDetailTable() {
       // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
       const id = document.getElementById("add-input_ticket-detail-id");
       const name = document.getElementById("add-input_ticket-detail-name");
-      const priceBase = document.getElementById(
-        "add-input_ticket-detail-price-base"
-      );
-      const priceInput = document.getElementById(
-        "add-input_ticket-detail-price-input"
-      );
-      const quantityInput = document.getElementById(
-        "add-input_ticket-detail-quantity-input"
-      );
+      const priceBase = document.getElementById( "add-input_ticket-detail-price-base" );
+      const priceInput = document.getElementById( "add-input_ticket-detail-price-input" );
+      const quantityInput = document.getElementById( "add-input_ticket-detail-quantity-input" );
 
       // ... xử lý (chưa kiểm tra tính hợp lệ)
-      //   let isExists = false;
-      //   for (let i = 0; i < data.length; i++) {
-      //     if (item.id == id.value) {
-      //       isExists = true;
-      //       break;
-      //     }
-      //   }
-      //   if (!isExists) {
-      //   } else {
-      //   }
-      data.push({
-        bookId: id.value,
-        bookName: name.value,
-        priceBase: Number(priceBase.value),
-        priceInput: Number(priceInput.value),
-        quantityInput: Number(quantityInput.value),
-      });
+        let isExists = false;
+        for (let i = 0; i < data.length; i++) {
+          isExists = false;
+          if (data[i].bookId == id.value) {
+            isExists = true;
+            break;
+          }
+        }
+       
+        if(isExists){
+          alert("Sách này đã được thêm");
+        }else{
+          if(id.value == '' || name.value == '' || priceInput.value =='' || quantityInput.value ==''){
+            alert("hãy điền đủ thong tin");
+          }else{
+            data.push({
+              bookId: id.value,
+              bookName: name.value,
+              priceBase: Number(priceBase.value),
+              priceInput: Number(priceInput.value),
+              quantityInput: Number(quantityInput.value),
+            });
+          }
+        }
+      
 
       // Cập nhật lại giao diện hiển thị
       renderInputTicketDetailTable();
@@ -172,7 +216,7 @@ export function addInputTicketData() {
   const addButton = document.getElementById("add-button-input_ticket");
 
   //
-  addButton.addEventListener("click", (e) => {
+  addButton.addEventListener("click", async (e) => {
     // Loại bỏ giá trị mặc định
     e.preventDefault();
 
@@ -200,7 +244,7 @@ export function addInputTicketData() {
               </div>
               <div class="dialog__form-group input_ticket half">
                 <label>Mã nhân viên</label>
-                <input type="text" id="update-input_ticket-customer" readonly />
+                <input type="text" id="update-input_ticket-customer" value="namduongit" readonly />
               </div>
               <div class="dialog__form-group input_ticket">
                 <label>Tổng thanh toán (VNĐ)</label>
@@ -208,7 +252,7 @@ export function addInputTicketData() {
               </div>
               <div class="dialog__form-group input_ticket">
                 <label>Trạng thái</label>
-                <input type="text" id="add-input_ticket-status" value="Chưa xác nhận" readonly />
+                <input type="text" id="add-input_ticket-status" value="CHO_XAC_NHAN" readonly />
               </div>
             </div>
             <div class="dialog__row">
@@ -222,10 +266,9 @@ export function addInputTicketData() {
               </div>
               <div class="dialog__form-group input_ticket full">
                 <label>Nhà cung cấp</label>
-                <select id="add-author-status">
+                <select id="add-input_ticket-suplier">
                   <option value="" selected>Chọn Nhà cung cấp</option>
-                  <option value="1">NCC00001 - Nhà cung cấp 01</option>
-                  <option value="0">NCC00002 - Nhà cung cấp 02</option>
+
                 </select>
               </div>
             </div>
@@ -259,6 +302,18 @@ export function addInputTicketData() {
     // Thêm vào body
     document.body.appendChild(addDialog);
 
+
+    
+      let suplierList = await getAllSupplierData();
+      let htmlSuplier = ``;
+      suplierList.forEach(suplier =>{
+        htmlSuplier +=`<option value="${suplier.id}">${suplier.name}</option>`;
+      });
+    
+      document.querySelector("#add-input_ticket-suplier").innerHTML +=htmlSuplier;
+    
+    
+
     // Hiển thị addDialog
     addDialog.showModal();
 
@@ -288,6 +343,91 @@ export function addInputTicketData() {
     });
     // -
     renderInputTicketDetailTable();
+
+    // sự kiện nhấn thêm pn
+    document.querySelector("#add-input_ticket-button").
+    addEventListener("click", async (e) => {
+      e.preventDefault();
+      let idInputTicket = -1;
+      let checkAddInputTicket = false;
+      try {
+        const dateCreate = document.querySelector("#add-input_ticket-date-create").value;
+        const employeeName = document.querySelector("#update-input_ticket-customer").value;
+        const status = document.querySelector("#add-input_ticket-status").value;
+        const suplierId = document.querySelector("#add-input_ticket-suplier").value;
+        const totalPrice = document.querySelector("#add-input_ticket-cost").value;
+
+        const response = await fetch("api/input_ticket/create.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            dateCreate:dateCreate,
+            employeeName: employeeName,
+            totalPrice: totalPrice,
+            suplierId: suplierId,
+            status:status,
+
+          }),
+        });
+        
+        const result = await response.json();
+        console.log("Server Response:", result);
+        
+        if (result.success) {
+          idInputTicket = result.inputTicketId;
+          checkAddInputTicket = true;
+          // alert("thêm phiếu nhập thành công!");
+        } else {
+          checkAddInputTicket = false;
+          alert("Lỗi thêm phiếu nhập: " + (result.message || "Không rõ nguyên nhân"));
+        }
+      } catch (error) {
+        console.error("Lỗi fetch API:", error);
+        // alert("Không thể kết nối đến server!");
+      }
+console.log(idInputTicket);
+      // nếu thêm thành công
+      if(checkAddInputTicket && idInputTicket != -1){
+        
+        let check = false;
+        data.forEach(async detail =>{
+          try {
+            const response = await fetch("api/input_ticket_detail/create.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: new URLSearchParams({
+                inputTicketId: idInputTicket,
+                bookId: detail.bookId,
+                inputPrice: detail.priceInput,
+                quantity : detail.quantityInput,
+              }),
+            });
+            
+            const result = await response.json();
+            console.log("Server Response:", result); 
+            if (result.success) {
+              check = true;
+            } else {
+              check = false;
+            }
+          } catch (error) {
+            console.error("Lỗi fetch API:", error);
+            alert("Không thể kết nối đến server!");
+          }
+        });
+        if(check){
+          alert("thêm phiêu nhập thành công");
+        }else{
+          alert("thêm không thành công");
+        }
+      }
+
+
+    });
 
     // Gán sự kiện cho nút "Đóng" dialog
     document
