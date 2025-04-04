@@ -1,6 +1,7 @@
 import { vietnamMoneyFormat } from "../others.js";
 import { updateInputTicketData } from "./updateInputTicketData.js";
 import { printInputTicket } from "./printInputTicket.js";
+import { filterInputTicket } from "./filterInputTicket.js";
 
 // Dữ liệu tạm thời (sau phải xây dựng hàm truy xuất dữ liệu từ csdl)
 let data = [];
@@ -25,8 +26,8 @@ export async function getAllInputTicketData(){
 
 
 // Hàm cập nhật lại dữ liệu cho bảng phiếu nhập hàng
-export async function renderInputTicketTable() {
-  data = await getAllInputTicketData();
+export async function renderInputTicketTable(pageIsSelected = 1) {
+  data = await filterInputTicket(pageIsSelected);
   // Biến chứa đối tượng bảng phiếu nhập hàng
   const bodyInputTicketTable = document.querySelector(
     ".main__data > .main__table.input_ticket > tbody"
@@ -38,7 +39,7 @@ export async function renderInputTicketTable() {
     html += `
         <tr>
             <td>${data[i].id}</td>
-            <td>${data[i].suplierId}</td>
+            <td>${data[i].suplierName}</td>
             <td>${data[i].dateCreate}</td>
             <td>${vietnamMoneyFormat(data[i].inputTotal)}</td>
             <td><span ${
@@ -92,4 +93,6 @@ export async function renderInputTicketTable() {
       printInputTicket(idInputTicketSelected);
     });
   });
+ 
+  
 }

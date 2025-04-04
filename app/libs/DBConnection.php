@@ -152,7 +152,7 @@ class app_libs_DBConnection
     
     // ===============================================================
 
-    public function joinTables($tables = [], $joins = [], $conditions = [], $orderBy = '', $orderType = 'ASC', $limit = null, $offset = null, $params = [], $columns = ['*']) {
+    public function joinTables(  $columns = ['*'], $tables = [], $joins = [], $conditions = [], $orderBy = '', $orderType = 'ASC', $limit = null, $offset = null, $params = []) {
         if (self::$connection == null) self::$connection = $this->open_connect();
     
         if (empty($tables) || empty($joins)) {

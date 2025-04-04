@@ -35,7 +35,6 @@ function renderInputTicketDetailTable() {
 
   // Chuyển đổi dữ liệu thành các thẻ html
   let html = ``;
-    total += Number(data[i].priceInput) * Number(data[i].quantityInput);
   let total = 0;
   for (let i = 0; i < data.length; i++) {
     total += Number(data[i].priceInput) * Number(data[i].quantityInput);
@@ -350,83 +349,86 @@ export function addInputTicketData() {
       e.preventDefault();
       let idInputTicket = -1;
       let checkAddInputTicket = false;
-      try {
-        const dateCreate = document.querySelector("#add-input_ticket-date-create").value;
-        const employeeName = document.querySelector("#update-input_ticket-customer").value;
-        const status = document.querySelector("#add-input_ticket-status").value;
-        const suplierId = document.querySelector("#add-input_ticket-suplier").value;
-        const totalPrice = document.querySelector("#add-input_ticket-cost").value;
-
-        const response = await fetch("api/input_ticket/create.php", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({
-            dateCreate:dateCreate,
-            employeeName: employeeName,
-            totalPrice: totalPrice,
-            suplierId: suplierId,
-            status:status,
-
-          }),
-        });
+      const dateCreate = document.querySelector("#add-input_ticket-date-create").value;
+      const employeeName = document.querySelector("#update-input_ticket-customer").value;
+      const status = document.querySelector("#add-input_ticket-status").value;
+      const suplierId = document.querySelector("#add-input_ticket-suplier").value;
+      const totalPrice = document.querySelector("#add-input_ticket-cost").value;
+      if(dateCreate != '' && employeeName != '' || status != '' && suplierId != '' && totalPrice != ''){
         
-        const result = await response.json();
-        console.log("Server Response:", result);
-        
-        if (result.success) {
-          idInputTicket = result.inputTicketId;
-          checkAddInputTicket = true;
-          // alert("thêm phiếu nhập thành công!");
-        } else {
-          checkAddInputTicket = false;
-          alert("Lỗi thêm phiếu nhập: " + (result.message || "Không rõ nguyên nhân"));
-        }
-      } catch (error) {
-        console.error("Lỗi fetch API:", error);
-        // alert("Không thể kết nối đến server!");
-      }
-console.log(idInputTicket);
-      // nếu thêm thành công
-      if(checkAddInputTicket && idInputTicket != -1){
-        
-        let check = false;
-        data.forEach(async detail =>{
-          try {
-            const response = await fetch("api/input_ticket_detail/create.php", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-              },
-              body: new URLSearchParams({
-                inputTicketId: idInputTicket,
-                bookId: detail.bookId,
-                inputPrice: detail.priceInput,
-                quantity : detail.quantityInput,
-              }),
-            });
-            
-            const result = await response.json();
-            console.log("Server Response:", result); 
-            if (result.success) {
-              check = true;
-            } else {
-              check = false;
-            }
-          } catch (error) {
-            console.error("Lỗi fetch API:", error);
-            alert("Không thể kết nối đến server!");
+        try {
+  
+          const response = await fetch("api/input_ticket/create.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              dateCreate:dateCreate,
+              employeeName: employeeName,
+              totalPrice: totalPrice,
+              suplierId: suplierId,
+              status:status,
+  
+            }),
+          });
+          
+          const result = await response.json();
+          console.log("Server Response:", result);
+          
+          if (result.success) {
+            idInputTicket = result.inputTicketId;
+            checkAddInputTicket = true;
+            // alert("thêm phiếu nhập thành công!");
+          } else {
+            checkAddInputTicket = false;
+            alert("Lỗi thêm phiếu nhập: " + (result.message || "Không rõ nguyên nhân"));
           }
-        });
-        if(check){
-          alert("thêm phiêu nhập thành công");
-        }else{
-          alert("thêm không thành công");
+        } catch (error) {
+          console.error("Lỗi fetch API:", error);
+          // alert("Không thể kết nối đến server!");
         }
+  console.log(idInputTicket);
+        // nếu thêm thành công
+        if(checkAddInputTicket && idInputTicket != -1){
+          
+          let check = false;
+          data.forEach(async detail =>{
+            try {
+              const response = await fetch("api/input_ticket_detail/create.php", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({
+                  inputTicketId: idInputTicket,
+                  bookId: detail.bookId,
+                  inputPrice: detail.priceInput,
+                  quantity : detail.quantityInput,
+                }),
+              });
+              
+              const result = await response.json();
+              console.log("Server Response:", result); 
+              if (result.success) {
+                check = true;
+              } else {
+                check = false;
+              }
+            } catch (error) {
+              console.error("Lỗi fetch API:", error);
+              alert("Không thể kết nối đến server!");
+            }
+          });
+          if(check){
+            alert("thêm phiêu nhập thành công");
+          }else{
+            alert("thêm không thành công");
+          }
+        }  
+      }else{
+        alert("hãy điền đủ thông tin ");
       }
-
-
     });
 
     // Gán sự kiện cho nút "Đóng" dialog

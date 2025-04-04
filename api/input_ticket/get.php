@@ -30,7 +30,7 @@ function returnJSONInputTicket($InputTickets) {
 
         $response[] = [
             "id" => $InputTicket['maPhieuNhap'],
-            "dateCreate" => $InputTicket['ngayTaoPhieu'],
+            // "dateCreate" => $InputTicket['ngayTaoPhieu'],
             "dateCreate" => explode(" ", $InputTicket['ngayTaoPhieu'])[0],
             "employeeUserName" => $InputTicket['taiKhoanNhanVien'],
             "inputTotal" => $InputTicket['tongTienNhap'],

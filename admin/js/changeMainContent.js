@@ -580,16 +580,16 @@ const mainContentMap = {
       </div>
       <div class="main__sort-slt main__select slt-form-1">
         <input required="" type="text" id="sort-slt-input_ticket" />
-        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Chọn Sắp xếp</span>
+        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
         <ul>
-          <li>ID tăng dần</li>
-          <li>ID giảm dần</li>
-          <li>Nhà cung cấp tăng dần</li>
-          <li>Nhà cung cấp giảm dần</li>
-          <li>Ngày lập phiếu tăng dần</li>
-          <li>Ngày lập phiếu giảm dần</li>
-          <li>Tổng tiền nhập tăng dần</li>
-          <li>Tổng tiền nhập giảm dần</li>
+        <li>ID giảm dần</li>
+        <li>ID tăng dần</li>
+        <li>Nhà cung cấp tăng dần</li>
+        <li>Nhà cung cấp giảm dần</li>
+        <li>Ngày lập phiếu tăng dần</li>
+        <li>Ngày lập phiếu giảm dần</li>
+        <li>Tổng tiền nhập tăng dần</li>
+        <li>Tổng tiền nhập giảm dần</li>
         </ul>
       </div>
       <div class="main__find-inp inp-text-form-1 date">
@@ -600,14 +600,25 @@ const mainContentMap = {
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-input_ticket" />
-        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
         <ul>
-          <li>Đã hoàn thành</li>
-          <li>Chưa thanh toán</li>
-          <li>Đang chờ xác nhận</li>
-          <li>Đã huỷ phiếu</li>
+          <li>Tất cả</li>
+          <li>DA_NHAP</li>
+          <li>CHO_XAC_NHAN</li>
         </ul>
       </div>
+
+      <div class="main__status-slt main__select slt-form-1">
+        <input required="" type="text" id="show-slt-input_ticket" />
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Hiển Thị</span>
+        <ul>
+          <li>Mặc định</li>
+          <li>15</li>
+          <li>20</li>
+          <li>25</li>
+        </ul>
+      </div>
+
       <button class="main__filter-btn" id="filter-button-input_ticket">
         <i class="fa-solid fa-filter"></i>
         <span>Lọc</span>
@@ -633,17 +644,11 @@ const mainContentMap = {
         </tbody>
       </table>
     </div>
-    <div class="main__pagination">
+    <div class="main__pagination" id="main__pagination_input-ticket">
       <button class="main-pagination__button previous">
         <i class="icon fa-solid fa-chevron-left"></i>
       </button>
-      <button class="main-pagination__button">1</button>
-      <button class="main-pagination__button active">2</button>
-      <button class="main-pagination__button">3</button>
-      <button class="main-pagination__button">...</button>
-      <button class="main-pagination__button">997</button>
-      <button class="main-pagination__button">998</button>
-      <button class="main-pagination__button">999</button>
+      
       <button class="main-pagination__button next">
         <i class="icon fa-solid fa-chevron-right"></i>
       </button>

@@ -87,7 +87,7 @@ $offset = 0;
 $columns = ['sach.hinhAnh', 'sach.giaTran', 'sach.moTa', 'sach.kichThuoc', 'sach.giaBan', 'sach.maSach', 'sach.soTrang', 'sach.tenSach',  'theLoai.tenTheLoai', 'nhaXuatBan.tenNXB', 'tacGia.tenTacGia', 'sach.namXuatBan', 'sach.trangThai', 'loaiBia.tenLoaiBia'];
 
 $db = new app_libs_DBConnection();
-$result = $db->joinTables($tables, $joins, $conditions, $orderByBook, $orderTypeBook, $limit, $offset, $params, $columns);
+$result = $db->joinTables( $columns, $tables, $joins, $conditions, $orderByBook, $orderTypeBook, $limit, $offset, $params);
 
 
 // print_r($result);

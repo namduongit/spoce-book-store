@@ -1,5 +1,5 @@
 import { clickToShowDatePicker } from "../others.js";
-// import { filterInputTicketData } from "./filterInputTicketData.js";
+import { filterInputTicketData } from "./filterInputTicket.js";
 import { addInputTicketData } from "./addInputTicketData.js";
 import { renderInputTicketTable } from "./renderInputTicketTable.js";
 
@@ -7,7 +7,7 @@ import { renderInputTicketTable } from "./renderInputTicketTable.js";
 export function updateInputTicketTable() {
   clickToShowDatePicker("find-date-create-before-inp-input_ticket");
   clickToShowDatePicker("find-date-create-after-inp-input_ticket");
-  //   filterInputTicketData();
+    filterInputTicketData();
   addInputTicketData();
   renderInputTicketTable();
 }
