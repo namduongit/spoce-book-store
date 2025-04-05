@@ -2,13 +2,28 @@ import { isNotFirstItemSelected } from "../selectEvents.js";
 import { clickToShowDatePicker, defaultDateSelected } from "../others.js";
 
 // Hàm thiết lập sự kiện Sửa một khuyến mãi cho bảng
-export function updateDiscountData(idDiscountSelected) {
+export async function updateDiscountData(idDiscountSelected) {
   // Phải truy vấn từ CSDL thông qua idDiscountSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
-
+  const id = idDiscountSelected.textContent;
+  const discountData = await fetch(`/api/discount/get_discount_detail.php?maGiamGia=${id}`);
+  const discountDataJson = await discountData.json();
+  // console.log(discountDataJson);
+  const discount = discountDataJson.data;
+  // console.log(discount);
+  let discountValue = "";
+  if (discount.type === "PERCENTAGE") {
+    discountValue = `${discount.phanTram}%`;
+  } else if (discount.type === "FIXED_AMOUNT") {
+    discountValue = `${parseInt(discount.giaTriGiam).toLocaleString()}đ`;
+  } else {
+    discountValue = "Không xác định";
+  }
+  console.log(discountValue);
+  
   // Biến chứa đối tượng là nút "Sửa"
   const updateButton = document.getElementById("update-button-discount");
-
+  
   // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
   updateButton.classList.add("active");
 
@@ -29,54 +44,54 @@ export function updateDiscountData(idDiscountSelected) {
               <div class="dialog__row">
                 <div class="dialog__form-group">
                   <label>Mã khuyến mãi</label>
-                  <input type="text" id="update-discount-id" readonly />
+                  <input type="text" id="update-discount-id" readonly value="${discount.maPGG}"/>
                 </div>
                 <div class="dialog__form-group">
                   <label>Tên khuyến mãi</label>
-                  <input type="text" id="update-discount-name" placeholder="Nhập Tên khuyến mãi" autofocus/>
+                  <input type="text" id="update-discount-name" placeholder="Nhập Tên khuyến mãi" autofocus value="${discount.tenPGG}"/>
                 </div>
               </div>
               <div class="dialog__row">
                      <div class="dialog__form-group">
                       <label>Loại khuyến mãi</label>
                       <select id="update-discount-type">
-                        <option value="" selected>Chọn Loại khuyến mãi</option>
-                        <option value="1">Phần trăm</option>
-                        <option value="0">Tiền</option>
+                        <option value="${discount.type}" selected style="opacity: 1;">${discount.type}</option>
+                        <option value="PERCENTAGE">PERCENTAGE</option>
+                        <option value="FIXED_AMOUNT">FIXED_AMOUNT</option>
                       </select>
                     </div>
                     <div class="dialog__form-group">
                       <label>Giá trị</label>
-                      <input type="text" id="update-discount-value" placeholder="Nhập Giá trị" />
+                      <input type="text" id="update-discount-value" placeholder="Nhập Giá trị" value="${discountValue}"/>
                     </div>
                   </div>
               <div class="dialog__row">
                 <div class="dialog__form-group">
                   <label>Ngày bắt đầu</label>
-                  <input type="date" id="update-discount-date-start" />
+                  <input type="date" id="update-discount-date-start" style="opacity: 1;" value="${discount.ngayBatDau}" autofocus/>
                 </div>
                 <div class="dialog__form-group">
                   <label>Ngày kết thúc</label>
-                  <input type="date" id="update-discount-date-end" />
+                  <input type="date" id="update-discount-date-end" style="opacity: 1;" value="${discount.ngayKetThuc}" autofocus/>
                 </div>
               </div>
               <div class="dialog__row">
                     <div class="dialog__form-group">
                       <label>Tiền đơn tối thiểu</label>
-                      <input type="text" id="update-discount-order-min-cost" placeholder="Nhập Tiền đơn tối thiểu" />
-                    </div>
+                      <input type="text" id="update-discount-order-min-cost" placeholder="Nhập Tiền đơn tối thiểu" value="${discount.toiThieu}"/>
+                    </div>  
                     <div class="dialog__form-group">
                       <label>Tiền giảm tối đa</label>
-                      <input type="text" id="update-discount-order-max-discount" placeholder="Nhập Tiền giảm tối đa" />
+                      <input type="text" id="update-discount-order-max-discount" placeholder="Nhập Tiền giảm tối đa" value="${discount.toiDa}"/>
                     </div>
                   </div>
               <div class="dialog__row">
                 <div class="dialog__form-group">
                   <label>Trạng thái</label>
-                  <select id="update-discount-status" disabled>
-                    <option value="" selected>Chọn Trạng thái</option>
-                    <option value="1">Hoạt động</option>
-                    <option value="0">Tạm dừng</option>
+                  <select id="update-discount-status">
+                    <option value="${discount.trangThai}">${discount.trangThai}</option>
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="DISABLE">DISABLE</option>
                   </select>
                 </div>
                 <div class="dialog__form-group"></div>
@@ -86,7 +101,6 @@ export function updateDiscountData(idDiscountSelected) {
               </div>
             </form>
         `;
-
   // Thêm vào body
   document.body.appendChild(updateDialog);
 
@@ -110,30 +124,96 @@ export function updateDiscountData(idDiscountSelected) {
   // Gán sự kiện cho nút "Sửa" dialog
   document
     .getElementById("update-discount-button")
-    .addEventListener("click", () => {
+    .addEventListener("click", async (e) => {
       // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-      //   const id = document.getElementById("add-discount-id");
-      const name = document.getElementById("add-discount-name");
-      const type = document.getElementById("add-discount-type");
-      const value = document.getElementById("add-discount-value");
-      const dateStart = document.getElementById("add-discount-date-start");
-      const dateEnd = document.getElementById("add-discount-date-end");
-      const minCost = document.getElementById("add-discount-order-min-cost");
+      e.preventDefault();
+      const id = document.getElementById("update-discount-id").value;
+      const name = document.getElementById("update-discount-name").value;
+      const type = document.getElementById("update-discount-type").value;
+      let value = document.getElementById("update-discount-value").value;
+      const dateStart = document.getElementById("update-discount-date-start").value;
+      const dateEnd = document.getElementById("update-discount-date-end").value;
+      const minCost = document.getElementById("update-discount-order-min-cost").value;
       const maxDiscount = document.getElementById(
-        "add-discount-order-max-discount"
-      );
-      //   const status = document.getElementById("add-discount-status");
+          "update-discount-order-max-discount"
+      ).value;
+      const status = document.getElementById("update-discount-status").value;
 
       // ... (Xử lý tiếp ở đây)
       //   console.log(id.value);
-      console.log(name.value);
-      console.log(value.value);
-      console.log(type.value);
-      console.log(dateStart.value);
-      console.log(dateEnd.value);
-      console.log(minCost.value);
-      console.log(maxDiscount.value);
+      console.log(name);
+      console.log(value);
+      console.log(type);
+      console.log(dateStart);
+      console.log(dateEnd);
+      console.log(minCost);
+      console.log(maxDiscount);
       //   console.log(status.value);
+      // Kiểm tra tính hợp lệ của dữ liệu
+      if (!name || !type || !value || !dateStart || !dateEnd || !minCost || !maxDiscount) {
+        alert("Vui lòng nhập đầy đủ thông tin");
+        return;
+      }
+      // Kiểm tra tính hợp lệ của ngày bắt đầu và ngày kết thúc
+      if (dateStart > dateEnd) {
+        alert("Ngày bắt đầu không được lớn hơn ngày kết thúc");
+        return;
+      }
+      // Kiểm tra tính hợp lệ của giá trị
+      if (type === "PERCENTAGE" && (value < 0 || value > 100)) {
+        alert("Giá trị phải nằm trong khoảng 0-100");
+        return;
+      }
+      if (type === "FIXED_AMOUNT") {
+        value = value.replace(/,/g, '');
+        value = parseInt(value);
+      }
+      if (type === "FIXED_AMOUNT" && (value < 0 || value > 1000000000)) {
+        alert("Giá trị phải nằm trong khoảng 0-10000000");
+        return;
+      }
+      if(type === "PERCENTAGE" ){
+        value = parseInt(value);
+      }
+      // Kiểm tra tính hợp lệ của tiền đơn tối thiểu
+      if (minCost < 0 || minCost > 1000000000) {
+        alert("Tiền đơn tối thiểu phải nằm trong khoảng 0-1000000000");
+        return;
+      }
+      // Kiểm tra tính hợp lệ của tiền giảm tối đa
+      if (maxDiscount < 0 || maxDiscount > 1000000000) {
+        alert("Tiền giảm tối đa phải nằm trong khoảng 0-1000000000");
+        return;
+      }
+      // Gửi dữ liệu đến server để cập nhật
+      let params = new URLSearchParams();
+      params.append("id", id);
+      params.append("name", name);
+      params.append("type", type);
+      params.append("value", value);
+      params.append("dateStart", dateStart);
+      params.append("dateEnd", dateEnd);
+      params.append("minCost", minCost);
+      params.append("maxDiscount", maxDiscount);
+      params.append("status", status);
+      
+      let url = `api/discount/update_discount.php?${params.toString()}`;
+      console.log("Request URL:", url); 
+
+      try {
+        const response = await fetch(url);
+
+        const result = await response.json(); // Chuyển luôn về JSON
+        console.log(result);
+        if (result.success) {
+          alert("sửa thành công!");
+        } else {
+          alert("Lỗi sửa phiếu khuyến mãi: " + (result.error));
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+      
     });
 
   // Gán sự kiện cho nút "Đóng" dialog

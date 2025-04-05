@@ -142,14 +142,16 @@ class app_models_PhieuGiamGia extends app_libs_DBConnection
             $fieldValues[] = "$field = :$field";
             $params[":$field"] = $value;
         }
-
-        $fieldValuesString = implode(', ', $fieldValues);
-
-        return $this->building_queryParam([
-            'where' => 'maPGG = :maPGG',
-            'params' => $params,
-            'field' => $fieldValuesString
-        ])->update();
+        // Câu SQL cập nhật
+        $sql = "UPDATE " . $this->table_name . " SET " . implode(", ", $fieldValues) . " WHERE maPGG = :maPGG";
+        
+        // Thực thi câu lệnh SQL
+        return $this->query($sql, $params);
+        // return $this->building_queryParam([
+        //     'where' => 'maPGG = :maPGG',
+        //     'params' => $params,
+        //     'field' => $fieldValuesString
+        // ])->update();
     }
     // Xóa phiếu giảm giá
     public function deleteDiscount($maPGG)

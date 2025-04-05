@@ -77,8 +77,8 @@ export async function renderDiscountTable() {
               <i id="detail-button-discount" class="fa-solid fa-circle-info"></i>
               <i id="update-button-discount" class="fa-solid fa-pen-to-square"></i>
               <i id="lock-button-discount" class="fa-solid fa-${
-                discount.trangThai === "Hoạt động" ? "" : "un"
-              }lock"></i>
+                discount.trangThai === "Hoạt động" ? "lock" : "unlock"
+              }"></i>
             </td>
           </tr>
         `;

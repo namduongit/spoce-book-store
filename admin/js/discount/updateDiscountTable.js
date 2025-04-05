@@ -1,6 +1,7 @@
 import { clickToShowDatePicker } from "../others.js";
 import { filterDiscountData } from "./filterDiscountData.js";
 import { addDiscountData } from "./addDiscountData.js";
+// import { updateDiscountData } from "./updateDiscountData.js";
 import { renderDiscountTable } from "./renderDiscountTable.js";
 
 // Hàm tổng hợp lại các sự kiện để có thể cập nhật bảng dữ liệu Khuyến mãi
@@ -9,5 +10,6 @@ export function updateDiscountTable() {
   clickToShowDatePicker("find-date-end-inp-discount");
   filterDiscountData();
   addDiscountData();
+  // updateDiscountData();
   renderDiscountTable();
 }
