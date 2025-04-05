@@ -139,6 +139,12 @@ class app_models_PhieuGiamGia extends app_libs_DBConnection
         $params = [':maPGG' => $maPGG];
 
         foreach ($data as $field => $value) {
+            if ($field === 'phanTram' && $data['type'] !== 'PERCENTAGE') {
+            continue; // Bỏ qua nếu không phải là PERCENTAGE
+        }
+        if ($field === 'giaTriGiam' && $data['type'] !== 'FIXED_AMOUNT') {
+            continue; // Bỏ qua nếu không phải là FIXED_AMOUNT
+        }
             $fieldValues[] = "$field = :$field";
             $params[":$field"] = $value;
         }

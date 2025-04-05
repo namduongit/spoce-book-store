@@ -88,10 +88,8 @@ export async function updateDiscountData(idDiscountSelected) {
               <div class="dialog__row">
                 <div class="dialog__form-group">
                   <label>Trạng thái</label>
-                  <select id="update-discount-status">
+                  <select id="update-discount-status" disabled>
                     <option value="${discount.trangThai}">${discount.trangThai}</option>
-                    <option value="ACTIVE">ACTIVE</option>
-                    <option value="DISABLE">DISABLE</option>
                   </select>
                 </div>
                 <div class="dialog__form-group"></div>
@@ -190,19 +188,21 @@ export async function updateDiscountData(idDiscountSelected) {
       params.append("id", id);
       params.append("name", name);
       params.append("type", type);
-      params.append("value", value);
+      if (type === "PERCENTAGE") {
+  params.append("phanTram", value);
+} else if (type === "FIXED_AMOUNT") {
+  params.append("giaTriGiam", value);
+}
       params.append("dateStart", dateStart);
       params.append("dateEnd", dateEnd);
       params.append("minCost", minCost);
       params.append("maxDiscount", maxDiscount);
-      params.append("status", status);
       
       let url = `api/discount/update_discount.php?${params.toString()}`;
       console.log("Request URL:", url); 
 
       try {
-        const response = await fetch(url);
-
+        const response = await fetch(url, {method: "GET"});
         const result = await response.json(); // Chuyển luôn về JSON
         console.log(result);
         if (result.success) {
