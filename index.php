@@ -493,9 +493,6 @@
                             <img src="public/images/footer_logo_payment_1.png" alt="payment1"> 
                             <img src="public/images/footer_logo_payment_2.png" alt="payment2"> 
                             <img src="public/images/footer_logo_payment_3.png" alt="payment3"> 
-                            <img src="public/images/footer_logo_payment_4.png" alt="payment4"> 
-                            <img src="public/images/footer_logo_payment_5.png" alt="payment5"> 
-                            <img src="public/images/footer_logo_payment_6.png" alt="payment6"> 
                         </div>
                     </div>
                     <div class="footer__top-item">

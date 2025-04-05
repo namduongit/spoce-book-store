@@ -453,11 +453,13 @@ async function showOrderDetail(orderId) {
         <div class="order-history__container">
             <div class="info__title">CHI TIẾT ĐƠN HÀNG</div>
             <div class="order-history__content">
-                <p class="order-detail__title">ĐƠN HÀNG: #${orderId}, <span class="order-detail__date">Đặt lúc — ${formatDate(order['ngayTaoDon'])}</span></p>
-                <p class="order-detail__status"><span>Tình trạng thanh toán: </span>${order['trangThaiThanhToan']}</p>
-                <p class="order-detail__status"><span>Trạng thái đơn hàng: </span>${formatStatus(order['trangThai'])}</p>
-                <p class="order-detail__status"><span>Địa chỉ giao hàng: </span>${order['diaChiGiao']}</p>
-                <span class="order-detail__back-to-order-history">Quay lại lịch sử đơn hàng</span>
+                <span class="order-detail__back-to-order-history"><i class="fa fa-reply"></i> Quay lại lịch sử đơn hàng</span>
+                <div class="order-detail__order-info-container">
+                    <p class="order-detail__title">ĐƠN HÀNG: #${orderId}, <span class="order-detail__date">Đặt lúc — ${formatDate(order['ngayTaoDon'])}</span></p>
+                    <p class="order-detail__status"><span>Tình trạng thanh toán: </span>${order['trangThaiThanhToan']}</p>
+                    <p class="order-detail__status"><span>Trạng thái đơn hàng: </span>${formatStatus(order['trangThai'])}</p>
+                    <p class="order-detail__status"><span>Địa chỉ giao hàng: </span>${order['diaChiGiao']}</p>
+                </div>
                 <div class="order-detail__product-detail-container">
                     <div class="order-detail__product-content">
                         <p>Chi tiết đơn hàng</p>
