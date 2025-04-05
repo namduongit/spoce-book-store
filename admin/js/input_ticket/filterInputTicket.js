@@ -76,45 +76,92 @@ export function filterInputTicketData() {
     if (filterButton) {
         filterButton. addEventListener("click", async (e)=> {
             e.preventDefault();
-            await renderInputTicketTable(1);        
+            curentpage = 1;     
+            await renderInputTicketTable(1);   
         });
     }
 
 }
 
 
-async function paginationInputTicket(limit) {
-    // console.log("khangg");
-    //   let allInputTicket = await fetchData(`api/input_ticket/get.php`);
-    //   let inputTicketCount = allInputTicket.length;
-    //   let pageCount = Math.ceil(inputTicketCount / limit);
-      let pagination_container = document.querySelector("#main__pagination_input-ticket");
-  
-      pagination_container.innerHTML = ''; 
-  
-      let prevButton = document.createElement("button");
-      prevButton.classList.add("main-pagination__button", "previous");
-      prevButton.innerHTML = '<i class="icon fa-solid fa-chevron-left"></i>';
-      pagination_container.appendChild(prevButton);
-  
-    //   console.log(pageCount);
+async function paginationInputTicket(pageCount) {
+    if(pageCount > 1){
 
-      for (let i = 1; i <= limit; i++) {
-        let pageButton = document.createElement("button");
-        pageButton.classList.add("main-pagination__button");
-        pageButton.textContent = i;
+        let pagination_container = document.querySelector("#main__pagination_input-ticket");
+    
+        pagination_container.innerHTML = ''; 
+    
+        let prevButton = document.createElement("button");
+        prevButton.classList.add("main-pagination__button", "previous");
+        prevButton.innerHTML = '<i class="icon fa-solid fa-chevron-left"></i>';
+        prevButton.addEventListener("click", function(){
+          if(curentpage > 1){
+              renderInputTicketTable(curentpage - 1);
+              curentpage -= 1;
+          }
   
-        pageButton.addEventListener("click", function () {
-          console.log(`Page ${i} clicked`);
-          renderInputTicketTable(i);
         });
+        pagination_container.appendChild(prevButton);
+    
+      //   console.log(pageCount);
   
-        pagination_container.appendChild(pageButton);
+        for (let i = 1; i <= pageCount; i++) {
+          let pageButton = document.createElement("button");
+          pageButton.classList.add("main-pagination__button");
+          pageButton.textContent = i;
+    
+          pageButton.addEventListener("click", function () {
+            console.log(`Page ${i} clicked`);
+            curentpage = i;
+            renderInputTicketTable(i);
+          });
+    
+          pagination_container.appendChild(pageButton);
+        }
+    
+        let nextButton = document.createElement("button");
+        nextButton.classList.add("main-pagination__button", "next");
+        nextButton.innerHTML = '<i class="icon fa-solid fa-chevron-right"></i>';
+        nextButton.addEventListener("click", function(){
+          if(curentpage < pageCount){
+              renderInputTicketTable(curentpage + 1);
+              curentpage += 1;
+          }
+  
+        });
+        pagination_container.appendChild(nextButton);
+  
+      const curentpageButton = document.querySelector(`.main__pagination button:nth-child(${curentpage + 1})`);
+      curentpageButton.classList.add("active");
+  
+      let allButtons = document.querySelectorAll('.main__pagination .main-pagination__button');
+      let buttonsContainer = document.querySelector('.main__pagination');
+      if(curentpage >= 4){
+          for(let i = 2; i < curentpage -1; i++){
+              allButtons[i].style.display = "none";
+          }
+  
+          const newButton = document.createElement("button");
+          newButton.classList.add("main-pagination__button");
+          newButton.textContent = "...";
+          // Chèn vào vị trí thứ 3 (index 2 vì index bắt đầu từ 0)
+          buttonsContainer.insertBefore(newButton, allButtons[2]);
+  
       }
+      if(curentpage < pageCount - 2){
+          for(let i = pageCount - 1; i > curentpage +1; i--){
+              allButtons[i].style.display = "none";
+          }
+          const newButton = document.createElement("button");
+          newButton.classList.add("main-pagination__button");
+          newButton.textContent = "...";
+          // Chèn vào vị trí thứ 3 (index 2 vì index bắt đầu từ 0)
+          buttonsContainer.insertBefore(newButton, allButtons[pageCount - 1]);
   
-      let nextButton = document.createElement("button");
-      nextButton.classList.add("main-pagination__button", "next");
-      nextButton.innerHTML = '<i class="icon fa-solid fa-chevron-right"></i>';
-      pagination_container.appendChild(nextButton);
-  }
+      }
+    }else{
+        let pagination_container = document.querySelector("#main__pagination_input-ticket");
+        pagination_container.innerHTML = '';
+    }
+}
   
