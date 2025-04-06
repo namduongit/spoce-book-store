@@ -1,9 +1,12 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
+import { fetchData } from "../../../public/js/book/getDataBook.js";
+
 
 // Hàm thiết lập sự kiện Sửa một nhà cung cấp cho bảng
-export function updateSuppliesData(supplier) {
+export async function updateSuppliesData(idSuppliesSelected) {
   // Phải truy vấn từ CSDL thông qua idSuppliesSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
+  const supplier = await fetchData(`api/supplies/get.php?supplyId=${idSuppliesSelected}`);
 
   // Biến chứa đối tượng là nút "Sửa"
   const updateButton = document.getElementById("update-button-supplies");
@@ -28,27 +31,27 @@ export function updateSuppliesData(supplier) {
               <div class="dialog__row">
                   <div class="dialog__form-group">
                       <label>Mã nhà cung cấp</label>
-                      <input type="text" id="update-supplies-id" value="${supplier.id}"  readonly />
+                      <input type="text" id="update-supplies-id" value="${supplier[0].id}"  readonly />
                   </div>
                   <div class="dialog__form-group">
                       <label>Tên nhà cung cấp</label>
-                      <input type="text" id="update-supplies-name" placeholder="Nhập Tên nhà cung cấp" value="${supplier.name}" autofocus/>
+                      <input type="text" id="update-supplies-name" placeholder="Nhập Tên nhà cung cấp" value="${supplier[0].name}" autofocus/>
                   </div>
               </div>
               <div class="dialog__row">
                   <div class="dialog__form-group">
                       <label>Số điện thoại</label>
-                      <input type="text" id="update-supplies-phone" placeholder="Nhập Số điện thoại" value="${supplier.phone}" />
+                      <input type="text" id="update-supplies-phone" placeholder="Nhập Số điện thoại" value="${supplier[0].phone}" />
                   </div>
                   <div class="dialog__form-group">
                       <label>Email</label>
-                      <input type="text" id="update-supplies-email" placeholder="Nhập Email" value="${supplier.email}"/>
+                      <input type="text" id="update-supplies-email" placeholder="Nhập Email" value="${supplier[0].email}"/>
                   </div>
               </div>
               <div class="dialog__row">
                   <div class="dialog__form-group full">
                       <label>Địa chỉ</label>
-                      <input type="text" id="update-supplies-address" placeholder="Nhập Địa chỉ" value="${supplier.address}" />
+                      <input type="text" id="update-supplies-address" placeholder="Nhập Địa chỉ" value="${supplier[0].address}" />
                       <button>Chọn địa chỉ</button>
                   </div>
               </div>
@@ -56,7 +59,7 @@ export function updateSuppliesData(supplier) {
                   <div class="dialog__form-group">
                       <label>Trạng thái</label>
                       <select id="update-supplies-status" disabled>
-                        <option selected value="${supplier.status}">${supplier.status}</option>
+                        <option selected value="${supplier[0].status}">${supplier[0].status}</option>
                         <option value="ACTIVE">ACTIVE</option>
                         <option value="INACTIVE">INACTIVE</option>
                         <option value="SUSPENDED">SUSPENDED</option>

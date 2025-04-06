@@ -494,83 +494,86 @@ const mainContentMap = {
     </div>
   `,
   supplies: `
-    <h1 class="main__title">Nhà cung cấp</h1>
-    <div class="main__row">
-      <div class="main__find-inp inp-text-form-1">
-        <input required="" type="text" id="find-inp-supplies" />
-        <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên nhà cung cấp</span>
-      </div>
-
-      <div class="main__sort-slt main__select slt-form-1">
-        <input required="" type="text" id="column-slt-supplies" />
-        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp cột</span>
-        <ul>
-          <li>ID</li>
-          <li>Tên nhà cung cấp</li>
-        </ul>
-      </div>
-
-
-      <div class="main__sort-slt main__select slt-form-1">
-        <input required="" type="text" id="sort-slt-supplies" />
-        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Chọn Sắp xếp</span>
-        <ul>
-          <li>Tăng dần</li>
-          <li>Giảm dần</li>
-        </ul>
-      </div>
-
-      <div class="main__status-slt main__select slt-form-1">
-        <input required="" type="text" id="status-slt-supplies" />
-        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
-        <ul>
+  <h1 class="main__title">Nhà cung cấp</h1>
+  <div class="main__row">
+    <div class="main__find-inp inp-text-form-1">
+      <input required="" type="text" id="find-inp-supplies" />
+      <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên nhà cung cấp</span>
+    </div>
+    <div class="main__sort-slt main__select slt-form-1">
+      <input required="" type="text" id="sort-slt-supplies" />
+      <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
+      <ul>
+        <li>ID tăng dần</li>
+        <li>ID giảm dần</li>
+        <li>Tên nhà cung cấp tăng dần</li>
+        <li>Tên nhà cung cấp giảm dần</li>
+      </ul>
+    </div>
+    <div class="main__status-slt main__select slt-form-1">
+      <input required="" type="text" id="status-slt-supplies" />
+      <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
+     <ul>
           <li>Tất cả</li>
           <li>ACTIVE</li>
           <li>INACTIVE</li>
           <li>SUSPENDED</li>
         </ul>
-      </div>
-      <button class="main__filter-btn" id="filter-button-supplies">
-        <i class="fa-solid fa-filter"></i>
-        <span>Lọc</span>
-      </button>
-      <button class="main__add-btn" id="add-button-supplies">
-        <i class="fa-solid fa-plus"></i>
-        <span>Thêm</span>
-      </button>
     </div>
-    <div class="main__data">
-      <table class="main__table supplies">
-        <thead>
-          <tr>
-              <th width="10%">ID</th>
-              <th width="28%">Tên nhà cung cấp</th>
-              <th width="14%">Số điện thoại</th>
-              <th width="20%">Email</th>
-              <th width="14%">Trạng thái</th>
-              <th width="14%"></th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
+
+      <div class="main__sort-slt main__select slt-form-1">
+      <input required="" type="text" id="show-slt-supplies" />
+      <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Hiển thị</span>
+      <ul>
+          <li>Mặc định</li>
+          <li>15</li>
+          <li>20</li>
+          <li>25</li>
+        </ul>
     </div>
-    <div class="main__pagination">
-      <button class="main-pagination__button previous">
-        <i class="icon fa-solid fa-chevron-left"></i>
-      </button>
-      <button class="main-pagination__button">1</button>
-      <button class="main-pagination__button active">2</button>
-      <button class="main-pagination__button">3</button>
-      <button class="main-pagination__button">...</button>
-      <button class="main-pagination__button">997</button>
-      <button class="main-pagination__button">998</button>
-      <button class="main-pagination__button">999</button>
-      <button class="main-pagination__button next">
-        <i class="icon fa-solid fa-chevron-right"></i>
-      </button>
-    </div>
-  `,
+
+
+    <button class="main__filter-btn" id="filter-button-supplies">
+      <i class="fa-solid fa-filter"></i>
+      <span>Lọc</span>
+    </button>
+    <button class="main__add-btn" id="add-button-supplies">
+      <i class="fa-solid fa-plus"></i>
+      <span>Thêm</span>
+    </button>
+  </div>
+  <div class="main__data">
+    <table class="main__table supplies">
+      <thead>
+        <tr>
+            <th width="10%">ID</th>
+            <th width="28%">Tên nhà cung cấp</th>
+            <th width="14%">Số điện thoại</th>
+            <th width="20%">Email</th>
+            <th width="14%">Trạng thái</th>
+            <th width="14%"></th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <div class="main__pagination"  id="main__pagination_supplies">
+    <button class="main-pagination__button previous">
+      <i class="icon fa-solid fa-chevron-left"></i>
+    </button>
+    <button class="main-pagination__button">1</button>
+    <button class="main-pagination__button active">2</button>
+    <button class="main-pagination__button">3</button>
+    <button class="main-pagination__button">...</button>
+    <button class="main-pagination__button">997</button>
+    <button class="main-pagination__button">998</button>
+    <button class="main-pagination__button">999</button>
+    <button class="main-pagination__button next">
+      <i class="icon fa-solid fa-chevron-right"></i>
+    </button>
+  </div>
+`,
   input_ticket: `
     <h1 class="main__title">Phiếu nhập</h1>
     <div class="main__row">

@@ -1,35 +1,15 @@
 import { updateSuppliesData } from "./updateSuppliesData.js";
 import { detailSuppliesData } from "./detailSuppliesData.js";
 import { lockSuppliesData } from "./lockSuppliesData.js";
+import { filterSupplies } from "./filterSuppliesData.js";
 
 // Dữ liệu tạm thời (sau phải xây dựng hàm truy xuất dữ liệu từ csdl)
-
-
-export async function getAllSupplierData(){
-  let url = `api/supplies/get.php`;
-  console.log("Request URL:", url);
-    try {
-      let response = await fetch(url);
-      if (!response.ok) {
-        throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
-      }
-        let data = await response.json();
-        console.log("Dữ liệu nhận được:", data);
-        return data;
-      } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu:", error);
-        alert("Lỗi khi lấy dữ liệu: " + error.message);
-        return [];
-      }
-    }
+let data = [];
 
 // Hàm cập nhật lại dữ liệu cho bảng Người dùng
-export async function renderSuppliesTable( data = null) {
+export async function renderSuppliesTable(pageIsSelected = 1) {
 
-  if(!data){
-    data = await getAllSupplierData();
-  }
-
+  data = await filterSupplies(pageIsSelected);
   // Biến chứa đối tượng bảng Người dùng
   const bodyInSuppliesTable = document.querySelector(
     ".main__data > .main__table.supplies > tbody"
@@ -57,61 +37,49 @@ export async function renderSuppliesTable( data = null) {
         </tr>
     `;
   }
-
-  if(data.length == 0){
-    html = `
-            <tr>
-            <td></td>
-            <td> DANH SÁCH TRỐNG</td>
-          </tr>`;
-  }
   // Cập nhật lại giao diện
   bodyInSuppliesTable.innerHTML = html;
 
-  
-  if(data.length > 0){
-    // Gán sự kiện cho các nút sau khi thay đổi giao diện
-    const idColumnInTable = document.querySelectorAll(
-      ".main__data > .main__table.supplies > tbody > tr > td:first-of-type"
-    );
-    const listButtonInTable = document.querySelectorAll(
-      ".main__data > .main__table.supplies > tbody > tr > td:last-of-type"
-    );
-    listButtonInTable.forEach((buttons, row) => {
-      const supplier = data[row];
-      // Các nút cần gán sự kiện trên mỗi dòng
-      const detailButton = buttons.children[0];
-      const updateButton = buttons.children[1];
-      const lockButton = buttons.children[2];
-      // Id của đối tượng đã được chọn để thao tác
-      const idSuppliesSelected = idColumnInTable.item(row);
-  
-      // Gán sự kiện hiện dialog chi tiết người dùng
-      detailButton.addEventListener("click", (e) => {
-        // Loại bỏ giá trị mặc định
-        e.preventDefault();
-  
-        // Gọi hàm sự kiện
-        detailSuppliesData(supplier);
-      });
-  
-      // Gán sự kiện hiện dialog sửa người dùng
-      updateButton.addEventListener("click", (e) => {
-        // Loại bỏ giá trị mặc định
-        e.preventDefault();
-  
-        // Gọi hàm sự kiện
-        updateSuppliesData(supplier);
-      });
-  
-      // Gán sự kiện hiện dialog khoá / mở khoá người dùng
-      lockButton.addEventListener("click", (e) => {
-        // Loại bỏ giá trị mặc định
-        e.preventDefault();
-  
-        // Gọi hàm sự kiện
-        lockSuppliesData(supplier);
-      });
+  // Gán sự kiện cho các nút sau khi thay đổi giao diện
+  const idColumnInTable = document.querySelectorAll(
+    ".main__data > .main__table.supplies > tbody > tr > td:first-of-type"
+  );
+  const listButtonInTable = document.querySelectorAll(
+    ".main__data > .main__table.supplies > tbody > tr > td:last-of-type"
+  );
+  listButtonInTable.forEach((buttons, row) => {
+    // Các nút cần gán sự kiện trên mỗi dòng
+    const detailButton = buttons.children[0];
+    const updateButton = buttons.children[1];
+    const lockButton = buttons.children[2];
+    // Id của đối tượng đã được chọn để thao tác
+    const idSuppliesSelected = idColumnInTable.item(row).textContent;
+
+    // Gán sự kiện hiện dialog chi tiết người dùng
+    detailButton.addEventListener("click", (e) => {
+      // Loại bỏ giá trị mặc định
+      e.preventDefault();
+
+      // Gọi hàm sự kiện
+      detailSuppliesData(idSuppliesSelected);
     });
-  }
+
+    // Gán sự kiện hiện dialog sửa người dùng
+    updateButton.addEventListener("click", (e) => {
+      // Loại bỏ giá trị mặc định
+      e.preventDefault();
+
+      // Gọi hàm sự kiện
+      updateSuppliesData(idSuppliesSelected);
+    });
+
+    // Gán sự kiện hiện dialog khoá / mở khoá người dùng
+    lockButton.addEventListener("click", (e) => {
+      // Loại bỏ giá trị mặc định
+      e.preventDefault();
+
+      // Gọi hàm sự kiện
+      lockSuppliesData(idSuppliesSelected);
+    });
+  });
 }

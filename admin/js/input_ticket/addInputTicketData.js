@@ -1,6 +1,5 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 import { fetchData } from "../../../public/js/book/getDataBook.js";
-import { getAllSupplierData } from "../../js/supplies/renderSuppliesTable.js";
 
 
 import {
@@ -131,7 +130,7 @@ async function addInputTicketDetailTable() {
 
 
   // get sachs
-  const bookList = await fetchData(`api/books/getbook.php`);
+  const bookList = await fetchData(`api/books/get.php`);
 
   let html = ``;
   bookList.forEach(book => {
@@ -302,8 +301,7 @@ export function addInputTicketData() {
     document.body.appendChild(addDialog);
 
 
-    
-      let suplierList = await getAllSupplierData();
+      let suplierList =  await fetchData(`api/supplies/get.php`);
       let htmlSuplier = ``;
       suplierList.forEach(suplier =>{
         htmlSuplier +=`<option value="${suplier.id}">${suplier.name}</option>`;

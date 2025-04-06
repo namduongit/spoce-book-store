@@ -1,7 +1,10 @@
+import { fetchData } from "../../../public/js/book/getDataBook.js";
+
 //
-export function lockSuppliesData(supplier) {
+export async function lockSuppliesData(idSuppliesSelected) {
   // Phải truy vấn từ CSDL thông qua idSuppliesSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
+  const supplier = await fetchData(`api/supplies/get.php?supplyId=${idSuppliesSelected}`);
 
   // Biến chứa đối tượng là nút "Khoá"
   const lockButton = document.getElementById("lock-button-supplies");
@@ -17,15 +20,15 @@ export function lockSuppliesData(supplier) {
   lockDialog.style.width = "400px";
   // - Ghi nội dung dialog
   lockDialog.innerHTML = `
-                <h1 class="dialog__title">${supplier.status === 'ACTIVE' ? 'Khoá nhà cung cấp' : 'Mở khoá'}</h1>
+                <h1 class="dialog__title">${supplier[0].status === 'ACTIVE' ? 'Khoá nhà cung cấp' : 'Mở khoá'}</h1>
                 <button id="close-supplies-button" class="dialog__close">
                   <i class="fa-solid fa-xmark"></i>
                 </button>
                 <div class="dialog__line"></div>
                 <form method="post" class="dialog__form">
-                  <div class="dialog__icons" style="display: flex; flex-direction: ${supplier.status === 'ACTIVE' ? 'row-reverse' : 'row'};">
-                    <input type="hidden" id="idSupplierInput" name="idSupplierInput" value="${supplier.id}">
-                    <input type="hidden" id="statusSupplierInput" name="statusSupplierInput" value="${supplier.status}">     
+                  <div class="dialog__icons" style="display: flex; flex-direction: ${supplier[0].status === 'ACTIVE' ? 'row-reverse' : 'row'};">
+                    <input type="hidden" id="idSupplierInput" name="idSupplierInput" value="${supplier[0].id}">
+                    <input type="hidden" id="statusSupplierInput" name="statusSupplierInput" value="${supplier[0].status}">     
                     <i class="fa-solid fa-lock"></i>
                     <i class="fa-solid fa-arrow-right"></i>
                     <i class="fa-solid fa-unlock"></i>

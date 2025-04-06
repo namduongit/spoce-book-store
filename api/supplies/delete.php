@@ -8,7 +8,7 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Nhận dữ liệu từ POST
-$supplierInput = isset($_POST['supplierInput']) ? $_POST['supplierInput'] : 'ACTIVE';
+$supplierInput = isset($_POST['statusInput']) ? $_POST['statusInput'] : 'ACTIVE';
 $idInput = isset($_POST['idInput']) ? $_POST['idInput'] : '1';
 
 // Kiểm tra idInput có hợp lệ không

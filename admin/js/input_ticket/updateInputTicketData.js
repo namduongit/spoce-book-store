@@ -1,6 +1,6 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 import { fetchData } from "../../../public/js/book/getDataBook.js";
-import { getAllSupplierData } from "../../js/supplies/renderSuppliesTable.js";
+
 
 import {
   vietnamMoneyFormat,
@@ -310,7 +310,7 @@ export async function updateInputTicketData(idInputTicketSelected) {
   updateDialog.showModal();
 
 
-  let suplierList = await getAllSupplierData();
+  let suplierList =  await fetchData(`api/supplies/getSupplier.php`);
   let htmlSuplier = ``;
   suplierList.forEach(suplier =>{
     htmlSuplier +=`<option value="${suplier.id}">${suplier.name}</option>`;
