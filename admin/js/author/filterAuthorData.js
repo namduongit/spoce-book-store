@@ -135,7 +135,7 @@ async function paginationAuthor(pageCount) {
           const newButton = document.createElement("button");
           newButton.classList.add("main-pagination__button");
           newButton.textContent = ".....";
-          // Chèn vào vị trí thứ 3 (index 2 vì index bắt đầu từ 0)
+          // Chèn vào vị trí thứ 3
           buttonsContainer.insertBefore(newButton, allButtons[2]);
   
       }
@@ -146,7 +146,7 @@ async function paginationAuthor(pageCount) {
           const newButton = document.createElement("button");
           newButton.classList.add("main-pagination__button");
           newButton.textContent = ".....";
-          // Chèn vào vị trí thứ 3 (index 2 vì index bắt đầu từ 0)
+
           buttonsContainer.insertBefore(newButton, allButtons[pageCount - 1]);
   
       }

@@ -4,7 +4,6 @@ import { fetchData } from "../../../public/js/book/getDataBook.js";
 
 // import { getAllCategoryData } from "../category/renderCategoryTable.js";
 import { getAllPublisherData } from "../publisher/renderPublisherTable.js";
-import { getAllCoverData } from "../cover/renderCoverTable.js";
 
 // Hàm thiết lập sự kiện Thêm một sách cho bảng
 export  async function addBookData() {
@@ -250,7 +249,7 @@ export  async function addBookData() {
 
 
      // THÊM option các  thể loại
-     let coverList = await getAllCoverData();
+     let coverList = await fetchData(`api/covers/get.php`);
      let coverSelect = document.querySelector("#add-book-cover");
      coverSelect.innerHTML = '';
       op = document.createElement("option");

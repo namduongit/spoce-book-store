@@ -1,9 +1,11 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
+import { fetchData } from "../../../public/js/book/getDataBook.js";
 
 // Hàm thiết lập sự kiện Sửa một loại bìa cho bảng
-export function updateCoverData(cover) {
+export async function updateCoverData(idCoverSelected) {
   // Phải truy vấn từ CSDL thông qua idCoverSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
+    let cover = await fetchData(`api/covers/get.php?coverId=${idCoverSelected}`);
 
   // Biến chứa đối tượng là nút "Sửa"
   const updateButton = document.getElementById("update-button-cover");
@@ -28,13 +30,13 @@ export function updateCoverData(cover) {
             <div class="dialog__row">
               <div class="dialog__form-group full">
                 <label>Mã loại bìa</label>
-                <input type="text" id="update-cover-id"  value="${cover.id}" readonly />
+                <input type="text" id="update-cover-id"  value="${cover[0].id}" readonly />
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group full">
                 <label>Tên loại bìa</label>
-                <input type="text" id="update-cover-name" placeholder="Nhập Tên loại bìa"  value="${cover.name}" autofocus/>
+                <input type="text" id="update-cover-name" placeholder="Nhập Tên loại bìa"  value="${cover[0].name}" autofocus/>
               </div>
             </div>
             <div class="dialog__row">
@@ -42,7 +44,7 @@ export function updateCoverData(cover) {
                 <label>Trạng thái</label>
                 <select id="update-cover-status" disabled>
                   <option value="" selected>Chọn Trạng thái</option>
-                  <option selected value="${cover.status}">${cover.status}</option>
+                  <option selected value="${cover[0].status}">${cover[0].status}</option>
                   <option value="ACTIVE">ACTIVE</option>
                   <option value="INACTIVE">INACTIVE</option>
                   <option value="SUSPENDED">SUSPENDED</option>
@@ -54,6 +56,7 @@ export function updateCoverData(cover) {
             </div>
           </form >
         `;
+
 
   // Thêm vào body
   document.body.appendChild(updateDialog);
@@ -101,7 +104,7 @@ export function updateCoverData(cover) {
           console.log("Server Response:", result);
   
           if (result.success) {
-            alert("Cập nhật trạng thái thành công!");
+            alert("Cập nhật loại bìa thành công!");
           } else {
             alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
           }

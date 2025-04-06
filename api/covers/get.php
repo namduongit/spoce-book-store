@@ -22,11 +22,10 @@ function returnJSONCoverType($coverTypes) {
             "id" => $cover['maLoaiBia'],
             "name" => $cover['tenLoaiBia'],
             "status" => $cover['trangThai'],
-            "price" => $cover['giaBia'],
             "updatedAt" => $cover['ngayCapNhat']
         ];
     }
-    echo json_encode($response);
+    echo json_encode($response,  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
 }
 
 $cover_model = new app_models_LoaiBia();
