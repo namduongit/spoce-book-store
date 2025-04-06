@@ -8,24 +8,24 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Nhận dữ liệu từ POST
-$publisherInput = isset($_POST['publisherInput']) ? $_POST['publisherInput'] : 'ACTIVE';
+$statusInput = isset($_POST['statusInput']) ? $_POST['statusInput'] : 'ACTIVE';
 $idInput = isset($_POST['idInput']) ? $_POST['idInput'] : '1';
 
 // Kiểm tra idInput có hợp lệ không
 if (empty($idInput)) {
-    echo json_encode(["success" => false, "message" => "Thiếu ID tác giả."]);
+    echo json_encode(["success" => false, "message" => "Thiếu ID loại bìa."]);
     exit;
 }
 
 // Chuyển trạng thái tác giả
-$publisherInput = ($publisherInput === 'ACTIVE') ? 'INACTIVE' : 'ACTIVE';
+$statusInput = ($statusInput === 'ACTIVE') ? 'INACTIVE' : 'ACTIVE';
 
 try {
     // Khởi tạo model tác giả
-    $author_model = new app_models_NhaXuatBan();
+    $publisher_model = new app_models_NhaXuatBan();
 
     // Cập nhật trạng thái tác giả trong database
-    $result = $author_model->updatePublisher($idInput, ["trangThai" => $publisherInput]);
+    $result = $publisher_model->updatePublisher($idInput, ["trangThai" => $statusInput]);
 
     // Kiểm tra số dòng bị ảnh hưởng
     if ($result && $result->rowCount() > 0) {

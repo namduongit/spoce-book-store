@@ -1,10 +1,5 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
-// import { getAllAuthorData } from "../author/renderAuthorTable.js";
 import { fetchData } from "../../../public/js/book/getDataBook.js";
-
-// import { getAllCategoryData } from "../category/renderCategoryTable.js";
-import { getAllPublisherData } from "../publisher/renderPublisherTable.js";
-
 // Hàm thiết lập sự kiện Thêm một sách cho bảng
 export  async function addBookData() {
   // Biến chứa đối tượng là nút "Thêm"
@@ -265,7 +260,7 @@ export  async function addBookData() {
  
 
       // THÊM option các  thể loại
-      let publisherList = await getAllPublisherData();
+      let publisherList = await fetchData(`api/publishers/get.php`);
       let publisherLelect = document.querySelector("#add-book-publish-name");
       publisherLelect.innerHTML = '';
        op = document.createElement("option");
