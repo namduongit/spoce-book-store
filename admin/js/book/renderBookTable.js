@@ -1,142 +1,99 @@
 import { detailBookData } from "./detailBookData.js";
 import { updateBookData } from "./updateBookData.js";
 import { lockBookData } from "./lockBookData.js";
+import { filterbook } from "./filterBookData.js";
 
 // Dữ liệu tạm thời (sau phải xây dựng hàm truy xuất dữ liệu từ csdl)
+let data = [];
 
-async function getAllBookData(){
-  
-      const id_or_bookName = document.getElementById("find-inp-book").value.trim();
-      const categoryBook = document.getElementById("type-slt-book").value;
-      const orderByBook = document.getElementById("sort_column-slt-book").value;
-      const orderTypeBook = document.getElementById("sort-slt-book").value;
-      const statusBook = document.getElementById("status-slt-book").value;
-      
-      // console.log(id_or_bookName,categoryBook,orderByBook , orderTypeBook, statusBook );
-        let orderBy = '';
-        switch (orderByBook) {
-          case 'Mã sách': orderBy = 'maSach'; break;
-          case 'Tiêu đề': orderBy = 'tenSach'; break;
-          case 'Tên thể loại': orderBy = 'tenTheLoai'; break;
-          case 'Năm xuất bản': orderBy = 'namXuatBan'; break;
-        }
-        
-        
-        let orderType = '';
-        switch(orderTypeBook){
-          case 'Tăng dần' : orderType = 'ASC'; break;
-          case 'Giảm dần' : orderType = 'DESC'; break;
-        }
+// Hàm cập nhật lại dữ liệu cho bảng Thể loại
+export async function renderBookTable( pageIsSelected = 1) {
+  data = await filterbook(pageIsSelected);
 
-        let category = '';
-        if(categoryBook !== 'Tất cả') category = categoryBook;
-        
-        let status = '';
-        if(statusBook !== 'Tất cả') status = statusBook;
-        
-  
-        // Xây dựng URL động, chỉ thêm tham số nếu có giá trị
-        let params = new URLSearchParams();
-        if (id_or_bookName) params.append("id_or_bookName", id_or_bookName);
-        if (categoryBook) params.append("categoryBook", category);
-        if (orderByBook) params.append("orderByBook", orderBy);
-        if (orderTypeBook) params.append("orderTypeBook", orderType);
-        if (statusBook) params.append("statusBook", status);
-  
-        // let url = `api/books/getbook.php?`;
-        let url = `api/books/getbook.php?${params.toString()}`;
-        console.log("Request URL:", url);
-        
-        try {
-          let response = await fetch(url);
-          if (!response.ok) {
-                throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
-            }
-            
-            let data = await response.json();
-            console.log("Dữ liệu nhận được:", data);
-            
-            return data;
-            
-          } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu:", error);
-            alert("Lỗi khi lấy dữ liệu: " + error.message);
-            return [];
-          }
-}
-export async function renderBookTable() {
-  let bookList = await getAllBookData();
-  console.log(bookList);
 
+  // Biến chứa đối tượng bảng Thể loại
   const bodyInBookTable = document.querySelector(
     ".main__data > .main__table.book > tbody"
   );
 
-  if (!bodyInBookTable) {
-    console.log("Không tìm thấy bảng hiển thị dữ liệu sách!");
-    return;
-  }
-
-  if (!bookList || !Array.isArray(bookList) || bookList.length === 0) {
-    alert(bookList.error || "Không có sản phẩm phù hợp");
-    return;
-  }
-
-  // 🛠 Tạo HTML trước
   let html = "";
-  bookList.forEach((book) => {
-    html += `
+
+  
+  if(data.length != 0){
+    data.forEach((book) => {
+      html += `
+        <tr>
+            <td>${book.id}</td>
+            <td><img src="public/uploads/books/${book.image}" alt="" width="90%" height="80%"/></td>
+            <td>${book.name}</td>
+            <td>${book.genreName}</td>
+            <td>${book.quantity}</td>
+            <td>
+                <span class="${book.status === "ACTIVE" ? "green" : "red"}">
+                    ${book.status}
+                </span>
+            </td>
+            <td>
+                <i class="fa-solid fa-circle-info detail-button-book"></i>  
+                <i class="fa-solid fa-pen-to-square update-button-book"></i>
+                <i class="fa-solid fa-${book.status === "ACTIVE" ? "" : "un"}lock lock-button-book"></i>
+            </td>
+        </tr>`;
+    });
+
+    bodyInBookTable.innerHTML = html;
+    // Cập nhật lại giao diện
+    
+      // Gán sự kiện cho các nút sau khi thay đổi giao diện
+      const idColumnInTable = document.querySelectorAll(
+        ".main__data > .main__table.book > tbody > tr > td:first-of-type"
+      );
+      const listButtonInTable = document.querySelectorAll(
+        ".main__data > .main__table.book > tbody > tr > td:last-of-type"
+      );
+      listButtonInTable.forEach((buttons, row) => {
+        // Các nút cần gán sự kiện trên mỗi dòng
+        const detailButton = buttons.children[0];
+        const updateButton = buttons.children[1];
+        const lockButton = buttons.children[2];
+        // Id của đối tượng đã được chọn để thao tác
+        const idBookSelected = idColumnInTable.item(row).textContent;
+    
+        // Gán sự kiện hiện dialog chi tiết người dùng
+        detailButton.addEventListener("click", (e) => {
+          // Loại bỏ giá trị mặc định
+          e.preventDefault();
+    
+          // Gọi hàm sự kiện
+          detailBookData(idBookSelected);
+        });
+    
+        // Gán sự kiện hiện dialog sửa người dùng
+        updateButton.addEventListener("click", (e) => {
+          // Loại bỏ giá trị mặc định
+          e.preventDefault();
+    
+          // Gọi hàm sự kiện
+          updateBookData(idBookSelected);
+        });
+    
+        // Gán sự kiện hiện dialog khoá / mở khoá người dùng
+        lockButton.addEventListener("click", (e) => {
+          // Loại bỏ giá trị mặc định
+          e.preventDefault();
+    
+          // Gọi hàm sự kiện
+          lockBookData(idBookSelected);
+        });
+      });
+  }else{
+    html = `
       <tr>
-          <td>${book.id}</td>
-          <td><img src="public/uploads/books/${book.image}" alt="" width="90%" height="80%"/></td>
-          <td>${book.name}</td>
-          <td>${book.genreName}</td>
-          <td>${book.quantity}</td>
-          <td>
-              <span class="${book.status === "ACTIVE" ? "green" : "red"}">
-                  ${book.status}
-              </span>
-          </td>
-          <td>
-              <i class="fa-solid fa-circle-info detail-button-book"></i>  
-              <i class="fa-solid fa-pen-to-square update-button-book"></i>
-              <i class="fa-solid fa-${book.status === "ACTIVE" ? "" : "un"}lock lock-button-book"></i>
-          </td>
+          <td colspan="4">Trống</td>
       </tr>`;
-  });
 
-  // Gán toàn bộ HTML một lần
-  bodyInBookTable.innerHTML = html;
+      bodyInBookTable.innerHTML = html;
+      // Cập nhật lại giao diện
+  }
 
-  // Lấy lại danh sách các hàng sau khi cập nhật HTML
-  const listRows = document.querySelectorAll(".main__table.book > tbody > tr");
-
-  // Gán sự kiện sau khi cập nhật HTML
-  listRows.forEach((row, index) => {
-    const book = bookList[index];
-    const detailButton = row.querySelector(".detail-button-book");
-    const updateButton = row.querySelector(".update-button-book");
-    const lockButton = row.querySelector(".lock-button-book");
-
-    if (detailButton) {
-      detailButton.addEventListener("click", (e) => {
-        e.preventDefault();
-        detailBookData(book);
-      });
-    }
-
-    if (updateButton) {
-      updateButton.addEventListener("click", (e) => {
-        e.preventDefault();
-        updateBookData(book);
-      });
-    }
-
-    if (lockButton) {
-      lockButton.addEventListener("click", (e) => {
-        e.preventDefault();
-        lockBookData(book);
-      });
-    }
-  });
 }

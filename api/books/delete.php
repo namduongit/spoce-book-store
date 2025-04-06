@@ -7,8 +7,8 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
-$statusInput = isset($_GET['statusInput']) ? $_GET['statusInput'] : 'ACTIVE';
-$idInput = isset($_GET['idInput']) ? $_GET['idInput'] : '';
+$statusInput = isset($_POST['statusInput']) ? $_POST['statusInput'] : 'ACTIVE';
+$idInput = isset($_POST['idInput']) ? $_POST['idInput'] : '';
 
 // Kiểm tra idInput có hợp lệ không
 if (empty($idInput)) {

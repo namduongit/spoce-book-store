@@ -4,7 +4,7 @@ require_once __DIR__ . '../../../app/config.php';
 function returnJSONBook($filters, $pageCount) {
     if (!is_array($filters) || empty($filters)) {
         http_response_code(404);
-        echo json_encode(["error" => "Không tìm thấy sách!"]);
+        echo json_encode(["error" => "Không tìm thấy pn!"]);
         exit();
     }
 
@@ -72,9 +72,6 @@ if (!empty($endDate)) {
     $params[':endDate'] = $endDate;  
 }
 
-
-// Kiểm soát biến orderBy để tránh SQL Injection
-$validOrderColumns = ['phieuNhap', 'nhaCungCap'];
 
 
 $limit = isset($_GET['limit']) ? trim($_GET['limit']) : '10';

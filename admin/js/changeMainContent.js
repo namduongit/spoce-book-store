@@ -665,35 +665,26 @@ const mainContentMap = {
         <input required="" type="text" id="sort-slt-book" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
         <ul>
-          <li>Tăng dần</li>
-          <li>Giảm dần</li>
+          <li>ID tăng dần</li>
+          <li>ID giảm dần</li>
+          <li>Tiêu đề tăng dần</li>
+          <li>Tiêu đề giảm dần</li>
+          <li>Số lượng tăng dần</li>
+          <li>Số lượng giảm dần</li>
+          <li>Thể loại tăng dần</li>
+          <li>Thể loại giảm dần</li>
         </ul>
       </div>
-
-      <div class="main__sort_column-slt main__select slt-form-1">
-        <input required="" type="text" id="sort_column-slt-book" />
-        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp cột</span>
-        <ul>
-          <li>Mã sách</li>
-          <li>Tiêu đề</li>
-          <li>Tên thể loại</li>
-          <li>Năm xuất bản</li>
-        </ul>
-      </div>
-
-      <div class="main__sort_category-slt main__select slt-form-1">
+      <div class="main__category-slt main__select slt-form-1">
         <input required="" type="text" id="type-slt-book" />
-        <span><i class="fa-solid fa-font-awesome"></i>&nbsp;&nbsp;Chọn Thể loại</span>
+        <span><i class="fa-solid fa-font-awesome"></i>&nbsp;&nbsp;Thể loại</span>
         <ul>
           <li>Tất cả</li>
-          <li>Tiểu thuyết</li>
-          <li>Trinh thám</li>
-          <li>Khoa học viễn tưởng</li>
         </ul>
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-book" />
-        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
         <ul>
           <li>Tất cả</li>
           <li>ACTIVE</li>
@@ -701,7 +692,21 @@ const mainContentMap = {
           <li>SUSPENDED</li>
         </ul>
       </div>
-      <button type="submit" class="main__filter-btn" id="filter-button-book">
+
+      <div class="main__sort-slt main__select slt-form-1">
+        <input required="" type="text" id="show-slt-book" />
+        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Hiển thị</span>
+        <ul>
+          <li>Mặc định</li>
+          <li>10</li>
+          <li>15</li>
+          <li>20</li>
+          <li>25</li>
+        </ul>
+      </div>
+
+
+      <button class="main__filter-btn" id="filter-button-book">
         <i class="fa-solid fa-filter"></i>
         <span>Lọc</span>
       </button>
@@ -709,12 +714,7 @@ const mainContentMap = {
         <i class="fa-solid fa-plus"></i>
         <span>Thêm</span>
       </button>
-    
-      
     </div>
-
-
-
     <div class="main__data">
       <table class="main__table book">
         <thead>
@@ -732,7 +732,7 @@ const mainContentMap = {
         </tbody>
       </table>
     </div>
-    <div class="main__pagination">
+    <div class="main__pagination" id="main__pagination_book">
       <button class="main-pagination__button previous">
         <i class="icon fa-solid fa-chevron-left"></i>
       </button>
@@ -1155,15 +1155,13 @@ async function showCategory() {
       return;
   }
 
-  const ulElement = document.querySelector('.main__sort_category-slt ul');
-  ulElement.innerHTML = ''; 
+  const ulElement = document.querySelector('.main__category-slt ul');
   let li = document.createElement('li');
-  li.textContent = 'Tất cả';
-   ulElement.appendChild(li);
   listCategory.forEach(category => {
       let li = document.createElement('li');
       li.textContent = category.name;
       ulElement.appendChild(li);
+
   });
 }
 

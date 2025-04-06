@@ -30,12 +30,12 @@ export  async function addBookData() {
             <i class="fa-solid fa-xmark"></i>
         </button>
         <div class="dialog__line"></div>
-        <form method="get" class="dialog__form">
+        <form method="post" class="dialog__form">
             <div class="dialog__row">
                 <div class="dialog__form-group book image">
                     <label>Hình ảnh</label>
-                    <img id="preview-image" src="alt"book-image"></img>
-                    <input type="file" id="add-book-image" value="80.jpg"    />
+                    <img id="preview-image" src="" alt"book-image"></img>
+                    <input type="file" id="add-book-image" value=""  accept="image/*"    />
                     <button type="button" onclick="document.getElementById('add-book-image').click()">Tải hình ảnh</button>
                 </div>
                 <div class="dialog__form-group book"></div>
@@ -124,10 +124,11 @@ export  async function addBookData() {
                 <div class="dialog__form-group book"></div>
                 <div class="dialog__form-group book">
                     <label>Trạng thái</label>
-                    <select id="add-book-status">
-                        <option selected value="ACTIVE">ACTIVE</option>
-                        <option selected value="INACTIVE">INACTIVE</option>
-                        <option selected value="SUSPENDED">SUSPENDED</option>
+                    <select id="add-book-status" >
+                        <option selected  value="">Chọn trạng thái</option>
+                        <option  value="ACTIVE">ACTIVE</option>
+                        <option  value="INACTIVE">INACTIVE</option>
+                        <option  value="SUSPENDED">SUSPENDED</option>
                         
                 
                     </select>
@@ -176,9 +177,30 @@ export  async function addBookData() {
     });
 
 
-    // thêm sự kiẹn chọn ảnh
+  
     let selectedImageName = ``; // Biến lưu tên ảnh
 
+    document.getElementById("add-book-image").addEventListener("change", function (event) {
+        const file = event.target.files[0];  // Lấy đối tượng file đầu tiên
+        if (file) {
+            // Lấy tên tệp thay vì đường dẫn đầy đủ
+            const fileName = file.name; 
+            console.log("Tên ảnh:", fileName);  // Hiển thị tên ảnh trong console
+            
+            // Nếu bạn muốn sử dụng tên tệp này cho mục đích khác (như gửi lên server), bạn có thể lưu trữ nó
+            selectedImageName = fileName;
+    
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const imgElement = document.getElementById("preview-image");
+                if (imgElement) {
+                    imgElement.src = e.target.result;  // Cập nhật hình ảnh xem trước
+                }
+            };
+            reader.readAsDataURL(file);  // Đọc ảnh dưới dạng URL dữ liệu để hiển thị trên trình duyệt
+        }
+    });
+    
 
     document.getElementById("add-book-image").addEventListener("change", function (event) {
         const file = event.target.files[0];
@@ -197,6 +219,10 @@ export  async function addBookData() {
     let authorList = await getAllAuthorData();
     let authorSelect = document.querySelector("#add-book-author");
     authorSelect.innerHTML = '';
+    let op = document.createElement("option");
+        op.value = "";
+        op.textContent = "Chọn tác giả";
+        authorSelect.appendChild(op);
     authorList.forEach(author => {
         let op = document.createElement("option");
         op.value = author.id;
@@ -209,6 +235,10 @@ export  async function addBookData() {
     let categoryList = await getAllCategoryData();
     let categorySelect = document.querySelector("#add-book-type");
     categorySelect.innerHTML = '';
+     op = document.createElement("option");
+        op.value = "";
+        op.textContent = "Chọn thể loại";
+        categorySelect.appendChild(op);
     categoryList.forEach(author => {
         let op = document.createElement("option");
         op.value = author.id;
@@ -221,6 +251,10 @@ export  async function addBookData() {
      let coverList = await getAllCoverData();
      let coverSelect = document.querySelector("#add-book-cover");
      coverSelect.innerHTML = '';
+      op = document.createElement("option");
+     op.value = "";
+     op.textContent = "Chọn loại bìa";
+     coverSelect.appendChild(op);
      coverList.forEach(author => {
          let op = document.createElement("option");
          op.value = author.id;
@@ -233,6 +267,10 @@ export  async function addBookData() {
       let publisherList = await getAllPublisherData();
       let publisherLelect = document.querySelector("#add-book-publish-name");
       publisherLelect.innerHTML = '';
+       op = document.createElement("option");
+          op.value = "";
+          op.textContent = "Chọn nhà xuất bản";
+          publisherLelect.appendChild(op);
       publisherList.forEach(author => {
           let op = document.createElement("option");
           op.value = author.id;
@@ -242,63 +280,70 @@ export  async function addBookData() {
 
     // Gán sự kiện cho nút "thêm" dialog
     document.getElementById("add-book-button").addEventListener("click", async (e) => {
-            e.preventDefault();
-        // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-        const image = document.getElementById("add-book-image").value;
-        const id = document.getElementById("add-book-id").value;
-        const title = document.getElementById("add-book-title").value;
-        const author = document.getElementById("add-book-author").value;
-        const type = document.getElementById("add-book-type").value;
-        const pages = document.getElementById("add-book-pages").value;
-        const cover = document.getElementById("add-book-cover").value;
-        const publishName = document.getElementById("add-book-publish-name").value;
-        const publishYear = document.getElementById("add-book-publish-year").value;
-        const priceBase = document.getElementById("add-book-price-base").value;
-        const priceOrder = document.getElementById("add-book-price-order").value;
-        const description = document.getElementById("add-book-description").value;
-        const status = document.getElementById("add-book-status").value;
-        const size = document.getElementById("add-book-size").value;
+        e.preventDefault();
+    
+    // Lấy thông tin từ các trường trong form
+    const imageInput = document.getElementById("add-book-image");
+    const imageFile = imageInput.files[0];  // Lấy tệp hình ảnh
+    const title = document.getElementById("add-book-title").value;
+    const author = document.getElementById("add-book-author").value;
+    const type = document.getElementById("add-book-type").value;
+    const pages = document.getElementById("add-book-pages").value;
+    const cover = document.getElementById("add-book-cover").value;
+    const publishName = document.getElementById("add-book-publish-name").value;
+    const publishYear = document.getElementById("add-book-publish-year").value;
+    const priceBase = document.getElementById("add-book-price-base").value;
+    const priceOrder = document.getElementById("add-book-price-order").value;
+    const description = document.getElementById("add-book-description").value;
+    const status = document.getElementById("add-book-status").value;
+    const size = document.getElementById("add-book-size").value;
 
-        if(image =='' || title=='' || author =='' || type=='' || pages=='' || cover=='' || publishName=='' || publishYear=='' || priceBase=='' || priceOrder=='' || description=='' ||status=='' || size==''){
-            alert("chưa điền đur thông tin");
-        }else{
-            let params = new URLSearchParams();
-            params.append("image", image);
-            params.append("title", title);
-            params.append("authorId", author);
-            params.append("categoryId", type);
-            params.append("numOfpages", pages);
-            params.append("coverTypeId", cover);
-            params.append("publisherId", publishName);
-            params.append("publishYear", publishYear);
-            params.append("priceBase", priceBase);
-            params.append("priceOrder", priceOrder);
-            params.append("description", description);
-            params.append("status", status);
-            params.append("size", size);
-    
-    
-            let url = `api/books/create.php?${params.toString()}`;
-            console.log("Request URL:", url);
-    
-    
-            try {
-                const response = await fetch(url, { method: "GET" });
-            
-                const result = await response.json(); // Chuyển luôn về JSON
-            
-                if (result.success) {
-                    alert("thêm sách thành công!");
-                } else {
-                    alert("Lỗi thêm sách: " + (result.error || "Không rõ nguyên nhân"));
-                }
-            } catch (error) {
-                console.error("Lỗi fetch API:", error);
-                alert("Không thể kết nối đến server!");
+    // Kiểm tra xem các trường có được điền đầy đủ không
+    if(imageFile == null || title == '' || author == '' || type == '' || pages == '' || cover == '' || publishName == '' || publishYear == '' || priceBase == '' || priceOrder == '' || description == '' || status == '' || size == '') {
+        alert("Vui lòng điền đầy đủ thông tin");
+    } else {
+        // Tạo đối tượng FormData
+        let formData = new FormData();
+        formData.append("image", imageFile);  // Thêm tệp hình ảnh vào FormData
+        formData.append("title", title);
+        formData.append("authorId", author);
+        formData.append("categoryId", type);
+        formData.append("numOfpages", pages);
+        formData.append("coverTypeId", cover);
+        formData.append("publisherId", publishName);
+        formData.append("publishYear", publishYear);
+        formData.append("priceBase", priceBase);
+        formData.append("priceOrder", priceOrder);
+        formData.append("description", description);
+        formData.append("status", status);
+        formData.append("size", size);
+
+        try {
+            // Gửi yêu cầu POST
+            const response = await fetch("api/books/create.php", {
+                method: "POST",
+                body: formData  // Gửi FormData
+            });
+
+            // Chờ phản hồi từ server
+            const result = await response.json(); // Chuyển phản hồi sang định dạng JSON
+
+            if (result.success) {
+                alert("Thêm sách thành công!");
+            } else {
+                alert("Lỗi thêm sách: " + (result.error || "Không rõ nguyên nhân"));
             }
-            
+        } catch (error) {
+            console.error("Lỗi fetch API:", error);
+            alert("Không thể kết nối đến server!");
         }
-      
+    }
+        // Xoá dialog
+        addDialog.remove();
+
+        // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
+        addButton.classList.remove("active");
+
         
         });
 
