@@ -2,7 +2,7 @@ import { isNotFirstItemSelected } from "../selectEvents.js";
 // import { getAllAuthorData } from "../author/renderAuthorTable.js";
 import { fetchData } from "../../../public/js/book/getDataBook.js";
 
-import { getAllCategoryData } from "../category/renderCategoryTable.js";
+// import { getAllCategoryData } from "../category/renderCategoryTable.js";
 import { getAllPublisherData } from "../publisher/renderPublisherTable.js";
 import { getAllCoverData } from "../cover/renderCoverTable.js";
 
@@ -234,7 +234,7 @@ export  async function addBookData() {
 
 
     // THÊM option các  thể loại
-    let categoryList = await getAllCategoryData();
+    let categoryList =await fetchData(`api/categories/get.php`);
     let categorySelect = document.querySelector("#add-book-type");
     categorySelect.innerHTML = '';
      op = document.createElement("option");

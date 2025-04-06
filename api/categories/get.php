@@ -25,7 +25,7 @@ function returnJSONCategory($categories) {
             "updatedAt" => $category['ngayCapNhat']
         ];
     }
-    echo json_encode($response);
+    echo json_encode($response,  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 }
 
 $category_model = new app_models_TheLoai();
