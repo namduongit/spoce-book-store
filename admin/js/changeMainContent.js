@@ -749,34 +749,25 @@ const mainContentMap = {
     </div>
   `,
   author: `
-    <h1 class="main__title">Tác giả</h1>
+        <h1 class="main__title">Tác giả</h1>
     <div class="main__row">
       <div class="main__find-inp inp-text-form-1">
         <input required="" type="text" id="find-inp-author" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên tác giả</span>
       </div>
-
-      <div class="main__column-slt main__select slt-form-1">
-        <input required="" type="text" id="column-slt-author" />
-        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp cột</span>
-        <ul>
-          <li>ID </li>
-          <li>Tên tác giả</li>
-        </ul>
-      </div>
-
-
       <div class="main__sort-slt main__select slt-form-1">
         <input required="" type="text" id="sort-slt-author" />
-        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Chọn Sắp xếp</span>
+        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
         <ul>
-          <li>Tăng dần</li>
-          <li>Giảm dần</li>
+          <li>ID tăng dần</li>
+          <li>ID giảm dần</li>
+          <li>Tên tác giả tăng dần</li>
+          <li>Tên tác giả giảm dần</li>
         </ul>
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-author" />
-        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
         <ul>
           <li>Tất cả</li>
           <li>ACTIVE</li>
@@ -784,6 +775,20 @@ const mainContentMap = {
           <li>SUSPENDED</li>
         </ul>
       </div>
+
+
+      <div class="main__sort-slt main__select slt-form-1">
+        <input required="" type="text" id="show-slt-author" />
+        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Hiển thị</span>
+        <ul>
+          <li>Mặc định</li>
+          <li>10</li>
+          <li>15</li>
+          <li>20</li>
+        </ul>
+      </div>
+
+
       <button class="main__filter-btn" id="filter-button-author">
         <i class="fa-solid fa-filter"></i>
         <span>Lọc</span>
@@ -807,7 +812,7 @@ const mainContentMap = {
         </tbody>
       </table>
     </div>
-    <div class="main__pagination">
+    <div class="main__pagination" id="main__pagination_author">
       <button class="main-pagination__button previous">
         <i class="icon fa-solid fa-chevron-left"></i>
       </button>

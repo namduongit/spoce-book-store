@@ -1,5 +1,7 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
-import { getAllAuthorData } from "../author/renderAuthorTable.js";
+// import { getAllAuthorData } from "../author/renderAuthorTable.js";
+import { fetchData } from "../../../public/js/book/getDataBook.js";
+
 import { getAllCategoryData } from "../category/renderCategoryTable.js";
 import { getAllPublisherData } from "../publisher/renderPublisherTable.js";
 import { getAllCoverData } from "../cover/renderCoverTable.js";
@@ -216,7 +218,7 @@ export  async function addBookData() {
     
 
     // THÊM option các  tác giả
-    let authorList = await getAllAuthorData();
+    let authorList = await fetchData(`api/authors/get.php`);
     let authorSelect = document.querySelector("#add-book-author");
     authorSelect.innerHTML = '';
     let op = document.createElement("option");

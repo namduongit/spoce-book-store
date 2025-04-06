@@ -35,7 +35,7 @@ export async function lockBookData(idBookSelected) {
   document.body.appendChild(lockDialog);
   lockDialog.showModal();
 
-  // ✅ Gửi POST khi đồng ý
+  //  Gửi POST khi đồng ý
   document.querySelector(".yes").addEventListener("click", async (e) => {
     e.preventDefault();
 
