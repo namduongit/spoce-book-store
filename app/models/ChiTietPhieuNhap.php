@@ -4,12 +4,35 @@ class app_models_ChitietPhieuNhap extends app_libs_DBConnection {
 
 
 
-    // Thêm  mới
-    public function insertInputTicketDetail($data) {
-        return $this->building_queryParam([
-            'field' => $data
-        ])->insert();
+    public function insertInputTicketDetail($data)
+{
+    // Kết nối đến cơ sở dữ liệu
+    if (self::$connection == null) self::$connection = $this->open_connect();
+
+    // Xây dựng mảng các cột và giá trị cho câu lệnh INSERT
+    $fields = array_keys($data); // Lấy các cột từ mảng $data
+    $placeholders = array_fill(0, count($fields), '?'); // Tạo các dấu hỏi cho placeholders trong câu lệnh SQL
+
+    // Tạo câu lệnh SQL
+    $sql = 'INSERT INTO ' . $this->table_name . ' (' . implode(', ', $fields) . ') VALUES (' . implode(', ', $placeholders) . ')';
+
+    // Thực thi câu lệnh SQL với các giá trị tương ứng từ mảng $data
+    try {
+        $stmt = self::$connection->prepare($sql);
+        $stmt->execute(array_values($data)); // Truyền các giá trị từ mảng $data vào câu lệnh SQL
+
+        // Kiểm tra xem có bản ghi nào được thêm không
+        if ($stmt->rowCount() > 0) {
+            return true; // Trả về true nếu thành công
+        } else {
+            return false; // Trả về false nếu không có thay đổi
+        }
+    } catch (PDOException $e) {
+        // Nếu có lỗi, trả về false và in ra lỗi
+        error_log('Database Error: ' . $e->getMessage());
+        return false;
     }
+}
 
   
     // public function updateInputTicketDetail($data) {
@@ -28,12 +51,16 @@ class app_models_ChitietPhieuNhap extends app_libs_DBConnection {
     //     return $this->query($sql, $params);
     // }
     
-    public function deleteAuthor($maInputTicket) {
-        return $this->building_queryParam([
-            'where' => 'maPhieuNhap = ?',
-            'params' => [$maInputTicket]
-        ])->delete();
+    public function deleteAllInputTicketDetail($maInputTicket) {
+        if (self::$connection == null) {
+            self::$connection = $this->open_connect();
+        }
+    
+        $sql = "DELETE FROM " . $this->table_name . " WHERE maPhieuNhap = ?";
+        $stmt = self::$connection->prepare($sql);
+        return $stmt->execute([$maInputTicket]);
     }
+    
     
 
     public function getInputTicketDetailByInputTicketId($maInputTicket) {

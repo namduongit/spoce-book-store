@@ -151,18 +151,17 @@ class app_libs_DBConnection
 
     
     // ===============================================================
-
-    public function joinTables($tables = [], $joins = [], $conditions = [], $orderBy = '', $orderType = 'ASC', $limit = null, $offset = null, $params = [], $columns = ['*']) {
+    public function joinTables($columns = ['*'], $tables = [], $joins = [], $conditions = [], $orderBy = '', $orderType = 'ASC', $limit = null, $offset = null, $params = []) {
         if (self::$connection == null) self::$connection = $this->open_connect();
     
-        if (empty($tables) || empty($joins)) {
-            return ["error" => "Thiếu thông tin bảng hoặc điều kiện JOIN"];
+        if (empty($tables)) {
+            return ["error" => "Thiếu thông tin bảng!"];
         }
     
         $columnList = is_array($columns) ? implode(", ", $columns) : '*';
-
-        $sql = "SELECT $columnList FROM " . array_shift($tables);
+        $sql = "SELECT $columnList FROM " . array_shift($tables); // Lấy bảng đầu tiên làm bảng chính
     
+        // Nếu có thêm bảng và JOIN tương ứng
         foreach ($tables as $index => $table) {
             if (!isset($joins[$index])) {
                 return ["error" => "Thiếu điều kiện JOIN cho bảng " . $table];
@@ -188,16 +187,15 @@ class app_libs_DBConnection
             }
         }
     
-    
         try {
             $stmt = self::$connection->prepare($sql);
     
-            // Bind các tham số tránh SQL Injection
+            // Bind các tham số truy vấn
             foreach ($params as $key => $value) {
                 $stmt->bindValue($key, $value, is_numeric($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
             }
     
-            // Bind limit và offset nếu có
+            // Bind limit/offset nếu có
             if (!is_null($limit)) {
                 $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
             }
@@ -211,4 +209,4 @@ class app_libs_DBConnection
             return ["error" => "Lỗi SQL: " . $e->getMessage()];
         }
     }
-}
+}    

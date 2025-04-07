@@ -1,9 +1,11 @@
+import { fetchData } from "../../../public/js/book/getDataBook.js";
 import { isNotFirstItemSelected } from "../selectEvents.js";
 
 // Hàm thiết lập sự kiện Sửa một tác giả cho bảng
-export function updateAuthorData(author) {
+export async function updateAuthorData(idAuthorSelected) {
   // Phải truy vấn từ CSDL thông qua idAuthorSelected để lấy được dữ liệu của đối tượng hiện tại
-  // ...
+  let author = await fetchData(`api/authors/get.php?authorId=${idAuthorSelected}`);
+
 
   // Biến chứa đối tượng là nút "Sửa"
   const updateButton = document.getElementById("update-button-author");
@@ -28,22 +30,22 @@ export function updateAuthorData(author) {
             <div class="dialog__row">
               <div class="dialog__form-group full">
                 <label>Mã tác giả</label>
-                <input type="text" id="update-author-id" value="${author.id}" readonly />
+                <input type="text" id="update-author-id" value="${author[0].id}" readonly />
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group full">
                 <label>Tên tác giả</label>
-                <input type="text" id="update-author-name" placeholder="Nhập Tên tác giả" value="${author.name}" autofocus/>
+                <input type="text" id="update-author-name" placeholder="Nhập Tên tác giả" value="${author[0].name}" autofocus/>
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group full">
                 <label>Trạng thái</label>
-                <select id="update-author-status" >
+                <select id="update-author-status" disabled >
                   <option value="" selected>Chọn Trạng thái</option>
                   
-                  <option selected value="${author.status}">${author.status}</option>
+                  <option selected value="${author[0].status}">${author[0].status}</option>
                   <option value="ACTIVE">ACTIVE</option>
                   <option value="INACTIVE">INACTIVE</option>
                   <option value="SUSPENDED">SUSPENDED</option>
@@ -102,7 +104,7 @@ export function updateAuthorData(author) {
           console.log("Server Response:", result);
   
           if (result.success) {
-            alert("Cập nhật trạng thái thành công!");
+            alert("Cập nhật tác giả thành công!");
           } else {
             alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
           }
@@ -111,6 +113,8 @@ export function updateAuthorData(author) {
           alert("Không thể kết nối đến server!");
         }
         updateDialog.remove();
+      updateButton.classList.remove("active");
+
       }
     });
 

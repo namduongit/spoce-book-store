@@ -28,7 +28,7 @@ function returnJSONSupplies($supplies) {
             "updatedAt" => $author['ngayCapNhat']
         ];
     }
-    echo json_encode($response);
+    echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 }
 
 $supplier_model = new app_models_NhaCungCap();

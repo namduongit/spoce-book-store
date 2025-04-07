@@ -18,7 +18,7 @@ $updateDateTime = date("Y-m-d H:i:s");
 
 // Kiểm tra supplierId có hợp lệ không
 if (empty($supplierId)) {
-    echo json_encode(["success" => false, "message" => "Thiếu ID tác giả."]);
+    echo json_encode(["success" => false, "message" => "Thiếu ID NCC."]);
     exit;
 }
 

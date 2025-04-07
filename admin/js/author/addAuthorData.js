@@ -43,7 +43,8 @@ export function addAuthorData() {
                 <div class="dialog__form-group full">
                   <label>Trạng thái</label>
                   <select id="add-author-status">
-                    <option selected value="ACTIVE">ACTIVE</option>
+                    <option selected value="">Chọn trạng thái</option>
+                    <option  value="ACTIVE">ACTIVE</option>
                     <option value="INACTIVE">INACTIVE</option>
                     <option value="SUSPENDED">SUSPENDED</option>
                   </select>
@@ -79,7 +80,7 @@ export function addAuthorData() {
         const authorName = document.getElementById("add-author-name").value;
         const authorStatus = document.getElementById("add-author-status").value;
           console.log(authorName, authorStatus);
-        if(authorName === ''){
+        if(authorName === '' || authorStatus == ''){
           alert("Hãy nhập tên đầy đủ");
         }else{
   
@@ -108,6 +109,8 @@ export function addAuthorData() {
             alert("Không thể kết nối đến server!");
           }
           addDialog.remove();
+        addButton.classList.remove("active");
+
         }
       });
 

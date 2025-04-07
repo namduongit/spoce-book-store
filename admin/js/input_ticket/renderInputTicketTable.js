@@ -1,9 +1,10 @@
 import { vietnamMoneyFormat } from "../others.js";
 import { updateInputTicketData } from "./updateInputTicketData.js";
 import { printInputTicket } from "./printInputTicket.js";
+import { filterInputTicket } from "./filterInputTicket.js";
 
 // Dữ liệu tạm thời (sau phải xây dựng hàm truy xuất dữ liệu từ csdl)
-
+let data = [];
 
 export async function getAllInputTicketData(){
   let url = `api/input_ticket/get.php`;
@@ -25,12 +26,8 @@ export async function getAllInputTicketData(){
 
 
 // Hàm cập nhật lại dữ liệu cho bảng phiếu nhập hàng
-export async function renderInputTicketTable(data = null) {
-
-  if(!data){
-    data = await getAllInputTicketData();
-  }
-
+export async function renderInputTicketTable(pageIsSelected = 1) {
+  data = await filterInputTicket(pageIsSelected);
   // Biến chứa đối tượng bảng phiếu nhập hàng
   const bodyInputTicketTable = document.querySelector(
     ".main__data > .main__table.input_ticket > tbody"
@@ -43,12 +40,12 @@ export async function renderInputTicketTable(data = null) {
         <tr>
             <td>${data[i].id}</td>
             <td>${data[i].suplierName}</td>
-            <td>${data[i].DateInit}</td>
+            <td>${data[i].dateCreate}</td>
             <td>${vietnamMoneyFormat(data[i].inputTotal)}</td>
             <td><span ${
-              data[i].status === "Đã hoàn thành"
+              data[i].status === "DA_NHAP"
                 ? 'class="green"'
-                : data[i].status === "Chưa xác nhận"
+                : data[i].status === "CHO_XAC_NHAN"
                 ? 'class="gray"'
                 : 'class="red"'
             }>${data[i].status}</span></td>
@@ -75,7 +72,7 @@ export async function renderInputTicketTable(data = null) {
     const updateButton = buttons.children[0];
     const printButton = buttons.children[1];
     // Id của đối tượng đã được chọn để thao tác
-    const idInputTicketSelected = idColumnInTable.item(row).innerText;
+    const idInputTicketSelected = idColumnInTable.item(row).textContent;
 
     // Gán sự kiện hiện dialog sửa phiếu nhập hàng
     updateButton.addEventListener("click", (e) => {
@@ -83,6 +80,7 @@ export async function renderInputTicketTable(data = null) {
       e.preventDefault();
 
       // Gọi hàm sự kiện
+      console.log(idInputTicketSelected);
       updateInputTicketData(idInputTicketSelected);
     });
 
@@ -95,4 +93,6 @@ export async function renderInputTicketTable(data = null) {
       printInputTicket(idInputTicketSelected);
     });
   });
+ 
+  
 }

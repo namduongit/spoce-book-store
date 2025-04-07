@@ -3,14 +3,23 @@ import { fetchData, getUserByID, isLogined } from "./displayInfoUser.js";
 import { showConfirmationDialog } from "../question.js";
 import { toast } from "../toast.js";
 
+// Đọc trang hiện tại từ local storage, nếu không có thì mặc định là trang 1
+let page = parseInt(localStorage.getItem("currentOrderPage")) || 1;
+localStorage.setItem("currentOrderPage", page);
+
+// Trạng thái đơn hàng được chọn khởi tạo là chờ xác nhận
+let selectedStatus = "CHO_XAC_NHAN";
 
 export async function showOrderHistory() {
     showLoading();
+
+    // Kiểm tra trạng thái đăng nhập
     const responseAPI = await isLogined();
     let currentParams = new URLSearchParams(window.location.search);
     const orderPage = document.querySelector('.order-history');
     let user = null;
 
+    // Nếu không đăng nhập mà query string có query paramerter order thì xóa query parameter đi và kết thúc hàm
     if (responseAPI == false) {
         if (currentParams.has("order")) {
             currentParams.delete("order");
@@ -19,19 +28,54 @@ export async function showOrderHistory() {
         }
     }
 
+    // Lấy ra dữ liệu của user hiện tại nếu đang ở trạng thái đăng nhập
     if (responseAPI !== false) {
         user = await getUserByID(responseAPI.user['id']);
     }
 
+    // Ẩn đi các trang khác nếu có
     hideMainPage();
+
+    // Hiển thị trang đơn hàng 
     if (orderPage.classList.contains('hide-item')) {
         orderPage.classList.remove('hide-item');
     }
 
-    let response = await fetch(`api/orders/get_orders.php?maKhachHang=${user['id']}`);
+    // Fetch dữ liệu đơn hàng từ backend thông qua ID của user, trang hiện tại và trạng thái đơn hàng
+    let response = await fetch(`api/orders/get_orders.php?maKhachHang=${user['id']}&page=${page}&status=${selectedStatus}`);
     let data = await response.json();
     console.log(data);
+
     const orderList = data.data.list;
+    let numberOfPages = data.data.total_pages;
+    // console.log(numberOfPages);
+
+    let statusString = "";
+    if (selectedStatus == "CHO_XAC_NHAN") {
+        statusString += '<div class="order-history__status-selection status-selection-active">Chờ xác nhận</div>';
+    } else {
+        statusString += '<div class="order-history__status-selection" data-status="CHO_XAC_NHAN">Chờ xác nhận</div>';
+    }
+
+    if (selectedStatus == "DANG_GIAO") {
+        statusString += '<div class="order-history__status-selection status-selection-active">Đang giao</div>';
+    } else {
+        statusString += '<div class="order-history__status-selection" data-status="DANG_GIAO">Đang giao</div>';
+    }
+
+    if (selectedStatus == "DA_GIAO") {
+        statusString += '<div class="order-history__status-selection status-selection-active">Đã giao</div>';
+    } else {
+        statusString += '<div class="order-history__status-selection" data-status="DA_GIAO">Đã giao</div>';
+    }
+
+    if (selectedStatus == "DA_HUY") {
+        statusString += '<div class="order-history__status-selection status-selection-active">Đã hủy</div>';
+    } else {
+        statusString += '<div class="order-history__status-selection" data-status="DA_HUY">Đã hủy</div>';
+    }
+    statusString = '<div class="order-history__status-select-container">' + statusString + '</div>';
+
     if (!orderList || orderList.length == 0) {
         orderPage.innerHTML = `
         <div class="order-history__container">
@@ -40,6 +84,7 @@ export async function showOrderHistory() {
                 <p class="order-history__account-info">Thông tin tài khoản</p>
                 <p class="order-history__account-name">${user['full_name']}</p>
                 <p class="order-history__account-phone">${user['phone'] == '' ? 'Chưa cập nhật số điện thoại' : user['phone']}</p>
+                ${statusString}
                 <table class="order-history__table">
                     <thead>
                         <td>Mã đơn hàng</td>
@@ -58,11 +103,31 @@ export async function showOrderHistory() {
             </div>
         </div>
         `;
+
+        // Thêm sự kiện cho các nút của nhóm trạng thái đơn hàng
+        const statusSelectionBtns = document.querySelectorAll(".order-history__status-selection");
+        statusSelectionBtns.forEach(btn => {
+            if (!btn.classList.contains("status-selection-active")) {
+                btn.addEventListener("click", () => {
+                    // Cập nhật lại trạng thái đơn hàng mà người dùng chọn
+                    selectedStatus = btn.dataset.status;
+
+                    // Cập nhật lại về trang đầu tiên nếu chuyển sang nhóm đơn hàng có trạng thái khác
+                    page = 1;
+                    localStorage.setItem("currentOrderPage", page);
+
+                    // Gọi hàm để hiển thị đơn hàng
+                    showOrderHistory();
+                });
+            }
+        });
     } else {
         let orderString = '';
         
         for (let i=0; i<orderList.length; i++) {
             let cancelButtonString;
+
+            // Trạng thái là chờ xác nhận sẽ có nút hủy đơn hàng
             if (orderList[i].trangThai === 'CHO_XAC_NHAN') {
                cancelButtonString = `<button class="order-history__cancel-btn" data-id="${orderList[i].maDonHang}">Hủy đơn</button>`;
             } else {
@@ -93,6 +158,7 @@ export async function showOrderHistory() {
                 <p class="order-history__account-info">Thông tin tài khoản</p>
                 <p class="order-history__account-name">${user['full_name']}</p>
                 <p class="order-history__account-phone">${user['phone'] == '' ? 'Chưa cập nhật số điện thoại' : user['phone']}</p>
+                ${statusString}
                 <table class="order-history__table">
                     <thead>
                         <td>Mã đơn hàng</td>
@@ -107,11 +173,17 @@ export async function showOrderHistory() {
                     </tbody>
                 </table>
             </div>
+            <div class="order-pagination"></div>
         </div>
         `;
 
+        // Hiển thị các đơn hàng
         orderPage.innerHTML = orderPageString;
 
+        // Gọi hàm tạo nút phân trang
+        makePagination(numberOfPages);
+
+        // Tạo sự kiện onclick cho các nút chi tiết để hiện chi tiết đơn hàng
         const detailBtns = document.querySelectorAll('.order-history__detail-btn');
         detailBtns.forEach(btn => {
             btn.addEventListener('click', async () => {
@@ -119,22 +191,49 @@ export async function showOrderHistory() {
             });
         });
 
+        // Thêm sự kiện cho các nút của nhóm trạng thái đơn hàng
+        const statusSelectionBtns = document.querySelectorAll(".order-history__status-selection");
+        statusSelectionBtns.forEach(btn => {
+            if (!btn.classList.contains("status-selection-active")) {
+                btn.addEventListener("click", () => {
+                    // Cập nhật lại trạng thái đơn hàng mà người dùng chọn
+                    selectedStatus = btn.dataset.status;
+
+                    // Cập nhật lại về trang đầu tiên nếu chuyển sang nhóm đơn hàng có trạng thái khác
+                    page = 1;
+                    localStorage.setItem("currentOrderPage", page);
+
+                    // Gọi hàm để hiển thị đơn hàng
+                    showOrderHistory();
+                });
+            }
+        });
+
+        // Cập nhật param
         let pageSearchParam = new URLSearchParams();
         pageSearchParam.set("order", "main")
         history.pushState(null, '', window.location.pathname + '?' + pageSearchParam.toString());
 
+        // Thêm sự kiện cho các nút hủy đơn hàng, đồng thời cập nhật lại database nếu người dùng xác nhận hủy
         let cancelBtns = document.querySelectorAll('.order-history__cancel-btn');
         cancelBtns.forEach(btn => {
             btn.addEventListener('click', async () => {
+                // Hiển thị dialog xác nhận hủy khi người dùng ấn nút hủy
                 const result = await showConfirmationDialog('Bạn chắc chắn muốn hủy đơn hàng?');
+
+                // Nếu người dùng xác nhận hủy thì tiến hành cập nhật trạng thái đơn hàng trên database
                 if (result == true) {
                     showLoading();
+
+                    // Lấy ra ID đơn hàng mà người dùng muốn hủy thông qua data-id của nút hủy
                     let orderId = btn.dataset.id;
+
+                    // Tạo query string với dữ liệu thay đổi
                     let data = new URLSearchParams();
-            
                     data.append("orderId", orderId);
                     data.append("status", "DA_HUY");
             
+                    // Tạo request đến file update.php để cập nhật dữ liệu
                     fetch("api/orders/update.php", {
                         method: "POST",
                         headers: {
@@ -150,12 +249,16 @@ export async function showOrderHistory() {
                     })
                     .then (data => {
                         hideLoading();
+
+                        // Hiển thị toast thông báo thành công
                         toast({
                             title: "Thông báo",
                             message: data.message,
                             type: data.success === true ? 'success' : 'warning',
                             duration: 3000
                         });
+
+                        // Hiển thị trang đơn hàng lại
                         showOrderHistory();
                     })
                     .catch(error => {
@@ -167,14 +270,127 @@ export async function showOrderHistory() {
     }   
 }
 
+function makePagination(numberOfPages) {
+    let paginationContainer = document.querySelector(".order-pagination");
+    paginationContainer.innerHTML = "";
+    
+    // Nếu chỉ có một trang thì không tạo phân trang
+    if (numberOfPages <= 1) {
+        return;
+    }
+
+    // Nút để quay về trang trước
+    let previousButton = document.createElement("button");
+    previousButton.textContent = "←";
+    previousButton.classList.add("pagination-btn");
+
+    if (page == 1) {
+        previousButton.disabled = true;
+    }
+
+    previousButton.addEventListener("click", () => {
+        page--;
+        localStorage.setItem("currentOrderPage", page);
+        showOrderHistory();
+    });
+
+    paginationContainer.appendChild(previousButton);
+
+    console.log("page");
+
+    if (page > 2) {
+        let firstPageButton = document.createElement("button");
+        firstPageButton.textContent = "1";
+        firstPageButton.classList.add("pagination-btn");
+        firstPageButton.addEventListener("click", () => {
+            page = 1;
+            localStorage.setItem("currentOrderPage", page);
+            showOrderHistory();
+        });
+
+        paginationContainer.appendChild(firstPageButton);
+    }
+ 
+
+    if (page > 3) {
+        let dotText = document.createElement("span");
+        dotText.textContent = " ... ";
+        dotText.classList.add("pagination-dots");
+        paginationContainer.appendChild(dotText);
+    }
+
+
+    for (let i = Math.max(1, page - 1); i <= Math.min(numberOfPages, page + 1); i++) {
+        let button = document.createElement("button");
+        button.textContent = i;
+        button.classList.add("pagination-btn");
+        if (i == page) {
+            button.classList.add("active");
+        }
+        if (i != page) {
+            button.addEventListener("click", () => {
+                page = i;
+                localStorage.setItem("currentOrderPage", page);
+                showOrderHistory();
+            });
+        }
+
+        paginationContainer.appendChild(button);
+    }
+
+
+    if (page < numberOfPages - 2) {
+        let dotText = document.createElement("span");
+        dotText.textContent = " ... ";
+        dotText.classList.add("pagination-dots");
+        paginationContainer.appendChild(dotText);
+    } 
+
+
+    if (page < numberOfPages - 1) {
+        let lastPageButton = document.createElement("button");
+        lastPageButton.textContent = numberOfPages;
+        lastPageButton.classList.add("pagination-btn");
+        lastPageButton.addEventListener("click", () => {
+            page = numberOfPages;
+            localStorage.setItem("currentOrderPage", page);
+            showOrderHistory();
+        });
+
+        paginationContainer.appendChild(lastPageButton);
+
+    }
+
+
+    let nextButton = document.createElement("button");
+    nextButton.textContent = "→";
+    nextButton.classList.add("pagination-btn");
+    if (page == numberOfPages) {
+        nextButton.disabled = true;
+    }
+    nextButton.addEventListener("click", () => {
+        page++;
+        localStorage.setItem("currentOrderPage", page);
+        showOrderHistory();
+    });
+
+    paginationContainer.appendChild(nextButton);
+
+}
+
 async function showOrderDetail(orderId) {
     showLoading();
+
+    // Kiểm tra trạng thái đăng nhập
     const responseAPI = await isLogined();
+
+    // Lấy ra query string hiện tại
     let currentParams = new URLSearchParams(window.location.search);
     let url = new URLSearchParams();
     let orderPage = document.querySelector('.order-history');
     let user = null;
 
+    // Nếu không đăng nhập mà query string có query paramerter order thì xóa query parameter đi và kết thúc hàm
     if (responseAPI === false) {
         if (currentParams.has('orderId')) {
             currentParams.delete('orderId');
@@ -185,24 +401,33 @@ async function showOrderDetail(orderId) {
         user = await getUserByID(responseAPI.user['id']);
     }
 
+    // Fetch dữ liệu đơn hàng cần hiển thị chi tiết thông qua ID đơn hàng
     let orderResponse = await fetch(`api/orders/get_orders.php?maDonHang=${orderId}`);
     let orderResult = await orderResponse.json();
     let order = orderResult.data.list;
 
+    // Fetch dữ liệu chi tiết đơn hàng thông qua ID đơn hàng
     let orderDetailResponse = await fetch(`api/orderDetail/get.php?orderId=${orderId}`);
     let orderDetailResult = await orderDetailResponse.json();
 
+    // Ẩn đi các trang khác nếu có
     hideMainPage();
+
+    // Hiển thị trang đơn hàng 
     if (orderPage.classList.contains('hide-item')) {
         orderPage.classList.remove('hide-item');
     }
+
+    // Nếu đơn hàng có dữ liệu chi tiết đơn hàng thì hiển thị lên cho người dùng
     if (orderDetailResult && orderDetailResult.length != 0) {
         let productString = '';
         let totalPrice = 0;
+
+        // Với mỗi chi tiết đơn hàng, tiến hành fetch dữ liệu sách của chi tiết đó để hiện thị lên chi tiết đơn hàng
         for (let i=0; i<orderDetailResult.length; i++) {
             let bookResponse = await fetch(`api/books/getbook.php?bookId=${orderDetailResult[i].bookId}`);
             let book = await bookResponse.json();
-            console.log(book);
+            // console.log(book);
             productString += `
             <tr>
                 <td>
@@ -219,6 +444,7 @@ async function showOrderDetail(orderId) {
             </tr>
             `;
 
+            // Cộng tiền của chi tiết đơn hàng đó vào tổng giá trị đơn hàng
             totalPrice += orderDetailResult[i].price;
         }
 
@@ -227,10 +453,13 @@ async function showOrderDetail(orderId) {
         <div class="order-history__container">
             <div class="info__title">CHI TIẾT ĐƠN HÀNG</div>
             <div class="order-history__content">
-                <p class="order-detail__title">ĐƠN HÀNG: #${orderId}, <span class="order-detail__date">Đặt lúc — ${formatDate(order['ngayTaoDon'])}</span></p>
-                <p class="order-detail__status"><span>Tình trạng thanh toán: </span>${order['trangThaiThanhToan']}</p>
-                <p class="order-detail__status"><span>Trạng thái đơn hàng: </span>${formatStatus(order['trangThai'])}</p>
-                <span class="order-detail__back-to-order-history">Quay lại lịch sử đơn hàng</span>
+                <span class="order-detail__back-to-order-history"><i class="fa fa-reply"></i> Quay lại lịch sử đơn hàng</span>
+                <div class="order-detail__order-info-container">
+                    <p class="order-detail__title">ĐƠN HÀNG: #${orderId}, <span class="order-detail__date">Đặt lúc — ${formatDate(order['ngayTaoDon'])}</span></p>
+                    <p class="order-detail__status"><span>Tình trạng thanh toán: </span>${order['trangThaiThanhToan']}</p>
+                    <p class="order-detail__status"><span>Trạng thái đơn hàng: </span>${formatStatus(order['trangThai'])}</p>
+                    <p class="order-detail__status"><span>Địa chỉ giao hàng: </span>${order['diaChiGiao']}</p>
+                </div>
                 <div class="order-detail__product-detail-container">
                     <div class="order-detail__product-content">
                         <p>Chi tiết đơn hàng</p>
@@ -257,13 +486,14 @@ async function showOrderDetail(orderId) {
         </div>
         `;
 
+        // Thêm sự kiện onclick cho nút quay về trang đơn hàng
         document.querySelector('.order-detail__back-to-order-history').addEventListener('click', async () => {
             await showOrderHistory();
         });
         
     }
     
-
+    // Cập nhật lại URL với ID của đơn hàng đang hiển thị chi tiết đơn hàng
     url.set("orderId", orderId)
     history.pushState(null, '', window.location.pathname + '?' + url.toString());
     hideLoading();
@@ -293,6 +523,7 @@ function hideMainPage() {
     const showCart = document.querySelector('.show-cart');
     const infoPage = document.querySelector('.self-infomation');
 
+    // Ẩn các thành phần khác trong trang
     if (!main.classList.contains('hide-item')) {
         main.classList.add('hide-item');
     }
@@ -318,6 +549,7 @@ function hideMainPage() {
     }
 }
 
+// Hàm để định dạng lại ngày
 function formatDate(str) {
     try {
         let date = new Date(str);
@@ -333,6 +565,7 @@ function formatDate(str) {
     }
 }
 
+// Hàm để định dạng lại trạng thái đơn hàng
 function formatStatus(str) {
     let result;
     switch (str) {

@@ -10,11 +10,11 @@ class app_models_PhieuGiamGia extends app_libs_DBConnection
     }
 
     // Lấy phiếu giảm giá theo ID
-    public function getDiscountById($maPhieuGiamGia)
+    public function getDiscountById($maPGG)
     {
         return $this->building_queryParam([
-            'where' => 'maPhieuGiamGia = ?',
-            'params' => [$maPhieuGiamGia]
+            'where' => 'maPGG = ?',
+            'params' => [$maPGG]
         ])->select_one();
     }
 
@@ -26,7 +26,7 @@ class app_models_PhieuGiamGia extends app_libs_DBConnection
         $params = [];
 
         if (!empty($id)) {
-            $conditions[] = 'maPhieuGiamGia = ?';
+            $conditions[] = 'maPGG = ?';
             $params[] = $id;
         }
         if (!empty($maKhachHang)) {
@@ -87,47 +87,96 @@ class app_models_PhieuGiamGia extends app_libs_DBConnection
     // Thêm phiếu giảm giá mới
     public function insertDiscount($data)
     {
-        return $this->building_queryParam([
-            'field' => $data
-        ])->insert();
+        // Kiểm tra dữ liệu đầu vào
+        if (!is_array($data) || empty($data)) {
+            throw new Exception('Dữ liệu không hợp lệ');
+        }
+
+        // Kiểm tra các trường bắt buộc
+        $requiredFields = ['tenPGG', 'type', 'toiThieu', 'toiDa', 'ngayBatDau', 'ngayKetThuc', 'trangThai'];
+        foreach ($requiredFields as $field) {
+            if (!isset($data[$field]) || $data[$field] === '') {
+                throw new Exception("Thiếu trường dữ liệu: $field");
+            }
+        }
+
+        // Kiểm tra và xử lý giá trị theo loại khuyến mãi
+        if ($data['type'] === 'PERCENTAGE') {
+            if (!isset($data['phanTram']) || $data['phanTram'] === null || $data['phanTram'] < 0 || $data['phanTram'] > 100) {
+                throw new Exception('Giá trị phần trăm không hợp lệ (0-100)');
+            }
+            $data['giaTriGiam'] = null;
+        } else if ($data['type'] === 'FIXED_AMOUNT') {
+            if (!isset($data['giaTriGiam']) || $data['giaTriGiam'] === null || $data['giaTriGiam'] <= 0) {
+                throw new Exception('Giá trị tiền giảm không hợp lệ');
+            }
+            $data['phanTram'] = null;
+        }
+
+        try {
+            return $this->building_queryParam([
+                'field' => [
+                    'maPGG' => $data['maPGG'],
+                    'tenPGG' => $data['tenPGG'],
+                    'type' => $data['type'],
+                    'phanTram' => $data['phanTram'],
+                    'giaTriGiam' => $data['giaTriGiam'],
+                    'toiThieu' => $data['toiThieu'],
+                    'toiDa' => $data['toiDa'],
+                    'ngayBatDau' => $data['ngayBatDau'],
+                    'ngayKetThuc' => $data['ngayKetThuc'],
+                    'trangThai' => $data['trangThai']
+                ]
+            ])->insert();
+        } catch (Exception $e) {
+            throw new Exception('Lỗi khi thêm phiếu giảm giá: ' . $e->getMessage());
+        }
     }
     // Cập nhật thông tin phiếu giảm giá
-    public function updateDiscount($maPhieuGiamGia, $data)
+    public function updateDiscount($maPGG, $data)
     {
         $fieldValues = [];
-        $params = [':maPhieuGiamGia' => $maPhieuGiamGia];
+        $params = [':maPGG' => $maPGG];
 
         foreach ($data as $field => $value) {
+            if ($field === 'phanTram' && $data['type'] !== 'PERCENTAGE') {
+            continue; // Bỏ qua nếu không phải là PERCENTAGE
+        }
+        if ($field === 'giaTriGiam' && $data['type'] !== 'FIXED_AMOUNT') {
+            continue; // Bỏ qua nếu không phải là FIXED_AMOUNT
+        }
             $fieldValues[] = "$field = :$field";
             $params[":$field"] = $value;
         }
-
-        $fieldValuesString = implode(', ', $fieldValues);
-
-        return $this->building_queryParam([
-            'where' => 'maPhieuGiamGia = :maPhieuGiamGia',
-            'params' => $params,
-            'field' => $fieldValuesString
-        ])->update();
+        // Câu SQL cập nhật
+        $sql = "UPDATE " . $this->table_name . " SET " . implode(", ", $fieldValues) . " WHERE maPGG = :maPGG";
+        
+        // Thực thi câu lệnh SQL
+        return $this->query($sql, $params);
+        // return $this->building_queryParam([
+        //     'where' => 'maPGG = :maPGG',
+        //     'params' => $params,
+        //     'field' => $fieldValuesString
+        // ])->update();
     }
     // Xóa phiếu giảm giá
-    public function deleteDiscount($maPhieuGiamGia)
+    public function deleteDiscount($maPGG)
     {
         return $this->building_queryParam([
-            'where' => 'maPhieuGiamGia = ?',
-            'params' => [$maPhieuGiamGia]
+            'where' => 'maPGG = ?',
+            'params' => [$maPGG]
         ])->delete();
     }
     // Lấy mã phiếu giảm giá mới
     public function getNewDiscountCode()
     {
         $result = $this->building_queryParam([
-            'order' => 'maPhieuGiamGia DESC',
+            'order' => 'maPGG DESC',
             'limit' => 1
         ])->select_one();
 
         if ($result) {
-            $lastCode = $result['maPhieuGiamGia'];
+            $lastCode = $result['maPGG'];
             $newCode = (int)substr($lastCode, 2) + 1;
             return 'PG' . str_pad($newCode, 5, '0', STR_PAD_LEFT);
         } else {

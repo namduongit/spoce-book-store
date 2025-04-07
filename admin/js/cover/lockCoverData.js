@@ -1,7 +1,10 @@
+import { fetchData } from "../../../public/js/book/getDataBook.js";
+
 //
-export function lockCoverData(cover) {
+export async function lockCoverData(idCoverSelected) {
   // Phải truy vấn từ CSDL thông qua idCoverSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
+  let cover = await fetchData(`api/covers/get.php?coverId=${idCoverSelected}`);
 
   // Biến chứa đối tượng là nút "Khoá"
   const lockButton = document.getElementById("lock-button-cover");
@@ -17,15 +20,15 @@ export function lockCoverData(cover) {
   lockDialog.style.width = "400px";
   // - Ghi nội dung dialog
   lockDialog.innerHTML = `
-                <h1 class="dialog__title">${cover.status === 'ACTIVE' ? 'Khoá bìa' : 'Mở khoá'}</h1>
+                <h1 class="dialog__title">${cover[0].status === 'ACTIVE' ? 'Khoá bìa' : 'Mở khoá'}</h1>
                 <button id="close-cover-button" class="dialog__close">
                   <i class="fa-solid fa-xmark"></i>
                 </button>
                 <div class="dialog__line"></div>
                 <form method="post" class="dialog__form">
-                  <div class="dialog__icons" style="display: flex; flex-direction: ${cover.status == 'ACTIVE' ? 'row-reverse' : 'row'};">
-                    <input type="text" id="idCoverInput" name="idInput" value="${cover.id}" style="display: none;">
-                    <input type="text" id="statusCoverInput" name="statusInput" value="${cover.status}" style="display: none;">
+                  <div class="dialog__icons" style="display: flex; flex-direction: ${cover[0].status == 'ACTIVE' ? 'row-reverse' : 'row'};">
+                    <input type="text" id="idCoverInput" name="idInput" value="${cover[0].id}" style="display: none;">
+                    <input type="text" id="statusCoverInput" name="statusInput" value="${cover[0].status}" style="display: none;">
                     <i class="fa-solid fa-lock"></i>
                     <i class="fa-solid fa-arrow-right"></i>
                     <i class="fa-solid fa-unlock"></i>
@@ -37,6 +40,7 @@ export function lockCoverData(cover) {
                 </form>
           `;
 
+  
   // Thêm vào body
   document.body.appendChild(lockDialog);
 

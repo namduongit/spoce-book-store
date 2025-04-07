@@ -5,6 +5,7 @@ import { updateAddressSelect } from '../../../api/address/updateAddressSelect.js
 import { autoSelectAddressByName } from "../../../api/address/updateAddressSelect.js";
 import { deleteCookie, getRoleById } from "../common.js";
 import { getCookie } from "../common.js";
+import { showOrderHistory } from "./orderHistory.js";
 
 export async function fetchData(URL) {
     try {

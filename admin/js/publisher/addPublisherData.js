@@ -43,7 +43,8 @@ export function addPublisherData() {
                   <div class="dialog__form-group full">
                     <label>Trạng thái</label>
                     <select id="add-publisher-status">
-                      <option selected value="ACTIVE">ACTIVE</option>
+                      <option selected value="">Chọn trạng thái</option>
+                      <option  value="ACTIVE">ACTIVE</option>
                       <option value="INACTIVE">INACTIVE</option>
                       <option value="SUSPENDED">SUSPENDED</option>
                     </select>
@@ -73,7 +74,7 @@ export function addPublisherData() {
     // Gán sự kiện cho nút "thêm" dialog
     document
       .getElementById("add-publisher-button")
-      .addEventListener("click", async () => {
+      .addEventListener("click", async (e) => {
         e.preventDefault();
         // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
         const publisherName = document.getElementById("add-publisher-name").value;

@@ -43,7 +43,8 @@ export function addCategoryData() {
                 <div class="dialog__form-group full">
                   <label>Trạng thái</label>
                   <select id="add-category-status">
-                    <option selected value="ACTIVE">ACTIVE</option>
+                    <option selected value="">Chọn trạng thái</option>
+                    <option  value="ACTIVE">ACTIVE</option>
                     <option value="INACTIVE">INACTIVE</option>
                     <option value="SUSPENDED">SUSPENDED</option>
                   </select>
@@ -109,6 +110,8 @@ export function addCategoryData() {
             alert("Không thể kết nối đến server!");
           }
           addDialog.remove();
+          addButton.classList.remove("active");
+
         }
 
         console.log(categoryName, categoryStatus);

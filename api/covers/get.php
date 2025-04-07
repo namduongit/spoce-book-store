@@ -25,7 +25,7 @@ function returnJSONCoverType($coverTypes) {
             "updatedAt" => $cover['ngayCapNhat']
         ];
     }
-    echo json_encode($response);
+    echo json_encode($response,  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
 }
 
 $cover_model = new app_models_LoaiBia();

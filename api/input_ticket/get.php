@@ -22,18 +22,7 @@ function returnJSONInputTicket($InputTickets) {
     $supplier_model = new app_models_NhaCungCap();
 
     foreach ($InputTickets as $InputTicket) {
-  
-        // lấy các chi tiết phiếu nhập
-        $AllInputTicket_detail = $inputTicketDetailModel->getInputTicketDetailByInputTicketId($InputTicket['maPhieuNhap']);
-        $lInputTicket_detailArr = [];
-        foreach($AllInputTicket_detail as $inputTicketDetail) {
-            $lInputTicket_detailArr[] = [
-                "bookId" => $inputTicketDetail['maSach'],
-                "inputPrice" => $inputTicketDetail['giaNhap'],
-                "quantity" => $inputTicketDetail['soLuong'],
-                "total" => $inputTicketDetail['tienNhap'],
-            ];
-        }
+
 
         // lấy tên nhà cung cấp
         $supplier = $supplier_model->getSupplierById($InputTicket['maNCC']);
@@ -41,14 +30,14 @@ function returnJSONInputTicket($InputTickets) {
 
         $response[] = [
             "id" => $InputTicket['maPhieuNhap'],
-            "DateInit" => $InputTicket['ngayTaoPhieu'],
+            // "dateCreate" => $InputTicket['ngayTaoPhieu'],
+            "dateCreate" => explode(" ", $InputTicket['ngayTaoPhieu'])[0],
             "employeeUserName" => $InputTicket['taiKhoanNhanVien'],
             "inputTotal" => $InputTicket['tongTienNhap'],
             "suplierId" => $InputTicket['maNCC'],
             "suplierName" => $supplier['tenNCC'],
             "status" => $InputTicket['trangThai'],
             "updatedAt" => $InputTicket['ngayCapNhat'],
-            "InputTicket_detail" => $lInputTicket_detailArr
         ];
     }
 

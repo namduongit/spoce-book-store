@@ -44,7 +44,7 @@ export function addCoverData() {
                       <label>Trạng thái</label>
                       <select id="add-cover-status">
                         <option value="" selected>Chọn Trạng thái</option>
-                        <option selected value="ACTIVE">ACTIVE</option>
+                        <option  value="ACTIVE">ACTIVE</option>
                         <option value="INACTIVE">INACTIVE</option>
                         <option value="SUSPENDED">SUSPENDED</option>
                       </select>
@@ -80,7 +80,7 @@ export function addCoverData() {
         const coverName = document.getElementById("add-cover-name").value;
         const coverStatus = document.getElementById("add-cover-status").value;
           console.log(coverName, coverStatus);
-        if(coverName === ''){
+        if(coverName === ''||coverStatus === '' ){
           alert("Hãy nhập tên đầy đủ");
         }else{
   

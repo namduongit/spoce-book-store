@@ -52,20 +52,23 @@ class app_models_NhaXuatBan extends app_libs_DBConnection {
         ])->insert();
     }
 
-    // Cập nhật thông tin nhà xuất bản
     public function updatePublisher($maNXB, $data) {
         $fieldValues = [];
         $params = [':maNXB' => $maNXB];
     
         foreach ($data as $field => $value) {
-            $fieldValues[] = "$field = :$field";
-            $params[":$field"] = $value;  // Chỉ dùng tham số có tên
+            // Sử dụng cú pháp :{$field} để đảm bảo tên tham số được nối chính xác
+            $fieldValues[] = "$field = :{$field}";
+            $params[":{$field}"] = $value;
         }
+    
         // Tạo câu SQL UPDATE
         $sql = "UPDATE " . $this->table_name . " SET " . implode(", ", $fieldValues) . " WHERE maNXB = :maNXB";
-        // Thực thi câu lệnh SQL
+    
+        // Thực thi câu lệnh SQL và trả về kết quả
         return $this->query($sql, $params);
     }
+    
     
 
     // Xóa nhà xuất bản

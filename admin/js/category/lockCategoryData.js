@@ -1,7 +1,10 @@
+import { fetchData } from "../../../public/js/book/getDataBook.js";
+
 //
-export function lockCategoryData(category) {
+export async function lockCategoryData(idCategorySelected) {
   // Phải truy vấn từ CSDL thông qua idCategorySelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
+    let category = await fetchData(`api/categories/get.php?cateId=${idCategorySelected}`);
 
   // Biến chứa đối tượng là nút "Khoá"
   const lockButton = document.getElementById("lock-button-category");
@@ -17,25 +20,26 @@ export function lockCategoryData(category) {
   lockDialog.style.width = "400px";
   // - Ghi nội dung dialog
   lockDialog.innerHTML = `
-            <h1 class="dialog__title">Khoá thể loại</h1>
-            <button id="close-category-button" class="dialog__close">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div class="dialog__line"></div>
-            <form method="post" class="dialog__form">
-             <div class="dialog__icons" style="display: flex; flex-direction: ${category.status === 'ACTIVE' ? 'row-reverse' : 'row'};">
-                <input type="hidden" id="categoryId" name="categoryId" value="${category.id}">
-                <input type="hidden" id="categoryStatus" name="categoryStatus" value="${category.status}">
-                <i class="fa-solid fa-lock"></i>
-                <i class="fa-solid fa-arrow-right"></i>
-                <i class="fa-solid fa-unlock"></i>
-              </div>
-              <div class="dialog__buttons">
-                <button class="yes">Đồng ý</button>
-                <button class="no">Từ chối</button>
-              </div>
-            </form>
-      `;
+  <h1 class="dialog__title">Khoá thể loại</h1>
+  <button id="close-category-button" class="dialog__close">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+  <div class="dialog__line"></div>
+  <form method="post" class="dialog__form">
+   <div class="dialog__icons" style="display: flex; flex-direction: ${category[0].status === 'ACTIVE' ? 'row-reverse' : 'row'};">
+      <input type="hidden" id="categoryId" name="categoryId" value="${category[0].id}">
+      <input type="hidden" id="categoryStatus" name="categoryStatus" value="${category[0].status}">
+      <i class="fa-solid fa-lock"></i>
+      <i class="fa-solid fa-arrow-right"></i>
+      <i class="fa-solid fa-unlock"></i>
+    </div>
+    <div class="dialog__buttons">
+      <button class="yes">Đồng ý</button>
+      <button class="no">Từ chối</button>
+    </div>
+  </form>
+`;
+
 
   // Thêm vào body
   document.body.appendChild(lockDialog);
@@ -76,7 +80,10 @@ export function lockCategoryData(category) {
       alert("Không thể kết nối đến server!");
     }
 
+
     lockDialog.remove();
+    lockButton.classList.remove("active");
+
   });
 
 

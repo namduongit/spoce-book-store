@@ -1,6 +1,44 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 import { clickToShowDatePicker, defaultDateSelected } from "../others.js";
 
+// Hàm load dữ liệu khuyến mãi
+async function loadDiscountData() {
+  try {
+    const response = await fetch("/api/discount/get_discount.php");
+    const data = await response.json();
+    
+    if (data.status === "success") {
+      const tbody = document.querySelector(".table__body");
+      tbody.innerHTML = ""; // Xóa dữ liệu cũ
+      
+      data.data.list.forEach((discount) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${discount.maPGG}</td>
+          <td>${discount.tenPGG}</td>
+          <td>${discount.type === "PERCENTAGE" ? discount.phanTram + "%" : discount.giaTriGiam.toLocaleString() + "đ"}</td>
+          <td>${discount.toiThieu.toLocaleString()}đ</td>
+          <td>${discount.toiDa.toLocaleString()}đ</td>
+          <td>${discount.ngayBatDau}</td>
+          <td>${discount.ngayKetThuc}</td>
+          <td>${discount.trangThai}</td>
+          <td>
+            <button class="edit" data-id="${discount.maPGG}">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button class="delete" data-id="${discount.maPGG}">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+  } catch (error) {
+    console.error("Lỗi khi tải dữ liệu:", error);
+  }
+}
+
 // Hàm thiết lập sự kiện Thêm một khuyến mãi cho bảng
 export function addDiscountData() {
   // Biến chứa đối tượng là nút "Thêm"
@@ -43,8 +81,8 @@ export function addDiscountData() {
                       <label>Loại khuyến mãi</label>
                       <select id="add-discount-type">
                         <option value="" selected>Chọn Loại khuyến mãi</option>
-                        <option value="1">Phần trăm</option>
-                        <option value="0">Tiền</option>
+                        <option value="PERCENTAGE">Phần trăm</option>
+                        <option value="FIXED_AMOUNT">Tiền</option>
                       </select>
                     </div>
                     <div class="dialog__form-group">
@@ -77,8 +115,8 @@ export function addDiscountData() {
                       <label>Trạng thái</label>
                       <select id="add-discount-status">
                         <option value="" selected>Chọn Trạng thái</option>
-                        <option value="1">Hoạt động</option>
-                        <option value="0">Tạm dừng</option>
+                        <option value="ACTIVE">Hoạt động</option>
+                        <option value="DISABLED">Tạm dừng</option>
                       </select>
                     </div>
                     <div class="dialog__form-group"></div>
@@ -112,28 +150,153 @@ export function addDiscountData() {
     // Gán sự kiện cho nút "Thêm" dialog
     document
       .getElementById("add-discount-button")
-      .addEventListener("click", () => {
+      .addEventListener("click", async (e) => {
         // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-        const id = document.getElementById("add-discount-id");
-        const name = document.getElementById("add-discount-name");
-        const type = document.getElementById("add-discount-type");
-        const value = document.getElementById("add-discount-value");
-        const dateStart = document.getElementById("add-discount-date-start");
-        const dateEnd = document.getElementById("add-discount-date-end");
-        const minCost = document.getElementById("add-discount-order-min-cost");
-        const maxDiscount = document.getElementById("add-discount-order-max-discount");
-        const status = document.getElementById("add-discount-status");
+        const name = document.getElementById("add-discount-name").value;
+        const type = document.getElementById("add-discount-type").value;
+        const value = document.getElementById("add-discount-value").value;
+        const dateStart = document.getElementById(
+          "add-discount-date-start"
+        ).value;
+        const dateEnd = document.getElementById("add-discount-date-end").value;
+        const minCost = document.getElementById(
+          "add-discount-order-min-cost"
+        ).value;
+        const maxDiscount = document.getElementById(
+          "add-discount-order-max-discount"
+        ).value;
+        const status = document.getElementById("add-discount-status").value;
+        e.preventDefault(); // Ngăn chặn hành vi mặc định của nút submit
+        // Kiểm tra dữ liệu
+        let errorMessage = "";
 
-        // ... (Xử lý tiếp ở đây)
-        console.log(id.value);
-        console.log(name.value);
-        console.log(type.value);
-        console.log(value.value);
-        console.log(dateStart.value);
-        console.log(dateEnd.value);
-        console.log(minCost.value);
-        console.log(maxDiscount.value);
-        console.log(status.value);
+        // Kiểm tra tên khuyến mãi
+        if (!name) {
+          errorMessage += "Vui lòng nhập tên khuyến mãi!\n";
+        } else if (name.length < 3) {
+          errorMessage += "Tên khuyến mãi phải có ít nhất 3 ký tự!\n";
+        }
+
+        // Kiểm tra loại khuyến mãi
+        if (!type) {
+          errorMessage += "Vui lòng chọn loại khuyến mãi!\n";
+        }
+
+        // Kiểm tra giá trị
+        if (!value) {
+          errorMessage += "Vui lòng nhập giá trị!\n";
+        } else {
+          const valueNum = parseFloat(value);
+          if (isNaN(valueNum)) {
+            errorMessage += "Giá trị phải là số!\n";
+          } else if (type === "PERCENTAGE" && (valueNum <= 0 || valueNum > 100)) {
+            errorMessage += "Giá trị phần trăm phải từ 0 đến 100!\n";
+          } else if (type === "FIXED_AMOUNT" && valueNum <= 0) {
+            errorMessage += "Giá trị tiền phải lớn hơn 0!\n";
+          }
+        }
+
+        // Kiểm tra ngày
+        if (!dateStart || !dateEnd) {
+          errorMessage += "Vui lòng chọn đầy đủ ngày bắt đầu và kết thúc!\n";
+        } else {
+          const startDate = new Date(dateStart);
+          const endDate = new Date(dateEnd);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          if (startDate < today) {
+            errorMessage += "Ngày bắt đầu không được nhỏ hơn ngày hiện tại!\n";
+          }
+          if (endDate <= startDate) {
+            errorMessage += "Ngày kết thúc phải lớn hơn ngày bắt đầu!\n";
+          }
+        }
+
+        // Kiểm tra tiền đơn tối thiểu
+        if (!minCost) {
+          errorMessage += "Vui lòng nhập tiền đơn tối thiểu!\n";
+        } else {
+          const minCostNum = parseFloat(minCost);
+          if (isNaN(minCostNum) || minCostNum <= 0) {
+            errorMessage += "Tiền đơn tối thiểu phải là số lớn hơn 0!\n";
+          }
+        }
+
+        // Kiểm tra tiền giảm tối đa
+        if (!maxDiscount) {
+          errorMessage += "Vui lòng nhập tiền giảm tối đa!\n";
+        } else {
+          const maxDiscountNum = parseFloat(maxDiscount);
+          if (isNaN(maxDiscountNum) || maxDiscountNum <= 0) {
+            errorMessage += "Tiền giảm tối đa phải là số lớn hơn 0!\n";
+          }
+        }
+
+        // Kiểm tra trạng thái
+        if (!status) {
+          errorMessage += "Vui lòng chọn trạng thái!\n";
+        }
+
+        // Nếu có lỗi, hiển thị và dừng
+        if (errorMessage) {
+          alert(errorMessage);
+          return;
+        }
+
+        try {
+          // Chuẩn bị dữ liệu để gửi
+          const discountData = {
+            tenPGG: name,
+            type: type,
+            phanTram: type === "PERCENTAGE" ? parseInt(value) : null,
+            giaTriGiam: type === "FIXED_AMOUNT" ? parseInt(value) : null,
+            toiThieu: parseInt(minCost),
+            toiDa: parseInt(maxDiscount),
+            ngayBatDau: dateStart,
+            ngayKetThuc: dateEnd,
+            trangThai: status,
+          };
+
+          console.log("Dữ liệu gửi đi:", discountData); // Log dữ liệu gửi đi
+
+          // // Gửi yêu cầu POST đến API
+          const response = await fetch("/api/discount/add_discount.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(discountData),
+          });
+
+          console.log("Status response:", response.status); // Log status code
+          const responseText = await response.text(); // Lấy response dạng text trước
+          console.log("Response text:", responseText); // Log response text
+
+          let result;
+          try {
+            result = JSON.parse(responseText); // Thử parse JSON
+          } catch (e) {
+            console.error("Lỗi parse JSON:", e);
+            throw new Error("Response không phải là JSON hợp lệ");
+          }
+
+          if (result.status === "success") {
+            alert("Thêm khuyến mãi thành công!");
+            // Đóng dialog
+            addDialog.remove();
+            // Xoá class active
+            addButton.classList.remove("active");
+            // Cập nhật dữ liệu bảng
+            await loadDiscountData();
+          } else {
+            alert(result.message || "Có lỗi xảy ra khi thêm khuyến mãi!");
+          }
+        } catch (error) {
+          console.error("Chi tiết lỗi:", error);
+          // alert("Có lỗi xảy ra khi thêm khuyến mãi: " + error.message);
+        }
       });
 
     // Gán sự kiện cho nút "Đóng" dialog

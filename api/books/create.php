@@ -8,19 +8,19 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 
-$image = isset($_GET['image']) ? $_GET['image'] : '80.png';
-$title = isset($_GET['title']) ? $_GET['title'] : '';
-$authorId = isset($_GET['authorId']) ? $_GET['authorId'] : '';
-$categoryId = isset($_GET['categoryId']) ? $_GET['categoryId'] : '';
-$numOfpages = isset($_GET['numOfpages']) ? $_GET['numOfpages'] : '';
-$coverTypeId = isset($_GET['coverTypeId']) ? $_GET['coverTypeId'] : '';
-$publisherId = isset($_GET['publisherId']) ? $_GET['publisherId'] : '';
-$publishYear = isset($_GET['publishYear']) ? $_GET['publishYear'] : '';
-$priceBase = isset($_GET['priceBase']) ? $_GET['priceBase'] : '';
-$priceOrder = isset($_GET['priceOrder']) ? $_GET['priceOrder'] : '';
-$description = isset($_GET['description']) ? $_GET['description'] : '';
-$status = isset($_GET['status']) ? $_GET['status'] : '';
-$size = isset($_GET['size']) ? $_GET['size'] : '';
+$image = isset($_POST['image']) ? $_POST['image'] : '80.png';
+$title = isset($_POST['title']) ? $_POST['title'] : '';
+$authorId = isset($_POST['authorId']) ? $_POST['authorId'] : '';
+$categoryId = isset($_POST['categoryId']) ? $_POST['categoryId'] : '';
+$numOfpages = isset($_POST['numOfpages']) ? $_POST['numOfpages'] : '';
+$coverTypeId = isset($_POST['coverTypeId']) ? $_POST['coverTypeId'] : '';
+$publisherId = isset($_POST['publisherId']) ? $_POST['publisherId'] : '';
+$publishYear = isset($_POST['publishYear']) ? $_POST['publishYear'] : '';
+$priceBase = isset($_POST['priceBase']) ? $_POST['priceBase'] : '';
+$priceOrder = isset($_POST['priceOrder']) ? $_POST['priceOrder'] : '';
+$description = isset($_POST['description']) ? $_POST['description'] : '';
+$status = isset($_POST['status']) ? $_POST['status'] : '';
+$size = isset($_POST['size']) ? $_POST['size'] : '';
 $updateDate = date('Y-m-d'); 
 
 

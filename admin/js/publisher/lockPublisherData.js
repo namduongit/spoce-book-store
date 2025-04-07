@@ -1,7 +1,12 @@
+import { fetchData } from "../../../public/js/book/getDataBook.js";
+
+
 //
-export function lockPublisherData(publisher) {
+export async function lockPublisherData(idPublisherSelected) {
   // Phải truy vấn từ CSDL thông qua idPublisherSelected để lấy được dữ liệu của đối tượng hiện tại
-  // ...
+  // ..
+  let publisher =  await fetchData(`api/publishers/get.php?publisherId=${idPublisherSelected}`);
+  
 
   // Biến chứa đối tượng là nút "Khoá"
   const lockButton = document.getElementById("lock-button-publisher");
@@ -17,25 +22,25 @@ export function lockPublisherData(publisher) {
   lockDialog.style.width = "400px";
   // - Ghi nội dung dialog
   lockDialog.innerHTML = `
-              <h1 class="dialog__title">${publisher.status === 'ACTIVE' ? 'Khoá tác giả' : 'Mở khoá'}</h1>
-              <button id="close-publisher-button" class="dialog__close">
-                <i class="fa-solid fa-xmark"></i>
-              </button>
-              <div class="dialog__line"></div>
-              <form method="post" class="dialog__form">
-               <div class="dialog__icons" style="display: flex; flex-direction: ${publisher.status === 'ACTIVE' ? 'row-reverse' : 'row'};">
-                <input type="hidden" id="idPublisherInput" name="idPublisherInput" value="${publisher.id}">
-                <input type="hidden" id="statusPublisherInput" name="statusPublisherInput" value="${publisher.status}">       
-                  <i class="fa-solid fa-lock"></i>
-                  <i class="fa-solid fa-arrow-right"></i>
-                  <i class="fa-solid fa-unlock"></i>
-                </div>
-                <div class="dialog__buttons">
-                  <button class="yes">Đồng ý</button>
-                  <button class="no">Từ chối</button>
-                </div>
-              </form>
-        `;
+      <h1 class="dialog__title">${publisher[0].status === 'ACTIVE' ? 'Khoá tác giả' : 'Mở khoá'}</h1>
+      <button id="close-publisher-button" class="dialog__close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="dialog__line"></div>
+      <form method="post" class="dialog__form">
+      <div class="dialog__icons" style="display: flex; flex-direction: ${publisher[0].status === 'ACTIVE' ? 'row-reverse' : 'row'};">
+        <input type="hidden" id="idPublisherInput" name="idPublisherInput" value="${publisher[0].id}">
+        <input type="hidden" id="statusPublisherInput" name="statusPublisherInput" value="${publisher[0].status}">       
+          <i class="fa-solid fa-lock"></i>
+          <i class="fa-solid fa-arrow-right"></i>
+          <i class="fa-solid fa-unlock"></i>
+        </div>
+        <div class="dialog__buttons">
+          <button class="yes">Đồng ý</button>
+          <button class="no">Từ chối</button>
+        </div>
+      </form>
+  `;
 
   // Thêm vào body
   document.body.appendChild(lockDialog);

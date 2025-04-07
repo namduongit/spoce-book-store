@@ -58,7 +58,8 @@ export function addSuppliesData() {
             <div class="dialog__form-group">
               <label>Trạng thái</label>
               <select id="add-supplies-status">
-                  <option selected value="ACTIVE">ACTIVE</option>
+                  <option selected value="">Chọn trạng thái</option>
+                  <option  value="ACTIVE">ACTIVE</option>
                   <option value="INACTIVE">INACTIVE</option>
                   <option value="SUSPENDED">SUSPENDED</option>
               </select>

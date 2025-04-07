@@ -1,10 +1,11 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
+import { fetchData } from "../../../public/js/book/getDataBook.js";
 
 // Hàm thiết lập sự kiện Sửa một nhà xuất bản cho bảng
-export function updatePublisherData(publisher) {
+export async function updatePublisherData(idPublisherSelected) {
   // Phải truy vấn từ CSDL thông qua idpublisherSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
-
+   let publisher =  await fetchData(`api/publishers/get.php?publisherId=${idPublisherSelected}`);
   // Biến chứa đối tượng là nút "Sửa"
   const updateButton = document.getElementById("update-button-publisher");
 
@@ -19,40 +20,41 @@ export function updatePublisherData(publisher) {
   updateDialog.style.width = "398px";
   // - Ghi nội dung dialog  
   updateDialog.innerHTML = `
-            <h1 class="dialog__title">Sửa nhà xuất bản</h1>
-            <button id="close-publisher-button" class="dialog__close">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div class="dialog__line"></div>
-            <form method="post" class="dialog__form">
-              <div class="dialog__row">
-                <div class="dialog__form-group full">
-                  <label>Mã nhà xuất bản</label>
-                  <input type="text" id="update-publisher-id"  value="${publisher.id}" readonly />
-                </div>
-              </div>
-              <div class="dialog__row">
-                <div class="dialog__form-group full">
-                  <label>Tên nhà xuất bản</label>
-                  <input type="text" id="update-publisher-name" placeholder="Nhập Tên nhà xuất bản"  value="${publisher.name}" autofocus/>
-                </div>
-              </div>
-              <div class="dialog__row">
-                <div class="dialog__form-group full">
-                  <label>Trạng thái</label>
-                  <select id="update-publisher-status" disabled>
-                    <option selected value="${publisher.status}">${publisher.status}</option>
-                    <option value="ACTIVE">ACTIVE</option>
-                    <option value="INACTIVE">INACTIVE</option>
-                    <option value="SUSPENDED">SUSPENDED</option>
-                  </select>
-                </div>
-              </div>
-              <div class="dialog__buttons">
-                <button id="update-publisher-button" class="update">Sửa</button>
-              </div>
-            </form >
-            `;
+  <h1 class="dialog__title">Sửa nhà xuất bản</h1>
+  <button id="close-publisher-button" class="dialog__close">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+  <div class="dialog__line"></div>
+  <form method="post" class="dialog__form">
+    <div class="dialog__row">
+      <div class="dialog__form-group full">
+        <label>Mã nhà xuất bản</label>
+        <input type="text" id="update-publisher-id"  value="${publisher[0].id}" readonly />
+      </div>
+    </div>
+    <div class="dialog__row">
+      <div class="dialog__form-group full">
+        <label>Tên nhà xuất bản</label>
+        <input type="text" id="update-publisher-name" placeholder="Nhập Tên nhà xuất bản"  value="${publisher[0].name}" autofocus/>
+      </div>
+    </div>
+    <div class="dialog__row">
+      <div class="dialog__form-group full">
+        <label>Trạng thái</label>
+        <select id="update-publisher-status" disabled>
+          <option selected value="${publisher[0].status}">${publisher[0].status}</option>
+          <option value="ACTIVE">ACTIVE</option>
+          <option value="INACTIVE">INACTIVE</option>
+          <option value="SUSPENDED">SUSPENDED</option>
+        </select>
+      </div>
+    </div>
+    <div class="dialog__buttons">
+      <button id="update-publisher-button" class="update">Sửa</button>
+    </div>
+  </form >
+  `;
+
 
   // Thêm vào body
   document.body.appendChild(updateDialog);
