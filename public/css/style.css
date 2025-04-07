@@ -1749,13 +1749,41 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   align-items: start;
 }
 
+.checkout__payment-method-holder .checkout__payment-method-option:last-child {
+  margin-bottom: 1rem;
+}
+
+
 .checkout__payment-method-option {
   padding: 0.45em;
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
   gap: 1.5rem;
   border-bottom: 1px solid #aaa;
   cursor: pointer;
+}
+
+.checkout__qrcode-method-child-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.checkout__payment-method-child {
+  display: none;
+}
+
+.checkout__qrcode-method-child-wrapper .checkout__qrcode-img {
+  width: 20%;
+}
+
+.checkout__qrcode-img img {
+  width: 100%;
+}
+
+.checkout__payment-method-child {
+  width: 100%;
 }
 
 .checkout__payment-radiobtn-holder {
@@ -1818,6 +1846,10 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   gap: 1rem;
 }
 
+.checkout__payment-method-content img {
+  height: 50px;
+}
+
 .checkout__credit-content-holder > img {
   width: 16rem;
 }
@@ -1850,6 +1882,7 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 .checkout__qrcode-method-holde-wrapper {
   display: flex;
+  justify-content: space-between;
 }
 
 .checkout__cart-table tr > td {

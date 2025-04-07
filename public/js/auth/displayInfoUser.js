@@ -460,7 +460,6 @@ export async function showAddressInCurrentUser(userId) {
         if (data.success) {
             return data;
         } else {
-            console.log('Không có địa chỉ:', data.message);
             return null;
         }
     } catch (error) {

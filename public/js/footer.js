@@ -226,20 +226,20 @@ function showFooterInfo(info) {
         <h2>Hướng dẫn mua hàng</h2>
         <h1>1.  Chọn sản phẩm cần mua.</h1>
         <p>o  Khách hàng lựa chọn xem sản phẩm cần mua, hệ thống Spoce cung cấp cho khách hàng các thông tin chi tiết nhất liên quan đến cuốn sách khách hàng quan tâm để có sự lựa chọn tốt nhất. Ngoài ra hệ thống Spoce còn cho phép khách hàng xem trước trích đoạn của sách.</p>
-        <img src="public/images/howto1.png" alt="howto1">
+        <img src="public/images/howto/howto1.png" alt="howto1">
         <p>o  Sau khi xem xong các thông tin của sách, khách hàng nhấn vào nút "MUA NGAY" để mua sách.</p>
         <h1>2.  Kiểm tra giỏ hàng.</h1>
         <p>o  Khách hàng nhấn vào mục giỏ hàng sẽ hiện ra danh sách sản phẩm trong giỏ hàng.</p>
-        <img src="public/images/howto2.png" alt="howto2">
+        <img src="public/images/howto/howto2.png" alt="howto2">
         <p>o  Khách hàng nhấn nút "Xem Giỏ Hàng" để thực hiện bước kế tiếp.</p>
         <p>o  Tại trang giỏ hàng, khách hàng có thể thêm, bớt hoặc bỏ sản phẩm ra khỏi giỏ hàng trước khi thanh toán.</p>
-        <img src="public/images/howto3.png" alt="howto3">
+        <img src="public/images/howto/howto3.png" alt="howto3">
         <p>o  Khách hàng nhấn nút "Thanh Toán" để thực hiện bước kế tiếp.</p>
         <p>o  Nếu khách hàng chưa đăng nhập hệ thống Spoce sẽ hiện trang yêu cầu đăng nhập.</p>
         <p>o  Nếu khách hàng chưa có tài khoản trên hệ thống Spoce Book Store, khách hàng có thể đăng ký tài khoản trên hệ thống.</p>
         <h1>3.  Cung cấp thông tin giao hàng và lựa chọn dịch vụ kèm theo:</h1>
         <p>o  Khách hàng điền địa chỉ giao hàng đầy đủ.</p>
-        <img src="public/images/howto4.png" alt="howto4">
+        <img src="public/images/howto/howto4.png" alt="howto4">
         <p>o  Khách hàng có thể tham khảo mục ghi chú ở dưới phương thức thanh toán để lựa chọn phương thức thanh toán phù hợp và tiện lợi nhất.</p>\
         <p>o Tại bước này, khách hàng có thể nhập mã giảm giá (nếu có) để được giảm giá thêm</p>
         <p>o  Quý khách kiểm tra lại "Địa chỉ thanh toán", "Địa chỉ giao hàng", "Số tiền trên đơn hàng", nếu các thông tin đã khớp xin vui lòng nhấn nút "Thanh toán" để xác nhận đặt hàng.</p>

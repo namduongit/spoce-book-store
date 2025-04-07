@@ -65,7 +65,6 @@ async function viewCart(type) {
         currentCartUser = currentCartUser['data'] || [];
     }
 
-    console.log('Giỏ hàng hiện tại',currentCartUser);
 
     const url = new URL(window.location.href)
     const currentParams = new URLSearchParams(url.search);
@@ -465,6 +464,81 @@ async function checkOutBill() {
         totalPrice += item.quantity * productItem.sellingPrice;
     }
 
+    async function getDataPayment() {
+        try {
+            const response = await fetch('api/payments/get.php', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }    
+
+    let dataPayment = await getDataPayment();
+    console.log(dataPayment);
+    let HTMLPayment = ``;
+
+    if (Array.isArray(dataPayment) && dataPayment) {
+        dataPayment.forEach(data => {
+            let holderPayment = '';
+            if (data.info != null && data.desc != null && data.qrCode != null && data.auth != null) {
+                holderPayment = `
+                    <div class="checkout__payment-method-child">
+                        <div class="checkout__qrcode-method-child-wrapper">
+                            <div class="checkout__qrcode-text">
+                                • ${data.info}
+                                • ${data.desc}
+                                • ${data.auth}
+                            </div>
+                            <div class="checkout__qrcode-img">
+                                <img src="../public/images/banking/uploads/${data.qrCode}" alt="payment_qr">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            HTMLPayment += `
+                    <label class="checkout__payment-method-option" for="${data.id}">
+                        <div class="checkout__payment-method-radiobtn">
+                            <label class="checkout__payment-radiobtn-holder">
+                                <input type="radio" id="${data.id}" name="payment" value="${data.id}">
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="checkout__payment-method-content">
+                            <img src="../public/images/banking/logo/${data.icon}" alt="payment_icon">
+                            <span>${data.name}</span>
+                        </div>
+                        ${holderPayment}
+                    </label>
+            `;
+        });
+    }
+
+    // Cái cuối cùng dùng để ứng dụng thanh toán cho thầy coi
+    HTMLPayment += `
+    <label class="checkout__payment-method-option" for="-1">
+        <div class="checkout__payment-method-radiobtn">
+            <label class="checkout__payment-radiobtn-holder">
+                <input type="radio" id="-1" name="payment" value="-1">
+                <span></span>
+            </label>
+        </div>
+        <div class="checkout__payment-method-content">
+            <img src="../public/images/banking/logo/type_atm.svg" alt="payment_icon">
+            <span>Chuyển khoản trực tiếp VNPAY - Dùng làm Demo</span>
+        </div>
+    </label>
+    `;
+
+    
+
     let rightHTMLCheckOut = `
             <div class="checkout__cart-info-holder">
                 <div class="checkout__cart-products-holder">
@@ -593,12 +667,8 @@ async function checkOutBill() {
             <div class="checkout__ship-container">
                 <p>Phương thức vận chuyển</p>
                 <div class="checkout__ship-method-holder">
-                    <div class="checkout__ship-method-unchoose" style="display: none;">
-                        <img src="public/images/download.svg" alt="package">
-                        <p>Vui lòng chọn tỉnh / thành để có danh sách phương thức vận chuyển.</p>
-                    </div>
-
                     <div class="checkout__ship-method-choose">
+
                         <label class="checkout__ship-method" for="tietkiem">
                             <div class="checkout__ship-method-radiobtn-holder">
 
@@ -609,8 +679,6 @@ async function checkOutBill() {
                                 <span>Giao hàng tiết kiệm</span>
 
                             </div>
-
-
                             <span>20.000đ</span>
                         </label>
 
@@ -639,6 +707,7 @@ async function checkOutBill() {
 
                             <span>50.000đ</span>
                         </label>
+
                     </div>
                 </div>
             </div>
@@ -646,64 +715,12 @@ async function checkOutBill() {
             <div class="checkout__payment-container">
                 <p>Phương thức thanh toán</p>
                 <div class="checkout__payment-method-holder">
-                    <label class="checkout__payment-method-option" for="cash">
-                        <div class="checkout__payment-method-radiobtn">
-                            <label class="checkout__payment-radiobtn-holder">
-                                <input type="radio" id="cash" name="payment" value="cash">
-                                <span></span>
-                            </label>
-                        </div>
-                        <div class="checkout__payment-method-content">
-                            <img src="../public/images/cod.svg" alt="payment_image">
-                            <span>Thanh toán khi giao hàng (COD)</span>
-                        </div>
-                    </label>
-
-                    <label class="checkout__payment-method-option" for="qrcode">
-                        <div class="checkout__payment-method-radiobtn">
-
-                            <label class="checkout__payment-radiobtn-holder">
-                                <input type="radio" id="qrcode" name="payment" value="qrcode">
-                                <span></span>
-                            </label>
-                        </div>
-                        <div class="checkout__payment-method-content">
-                            <img src="../public/images/type_atm.svg" alt="payment_image">
-                            <span>Chuyển khoản qua ngân hàng</span>
-                        </div>
-                    </label>
-
-                    <div class="checkout__qrcode-method-holder">
-                        <div class="checkout__qrcode-method-holde-wrapper">
-                            <div class="checkout__qrcode-text">
-                                • <strong>NGÂN HÀNG: </strong> TMCP Kỹ THƯƠNG VIỆT NAM (TECHCOMBANK)
-                                • <strong>SỐ TÀI KHOẢN: </strong> 8685.8888.888
-                                • <strong>TÊN TÀI KHOẢN: </strong> CTY CP TMDV SPOCE BOOK STORE
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="checkout__credit-method-holder">
-                        <div class="checkout__input-field">
-                            <input type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" maxlength="19" id="card-number-field" name="card-number" placeholder="Số thẻ">
-                            <label>Số thẻ (16 số)</label>
-                        </div>
-
-                        <div class="checkout__input-field">
-                            <input type="tel" inputmode="numeric" maxlength="5" id="card-expiration-field" name="card-expiration" placeholder="Ngày hết hạn">
-                            <label>Ngày hết hạn (MM/YY)</label>
-                        </div>
-
-                        <div class="checkout__input-field">
-                            <input type="tel" inputmode="numeric" pattern="[0-9]{3}" maxlength="3" id="card-cvv-field" name="card-cvv" placeholder="Mã bảo mật">
-                            <label>Mã bảo mật (3 số)</label>
-                        </div>
-                    </div>
+                    ${HTMLPayment}
                 </div>
             </div>
         </div>
-
     `;
+
 
     checkoutMain.innerHTML = `
         <div class="checkout__container">
@@ -713,15 +730,25 @@ async function checkOutBill() {
     `;
     hideLoading();
 
-    document.getElementById('cash').addEventListener('click', function() {
-        document.querySelector('.checkout__qrcode-method-holder').style.display = 'none';
-        document.querySelector('.checkout__credit-method-holder').style.display = 'none';
+    const paymentMethodOptions = document.querySelectorAll('.checkout__payment-method-option');
+    paymentMethodOptions.forEach(option => {
+        const buttonRadio = option.querySelector('.checkout__payment-radiobtn-holder input');
+        buttonRadio.addEventListener('click', function() {
+            paymentMethodOptions.forEach(opt => {
+                const childElement = opt.querySelector('.checkout__payment-method-child');
+                if (childElement) {
+                    childElement.style.display = 'none';
+                }
+            });
+    
+            const childElement = option.querySelector('.checkout__payment-method-child');
+            if (childElement) {
+                childElement.style.display = 'block';
+            }
+        });
     });
+    
 
-    document.getElementById('qrcode').addEventListener('click', function() {
-        document.querySelector('.checkout__qrcode-method-holder').style.display = 'block';
-        document.querySelector('.checkout__credit-method-holder').style.display = 'none';
-    });
 
     cartMain.classList.add('hide-item');
     mainMain.classList.add('hide-item');
@@ -732,9 +759,10 @@ async function checkOutBill() {
     checkoutMain.classList.remove('hide-item');
     document.querySelector(".topbar__cart-detail-holder").classList.remove('show');
 
+
     // Render dữ liệu vào select đầu tiên do nút địa chỉ được lưu có trước
     function renderBaseAddress() {
-        if (currentAddress.success) {
+        if (currentAddress != null) {
             const selectOption = document.getElementById('address-holder');
             let index = 0;
             currentAddress.data.forEach(element => {
@@ -754,26 +782,50 @@ async function checkOutBill() {
         }
         document.querySelector('.checkout__input-field-input-address').classList.add('hide-item');
         document.querySelector('.checkout__address-field-two').classList.add('hide-item');
-
     }
+
     renderBaseAddress();
+    updateAddressSelect('city', 'district', 'ward');
+
+    if (currentAddress ==  null) {
+        document.querySelector('.checkout__input-field .checkout__address-btn-child-select').classList.remove('active');
+        document.querySelector('.checkout__input-field .checkout__address-btn-child-inoput').classList.add('active');
+        document.querySelector('.checkout__input-field-input-address').classList.remove('hide-item');
+        document.querySelector('.checkout__address-field-two').classList.remove('hide-item');
+        document.querySelector('.checkout__address-select').classList.add('hide-item');
+    }
 
     // Xử lí render dữ liệu ở đây
     document.querySelectorAll('.checkout__address-btn-child').forEach(btn => {
         btn.addEventListener('click', function() {
-            let isSelectSaved = this.classList.contains('checkout__address-btn-child-select');
+            if (currentAddress != null) {
+                let isSelectSaved = this.classList.contains('checkout__address-btn-child-select');
 
-            document.querySelector('.checkout__address-select').classList.toggle('hide-item', !isSelectSaved);
-            document.querySelector('.checkout__input-field-input-address').classList.toggle('hide-item', isSelectSaved);
-            document.querySelector('.checkout__address-field-two').classList.toggle('hide-item', isSelectSaved);
+                document.querySelector('.checkout__address-select').classList.toggle('hide-item', !isSelectSaved);
+                document.querySelector('.checkout__input-field-input-address').classList.toggle('hide-item', isSelectSaved);
+                document.querySelector('.checkout__address-field-two').classList.toggle('hide-item', isSelectSaved);
 
-            document.querySelectorAll('.checkout__address-btn-child').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
+                document.querySelectorAll('.checkout__address-btn-child').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            }
+            else {
+                let isSelectSaved = this.classList.contains('checkout__address-btn-child-select');
+                if (isSelectSaved) {
+                    document.querySelector('.checkout__input-field-input-address').classList.remove('hide-item');
+                    document.querySelector('.checkout__address-field-two').classList.remove('hide-item');
+                    document.querySelector('.checkout__address-select').classList.add('hide-item');
+                    toast({
+                        title: 'Thông báo',
+                        message: 'Bạn chưa lưu bất kì địa chỉ nào',
+                        type: 'warning',
+                        duration: 3000
+                    });
+                }
+            }
 
         });
     });
 
-    updateAddressSelect('city', 'district', 'ward');
     
     // Submit gửi đơn hàng lên Server
     document.querySelector('.checkout__submit-btn-final').addEventListener('click', function() {

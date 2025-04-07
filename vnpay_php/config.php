@@ -3,8 +3,6 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
 
 // Lấy cấu hình cổng
 $port = $_SERVER['SERVER_PORT'];
-echo $port;
-die();
 
 
 $vnp_TmnCode = "W54SL72A"; //Website ID in VNPAY System
