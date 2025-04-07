@@ -96,7 +96,7 @@ async function updateInputTicketDetailTable() {
           </select>
       </div>
       <div class="dialog__form-group">
-          <label>Giá bìa (VNĐ)</label>
+          <label>Giá gốc (VNĐ)</label>
           <input type="text" id="update-input_ticket-detail-price-base" value="" readonly />
       </div>
     </div>
@@ -143,8 +143,8 @@ async function updateInputTicketDetailTable() {
       const bookList = await fetchData(`api/books/getbook.php`);
 
       let html = ``;
-      bookList.forEach(book => {
-        html += `<option value="${book.id}">${book.id}</option>`;
+      bookList.bookList.forEach(book => {
+        html += `<option value="${book.id}">${book.id} - ${book.name} </option>`;
       });
     
       const selectElement = document.querySelector("#update-input_ticket-detail-id");
@@ -153,9 +153,8 @@ async function updateInputTicketDetailTable() {
       selectElement.addEventListener("change", async function () {
         const bookId = this.value;
         const book = await fetchData(`api/books/get.php?bookID=${bookId}`);
-        const cover = await fetchData(`api/covers/get.php?coverId=${book.books[0].genreId}`);
         document.querySelector("#update-input_ticket-detail-name").value = book.books[0].name;
-        document.querySelector("#update-input_ticket-detail-price-base").value = cover[0].price;
+        document.querySelector("#update-input_ticket-detail-price-base").value = book.books[0].originalPrice;
     
       });
       
@@ -261,15 +260,15 @@ export async function updateInputTicketData(idInputTicketSelected) {
             <div class="dialog__row">
               <div class="dialog__form-group input_ticket half">
                 <label>Ngày tạo phiếu</label>
-                <input type="date" id="update-input_ticket-date-create" value="${detailList.dateCreate}" />
+                <input type="date" id="update-input_ticket-date-create" value="${detailList.dateCreate}" class="hasValidDate" />
               </div>
               <div class="dialog__form-group input_ticket half">
                 <label>Ngày hợp đồng</label>
-                <input type="date" id="update-input_ticket-date-contract"  value="${detailList.dateCreate}" />
+                <input type="date" id="update-input_ticket-date-contract"  value="${detailList.dateCreate}"  class="hasValidDate"/>
               </div>
               <div class="dialog__form-group input_ticket full">
                 <label>Nhà cung cấp</label>
-                <select id="update-input_ticket-suplier">
+                <select id="update-input_ticket-suplier" class="changed">
                   <option value="${detailList.suplierId}" selected> ${detailList.suplierName}</option>
                   
                 </select>
@@ -284,7 +283,7 @@ export async function updateInputTicketData(idInputTicketSelected) {
                     <tr>  
                       <th width="8%">Mã sách</th>
                       <th width="28%">Tên sách</th>
-                      <th width="14%">Giá bìa (VNĐ)</th>
+                      <th width="14%">Giá gốc (VNĐ)</th>
                       <th width="14%">Giá nhập (VNĐ)</th>
                       <th width="10%">Số lượng</th>
                       <th width="22%">Thành tiền (VNĐ)</th>
@@ -310,7 +309,7 @@ export async function updateInputTicketData(idInputTicketSelected) {
   updateDialog.showModal();
 
 
-  let suplierList =  await fetchData(`api/supplies/getSupplier.php`);
+  let suplierList =  await fetchData(`api/supplies/get.php`);
   let htmlSuplier = ``;
   suplierList.forEach(suplier =>{
     htmlSuplier +=`<option value="${suplier.id}">${suplier.name}</option>`;
@@ -458,6 +457,16 @@ export async function updateInputTicketData(idInputTicketSelected) {
   // Gán sự kiện cho nút "Đóng" dialog
   document
     .getElementById("close-input_ticket-button")
+    .addEventListener("click", () => {
+      // Xoá dialog
+      updateDialog.remove();
+
+      // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
+      updateButton.classList.remove("active");
+    });
+
+    document
+    .querySelector(".cancel-status")
     .addEventListener("click", () => {
       // Xoá dialog
       updateDialog.remove();

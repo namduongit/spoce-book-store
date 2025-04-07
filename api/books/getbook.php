@@ -46,7 +46,7 @@ $orderType = isset($_GET['orderType']) ? trim($_GET['orderType']) : 'ASC';
 $orderByColumn = isset($_GET['orderByColumn']) ? trim($_GET['orderByColumn']) : 'maSach';
 $status = isset($_GET['status']) ? trim($_GET['status']) : '';
 $category = isset($_GET['category']) ? trim($_GET['category']) : '';
-$limit = isset($_GET['limit']) ? trim($_GET['limit']) : '10';
+$limit = isset($_GET['limit']) ? trim($_GET['limit']) : PHP_INT_MAX;
 $offset = isset($_GET['offset']) ? trim($_GET['offset']) : '0';
 
 
@@ -86,7 +86,7 @@ if (!empty($category)) {
 $db = new app_libs_DBConnection();
 $result = $db->joinTables( $columns, $tables, $joins, $conditions, $orderByColumn, $orderType, $limit, $offset, $params);
 $result2 = $db->joinTables( $columns, $tables, $joins, $conditions, $orderByColumn, $orderType, null, null, $params);
-$pageCount = ceil(count($result2)/$limit);
+$pageCount = ceil(count($result2)/($limit== null? PHP_INT_MAX : $limit));
 
 // print_r($result);
 if (empty($result)) {

@@ -97,7 +97,7 @@ async function addInputTicketDetailTable() {
           </select>
       </div>
       <div class="dialog__form-group">
-          <label>Giá bìa (VNĐ)</label>
+          <label>Giá gốc (VNĐ)</label>
           <input type="text" id="add-input_ticket-detail-price-base" value="" readonly />
       </div>
     </div>
@@ -130,10 +130,10 @@ async function addInputTicketDetailTable() {
 
 
   // get sachs
-  const bookList = await fetchData(`api/books/get.php`);
+  const bookList = await fetchData(`api/books/getbook.php`);
 
   let html = ``;
-  bookList.forEach(book => {
+  bookList.bookList.forEach(book => {
     html += `<option value="${book.id}">${book.id} - ${book.name} </option>`;
   });
   const selectElementBokID = document.querySelector("#add-input_ticket-detail-id");
@@ -142,9 +142,8 @@ async function addInputTicketDetailTable() {
   selectElementBokID.addEventListener("change", async function () {
     const bookId = this.value;
     const book = await fetchData(`api/books/get.php?bookID=${bookId}`);
-    const cover = await fetchData(`api/covers/get.php?coverId=${book.books[0].genreId}`);
     document.querySelector("#add-input_ticket-detail-name").value = book.books[0].name;
-    document.querySelector("#add-input_ticket-detail-price-base").value = cover[0].price;
+    document.querySelector("#add-input_ticket-detail-price-base").value = book.books[0].originalPrice;
 
   });
 
@@ -279,7 +278,7 @@ export function addInputTicketData() {
                     <tr>  
                       <th width="8%">Mã sách</th>
                       <th width="28%">Tên sách</th>
-                      <th width="14%">Giá bìa (VNĐ)</th>
+                      <th width="14%">Giá gốc (VNĐ)</th>
                       <th width="14%">Giá nhập (VNĐ)</th>
                       <th width="10%">Số lượng</th>
                       <th width="22%">Thành tiền (VNĐ)</th>

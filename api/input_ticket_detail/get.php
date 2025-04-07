@@ -13,18 +13,18 @@ function returnJSONInputTicketDetail($InputTicketDetails, $InputTicketId) {
     }else{
         $allDetail = [];
         $book_model = new app_models_Sach();
-        $cover_model = new app_models_LoaiBia();
+        // $cover_model = new app_models_LoaiBia();
         foreach ($InputTicketDetails as $InputTicket) {
             $book = $book_model->getBookById( $InputTicket['maSach']);
-            $cover = $cover_model->getCoverById( $book['maLoaiBia']);
+            // $cover = $cover_model->getCoverById( $book['maLoaiBia']);
             
             $allDetail[] = [
                 // "id" => $InputTicket['maPhieuNhap'],
                 "bookId" => $InputTicket['maSach'],
                 "bookName" => $book['tenSach'],
-                "basePrice" => $cover['giaBia'],
-                // "sellingPrice" => $book['giaBan'],
+                "sellingPrice" => $book['giaBan'],
                 "inputPrice" => $InputTicket['giaNhap'],
+                "basePrice" => $book['giaTran'],
                 "quantity" => $InputTicket['soLuong'],
                 // "total" => $InputTicket['tienNhap'],                
             ];
