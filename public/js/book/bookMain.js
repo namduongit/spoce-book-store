@@ -178,7 +178,6 @@ document.addEventListener("DOMContentLoaded", async function() {
     }
 
     updateQuantityCardHolder();
-    viewCart('Recursive');
 
     // Hiển thị sách lên màn hình
     window.addEventListener("load", function() {

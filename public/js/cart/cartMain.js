@@ -9,25 +9,24 @@ import { updateAddressSelect } from "../../../api/address/updateAddressSelect.js
 
 window.onload = async function() {
     const currentParams = new URLSearchParams(window.location.search);
-    updateQuantityCardHolder();
-    showLoading();
-    // Điều hướng xem giỏ hàng hoặc trang thanh toán
+    await updateQuantityCardHolder();
     if (currentParams.has('page-action')) {
+        showLoading();
         if (currentParams.get('page-action') === 'check-out') {
-            checkOutBill();
+            await checkOutBill();
         }
         else if (currentParams.get('page-action') === 'show-all-cart') {
             await showAllCart('Recursive');
         }
-
+        hideLoading();
+        return;
     }
-    hideLoading();
 
-    //  Hiển thị lại cái card holder (Xem giỏ hàng Mini)
-    if (currentParams.has('cart-holder') && currentParams.get('cart-holder') === 'true') {
+    if (currentParams.has('cart-holder') && currentParams.get('cart-holder') == 'true') {
         showLoading();
         await viewCart('Recursive');
         hideLoading();
+        return;
     }
 }
 
@@ -361,7 +360,6 @@ function plusQuantity(bookId) {
 }
 
 async function checkOutBill() {
-    // Kiểm tra đã đăng nhập chưa nếu chưa thì không cho mua hàng
     const currentUser = await getCurrentUser();
 
     if (currentUser == null) {
@@ -895,6 +893,7 @@ function deleteFromCart(bookId) {
 
 
 async function updateQuantityCardHolder() {
+    showLoading();
     const currentUser = await getCurrentUser();
     let cartButton = document.querySelector(".topbar__cart-holder");
     let totalQuantity = 0;
@@ -922,6 +921,7 @@ async function updateQuantityCardHolder() {
             <span class="topbar__count">${totalQuantity}</span>
         </span>
     `;
+    hideLoading();
 }
 
 
