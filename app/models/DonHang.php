@@ -111,7 +111,7 @@ class app_models_DonHang extends app_libs_DBConnection
         $queryParams = [
             'where' => $whereClause,
             'params' => $params,
-            'other' => "ORDER BY ngayTaoDon DESC LIMIT $offset, $pageSize"
+            'other' => "ORDER BY maDonHang ASC LIMIT $offset, $pageSize"
         ];
 
         return $this->building_queryParam($queryParams)->select();
