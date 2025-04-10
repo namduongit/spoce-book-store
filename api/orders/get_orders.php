@@ -29,6 +29,16 @@ try {
         $page
     );
 
+    // Bổ sung địa chỉ đầy đủ
+    foreach ($result as &$order) {
+        if (isset($order['maDiaChi'])) {
+            $order['diaChiDayDu'] = $donHang->getDiaChiDayDu($order['maDiaChi']);
+        } else {
+            $order['diaChiDayDu'] = '';
+        }
+    }
+    unset($order);
+
     // Lấy tổng số đơn hàng theo bộ lọc
     $total = $donHang->countOrders(
         $maKhachHang,

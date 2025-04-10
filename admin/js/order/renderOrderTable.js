@@ -1,6 +1,7 @@
 import { vietnamMoneyFormat } from "../others.js";
 import { updateOrderData } from "./updateOrderData.js";
 import { printOrderTicket } from "./printOrderTicket.js";
+import { filterOrder } from "./filterOrderData.js";
 
 // Hàm tách các thông tin trong địa chỉ giao hàng (địa chỉ hợp lệ)
 function splitAddressToShip(address) {
@@ -10,43 +11,44 @@ function splitAddressToShip(address) {
 }
 
 // Hàm lấy dữ liệu đơn hàng từ API
-async function fetchOrders() {
-  try {
-    // Sử dụng đường dẫn tuyệt đối từ thư mục gốc
-    const response = await fetch("/api/orders/get_orders.php");
+// async function fetchOrders() {
+//   try {
+//     // Sử dụng đường dẫn tuyệt đối từ thư mục gốc
+//     const response = await fetch("/api/orders/get_orders.php");
+//     // Lấy địa chỉ
 
-    // Kiểm tra response status
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+//     // Kiểm tra response status
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
 
-    // Kiểm tra content type
-    const contentType = response.headers.get("content-type");
-    if (!contentType || !contentType.includes("application/json")) {
-      throw new TypeError("Response không phải là JSON!");
-    }
+//     // Kiểm tra content type
+//     const contentType = response.headers.get("content-type");
+//     if (!contentType || !contentType.includes("application/json")) {
+//       throw new TypeError("Response không phải là JSON!");
+//     }
 
-    const result = await response.json();
-    console.log(result); // Kiểm tra kết quả trả về từ API
+//     const result = await response.json();
 
-    if (result.status) {
-      console.log("Danh sách đơn hàng:", result.data);
-      return result.data;
-    } else {
-      console.error("Lỗi khi lấy dữ liệu:", result.message);
-      return [];
-    }
-  } catch (error) {
-    console.error("Lỗi khi gọi API:", error);
-    return [];
-  }
-}
+//     console.log(result); // Kiểm tra kết quả trả về từ API
+//     if (result.status) {
+//       console.log("Danh sách đơn hàng:", result.data);
+//       return result.data;
+//     } else {
+//       console.error("Lỗi khi lấy dữ liệu:", result.message);
+//       return [];
+//     }
+//   } catch (error) {
+//     console.error("Lỗi khi gọi API:", error);
+//     return [];
+//   }
+// }
 
 // Hàm cập nhật lại dữ liệu cho bảng Đơn hàng
-export async function renderOrderTable() {
+export async function renderOrderTable(pageIsSelected = 1) {
   try {
     // Lấy dữ liệu từ API
-    const orders = await fetchOrders();
+    const orders = await filterOrder(pageIsSelected);
     console.log(orders.list); // Kiểm tra kết quả trả về từ API
     // Biến chứa đối tượng bảng Đơn hàng
     const bodyInOrderTable = document.querySelector(
@@ -69,7 +71,7 @@ export async function renderOrderTable() {
             <tr>
               <td>${order.maDonHang}</td>
               <td>${order.ngayTaoDon}</td>
-              <td>${splitAddressToShip(order.diaChiGiao)}</td>
+              <td>${splitAddressToShip(order.diaChiDayDu)}</td>
               <td>${vietnamMoneyFormat(order.tongTienThu)}</td>
               <td><span ${
                 order.trangThai === "Đã giao"
