@@ -1,5 +1,7 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
-
+import { toast } from "../../../public/js/toast.js";
+import { showNotification } from "../dialogMessage.js";
+import { renderPublisherTable } from "./renderPublisherTable.js";
 // Hàm thiết lập sự kiện Thêm một nhà xuất bản cho bảng
 export function addPublisherData() {
   // Biến chứa đối tượng là nút "Thêm"
@@ -80,35 +82,54 @@ export function addPublisherData() {
         const publisherName = document.getElementById("add-publisher-name").value;
         const publisherStatus = document.getElementById("add-publisher-status").value;
           console.log(publisherName, publisherStatus);
+          let checkName = true;
         if(publisherName === ''){
-          alert("Hãy nhập tên đầy đủ");
-        }else{
-  
-          try {
-            const response = await fetch("api/publishers/create.php", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-              },
-              body: new URLSearchParams({
-                publisherName: publisherName,
-                publisherStatus: publisherStatus,
-              }),
-            });
-    
-            const result = await response.json();
-            console.log("Server Response:", result);
-    
-            if (result.success) {
-              alert("thêm tác giả thành công!");
-            } else {
-              alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+          // alert("Hãy nhập tên đầy đủ");
+          toast({title :"Cảnh báo", message :`Vui lòng nhập tên nhà xuất bản.`, type : "warning" , duration : 3000});
+          checkName = false;
+        }
+        let checkStatus = true;
+        if(publisherStatus === ''){
+          // alert("Hãy nhập tên đầy đủ");
+          toast({title :"Cảnh báo", message :`Vui lòng chọn trạng thái.`, type : "warning" , duration : 3000});
+          checkStatus = false;
+        }
+        if(checkName && checkStatus){
+          let yes = await showNotification("Bạn có đồng ý thêm nhà xuất bản này không?");
+          if(yes){
+            try {
+              const response = await fetch("api/publishers/create.php", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({
+                  publisherName: publisherName,
+                  publisherStatus: publisherStatus,
+                }),
+              });
+      
+              const result = await response.json();
+              console.log("Server Response:", result);
+      
+              if (result.success) {
+                // alert("thêm tác giả thành công!");
+              toast({title :"Thành công", message :`Thêm nhà xuất bản thành công.`, type : "success" , duration : 3000});
+
+              } else {
+                // alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+              toast({title :"Cảnh báo", message :`${result.message}`, type : "warning" , duration : 3000});
+                
+              }
+            } catch (error) {
+              console.error("Lỗi fetch API:", error);
+              // alert("Không thể kết nối đến server!");
+            toast({title :"Lỗi", message :`Lỗi fetch API:${error}`, type : "error" , duration : 3000});
             }
-          } catch (error) {
-            console.error("Lỗi fetch API:", error);
-            alert("Không thể kết nối đến server!");
+            addDialog.remove();
+          renderPublisherTable();
+
           }
-          addDialog.remove();
         }
       });
 

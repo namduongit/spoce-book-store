@@ -4,7 +4,7 @@ import { renderPublisherTable } from "./renderPublisherTable.js";
 let curentpage = 1;
 
 //  lọc
-export async function filterPublisher(pageIsSelected = 1){
+export async function filterPublisher(){
     let id = document.querySelector("#find-inp-publisher").value.toLowerCase().trim();
     let sort = document.querySelector("#sort-slt-publisher").value.toLowerCase().trim();
     let publisherStatus = document.querySelector("#status-slt-publisher").value.trim();
@@ -24,7 +24,7 @@ export async function filterPublisher(pageIsSelected = 1){
     let status = publisherStatus !== 'Tất cả' ? publisherStatus : '';
 
     let limit = (show !== '' && show !== 'mặc định') ? Number(show) : 5;
-    let page = Number(pageIsSelected) || 1;
+    let page = Number(curentpage) || 1;
     let offset = (page - 1) * limit;
 
     let params = new URLSearchParams();

@@ -1,6 +1,7 @@
 
 import { fetchData } from "../../../public/js/book/getDataBook.js";
 import { renderBookTable } from "./renderBookTable.js";
+import { toast } from "../../../public/js/toast.js";
 
 
 let curentpage = 1;
@@ -60,7 +61,8 @@ export async function filterbook(pageIsSelected = 1){
 
     } catch (error) {
         console.error("Lỗi khi lấy dữ liệu:", error);
-        alert("Lỗi khi lấy dữ liệu: " + error.message);
+        // alert("Lỗi khi lấy dữ liệu: " + error.message);
+
         return [];
     }
 
@@ -75,7 +77,7 @@ export function filterBookData() {
         filterButton. addEventListener("click", async (e)=> {
             e.preventDefault();
             curentpage = 1;     
-            await renderBookTable(1);   
+            await renderBookTable();   
         });
     }
 

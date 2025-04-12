@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom Dialog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <style>
+        #notification-dialog {
+            max-width: 400px;
+            margin: 0 auto;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        #notification-title {
+            background-color: #044785;
+            margin: 0px;
+            line-height: 35px;
+            color: white;
+        }
+
+        #notification-dialog::backdrop {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        .dialog-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+
+        #notification-dialog .dialog-content {
+            padding: 20px;
+        }
+
+        #notification-message {
+            margin: 0px;
+            font-size: 18px;
+        }
+
+        #notification-dialog button {
+            padding: 5px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .test-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="test-buttons">
+        <button onclick="showNotification({ Question: 'Sách đã được thêfdsjffwfwoefiewm vào hệ thống.' })">Test Thành Công</button>
+        <button onclick="showNotification({ Question: 'Vui lòng nhập đúng định dạng.' })">Test Lỗi</button>
+        <button onclick="showNotification({ Question: 'Bạn có chắc chắn muốn xoá sách này không?' })">Test Cảnh Báo</button>
+    </div>
+
+    <script>
+        function showNotification({ Question = "" }) {
+            // Xóa dialog cũ nếu có
+            const oldDialog = document.getElementById("notification-dialog");
+            if (oldDialog) oldDialog.remove();
+
+            // Tạo dialog mới
+            const html = document.createElement("dialog");
+            html.id = "notification-dialog";
+            html.innerHTML = `
+                <h2 id="notification-title">Thông báo</h2>
+                <div class="dialog-content">
+                    <p id="notification-message">${Question}</p>
+                    <div class="dialog-buttons">
+                        <button id="confirm-button" >Đồng ý</button>
+                        <button id="cancel-button" >Huỷ</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(html);
+
+            // Gán sự kiện
+            html.querySelector("#cancel-button").addEventListener("click", () => {
+                html.close();
+            });
+
+            html.querySelector("#confirm-button").addEventListener("click", () => {
+                alert("Đã hoàn thành!");
+                html.close();
+            });
+
+            // Mở dialog
+            html.showModal();
+        }
+    </script>
+</body>
+</html>

@@ -1,5 +1,7 @@
 import { fetchData } from "../../../public/js/book/getDataBook.js";
-
+import { toast } from "../../../public/js/toast.js";
+import { showNotification } from "../dialogMessage.js";
+import { renderPublisherTable } from "./renderPublisherTable.js";
 
 //
 export async function lockPublisherData(idPublisherSelected) {
@@ -51,42 +53,62 @@ export async function lockPublisherData(idPublisherSelected) {
   //  thêm sự kiện khi nhấn nút đồng ý
   document.querySelector(".yes").addEventListener("click", async (e) => {
     e.preventDefault();
+    let yes = await showNotification("Bạn có đồng ý thay đổi trạng thái không.");
+    if(yes){
+      const idInput = document.getElementById("idPublisherInput").value;
+      const statusInput = document.getElementById("statusPublisherInput").value;
+      
+      console.log("ID:", idInput, "Status:", statusInput);
+  
+      try {
+        const response = await fetch("api/publishers/delete.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            idInput: idInput,
+            statusInput: statusInput,
+          }),
+        });
+  
+        const result = await response.json();
+        console.log("Server Response:", result);
+  
+        if (result.success) {
+          // alert("Cập nhật trạng thái thành công!");
+          toast({title :"Thành công", message :`Lưu chỉnh sửa thành công`, type : "success" , duration : 3000});
 
-    const idInput = document.getElementById("idPublisherInput").value;
-    const statusInput = document.getElementById("statusPublisherInput").value;
-    
-    console.log("ID:", idInput, "Status:", statusInput);
+        } else {
+          // alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+          toast({title :"Cảnh báo", message :`${result.message}`, type : "warning" , duration : 3000});
 
-    try {
-      const response = await fetch("api/publishers/delete.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({
-          idInput: idInput,
-          statusInput: statusInput,
-        }),
-      });
+        }
+      } catch (error) {
+        console.error("Lỗi fetch API:", error);
+        // alert("Không thể kết nối đến server!");
+        toast({title :"Lỗi", message :`Lỗi fetch API:${error}`, type : "error" , duration : 3000});
 
-      const result = await response.json();
-      console.log("Server Response:", result);
-
-      if (result.success) {
-        alert("Cập nhật trạng thái thành công!");
-      } else {
-        alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
       }
-    } catch (error) {
-      console.error("Lỗi fetch API:", error);
-      alert("Không thể kết nối đến server!");
+  
+      lockDialog.remove();
+      renderPublisherTable();
     }
-
-    lockDialog.remove();
   });
 
 
   // Gán sự kiện cho nút "Đóng" dialog
+
+  document
+    .querySelector(".no")
+    .addEventListener("click", () => {
+      // Xoá dialog
+      lockDialog.remove();
+
+      // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
+      lockButton.classList.remove("active");
+    });
+
   document
     .getElementById("close-publisher-button")
     .addEventListener("click", () => {

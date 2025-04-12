@@ -2,14 +2,15 @@ import { detailBookData } from "./detailBookData.js";
 import { updateBookData } from "./updateBookData.js";
 import { lockBookData } from "./lockBookData.js";
 import { filterbook } from "./filterBookData.js";
+import { showNotification } from "../dialogMessage.js";
+
 
 // Dữ liệu tạm thời (sau phải xây dựng hàm truy xuất dữ liệu từ csdl)
-let data = [];
+export let data = [];
 
 // Hàm cập nhật lại dữ liệu cho bảng Thể loại
 export async function renderBookTable( pageIsSelected = 1) {
   data = await filterbook(pageIsSelected);
-
 
   // Biến chứa đối tượng bảng Thể loại
   const bodyInBookTable = document.querySelector(

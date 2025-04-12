@@ -6,9 +6,9 @@ import { filterPublisher } from "./filterPublisherData.js";
 let data = [];
 
 // Hàm cập nhật lại dữ liệu cho bảng Nhà xuất bản
-export async function renderPublisherTable(pageIsSelected = 1) {
+export async function renderPublisherTable() {
   // Biến chứa đối tượng bảng Nhà xuất bản
-  data = await filterPublisher(pageIsSelected);
+  data = await filterPublisher();
   const bodyInPublisherTable = document.querySelector(
     ".main__data > .main__table.publisher > tbody"
   );
