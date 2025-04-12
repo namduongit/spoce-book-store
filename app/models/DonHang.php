@@ -62,6 +62,21 @@ class app_models_DonHang extends app_libs_DBConnection
             'params' => [$trangThai]
         ])->select();
     }
+    //lấy địa chỉ đơn hàng theo mã đơn hàng
+    public function getDiaChiDayDu($maDiaChi)
+    {
+        $sql = "SELECT soNha, phuongXa, quanHuyen, tinhThanh
+                FROM diaChiNguoiDung
+                WHERE maDiaChi = :maDiaChi
+                LIMIT 1";
+        $stmt = $this->open_connect()->prepare($sql);
+        $stmt->execute([':maDiaChi' => $maDiaChi]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            return "{$row['soNha']}, {$row['phuongXa']}, {$row['quanHuyen']}, {$row['tinhThanh']}";
+        }
+        return '';
+    }
 
     // Lấy danh sách đơn hàng với các bộ lọc
     public function getOrderByFilters(
@@ -111,10 +126,18 @@ class app_models_DonHang extends app_libs_DBConnection
         $queryParams = [
             'where' => $whereClause,
             'params' => $params,
-            'other' => "ORDER BY ngayTaoDon DESC LIMIT $offset, $pageSize"
+            'other' => "ORDER BY maDonHang ASC LIMIT $offset, $pageSize"
         ];
 
-        return $this->building_queryParam($queryParams)->select();
+        $orders =  $this->building_queryParam($queryParams)->select();
+        // Gắn địa chỉ đầy đủ vào từng đơn hàng
+        foreach ($orders as &$order) {
+            if (isset($order['maDiaChi'])) {
+                $order['diaChiDayDu'] = $this->getDiaChiDayDu($order['maDiaChi']);
+            }
+        }
+
+        return $orders;
     }
 
     // Đếm tổng số đơn hàng theo bộ lọc
