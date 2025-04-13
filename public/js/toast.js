@@ -5,7 +5,10 @@ export function toast({
     type = "success",
     duration = 3000,
 }) {
-    const main = document.getElementById("toast");
+    // const main = document.getElementById("toast");
+    const aLLmain = document.querySelectorAll("#toast");
+    const main = aLLmain[aLLmain.length - 1];
+
     if (main) {
         const toast = document.createElement("div");
         const autoremoveId = setTimeout(function () {
@@ -51,6 +54,8 @@ export function toast({
         `;
 
         toast.style.animation = `slideInLeft ease 0.3s, fadeOut linear 1s ${delay}s forwards`;
+        document.body.appendChild(toast);
+
         main.appendChild(toast);
     }
 }

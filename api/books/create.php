@@ -8,7 +8,6 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 
-$image = isset($_POST['image']) ? $_POST['image'] : '80.png';
 $title = isset($_POST['title']) ? $_POST['title'] : '';
 $authorId = isset($_POST['authorId']) ? $_POST['authorId'] : '';
 $categoryId = isset($_POST['categoryId']) ? $_POST['categoryId'] : '';
@@ -23,6 +22,27 @@ $status = isset($_POST['status']) ? $_POST['status'] : '';
 $size = isset($_POST['size']) ? $_POST['size'] : '';
 $updateDate = date('Y-m-d'); 
 
+$imageName = 'default.jpg';
+
+if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+    $uploadDir = __DIR__ . '/../../public/uploads/books/'; // Thư mục đích
+
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true); 
+    }
+
+    $newImageTmpPath = $_FILES['image']['tmp_name'];
+    $newImageType = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+
+    $imageName = uniqid('book_') . '.' . $newImageType; // Tạo tên file duy nhất
+
+    $newImagePath = $uploadDir . $imageName;
+
+    if (!move_uploaded_file($newImageTmpPath, $newImagePath)) {
+        // Nếu thất bại, dùng default
+        $imageName = 'default.jpg';
+    }
+}
 
 
 
@@ -33,7 +53,7 @@ $book_model = new app_models_Sach();
 // ínert sách trong database
 $insertSuccess = $book_model->insertBook( 
     [   
-        "hinhAnh" => $image,
+        "hinhAnh" => $imageName,
         "tenSach" => $title,
         "maTacGia" => $authorId,
         "maTheLoai" => $categoryId,

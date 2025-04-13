@@ -109,7 +109,7 @@ export async function updatePublisherData(idPublisherSelected) {
     
             if (result.success) {
               // alert("Cập nhật nhà xuất thành công!");
-              toast({title :"Thành công", message :`Lưu chỉnh sửa thành công`, type : "success" , duration : 3000});
+              toast({title :"Thành công", message :`Cập nhật thành công`, type : "success" , duration : 3000});
 
             } else {
               // alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));

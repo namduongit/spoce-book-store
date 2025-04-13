@@ -9,7 +9,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 
 $id = isset($_POST['id']) ? $_POST['id'] : '';
-$image = isset($_POST['image']) ? $_POST['image'] : '80.png';
+$oldImageName = isset($_POST['oldImageName']) ? $_POST['oldImageName'] : 'default.jpg';
 $title = isset($_POST['title']) ? $_POST['title'] : '';
 $authorId = isset($_POST['authorId']) ? $_POST['authorId'] : '';
 $categoryId = isset($_POST['categoryId']) ? $_POST['categoryId'] : '';
@@ -24,6 +24,22 @@ $status = isset($_POST['status']) ? $_POST['status'] : '';
 $size = isset($_POST['size']) ? $_POST['size'] : '';
 $updateDate = date('Y-m-d'); 
 
+$image = $oldImageName;
+
+if (isset($_FILES['newImage']) && $_FILES['newImage']['error'] === UPLOAD_ERR_OK) {
+    $uploadDir = __DIR__ . '/../../public/uploads/books/';
+    $newImageTmpPath = $_FILES['newImage']['tmp_name'];
+    $newImageType = pathinfo($_FILES['newImage']['name'], PATHINFO_EXTENSION);
+
+    $image = $oldImageName; // giữ tên cũ
+    $newImagePath = $uploadDir . $image;
+
+    if (file_exists($newImagePath)) {
+        unlink($newImagePath);
+    }
+
+    move_uploaded_file($newImageTmpPath, $newImagePath);
+}
 
 
 

@@ -1,5 +1,8 @@
 import { fetchData } from "../../../public/js/book/getDataBook.js";
 import { isNotFirstItemSelected } from "../selectEvents.js";
+import { toast } from "../../../public/js/toast.js";
+import { showNotification } from "../dialogMessage.js";
+import { renderAuthorTable } from "./renderAuthorTable.js";
 
 // Hàm thiết lập sự kiện Sửa một tác giả cho bảng
 export async function updateAuthorData(idAuthorSelected) {
@@ -84,37 +87,47 @@ export async function updateAuthorData(idAuthorSelected) {
       const authorStatus = document.getElementById("update-author-status").value.trim();
       console.log(authorId, authorName, authorStatus);
       if(authorName === ''){
-        alert("Hãy nhập tên đầy đủ");
+        // alert("Hãy nhập tên đầy đủ");
+        toast({title :"Lỗi", message :`Hãy nhập tên tác giả`, type : "warning" , duration : 3000});
       }else{
+        let yes = await showNotification("Bạn có đồng ý lưu chỉnh sửa không.");
+        if(yes){
 
-        try {
-          const response = await fetch("api/authors/update.php", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: new URLSearchParams({
-              authorId: authorId,
-              authorName: authorName,
-              authorStatus: authorStatus,
-            }),
-          });
+          try {
+            const response = await fetch("api/authors/update.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: new URLSearchParams({
+                authorId: authorId,
+                authorName: authorName,
+                authorStatus: authorStatus,
+              }),
+            });
+    
+            const result = await response.json();
+            console.log("Server Response:", result);
+    
+            if (result.success) {
+              // alert("Cập nhật tác giả thành công!");
+              toast({title :"Thành công", message :`Cập nhật thành công`, type : "success" , duration : 3000});
   
-          const result = await response.json();
-          console.log("Server Response:", result);
+            } else {
+              // alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+              toast({title :"Cảnh báo", message :`${result.message}`, type : "warning" , duration : 3000});
   
-          if (result.success) {
-            alert("Cập nhật tác giả thành công!");
-          } else {
-            alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+            }
+          } catch (error) {
+            console.error("Lỗi fetch API:", error);
+            // alert("Không thể kết nối đến server!");
+            toast({title :"Lỗi", message :`Lỗi fetch API:${error}`, type : "error" , duration : 3000});
+  
           }
-        } catch (error) {
-          console.error("Lỗi fetch API:", error);
-          alert("Không thể kết nối đến server!");
+          updateDialog.remove();
+        updateButton.classList.remove("active");
+        renderAuthorTable();
         }
-        updateDialog.remove();
-      updateButton.classList.remove("active");
-
       }
     });
 

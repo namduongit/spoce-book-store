@@ -1,6 +1,8 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 import { fetchData } from "../../../public/js/book/getDataBook.js";
-
+import { toast } from "../../../public/js/toast.js";
+import { showNotification } from "../dialogMessage.js";
+import { renderCoverTable } from "./renderCoverTable.js";
 // Hàm thiết lập sự kiện Sửa một loại bìa cho bảng
 export async function updateCoverData(idCoverSelected) {
   // Phải truy vấn từ CSDL thông qua idCoverSelected để lấy được dữ liệu của đối tượng hiện tại
@@ -84,35 +86,46 @@ export async function updateCoverData(idCoverSelected) {
       const coverStatus = document.getElementById("update-cover-status").value.trim();
       console.log(coverId, coverName, coverStatus);
       if(coverName === ''){
-        alert("Hãy nhập tên đầy đủ");
+        // alert("Hãy nhập tên đầy đủ");
+        toast({title :"Lỗi", message :`Hãy nhập tên loại bìa`, type : "warning" , duration : 3000});
       }else{
+        let yes = await showNotification("Bạn có đồng ý lưu chỉnh sửa không.");
+        if(yes){
 
-        try {
-          const response = await fetch("api/covers/update.php", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: new URLSearchParams({
-              coverId: coverId,
-              coverName: coverName,
-              coverStatus: coverStatus,
-            }),
-          });
+          try {
+            const response = await fetch("api/covers/update.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: new URLSearchParams({
+                coverId: coverId,
+                coverName: coverName,
+                coverStatus: coverStatus,
+              }),
+            });
+    
+            const result = await response.json();
+            console.log("Server Response:", result);
+    
+            if (result.success) {
+              // alert("Cập nhật loại bìa thành công!");
+              toast({title :"Thành công", message :`Lưu chỉnh sửa thành công`, type : "success" , duration : 3000});
+            } else {
+              // alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+              toast({title :"Cảnh báo", message :`${result.message}`, type : "warning" , duration : 3000});
   
-          const result = await response.json();
-          console.log("Server Response:", result);
+            }
+          } catch (error) {
+            console.error("Lỗi fetch API:", error);
+            // alert("Không thể kết nối đến server!");
+            toast({title :"Lỗi", message :`Lỗi fetch API:${error}`, type : "error" , duration : 3000});
   
-          if (result.success) {
-            alert("Cập nhật loại bìa thành công!");
-          } else {
-            alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
           }
-        } catch (error) {
-          console.error("Lỗi fetch API:", error);
-          alert("Không thể kết nối đến server!");
+          updateDialog.remove();
+          renderCoverTable();
         }
-        updateDialog.remove();
+
       }
     });
 

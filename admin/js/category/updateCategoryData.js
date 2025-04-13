@@ -1,6 +1,8 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 import { fetchData } from "../../../public/js/book/getDataBook.js";
-
+import { toast } from "../../../public/js/toast.js";
+import { showNotification } from "../dialogMessage.js";
+import { renderCategoryTable } from "./renderCategoryTable.js";
 
 // Hàm thiết lập sự kiện Sửa một thể loại cho bảng
 export async function updateCategoryData(idCategorySelected) {
@@ -86,38 +88,48 @@ export async function updateCategoryData(idCategorySelected) {
       const categoryStatus = document.getElementById("update-category-status").value.trim();
       console.log(categoryId, categoryName, categoryStatus);
       if(categoryName === ''){
-        alert("Hãy nhập tên đầy đủ");
+        // alert("Hãy nhập tên đầy đủ");
+        toast({title :"Lỗi", message :`Hãy nhập tên thể loại`, type : "warning" , duration : 3000});
       }else{
-
-        try {
-          const response = await fetch("api/categories/update.php", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: new URLSearchParams({
-              categoryId: categoryId,
-              categoryName: categoryName,
-              categoryStatus: categoryStatus,
-            }),
-          });
-  
-          const result = await response.json();
-          console.log("Server Response:", result);
-  
-          if (result.success) {
-            alert("Cập nhật Thể loại thành công!");
-          } else {
-            alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+        let yes = await showNotification("Bạn có đồng ý lưu chỉnh sửa không.");
+          if(yes){
+            try {
+              const response = await fetch("api/categories/update.php", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({
+                  categoryId: categoryId,
+                  categoryName: categoryName,
+                  categoryStatus: categoryStatus,
+                }),
+              });
+      
+              const result = await response.json();
+              console.log("Server Response:", result);
+      
+              if (result.success) {
+                // alert("Cập nhật Thể loại thành công!");
+                toast({title :"Thành công", message :`Cập nhật thành công`, type : "success" , duration : 3000});
+    
+              } else {
+                // alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+                toast({title :"Cảnh báo", message :`${result.message}`, type : "warning" , duration : 3000});
+                
+              }
+            } catch (error) {
+              console.error("Lỗi fetch API:", error);
+              // alert("Không thể kết nối đến server!");
+              toast({title :"Lỗi", message :`Lỗi fetch API:${error}`, type : "error" , duration : 3000});
+    
+            }
+            updateDialog.remove();
+          updateButton.classList.remove("active");
+          renderCategoryTable();
           }
-        } catch (error) {
-          console.error("Lỗi fetch API:", error);
-          alert("Không thể kết nối đến server!");
-        }
-        updateDialog.remove();
-      updateButton.classList.remove("active");
 
-      }
+        }
     });
 
   // Gán sự kiện cho nút "Đóng" dialog

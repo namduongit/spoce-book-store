@@ -9,8 +9,8 @@ import { showNotification } from "../dialogMessage.js";
 export let data = [];
 
 // Hàm cập nhật lại dữ liệu cho bảng Thể loại
-export async function renderBookTable( pageIsSelected = 1) {
-  data = await filterbook(pageIsSelected);
+export async function renderBookTable() {
+  data = await filterbook();
 
   // Biến chứa đối tượng bảng Thể loại
   const bodyInBookTable = document.querySelector(
@@ -25,7 +25,7 @@ export async function renderBookTable( pageIsSelected = 1) {
       html += `
         <tr>
             <td>${book.id}</td>
-            <td><img src="public/uploads/books/${book.image}" alt="" width="90%" height="80%"/></td>
+            <td><img src="public/uploads/books/${book.image}?v=${Date.now()}" alt="" width="90%" height="80%"/></td>
             <td>${book.name}</td>
             <td>${book.genreName}</td>
             <td>${book.quantity}</td>
@@ -88,10 +88,13 @@ export async function renderBookTable( pageIsSelected = 1) {
         });
       });
   }else{
-    html = `
-      <tr>
-          <td colspan="4">Trống</td>
-      </tr>`;
+        html =  `
+            <tr>
+                <td></td>
+                <td>Danh sách trống</td>             
+                <td></td>
+            </tr>
+        `;
 
       bodyInBookTable.innerHTML = html;
       // Cập nhật lại giao diện

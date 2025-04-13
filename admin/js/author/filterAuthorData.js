@@ -5,7 +5,7 @@ import { renderAuthorTable } from "./renderAuthorTable.js";
 let curentpage = 1;
 
 //  lọc
-export async function filterAuthor(pageIsSelected = 1){
+export async function filterAuthor(){
     let id = document.querySelector("#find-inp-author").value.toLowerCase().trim();
     let sort = document.querySelector("#sort-slt-author").value.toLowerCase().trim();
     let authorStatus = document.querySelector("#status-slt-author").value.trim();
@@ -25,7 +25,7 @@ export async function filterAuthor(pageIsSelected = 1){
     let status = authorStatus !== 'Tất cả' ? authorStatus : '';
 
     let limit = (show !== '' && show !== 'mặc định') ? Number(show) : 5;
-    let page = Number(pageIsSelected) || 1;
+    let page = Number(curentpage) || 1;
     let offset = (page - 1) * limit;
 
     let params = new URLSearchParams();
@@ -87,8 +87,8 @@ async function paginationAuthor(pageCount) {
         prevButton.innerHTML = '<i class="icon fa-solid fa-chevron-left"></i>';
         prevButton.addEventListener("click", function(){
           if(curentpage > 1){
-            renderAuthorTable(curentpage - 1);
-              curentpage -= 1;
+            curentpage -= 1;
+            renderAuthorTable();
           }
   
         });
@@ -115,8 +115,8 @@ async function paginationAuthor(pageCount) {
         nextButton.innerHTML = '<i class="icon fa-solid fa-chevron-right"></i>';
         nextButton.addEventListener("click", function(){
           if(curentpage < pageCount){
-            renderAuthorTable(curentpage + 1);
-              curentpage += 1;
+            curentpage += 1;
+            renderAuthorTable();
           }
   
         });

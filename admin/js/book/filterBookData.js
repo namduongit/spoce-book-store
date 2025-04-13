@@ -7,7 +7,7 @@ import { toast } from "../../../public/js/toast.js";
 let curentpage = 1;
 
 //  lọc
-export async function filterbook(pageIsSelected = 1){
+export async function filterbook(){
     let id = document.querySelector("#find-inp-book").value.toLowerCase().trim();
     let sort = document.querySelector("#sort-slt-book").value.toLowerCase().trim();
     let categoryBook = document.querySelector("#type-slt-book").value.trim();
@@ -32,7 +32,7 @@ export async function filterbook(pageIsSelected = 1){
     let category = categoryBook !== 'Tất cả' ? categoryBook : '';
 
     let limit = (show !== '' && show !== 'mặc định') ? Number(show) : 5;
-    let page = Number(pageIsSelected) || 1;
+    let page = Number(curentpage) || 1;
     let offset = (page - 1) * limit;
 
     let params = new URLSearchParams();
@@ -96,8 +96,8 @@ async function paginationBook(pageCount) {
         prevButton.innerHTML = '<i class="icon fa-solid fa-chevron-left"></i>';
         prevButton.addEventListener("click", function(){
           if(curentpage > 1){
-            renderBookTable(curentpage - 1);
-              curentpage -= 1;
+            curentpage -= 1;
+            renderBookTable();
           }
   
         });
@@ -113,7 +113,7 @@ async function paginationBook(pageCount) {
           pageButton.addEventListener("click", function () {
             console.log(`Page ${i} clicked`);
             curentpage = i;
-            renderBookTable(i);
+            renderBookTable();
           });
     
           pagination_container.appendChild(pageButton);
@@ -124,8 +124,8 @@ async function paginationBook(pageCount) {
         nextButton.innerHTML = '<i class="icon fa-solid fa-chevron-right"></i>';
         nextButton.addEventListener("click", function(){
           if(curentpage < pageCount){
-            renderBookTable(curentpage + 1);
-              curentpage += 1;
+            curentpage += 1;
+            renderBookTable();
           }
   
         });

@@ -4,7 +4,7 @@ import { renderCategoryTable } from "./renderCategoryTable.js";
 let curentpage = 1;
 
 //  lọc
-export async function filterCategory(pageIsSelected = 1){
+export async function filterCategory(){
     let id = document.querySelector("#find-inp-category").value.toLowerCase().trim();
     let sort = document.querySelector("#sort-slt-category").value.toLowerCase().trim();
     let categoryStatus = document.querySelector("#status-slt-category").value.trim();
@@ -24,7 +24,7 @@ export async function filterCategory(pageIsSelected = 1){
     let status = categoryStatus !== 'Tất cả' ? categoryStatus : '';
 
     let limit = (show !== '' && show !== 'mặc định') ? Number(show) : 5;
-    let page = Number(pageIsSelected) || 1;
+    let page = Number(curentpage) || 1;
     let offset = (page - 1) * limit;
 
     let params = new URLSearchParams();
@@ -67,7 +67,7 @@ export function filterCategoryData() {
         filterButton. addEventListener("click", async (e)=> {
             e.preventDefault();
             curentpage = 1;     
-            await renderCategoryTable(1);   
+            await renderCategoryTable();   
         });
     }
 
@@ -86,8 +86,8 @@ async function paginationCategory(pageCount) {
         prevButton.innerHTML = '<i class="icon fa-solid fa-chevron-left"></i>';
         prevButton.addEventListener("click", function(){
           if(curentpage > 1){
-            renderCategoryTable(curentpage - 1);
-              curentpage -= 1;
+            curentpage -= 1;
+            renderCategoryTable();
           }
   
         });
@@ -114,8 +114,8 @@ async function paginationCategory(pageCount) {
         nextButton.innerHTML = '<i class="icon fa-solid fa-chevron-right"></i>';
         nextButton.addEventListener("click", function(){
           if(curentpage < pageCount){
-            renderCategoryTable(curentpage + 1);
-              curentpage += 1;
+            curentpage += 1;
+            renderCategoryTable();
           }
   
         });

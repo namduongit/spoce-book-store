@@ -67,7 +67,7 @@ export function filterPublisherData() {
         filterButton. addEventListener("click", async (e)=> {
             e.preventDefault();
             curentpage = 1;     
-            await renderPublisherTable(1);   
+            await renderPublisherTable();   
         });
     }
 
@@ -86,8 +86,8 @@ async function paginationPublisher(pageCount) {
         prevButton.innerHTML = '<i class="icon fa-solid fa-chevron-left"></i>';
         prevButton.addEventListener("click", function(){
           if(curentpage > 1){
-            renderPublisherTable(curentpage - 1);
-              curentpage -= 1;
+            curentpage -= 1;
+            renderPublisherTable();
           }
   
         });
@@ -114,8 +114,8 @@ async function paginationPublisher(pageCount) {
         nextButton.innerHTML = '<i class="icon fa-solid fa-chevron-right"></i>';
         nextButton.addEventListener("click", function(){
           if(curentpage < pageCount){
-            renderPublisherTable(curentpage + 1);
-              curentpage += 1;
+            curentpage += 1;
+            renderPublisherTable();
           }
   
         });
