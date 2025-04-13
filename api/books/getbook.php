@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '../../../app/config.php';
 
-function returnJSONBook($filters, $pageCount) {
+function returnJSONBook($filters, $pageCount)
+{
     if (!is_array($filters) || empty($filters)) {
         http_response_code(404);
         echo json_encode(["error" => "Không tìm thấy sách!"]);
@@ -38,7 +39,7 @@ function returnJSONBook($filters, $pageCount) {
         ["bookList" => $response, "pageCount" => $pageCount],
         JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
     );
-        exit();
+    exit();
 }
 
 $id_or_bookName = isset($_GET['id_or_bookName']) ? trim($_GET['id_or_bookName']) : '';
@@ -60,7 +61,7 @@ $joins = [
     'sach.maNXB = nhaXuatBan.maNXB',
     'sach.maTheLoai = theLoai.maTheLoai',
     'sach.maLoaiBia = loaiBia.maLoaiBia'
-];    
+];
 
 
 $conditions = [];
@@ -69,24 +70,24 @@ $params = [];
 
 if (!empty($id_or_bookName)) {
     $conditions[] = "(sach.tenSach LIKE :name or sach.maSach like :name)";
-    $params[':name'] = "%$id_or_bookName%";  
-}    
+    $params[':name'] = "%$id_or_bookName%";
+}
 
 if (!empty($status)) {
     $conditions[] = "sach.trangThai = :status";
     $params[':status'] = $status;
-}    
+}
 if (!empty($category)) {
     $conditions[] = "theLoai.tenTheLoai = :category";
     $params[':category'] = $category;
-}    
+}
 
 
 
 $db = new app_libs_DBConnection();
-$result = $db->joinTables( $columns, $tables, $joins, $conditions, $orderByColumn, $orderType, $limit, $offset, $params);
-$result2 = $db->joinTables( $columns, $tables, $joins, $conditions, $orderByColumn, $orderType, null, null, $params);
-$pageCount = ceil(count($result2)/($limit== null? PHP_INT_MAX : $limit));
+$result = $db->joinTables($columns, $tables, $joins, $conditions, $orderByColumn, $orderType, $limit, $offset, $params);
+$result2 = $db->joinTables($columns, $tables, $joins, $conditions, $orderByColumn, $orderType, null, null, $params);
+$pageCount = ceil(count($result2) / ($limit == null ? PHP_INT_MAX : $limit));
 
 // print_r($result);
 if (empty($result)) {
@@ -95,9 +96,3 @@ if (empty($result)) {
 }
 
 returnJSONBook($result, $pageCount);
-
-
-?>
-
-
-

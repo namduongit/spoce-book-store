@@ -1,15 +1,21 @@
-// import {renderOrderTable} from "./renderOrderTable";
-
-let curentpage = 1;
-// hàm lọc
-// const filterOrder = document.querySelector("#filter-button-order");
-// if (filterOrder) {
-//   filterOrder.addEventListener("click", async (e) => {
-//     e.preventDefault();
-//     curentpage = 1;
-//     await renderOrderTable(1);
-//   });
-// }
+/**
+ * Filters order data based on various criteria and fetches the filtered results from the server.
+ *
+ * @async
+ * @function
+ * @param {number} [pageIsSelected=1] - The page number to fetch (default is 1).
+ * @returns {Promise<Array>} A promise that resolves to an array of filtered order data.
+ *
+ * @throws {Error} Throws an error if the fetch request fails or the server responds with a non-OK status.
+ *
+ * @example
+ * // Call the function to filter orders and log the results
+ * filterOrder(2).then(orderList => {
+ *   console.log(orderList);
+ * }).catch(error => {
+ *   console.error("Error fetching orders:", error);
+ * });
+ */
 export async function filterOrder(pageIsSelected = 1) {
   let id = document.querySelector("#find-inp-order").value.trim();
   let sort = document
@@ -20,7 +26,7 @@ export async function filterOrder(pageIsSelected = 1) {
   let province = document.querySelector("#city-slt-order").value.trim();
   let district = document.querySelector("#district-slt-order").value.trim();
 
-  let orderBy = "donHang.maDonHang",
+  let orderBy = "maDonHang",
     orderType = "ASC";
 
   switch (sort) {
@@ -28,30 +34,34 @@ export async function filterOrder(pageIsSelected = 1) {
       orderType = "DESC";
       break;
     case "ngày tạo đơn tăng dần":
-      orderBy = "donHang.ngayTao";
+      orderBy = "ngayTao";
       break;
     case "ngày tạo đơn giảm dần":
-      orderBy = "donHang.ngayTao";
+      orderBy = "ngayTao";
       orderType = "DESC";
       break;
     case "tổng thanh toán tăng dần":
-      orderBy = "donHang.tongTien";
+      orderBy = "tongTien";
       break;
     case "tổng thanh toán giảm dần":
-      orderBy = "donHang.tongTien";
+      orderBy = "tongTien";
       orderType = "DESC";
       break;
   }
 
-  let limit = 10;
+  let limit = 5;
   let page = Number(pageIsSelected) || 1;
   let offset = (page - 1) * limit;
 
+  status = status !== "Tất cả" ? status : "";
+  province = province !== "Tất cả" ? province : "";
+  district = district !== "Tất cả" ? district : "";
+
   let params = new URLSearchParams();
   if (id) params.append("id", id);
-  if (status && status !== "Tất cả") params.append("status", status);
+  if (status) params.append("status", status);
   if (province) params.append("tinh", province);
-  if (district) params.append("district", district); //
+  if (district) params.append("district", district);
   params.append("orderBy", orderBy);
   params.append("orderType", orderType);
   params.append("limit", limit);
@@ -66,13 +76,9 @@ export async function filterOrder(pageIsSelected = 1) {
       throw new Error("HTTP status: " + response.status);
     }
 
-    let data = await response.json();
+    let data = await response.text();
     console.log("Dữ liệu nhận được:", data);
-
-    if (data.pageCount !== undefined) {
-      await paginationOrder(data.pageCount); //
-    }
-
+    // await paginationOrder(data.pageCount); // nếu có
     return data.orderList;
   } catch (error) {
     console.error("Lỗi khi fetch dữ liệu:", error);
