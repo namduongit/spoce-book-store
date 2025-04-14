@@ -5,7 +5,7 @@ import { renderInputTicketTable } from "./renderInputTicketTable.js";
 let curentpage = 1;
 
 //  lọc
-export async function filterInputTicket(pageIsSelected = 1){
+export async function filterInputTicket(){
     let id = document.querySelector("#find-inp-input_ticket").value.toLowerCase().trim();
     let sort = document.querySelector("#sort-slt-input_ticket").value;
     let beforeDate = document.querySelector("#find-date-create-before-inp-input_ticket").value.toLowerCase().trim();
@@ -31,8 +31,8 @@ export async function filterInputTicket(pageIsSelected = 1){
     let startDate = beforeDate !== '' ? beforeDate : '';
     let endDate = afterDate !== '' ? afterDate : '';
   
-    let limit = (show !== '' && show !== 'mặc định') ? Number(show) : 2;
-    let page = Number(pageIsSelected) || 1;
+    let limit = (show !== '' && show !== 'mặc định') ? Number(show) : 5;
+    let page = Number(curentpage) || 1;
     let offset = (page - 1) * limit;
 
     let params = new URLSearchParams();
@@ -96,8 +96,8 @@ async function paginationInputTicket(pageCount) {
         prevButton.innerHTML = '<i class="icon fa-solid fa-chevron-left"></i>';
         prevButton.addEventListener("click", function(){
           if(curentpage > 1){
-              renderInputTicketTable(curentpage - 1);
               curentpage -= 1;
+              renderInputTicketTable();
           }
   
         });
@@ -124,8 +124,8 @@ async function paginationInputTicket(pageCount) {
         nextButton.innerHTML = '<i class="icon fa-solid fa-chevron-right"></i>';
         nextButton.addEventListener("click", function(){
           if(curentpage < pageCount){
-              renderInputTicketTable(curentpage + 1);
               curentpage += 1;
+              renderInputTicketTable();
           }
   
         });

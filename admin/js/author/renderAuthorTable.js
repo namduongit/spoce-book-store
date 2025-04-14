@@ -6,9 +6,9 @@ import { filterAuthor } from "./filterAuthorData.js";
 let data = [];
 
 // Hàm cập nhật lại dữ liệu cho bảng Thể loại
-export async function renderAuthorTable(pageIsSelected = 1) {
+export async function renderAuthorTable() {
 
-  data = await filterAuthor(pageIsSelected);
+  data = await filterAuthor();
 
   // Biến chứa đối tượng bảng Thể loại
   const bodyInAuthorTable = document.querySelector(
@@ -35,40 +35,51 @@ export async function renderAuthorTable(pageIsSelected = 1) {
       `;
   }
 
-
-  // Cập nhật lại giao diện
-  bodyInAuthorTable.innerHTML = html;
-
-  // Gán sự kiện cho các nút sau khi thay đổi giao diện
-  const idColumnInTable = document.querySelectorAll(
-    ".main__data > .main__table.author > tbody > tr > td:first-of-type"
-  );
-  const listButtonInTable = document.querySelectorAll(
-    ".main__data > .main__table.author > tbody > tr > td:last-of-type"
-  );
-  listButtonInTable.forEach((buttons, row) => {
-    // Các nút cần gán sự kiện trên mỗi dòng
-    const updateButton = buttons.children[0];
-    const lockButton = buttons.children[1];
-    // Id của đối tượng đã được chọn để thao tác
-    const idAuthorSelected = idColumnInTable.item(row).textContent;
-
-    // Gán sự kiện hiện dialog sửa thể loại
-    updateButton.addEventListener("click", (e) => {
-      // Loại bỏ giá trị mặc định
-      e.preventDefault();
-
-      // Gọi hàm sự kiện
-      updateAuthorData(idAuthorSelected);
+  if(data.length == 0){
+    html =  `
+          <tr>
+              <td></td>
+              <td>Danh sách trống</td>             
+              <td></td>
+          </tr>
+      `;
+      bodyInAuthorTable.innerHTML = html;
+  }else{
+    // Cập nhật lại giao diện
+    bodyInAuthorTable.innerHTML = html;
+  
+    // Gán sự kiện cho các nút sau khi thay đổi giao diện
+    const idColumnInTable = document.querySelectorAll(
+      ".main__data > .main__table.author > tbody > tr > td:first-of-type"
+    );
+    const listButtonInTable = document.querySelectorAll(
+      ".main__data > .main__table.author > tbody > tr > td:last-of-type"
+    );
+    listButtonInTable.forEach((buttons, row) => {
+      // Các nút cần gán sự kiện trên mỗi dòng
+      const updateButton = buttons.children[0];
+      const lockButton = buttons.children[1];
+      // Id của đối tượng đã được chọn để thao tác
+      const idAuthorSelected = idColumnInTable.item(row).textContent;
+  
+      // Gán sự kiện hiện dialog sửa thể loại
+      updateButton.addEventListener("click", (e) => {
+        // Loại bỏ giá trị mặc định
+        e.preventDefault();
+  
+        // Gọi hàm sự kiện
+        updateAuthorData(idAuthorSelected);
+      });
+  
+      // Gán sự kiện hiện dialog khoá / mở khoá thể loại
+      lockButton.addEventListener("click", (e) => {
+        // Loại bỏ giá trị mặc định
+        e.preventDefault();
+  
+        // Gọi hàm sự kiện
+        lockAuthorData(idAuthorSelected);
+      });
     });
+  }
 
-    // Gán sự kiện hiện dialog khoá / mở khoá thể loại
-    lockButton.addEventListener("click", (e) => {
-      // Loại bỏ giá trị mặc định
-      e.preventDefault();
-
-      // Gọi hàm sự kiện
-      lockAuthorData(idAuthorSelected);
-    });
-  });
 }

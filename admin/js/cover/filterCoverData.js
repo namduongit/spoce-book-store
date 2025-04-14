@@ -5,7 +5,7 @@ import { renderCoverTable } from "./renderCoverTable.js";
 let curentpage = 1;
 
 //  lọc
-export async function filterCover(pageIsSelected = 1){
+export async function filterCover(){
     let id = document.querySelector("#find-inp-cover").value.toLowerCase().trim();
     let sort = document.querySelector("#sort-slt-cover").value.toLowerCase().trim();
     let coverStatus = document.querySelector("#status-slt-cover").value.trim();
@@ -25,7 +25,7 @@ export async function filterCover(pageIsSelected = 1){
     let status = coverStatus !== 'Tất cả' ? coverStatus : '';
 
     let limit = (show !== '' && show !== 'mặc định') ? Number(show) : 5;
-    let page = Number(pageIsSelected) || 1;
+    let page = Number(curentpage) || 1;
     let offset = (page - 1) * limit;
 
     let params = new URLSearchParams();
@@ -87,8 +87,8 @@ async function paginationCover(pageCount) {
         prevButton.innerHTML = '<i class="icon fa-solid fa-chevron-left"></i>';
         prevButton.addEventListener("click", function(){
           if(curentpage > 1){
-            renderCoverTable(curentpage - 1);
-              curentpage -= 1;
+            curentpage -= 1;
+            renderCoverTable();
           }
   
         });
@@ -115,8 +115,8 @@ async function paginationCover(pageCount) {
         nextButton.innerHTML = '<i class="icon fa-solid fa-chevron-right"></i>';
         nextButton.addEventListener("click", function(){
           if(curentpage < pageCount){
-            renderCoverTable(curentpage + 1);
-              curentpage += 1;
+            curentpage += 1;
+            renderCoverTable();
           }
   
         });

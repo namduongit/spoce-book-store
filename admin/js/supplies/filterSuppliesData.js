@@ -5,7 +5,7 @@ import { renderSuppliesTable } from "./renderSuppliesTable.js";
 let curentpage = 1;
 
 //  lọc
-export async function filterSupplies(pageIsSelected = 1){
+export async function filterSupplies(){
     let id = document.querySelector("#find-inp-supplies").value.toLowerCase().trim();
     let sort = document.querySelector("#sort-slt-supplies").value.toLowerCase().trim();
     let suppliesStatus = document.querySelector("#status-slt-supplies").value.trim();
@@ -25,7 +25,7 @@ export async function filterSupplies(pageIsSelected = 1){
     let status = suppliesStatus !== 'Tất cả' ? suppliesStatus : '';
 
     let limit = (show !== '' && show !== 'mặc định') ? Number(show) : 5;
-    let page = Number(pageIsSelected) || 1;
+    let page = Number(curentpage) || 1;
     let offset = (page - 1) * limit;
 
     let params = new URLSearchParams();
@@ -68,7 +68,7 @@ export function filterSuppliesData() {
         filterButton. addEventListener("click", async (e)=> {
             e.preventDefault();
             curentpage = 1;     
-            await renderSuppliesTable(1);   
+            await renderSuppliesTable();   
         });
     }
 
@@ -87,8 +87,8 @@ async function paginationSupplies(pageCount) {
         prevButton.innerHTML = '<i class="icon fa-solid fa-chevron-left"></i>';
         prevButton.addEventListener("click", function(){
           if(curentpage > 1){
-            renderSuppliesTable(curentpage - 1);
-              curentpage -= 1;
+            curentpage -= 1;
+            renderSuppliesTable();
           }
   
         });
@@ -104,7 +104,7 @@ async function paginationSupplies(pageCount) {
           pageButton.addEventListener("click", function () {
             console.log(`Page ${i} clicked`);
             curentpage = i;
-            renderSuppliesTable(i);
+            renderSuppliesTable();
           });
     
           pagination_container.appendChild(pageButton);
@@ -115,8 +115,8 @@ async function paginationSupplies(pageCount) {
         nextButton.innerHTML = '<i class="icon fa-solid fa-chevron-right"></i>';
         nextButton.addEventListener("click", function(){
           if(curentpage < pageCount){
-            renderSuppliesTable(curentpage + 1);
-              curentpage += 1;
+            curentpage += 1;
+            renderSuppliesTable();
           }
   
         });

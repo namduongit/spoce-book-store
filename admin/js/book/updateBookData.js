@@ -1,5 +1,14 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 import { fetchData } from "../../../public/js/book/getDataBook.js";
+import { toast } from "../../../public/js/toast.js";
+import { showNotification } from "../dialogMessage.js";
+import { renderBookTable } from "./renderBookTable.js";
+import {
+    vietnamMoneyFormat,
+    clickToShowDatePicker,
+    defaultDateSelected,
+  } from "../others.js";
+  
 
 // Hàm thiết lập sự kiện Sửa một sách cho bảng
 export async function updateBookData(idBookSelected) {
@@ -34,7 +43,7 @@ export async function updateBookData(idBookSelected) {
       <div class="dialog__row">
           <div class="dialog__form-group book image">
               <label>Hình ảnh</label>
-              <img id="preview-image"  src="public/uploads/books/${book.image}" alt"book-image"></img>
+              <img id="preview-image"  src="public/uploads/books/${book.image}?v=${Date.now()}" alt"book-image"></img>
               <input type="file" id="update-book-image" accept="image/*" style="display: none;" />
               <button type="button" onclick="document.getElementById('update-book-image').click()">Tải hình ảnh</button>
           </div>
@@ -57,18 +66,15 @@ export async function updateBookData(idBookSelected) {
           <div class="dialog__form-group book">
               <label>Tác giả</label>
               <select id="update-book-author" class="changed">
-                  <option value="4" selected>${author[0].name}</option>
-                  <option value="1">Nguyễn Nhật Ánh</option>
-                  <option value="2">J.K. Rowling</option>
-                  <option value="3">Haruki Murakami</option>
+                  <option value="${author[0].id}" selected>${author[0].name}</option>
+
               </select>
           </div>
           <div class="dialog__form-group book">
               <label>Thể loại</label>
               <select id="update-book-type"  class="changed">
-                  <option value="1" selected>${category[0].name}</option>
-                  <option value="2">Trinh thám</option>
-                  <option value="3">Tình cảm</option>
+                  <option value="${category[0].id}" selected>${category[0].name}</option>
+
               </select>
           </div>
       </div>
@@ -81,9 +87,7 @@ export async function updateBookData(idBookSelected) {
           <div class="dialog__form-group book">
               <label>Loại bìa</label>
               <select id="update-book-cover"  class="changed">
-                  <option value="2" selected>${corver[0].name}</option>
-                  <option value="1">Bìa cứng</option>
-                  <option value="3">Bìa mềm</option>
+                  <option value="${corver[0].id}" selected>${corver[0].name}</option>
               </select>
           </div>
       </div>
@@ -92,14 +96,13 @@ export async function updateBookData(idBookSelected) {
           <div class="dialog__form-group book">
               <label>Nhà xuất bản</label>
               <select id="update-book-publish-name"  class="changed">
-                  <option value="5" selected>${publisher[0].name}</option>
-                  <option value="1">Nhà xuất bản 1</option>
-                  <option value="0">Nhà xuất bản 2</option>
+                  <option value="${publisher[0].id}" selected>${publisher[0].name}</option>
+                  
               </select>
           </div>
           <div class="dialog__form-group book">
               <label>Năm xuất bản</label>
-              <input type="text" id="update-book-publish-year" placeholder="Nhập Năm xuất bản" value="${book.publishYear}" />
+              <input type="date" id="update-book-publish-year" class="hasValidDate" placeholder="Nhập Năm xuất bản" value="${book.publishYear}" />
           </div>
       </div>
       <div class="dialog__row">
@@ -126,7 +129,7 @@ export async function updateBookData(idBookSelected) {
           <div class="dialog__form-group book">
               <label>Trạng thái</label>
               <select id="update-book-status" class="changed" disabled>
-                  <option value="4" selected>${book.status}</option>
+                  <option value="${book.status}" selected>${book.status}</option>
                   <option value="Còn hàng">Còn hàng</option>
                   <option value="Tạm ngưng">Tạm ngưng</option>
               </select>
@@ -145,8 +148,13 @@ export async function updateBookData(idBookSelected) {
 // Thêm vào body
 document.body.appendChild(updateDialog);
 
+
+
 // Hiển thị updateDialog
 updateDialog.showModal();
+
+
+
 
 // Sự kiện cho các thành phần trong dialog
 // - Nếu các select đã được chọn giá trị khác mặc định thì đổi định dạng
@@ -157,13 +165,17 @@ selectElement.forEach((select) => {
 isNotFirstItemSelected(select);
 });
 
+
+clickToShowDatePicker("update-book-publish-year");
+defaultDateSelected("update-book-publish-year");
+
 // thêm sự kiẹn chọn ảnh
 let selectedImageName = `${book.image}`; // Biến lưu tên ảnh
 
 document.getElementById("update-book-image").addEventListener("change", function (event) {
   const file = event.target.files[0];
   if (file) {
-      selectedImageName = file.name; 
+    //   selectedImageName = file.name; 
       // console.log( selectedImageName); 
   
       const reader = new FileReader();
@@ -176,12 +188,62 @@ document.getElementById("update-book-image").addEventListener("change", function
       reader.readAsDataURL(file);
   }
 });
-// console.log(selectedImageName);
+
+
+ // THÊM option các  tác giả
+ let authorList = await fetchData(`api/authors/get.php`);
+ authorList = authorList.filter(tacGia => tacGia.id !== author[0].id);
+ let authorSelect = document.querySelector("#update-book-author");
+ authorList.forEach(author => {
+     let op = document.createElement("option");
+     op.value = author.id;
+     op.textContent = author.name;
+     authorSelect.appendChild(op);
+ });
+
+  // THÊM option các  thể loại
+  let categoryList =await fetchData(`api/categories/get.php`);
+    categoryList = categoryList.filter(theLoai => theLoai.id !== category[0].id);
+  let categorySelect = document.querySelector("#update-book-type");
+  categoryList.forEach(category => {
+      let op = document.createElement("option");
+      op.value = category.id;
+      op.textContent = category.name;
+      categorySelect.appendChild(op);
+  });
+
+
+   // THÊM option các  thể loại
+   let coverList = await fetchData(`api/covers/get.php`);
+   coverList = coverList.filter(loaiBia => loaiBia.id !== corver[0].id);
+   let coverSelect = document.querySelector("#update-book-cover");
+   coverList.forEach(author => {
+       let op = document.createElement("option");
+       op.value = author.id;
+       op.textContent = author.name;
+       coverSelect.appendChild(op);
+   });
+
+    // THÊM option các  thể loại
+      let publisherList = await fetchData(`api/publishers/get.php`);
+        publisherList = publisherList.filter(nxb => nxb.id !== publisher[0].id);
+
+      let publisherLelect = document.querySelector("#update-book-publish-name");
+      publisherList.forEach(nxb => {
+          let op = document.createElement("option");
+          op.value = nxb.id;
+          op.textContent = nxb.name;
+          publisherLelect.appendChild(op);
+      });
+
 
 // Gán sự kiện cho nút "Sửa" dialog
 document.getElementById("update-book-button").addEventListener("click", async (e) => {
     e.preventDefault();
 
+
+
+    
     const id = document.getElementById("update-book-id").value;
     const title = document.getElementById("update-book-title").value;
     const author = document.getElementById("update-book-author").value;
@@ -194,53 +256,107 @@ document.getElementById("update-book-button").addEventListener("click", async (e
     const priceOrder = document.getElementById("update-book-price-order").value;
     const description = document.getElementById("update-book-description").value;
     const size = document.getElementById("update-book-size").value;
-
+    // console.log(publishYear);
     const imageInput = document.getElementById("update-book-image");
+    const oldImageName = selectedImageName;
 
-    let formData = new FormData();
-    formData.append("id", id);
-    formData.append("title", title);
-    formData.append("authorId", author);
-    formData.append("categoryId", type);
-    formData.append("numOfpages", pages);
-    formData.append("coverTypeId", cover);
-    formData.append("publisherId", publishName);
-    formData.append("publishYear", publishYear);
-    formData.append("priceBase", priceBase);
-    formData.append("priceOrder", priceOrder);
-    formData.append("description", description);
-    formData.append("size", size);
-
-    if (imageInput.files.length > 0) {
-        formData.append("image", imageInput.files[0]);
-    } else {
-        formData.append("image", selectedImageName);
+    let checkTitle = true;
+    if(title == ''){
+        toast({title :"Lỗi", message :`Hãy nhập tên tiêu đề của sách.`, type : "warning" , duration : 3000});
+        checkTitle = false;
     }
 
-    try {
-        const response = await fetch("api/books/update.php", {
-            method: "POST",
-            body: formData,
-        });
+    let checkNumPage = true;
+    if (!pages.match(/^\d+$/)) {
+        toast({ title: "Lỗi", message: "Số trang chỉ được nhập số.", type: "warning", duration: 3000 });
+        checkNumPage = false;
+    }
 
-        const result = await response.json();
+    let checkOriginPrice = true;
+    if (!priceBase.match(/^\d+$/)) {
+        toast({ title: "Lỗi", message: "Giá gốc chỉ được nhập số.", type: "warning", duration: 3000 });
+        checkOriginPrice = false;
+    }
 
-        if (result.success) {
-            alert("Sửa sách thành công!");
-        } else {
-            alert("Lỗi sửa sách: " + (result.message || "Không rõ nguyên nhân"));
+    let checkSellingPrice = true;
+    if (!priceOrder.match(/^\d+$/)) {
+        toast({ title: "Lỗi", message: "Giá bán chỉ được nhập số.", type: "warning", duration: 3000 });
+        checkSellingPrice = false;
+    }
+
+
+    let checkSize = true;
+    if (!size.match(/^\d+$/)) {
+        toast({ title: "Lỗi", message: "Kích thước chỉ được nhập số.", type: "warning", duration: 3000 });
+        checkSize = false;
+    }
+
+    if(checkTitle && checkNumPage && checkOriginPrice && checkSellingPrice && checkSize){
+
+        let yes = await showNotification("Bạn có đồng ý lưu chỉnh sửa không ?");
+        if(yes){
+        
+            let formData = new FormData();
+            formData.append("id", id);
+            formData.append("title", title);
+            formData.append("authorId", author);
+            formData.append("categoryId", type);
+            formData.append("numOfpages", pages);
+            formData.append("coverTypeId", cover);
+            formData.append("publisherId", publishName);
+            formData.append("publishYear", publishYear);
+            formData.append("priceBase", priceBase);
+            formData.append("priceOrder", priceOrder);
+            formData.append("description", description);
+            formData.append("size", size);
+            formData.append("oldImageName", oldImageName);
+            formData.append("newImage", imageInput.files.length > 0 ? imageInput.files[0] : '');
+        
+           
+            try {
+                const response = await fetch("api/books/update.php", {
+                    method: "POST",
+                    body: formData,
+                });
+        
+                const result = await response.json();
+        
+                if (result.success) {
+                    // alert("Sửa sách thành công!");
+                  toast({title :"Thành công", message :`Cập nhật sách thành công`, type : "success" , duration : 3000});
+    
+                } else {
+                    // alert("Lỗi sửa sách: " + (result.message || "Không rõ nguyên nhân"));
+                  toast({title :"Cảnh báo", message :`${result.message}`, type : "warning" , duration : 3000});
+    
+                }
+            } catch (error) {
+                console.error("Lỗi fetch API:", error);
+                // alert("Không thể kết nối đến server!");
+                toast({title :"Lỗi", message :`Lỗi fetch API:${error}`, type : "error" , duration : 3000});
+    
+            }
+            updateDialog.remove();
+            updateButton.classList.remove("active");
+            await renderBookTable();
+    
         }
-    } catch (error) {
-        console.error("Lỗi fetch API:", error);
-        alert("Không thể kết nối đến server!");
     }
+
+
+
 });
 
 
 // Gán sự kiện cho nút "Đóng" dialog
-document.getElementById("close-book-button").addEventListener("click", () => {
-// Xoá dialog
-updateDialog.remove();
+document.getElementById("close-book-button").addEventListener("click", async () => {
+    let yes = await showNotification("Bạn có đồng ý thoát không?");
+    if(yes){
+        // Xoá dialog
+        updateDialog.remove();
+        updateButton.classList.remove("active");
+    }
+
 
 });
 }
