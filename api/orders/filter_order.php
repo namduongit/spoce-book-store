@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '../../../app/config.php';
 
-function returnJSONBook($filters, $pageCount)
+function returnJSONOrder($filters, $pageCount)
 {
     if (!is_array($filters) || empty($filters)) {
         http_response_code(404);
@@ -46,7 +46,7 @@ $db = new app_libs_DBConnection();
 $columns = [
     'donHang.maDonHang',
     'nguoiDung.maNguoiDung',
-    'nguoiDung.hoVaTen', // Thay đổi trường này thành 'hoVaTen' thay vì 'hoTen'
+    'nguoiDung.hoVaTen',
     'nguoiDung.soDT',
     'nguoiDung.email',
     'donHang.trangThai',
@@ -109,4 +109,4 @@ if (empty($result)) {
 
 
 
-returnJSONBook($result, $pageCount);
+returnJSONOrder($result, $pageCount);

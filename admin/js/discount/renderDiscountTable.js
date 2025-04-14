@@ -1,49 +1,54 @@
 import { detailDiscountData } from "./detailDiscountData.js";
 import { updateDiscountData } from "./updateDiscountData.js";
 import { lockDiscountData } from "./lockDiscountData.js";
+import { filterDiscount } from "./filterDiscountData.js";
 
 // Hàm lấy dữ liệu mã giảm giá từ API
-async function fetchDiscounts() {
-  try {
-    const response = await fetch("/api/discount/get_discount.php");
+// async function fetchDiscounts() {
+//   try {
+//     const response = await fetch("/api/discount/get_discount.php");
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
 
-    const result = await response.json();
-    console.log("Kết quả API:", result);
+//     const result = await response.json();
+//     console.log("Kết quả API:", result);
 
-    if (result.status === "success") {
-      return result.data;
-    } else {
-      console.error("Lỗi khi lấy dữ liệu:", result.message);
-      return {
-        list: [],
-        total: 0,
-        page: 1,
-        limit: 10,
-        total_pages: 0,
-      };
-    }
-  } catch (error) {
-    console.error("Lỗi khi gọi API:", error);
-    return {
-      list: [],
-      total: 0,
-      page: 1,
-      limit: 10,
-      total_pages: 0,
-    };
-  }
-}
+//     if (result.status === "success") {
+//       return result.data;
+//     } else {
+//       console.error("Lỗi khi lấy dữ liệu:", result.message);
+//       return {
+//         list: [],
+//         total: 0,
+//         page: 1,
+//         limit: 10,
+//         total_pages: 0,
+//       };
+//     }
+//   } catch (error) {
+//     console.error("Lỗi khi gọi API:", error);
+//     return {
+//       list: [],
+//       total: 0,
+//       page: 1,
+//       limit: 10,
+//       total_pages: 0,
+//     };
+//   }
+// }
 
 // Hàm cập nhật lại dữ liệu cho bảng khuyến mãi
-export async function renderDiscountTable() {
+export async function renderDiscountTable(pageIsSelected = 1) {
   try {
     // Lấy dữ liệu từ API
-    const data = await fetchDiscounts();
-
+    let data = await filterDiscount(pageIsSelected);
+    console.log("Dữ liệu khuyến mãi:", data);
+    if (!data || data.length === 0) {
+      console.log("Không có dữ liệu");
+      return;
+    }
     // Biến chứa đối tượng bảng khuyến mãi
     const bodyInDiscountTable = document.querySelector(
       ".main__data > .main__table.discount > tbody"
@@ -56,11 +61,11 @@ export async function renderDiscountTable() {
 
     // Chuyển đổi dữ liệu thành các thẻ html
     let html = ``;
-    if (!data.list || data.list.length === 0) {
+    if (!data || data.length === 0) {
       html =
         '<tr><td colspan="7" class="text-center">Không có mã giảm giá nào</td></tr>';
     } else {
-      data.list.forEach((discount) => {
+      data.forEach((discount) => {
         html += `
           <tr>
             <td>${discount.maPGG}</td>
@@ -92,6 +97,8 @@ export async function renderDiscountTable() {
     const idColumnInTable = document.querySelectorAll(
       ".main__data > .main__table.discount > tbody > tr > td:first-of-type"
     );
+    console.log(idColumnInTable);
+
     const listButtonInTable = document.querySelectorAll(
       ".main__data > .main__table.discount > tbody > tr > td:last-of-type"
     );

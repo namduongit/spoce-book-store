@@ -1,21 +1,5 @@
-/**
- * Filters order data based on various criteria and fetches the filtered results from the server.
- *
- * @async
- * @function
- * @param {number} [pageIsSelected=1] - The page number to fetch (default is 1).
- * @returns {Promise<Array>} A promise that resolves to an array of filtered order data.
- *
- * @throws {Error} Throws an error if the fetch request fails or the server responds with a non-OK status.
- *
- * @example
- * // Call the function to filter orders and log the results
- * filterOrder(2).then(orderList => {
- *   console.log(orderList);
- * }).catch(error => {
- *   console.error("Error fetching orders:", error);
- * });
- */
+// import { renderOrderTable } from "./renderOrderTable.js";
+let curentpage = 1;
 export async function filterOrder(pageIsSelected = 1) {
   let id = document.querySelector("#find-inp-order").value.trim();
   let sort = document
@@ -60,13 +44,12 @@ export async function filterOrder(pageIsSelected = 1) {
   let params = new URLSearchParams();
   if (id) params.append("id", id);
   if (status) params.append("status", status);
-  if (province) params.append("tinh", province);
+  if (province) params.append("city", province);
   if (district) params.append("district", district);
-  params.append("orderBy", orderBy);
+  params.append("orderByColumn", orderBy);
   params.append("orderType", orderType);
   params.append("limit", limit);
   params.append("offset", offset);
-
   let url = `api/orders/filter_order.php?${params.toString()}`;
   console.log("Request URL:", url);
 
@@ -89,11 +72,11 @@ export async function filterOrder(pageIsSelected = 1) {
 export function filterOrderData() {
   const filterButton = document.querySelector("#filter-button-order");
 
-  if (filterButton) {
-    filterButton.addEventListener("click", async (e) => {
-      e.preventDefault();
-      curentpage = 1;
-      await renderOrderTable(1);
-    });
-  }
+  // if (filterButton) {
+  //   filterButton.addEventListener("click", async (e) => {
+  //     e.preventDefault();
+  //     curentpage = 1;
+  //     await renderOrderTable(1);
+  //   });
+  // }
 }
