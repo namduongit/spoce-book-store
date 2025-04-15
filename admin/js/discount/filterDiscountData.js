@@ -59,9 +59,9 @@ export async function filterDiscount(pageIsSelected = 1) {
     }
 
     let data = await response.json();
-    console.log("Dữ liệu nhận được:", data.discountList);
+    console.log("Dữ liệu nhận được:", data);
     await paginationDiscount(data.pageCount);
-    return data.discountList;
+    return data;
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu:", error);
     return [];

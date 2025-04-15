@@ -38,14 +38,14 @@ import { filterDiscount } from "./filterDiscountData.js";
 //     };
 //   }
 // }
-
+// export let data = [];
 // Hàm cập nhật lại dữ liệu cho bảng khuyến mãi
 export async function renderDiscountTable(pageIsSelected = 1) {
   try {
     // Lấy dữ liệu từ API
-    let data = await filterDiscount(pageIsSelected);
-    console.log("Dữ liệu khuyến mãi:", data);
-    if (!data || data.length === 0) {
+    const data = await filterDiscount(pageIsSelected);
+    console.log("Dữ liệu khuyến mãi:", data.discountList);
+    if (!data || !data.discountList || data.discountList.length === 0) {
       console.log("Không có dữ liệu");
       return;
     }
@@ -61,11 +61,11 @@ export async function renderDiscountTable(pageIsSelected = 1) {
 
     // Chuyển đổi dữ liệu thành các thẻ html
     let html = ``;
-    if (!data || data.length === 0) {
+    if (!data.discountList || data.discountList.length === 0) {
       html =
         '<tr><td colspan="7" class="text-center">Không có mã giảm giá nào</td></tr>';
     } else {
-      data.forEach((discount) => {
+      data.discountList.forEach((discount) => {
         html += `
           <tr>
             <td>${discount.maPGG}</td>
