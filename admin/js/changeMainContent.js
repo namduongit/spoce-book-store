@@ -365,9 +365,10 @@ const mainContentMap = {
         <input required="" type="text" id="privilege-slt-account" />
         <span><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Chọn Nhóm quyền</span>
         <ul>
+        <li>Tất cả</li>
           <li>Quản lý</li>
-          <li>Nhân viên thủ kho</li>
-          <li>Nhân viên bán hàng</li>
+          <li>Nhân viên</li>
+          <li>Quản kho</li>
           <li>Khách hàng</li> 
         </ul>
       </div>
@@ -375,8 +376,10 @@ const mainContentMap = {
         <input required="" type="text" id="status-slt-account" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
-          <li>Hoạt động</li>
-          <li>Tạm dừng</li>
+          <li>Tất cả</li>
+          <li>ACTIVE</li>
+          <li>DISABLED</li>
+          <li>LOCKED</li>
         </ul>
       </div>
       <button class="main__filter-btn" id="filter-button-account">
@@ -404,7 +407,7 @@ const mainContentMap = {
         </tbody>
       </table>
     </div>
-    <div class="main__pagination">
+    <div class="main__pagination" id="main__pagination_account">
       <button class="main-pagination__button previous">
         <i class="icon fa-solid fa-chevron-left"></i>
       </button>
