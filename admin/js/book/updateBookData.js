@@ -30,6 +30,7 @@ export async function updateBookData(idBookSelected) {
       <i class="fa-solid fa-xmark"></i>
   </button>
   <div class="dialog__line"></div>
+  
   <form method="post" class="dialog__form">
       <div class="dialog__row">
           <div class="dialog__form-group book image">

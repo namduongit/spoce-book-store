@@ -910,7 +910,7 @@ const mainContentMap = {
     </button>
   </div>
 `,
-cover: `
+  cover: `
 <h1 class="main__title">Loại bìa</h1>
 <div class="main__row">
   <div class="main__find-inp inp-text-form-1">
@@ -990,7 +990,7 @@ cover: `
   </button>
 </div>
 `,
-publisher: `
+  publisher: `
 <h1 class="main__title">Nhà xuất bản</h1>
 <div class="main__row">
   <div class="main__find-inp inp-text-form-1">
@@ -1069,7 +1069,7 @@ publisher: `
   </button>
 </div>
 `,
-  
+
 };
 
 // Biến dùng để chuyển nội dung chính tương ứng với từng trang
@@ -1171,16 +1171,16 @@ async function showCategory() {
   console.log("Dữ liệu nhận được từ API:", listCategory);
 
   if (!Array.isArray(listCategory)) {
-      console.error(" Lỗi: Dữ liệu không đúng định dạng (phải là mảng).");
-      return;
+    console.error(" Lỗi: Dữ liệu không đúng định dạng (phải là mảng).");
+    return;
   }
 
   const ulElement = document.querySelector('.main__category-slt ul');
   let li = document.createElement('li');
   listCategory.forEach(category => {
-      let li = document.createElement('li');
-      li.textContent = category.name;
-      ulElement.appendChild(li);
+    let li = document.createElement('li');
+    li.textContent = category.name;
+    ulElement.appendChild(li);
 
   });
 }
