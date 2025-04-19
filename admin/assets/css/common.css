@@ -48,20 +48,18 @@
 
 /* <===== Input Text Form 1 =====> */
 
-.main__row_item{
+.main__row_item {
   display: flex;
   flex-direction: column;
 }
 
 .main__find-inp-book-constainer input,
 .main__row_item select {
-  padding: 0.5rem 0.8rem; 
+  padding: 0.5rem 0.8rem;
   width: 100%;
   border-radius: 7px;
   border: 1px solid gray;
 }
-
-
 
 .inp-text-form-1 {
   position: relative;
@@ -256,6 +254,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   position: relative;
   top: -4px;
   font-size: 20px;
+  font-weight: 700;
   text-align: center;
 }
 .dialog__line {
@@ -556,7 +555,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #ffffff;
   line-height: var(--table-height);
   font-weight: bold;
-
 }
 .dialog__form-group table th,
 .dialog__form-group table td {

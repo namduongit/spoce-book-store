@@ -24,9 +24,9 @@ li {
 
   --width-left-menu: 250px;
 
-  --table-height: 40px;
-  --table-column-font-size: 15px;
-  --table-row-font-size: 14px;
+  --table-height: 30px;
+  --table-title-font-size: 14px;
+  --table-paragraph-font-size: 14px;
 }
 
 html {
@@ -270,7 +270,7 @@ body {
   cursor: pointer;
 }
 .main__print-btn {
-  width: 140px;
+  width: 15%;
 }
 
 .main__add-btn:hover,
@@ -332,7 +332,7 @@ body {
 .main__table th,
 .main__table td {
   height: var(--table-height);
-  font-size: var(--table-row-font-size);
+  font-size: var(--table-paragraph-font-size);
   text-align: center;
   padding: 4px 6px;
   line-height: var(--table-height);
@@ -344,7 +344,7 @@ body {
   height: calc(var(--table-height) * 3);
 }
 .main__table th {
-  font-size: var(--table-column-font-size);
+  font-size: var(--table-title-font-size);
 }
 .main__table tbody tr {
   border-bottom: 1px solid #dddddd;
@@ -386,7 +386,7 @@ body {
   justify-content: center;
   align-items: center;
   gap: 0 14px;
-  font-size: var(--table-row-font-size);
+  font-size: var(--table-paragraph-font-size);
   transition: 0.2s ease-in-out;
 }
 .main__table tbody td:last-of-type i:hover {
@@ -399,7 +399,7 @@ body {
 .main__table tfoot td:first-of-type {
   background: #3597f2;
   color: #fff;
-  font-size: var(--table-column-font-size);
+  font-size: var(--table-title-font-size);
   font-weight: 700;
 }
 .main__table tfoot tr {

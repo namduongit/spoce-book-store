@@ -6,7 +6,9 @@ export async function updateDiscountData(idDiscountSelected) {
   // Phải truy vấn từ CSDL thông qua idDiscountSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
   const id = idDiscountSelected.textContent;
-  const discountData = await fetch(`/api/discount/get_discount_detail.php?maGiamGia=${id}`);
+  const discountData = await fetch(
+    `/api/discount/get_discount_detail.php?maGiamGia=${id}`
+  );
   const discountDataJson = await discountData.json();
   // console.log(discountDataJson);
   const discount = discountDataJson.data;
@@ -20,10 +22,10 @@ export async function updateDiscountData(idDiscountSelected) {
     discountValue = "Không xác định";
   }
   console.log(discountValue);
-  
+
   // Biến chứa đối tượng là nút "Sửa"
   const updateButton = document.getElementById("update-button-discount");
-  
+
   // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
   updateButton.classList.add("active");
 
@@ -129,11 +131,15 @@ export async function updateDiscountData(idDiscountSelected) {
       const name = document.getElementById("update-discount-name").value;
       const type = document.getElementById("update-discount-type").value;
       let value = document.getElementById("update-discount-value").value;
-      const dateStart = document.getElementById("update-discount-date-start").value;
+      const dateStart = document.getElementById(
+        "update-discount-date-start"
+      ).value;
       const dateEnd = document.getElementById("update-discount-date-end").value;
-      const minCost = document.getElementById("update-discount-order-min-cost").value;
+      const minCost = document.getElementById(
+        "update-discount-order-min-cost"
+      ).value;
       const maxDiscount = document.getElementById(
-          "update-discount-order-max-discount"
+        "update-discount-order-max-discount"
       ).value;
       const status = document.getElementById("update-discount-status").value;
 
@@ -148,7 +154,15 @@ export async function updateDiscountData(idDiscountSelected) {
       console.log(maxDiscount);
       //   console.log(status.value);
       // Kiểm tra tính hợp lệ của dữ liệu
-      if (!name || !type || !value || !dateStart || !dateEnd || !minCost || !maxDiscount) {
+      if (
+        !name ||
+        !type ||
+        !value ||
+        !dateStart ||
+        !dateEnd ||
+        !minCost ||
+        !maxDiscount
+      ) {
         alert("Vui lòng nhập đầy đủ thông tin");
         return;
       }
@@ -163,14 +177,14 @@ export async function updateDiscountData(idDiscountSelected) {
         return;
       }
       if (type === "FIXED_AMOUNT") {
-        value = value.replace(/,/g, '');
+        value = value.replace(/,/g, "");
         value = parseInt(value);
       }
       if (type === "FIXED_AMOUNT" && (value < 0 || value > 1000000000)) {
         alert("Giá trị phải nằm trong khoảng 0-10000000");
         return;
       }
-      if(type === "PERCENTAGE" ){
+      if (type === "PERCENTAGE") {
         value = parseInt(value);
       }
       // Kiểm tra tính hợp lệ của tiền đơn tối thiểu
@@ -189,31 +203,30 @@ export async function updateDiscountData(idDiscountSelected) {
       params.append("name", name);
       params.append("type", type);
       if (type === "PERCENTAGE") {
-  params.append("phanTram", value);
-} else if (type === "FIXED_AMOUNT") {
-  params.append("giaTriGiam", value);
-}
+        params.append("phanTram", value);
+      } else if (type === "FIXED_AMOUNT") {
+        params.append("giaTriGiam", value);
+      }
       params.append("dateStart", dateStart);
       params.append("dateEnd", dateEnd);
       params.append("minCost", minCost);
       params.append("maxDiscount", maxDiscount);
-      
+
       let url = `api/discount/update_discount.php?${params.toString()}`;
-      console.log("Request URL:", url); 
+      console.log("Request URL:", url);
 
       try {
-        const response = await fetch(url, {method: "GET"});
+        const response = await fetch(url, { method: "GET" });
         const result = await response.json(); // Chuyển luôn về JSON
         console.log(result);
         if (result.success) {
           alert("sửa thành công!");
         } else {
-          alert("Lỗi sửa phiếu khuyến mãi: " + (result.error));
+          alert("Lỗi sửa phiếu khuyến mãi: " + result.error);
         }
       } catch (error) {
         console.error("Error:", error);
       }
-      
     });
 
   // Gán sự kiện cho nút "Đóng" dialog

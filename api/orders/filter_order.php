@@ -64,8 +64,9 @@ $columns = [
 $tables = ['donHang', 'nguoiDung', 'phieuGiamGia', 'diaChiNguoiDung'];
 $joins = [
     'donHang.maKhachHang = nguoiDung.maNguoiDung',
+    'donHang.maDiaChi = diaChiNguoiDung.maDiaChi',
     'donHang.maKhuyenMai = phieuGiamGia.maPGG',
-    'donHang.maDiaChi = diaChiNguoiDung.maDiaChi'
+    'nguoiDung.maNguoiDung = diaChiNguoiDung.maNguoiDung'
 ];
 $conditions = [];
 $params = [];
