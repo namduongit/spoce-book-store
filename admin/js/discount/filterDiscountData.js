@@ -158,7 +158,9 @@ async function paginationDiscount(pageCount) {
       buttonsContainer.insertBefore(newButton, allButtons[pageCount - 1]);
     }
   } else {
-    let pagination_container = document.querySelector("#main__pagination_book");
+    let pagination_container = document.querySelector(
+      "#main__pagination_discount"
+    );
     pagination_container.innerHTML = "";
   }
 }

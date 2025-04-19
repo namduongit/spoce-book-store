@@ -450,8 +450,8 @@ const mainContentMap = {
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
           <li>Tất cả</li>
-          <li>Hoạt động</li>
-          <li>Tạm dừng</li>
+          <li>ACTIVE</li>
+          <li>DISABLED</li>
         </ul>
       </div>
       <button class="main__filter-btn" id="filter-button-discount">

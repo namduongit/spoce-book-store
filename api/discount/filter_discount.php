@@ -49,7 +49,7 @@ $conditions = [];
 $params = [];
 
 if (!empty($id)) {
-    $conditions[] = "maPGG LIKE :id";
+    $conditions[] = "maPGG LIKE :id OR tenPGG LIKE :id";
     $params[':id'] = "%$id%";
 }
 if (!empty($status)) {
