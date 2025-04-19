@@ -6,9 +6,9 @@ import { filterCategory } from "./filterCategoryData.js";
 let data = [];
 
 // Hàm cập nhật lại dữ liệu cho bảng Thể loại
-export async function renderCategoryTable(pageIsSelected = 1) {
+export async function renderCategoryTable() {
 
-  data = await filterCategory(pageIsSelected);
+  data = await filterCategory();
 
   // Biến chứa đối tượng bảng Thể loại
   const bodyInCategoryTable = document.querySelector(
@@ -35,39 +35,53 @@ export async function renderCategoryTable(pageIsSelected = 1) {
       `;
   }
 
-  // Cập nhật lại giao diện
-  bodyInCategoryTable.innerHTML = html;
+  if(data.length == 0){
+    html =  `
+          <tr>
+              <td></td>
+              <td>Danh sách trống</td>             
+              <td></td>
+          </tr>
+      `;
+      bodyInCategoryTable.innerHTML = html;
 
-  // Gán sự kiện cho các nút sau khi thay đổi giao diện
-  const idColumnInTable = document.querySelectorAll(
-    ".main__data > .main__table.category > tbody > tr > td:first-of-type"
-  );
-  const listButtonInTable = document.querySelectorAll(
-    ".main__data > .main__table.category > tbody > tr > td:last-of-type"
-  );
-  listButtonInTable.forEach((buttons, row) => {
-    // Các nút cần gán sự kiện trên mỗi dòng
-    const updateButton = buttons.children[0];
-    const lockButton = buttons.children[1];
-    // Id của đối tượng đã được chọn để thao tác
-    const idCategorySelected = idColumnInTable.item(row).textContent;
-
-    // Gán sự kiện hiện dialog sửa thể loại
-    updateButton.addEventListener("click", (e) => {
-      // Loại bỏ giá trị mặc định
-      e.preventDefault();
-
-      // Gọi hàm sự kiện
-      updateCategoryData(idCategorySelected);
-    });
-
-    // Gán sự kiện hiện dialog khoá / mở khoá thể loại
-    lockButton.addEventListener("click", (e) => {
-      // Loại bỏ giá trị mặc định
-      e.preventDefault();
-
-      // Gọi hàm sự kiện
-      lockCategoryData(idCategorySelected);
-    });
-  });
+  }else{
+  
+    
+      // Cập nhật lại giao diện
+      bodyInCategoryTable.innerHTML = html;
+    
+      // Gán sự kiện cho các nút sau khi thay đổi giao diện
+      const idColumnInTable = document.querySelectorAll(
+        ".main__data > .main__table.category > tbody > tr > td:first-of-type"
+      );
+      const listButtonInTable = document.querySelectorAll(
+        ".main__data > .main__table.category > tbody > tr > td:last-of-type"
+      );
+      listButtonInTable.forEach((buttons, row) => {
+        // Các nút cần gán sự kiện trên mỗi dòng
+        const updateButton = buttons.children[0];
+        const lockButton = buttons.children[1];
+        // Id của đối tượng đã được chọn để thao tác
+        const idCategorySelected = idColumnInTable.item(row).textContent;
+    
+        // Gán sự kiện hiện dialog sửa thể loại
+        updateButton.addEventListener("click", (e) => {
+          // Loại bỏ giá trị mặc định
+          e.preventDefault();
+    
+          // Gọi hàm sự kiện
+          updateCategoryData(idCategorySelected);
+        });
+    
+        // Gán sự kiện hiện dialog khoá / mở khoá thể loại
+        lockButton.addEventListener("click", (e) => {
+          // Loại bỏ giá trị mặc định
+          e.preventDefault();
+    
+          // Gọi hàm sự kiện
+          lockCategoryData(idCategorySelected);
+        });
+      });
+  }
 }

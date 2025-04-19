@@ -36,7 +36,6 @@ export async function detailBookData(idBookSelected) {
           <div class="dialog__form-group book image">
               <label>Hình ảnh</label>
               <img src="public/uploads/books/${book.image}" alt"book-image"></img>
-              <input type="file" id="detail-book-image" disabled />
           </div>
           <div class="dialog__form-group book"></div>
           <div class="dialog__form-group book"></div>

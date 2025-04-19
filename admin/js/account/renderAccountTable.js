@@ -1,43 +1,49 @@
 import { updateAccountData } from "./updateAccountData.js";
 import { detailAccountData } from "./detailAccountData.js";
 import { lockAccountData } from "./lockAccountData.js";
+import { filterAccount } from "./filterAccountData.js";
 
 // Dữ liệu tạm thời (sau phải xây dựng hàm truy xuất dữ liệu từ csdl)
-let data = [
-  {
-    id: "1",
-    username: "admin",
-    password: "123456",
-    privilege: "Quản lý",
-    phone: "0123456789",
-    email: "admin@gmail.com",
-    status: "Hoạt động",
-    dateUpdate: "",
-  },
-  {
-    id: "2",
-    username: "thanhquy",
-    password: "1",
-    privilege: "Nhân viên bán hàng",
-    phone: "0123456789",
-    email: "customer@gmail.com",
-    status: "Tạm dừng",
-    dateUpdate: "",
-  },
-  {
-    id: "99",
-    username: "thanhquy",
-    password: "1",
-    privilege: "Khách hàng",
-    phone: "0123456789",
-    email: "customer@gmail.com",
-    status: "Tạm dừng",
-    dateUpdate: "",
-  },
-];
+// let data = [
+//   {
+//     id: "1",
+//     username: "admin",
+//     password: "123456",
+//     privilege: "Quản lý",
+//     phone: "0123456789",
+//     email: "admin@gmail.com",
+//     status: "Hoạt động",
+//     dateUpdate: "",
+//   },
+//   {
+//     id: "2",
+//     username: "thanhquy",
+//     password: "1",
+//     privilege: "Nhân viên bán hàng",
+//     phone: "0123456789",
+//     email: "customer@gmail.com",
+//     status: "Tạm dừng",
+//     dateUpdate: "",
+//   },
+//   {
+//     id: "99",
+//     username: "thanhquy",
+//     password: "1",
+//     privilege: "Khách hàng",
+//     phone: "0123456789",
+//     email: "customer@gmail.com",
+//     status: "Tạm dừng",
+//     dateUpdate: "",
+//   },
+// ];
 
 // Hàm cập nhật lại dữ liệu cho bảng Người dùng
-export function renderAccountTable() {
+export async function renderAccountTable(pageIsSelected = 1) {
+  // Lấy dữ liệu từ API
+  let account = await filterAccount(pageIsSelected);
+  console.log(account);
+  let data = account.accountList;
+  console.log(data);
   // Biến chứa đối tượng bảng Người dùng
   const bodyInAccountTable = document.querySelector(
     ".main__data > .main__table.account > tbody"
@@ -48,18 +54,18 @@ export function renderAccountTable() {
   for (let i = 0; i < data.length; i++) {
     html += `
         <tr>
-            <td>${data[i].id}</td>
-            <td>${data[i].username}</td>
-            <td>${data[i].privilege}</td>
-            <td>${data[i].phone}</td>
+            <td>${data[i].maNguoiDung}</td>
+            <td>${data[i].hoVaTen}</td>
+            <td>${data[i].tenQuyen}</td>
+            <td>${data[i].soDT}</td>
             <td><span ${
-              data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
-            }>${data[i].status}</span></td>
+              data[i].trangThai === "ACTIVE" ? 'class="green"' : 'class="red"'
+            }>${data[i].trangThai}</span></td>
             <td>
                 <i id="detail-button-account" class="fa-solid fa-circle-info"></i>
                 <i id="update-button-account" class="fa-solid fa-pen-to-square"></i>
                 <i id="lock-button-account" class="fa-solid fa-${
-                  data[i].status === "Hoạt động" ? "" : "un"
+                  data[i].trangThai === "ACTIVE" ? "" : "un"
                 }lock"></i>
             </td>
         </tr>

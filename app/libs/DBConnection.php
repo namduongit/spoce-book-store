@@ -9,9 +9,9 @@
 
 class app_libs_DBConnection
 {
-    protected $dsn = "mysql:host=128.199.154.64;port=3306;dbname=bookStore;charset=utf8";
+    protected $dsn = "mysql:host=152.42.173.216;port=3306;dbname=bookStore;charset=utf8";
     protected $username = "bookStore";
-    protected $password = "bookStoreWeb";
+    protected $password = "bookStore";
 
     protected $table_name = 'default_table';
     // Mảng lưu trữ các param được dùng để truy vấn

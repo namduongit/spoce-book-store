@@ -4,7 +4,7 @@ import { renderPublisherTable } from "./renderPublisherTable.js";
 let curentpage = 1;
 
 //  lọc
-export async function filterPublisher(pageIsSelected = 1){
+export async function filterPublisher(){
     let id = document.querySelector("#find-inp-publisher").value.toLowerCase().trim();
     let sort = document.querySelector("#sort-slt-publisher").value.toLowerCase().trim();
     let publisherStatus = document.querySelector("#status-slt-publisher").value.trim();
@@ -24,7 +24,7 @@ export async function filterPublisher(pageIsSelected = 1){
     let status = publisherStatus !== 'Tất cả' ? publisherStatus : '';
 
     let limit = (show !== '' && show !== 'mặc định') ? Number(show) : 5;
-    let page = Number(pageIsSelected) || 1;
+    let page = Number(curentpage) || 1;
     let offset = (page - 1) * limit;
 
     let params = new URLSearchParams();
@@ -67,7 +67,7 @@ export function filterPublisherData() {
         filterButton. addEventListener("click", async (e)=> {
             e.preventDefault();
             curentpage = 1;     
-            await renderPublisherTable(1);   
+            await renderPublisherTable();   
         });
     }
 
@@ -86,8 +86,8 @@ async function paginationPublisher(pageCount) {
         prevButton.innerHTML = '<i class="icon fa-solid fa-chevron-left"></i>';
         prevButton.addEventListener("click", function(){
           if(curentpage > 1){
-            renderPublisherTable(curentpage - 1);
-              curentpage -= 1;
+            curentpage -= 1;
+            renderPublisherTable();
           }
   
         });
@@ -114,8 +114,8 @@ async function paginationPublisher(pageCount) {
         nextButton.innerHTML = '<i class="icon fa-solid fa-chevron-right"></i>';
         nextButton.addEventListener("click", function(){
           if(curentpage < pageCount){
-            renderPublisherTable(curentpage + 1);
-              curentpage += 1;
+            curentpage += 1;
+            renderPublisherTable();
           }
   
         });

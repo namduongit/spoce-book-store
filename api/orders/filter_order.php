@@ -1,111 +1,112 @@
 <?php
 require_once __DIR__ . '../../../app/config.php';
 
-function returnJSONOrders($orders, $pageCount)
+function returnJSONOrder($filters, $pageCount)
 {
-    // Nếu không có đơn hàng trả về
-    if (!is_array($orders) || empty($orders)) {
-        http_response_code(200);
-        echo json_encode([
-            "orderList" => [],
-            "pageCount" => 0
-        ], JSON_UNESCAPED_UNICODE);
+    if (!is_array($filters) || empty($filters)) {
+        http_response_code(404);
+        echo json_encode(["error" => "Không tìm thấy đơn hàng!"]);
         exit();
     }
-
-    // Chuẩn hóa dữ liệu trả về
-    $response = array_map(function ($order) {
+    $response = array_map(function ($filter) {
         return [
-            "orderId" => $order['maDonHang'] ?? '',
-            "customerName" => $order['tenKhachHang'] ?? '',
-            "status" => $order['trangThai'] ?? '',
-            "createdAt" => $order['ngayTao'] ?? '',
-            "totalPrice" => $order['tongTien'] ?? 0,
-            "fullAddress" => $order['diachiDayDu'] ?? '',
+            "maDonHang" => $filter['maDonHang'] ?? '',
+            "maKhachHang" => $filter['maKhachHang'] ?? '',
+            "status" => $filter['trangThai'] ?? '',
+            "ngayTaoDon" => $filter['ngayTaoDon'] ?? '',
+            "maKhuyenMai" => $filter['maKhuyenMai'] ?? '',
+            "tongTien" => $filter['tongTienThu'] ?? 0,
+            "maNhanVien" => $filter['maNhanVien'] ?? '',
+            "maDiaChi" => $filter['maDiaChi'] ?? '',
+            "ngayCapNhat" => $filter['ngayCapNhat'] ?? ''
         ];
-    }, $orders);
+    }, (is_array($filters) && isset($filters[0])) ? $filters : [$filters]);
 
     header('Content-Type: application/json; charset=UTF-8');
-    echo json_encode([
-        "orderList" => $response,
-        "pageCount" => $pageCount
-    ], JSON_UNESCAPED_UNICODE);
+    echo json_encode(
+        ["orderList" => $response, "pageCount" => $pageCount],
+        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+    );
     exit();
 }
 
-// Lấy tham số từ URL
-$id = $_GET['id'] ?? '';
-$orderType = $_GET['orderType'] ?? 'DESC';
-$orderBy = $_GET['orderBy'] ?? 'donHang.maDonHang';
-$status = $_GET['status'] ?? '';
-$city = $_GET['tinh'] ?? '';
-$district = $_GET['district'] ?? '';
-$dateStart = $_GET['dateStart'] ?? '';
-$dateEnd = $_GET['dateEnd'] ?? '';
-$limit = $_GET['limit'] ?? PHP_INT_MAX;
-$offset = $_GET['offset'] ?? 0;
+$id = isset($_GET['id']) ? trim($_GET['id']) : '';
+$orderType = isset($_GET['orderType']) ? trim($_GET['orderType']) : 'ASC';
+$orderByColumn = isset($_GET['orderByColumn']) ? trim($_GET['orderByColumn']) : 'maDonHang';
+$status = isset($_GET['status']) ? trim($_GET['status']) : '';
+$city = isset($_GET['city']) ? trim($_GET['city']) : '';
+$district = isset($_GET['district']) ? trim($_GET['district']) : '';
+$ngayTaoDon = isset($_GET['ngayTaoDon']) ? trim($_GET['ngayTaoDon']) : '';
+$ngayCapNhat = isset($_GET['ngayCapNhat']) ? trim($_GET['ngayCapNhat']) : '';
+$limit = isset($_GET['limit']) ? (int)trim($_GET['limit']) : 5;
+$offset = isset($_GET['offset']) ? (int)trim($_GET['offset']) : 0;
 
-// Cột cần lấy
+$db = new app_libs_DBConnection();
+
 $columns = [
-    'donHang.*',
-    'khachHang.tenKhachHang',
-    'diaChi.diachiDayDu',
-    'diaChi.tinhThanhPho',
-    'diaChi.quanHuyen'
+    'donHang.maDonHang',
+    'nguoiDung.maNguoiDung',
+    'nguoiDung.hoVaTen',
+    'nguoiDung.soDT',
+    'nguoiDung.email',
+    'donHang.trangThai',
+    'donHang.ngayTaoDon',
+    'phieuGiamGia.tenPGG',
+    'donHang.tongTienThu',
+    'donHang.maNhanVien',
+    'diaChiNguoiDung.tinhThanh',
+    'diaChiNguoiDung.quanHuyen',
+    'diaChiNguoiDung.phuongXa',
+    'diaChiNguoiDung.soNha',
+    'donHang.ngayCapNhat'
 ];
 
-// Các bảng và điều kiện join
-$tables = ['donHang', 'khachHang', 'diaChi'];
+$tables = ['donHang', 'nguoiDung', 'phieuGiamGia', 'diaChiNguoiDung'];
 $joins = [
-    'donHang.maKhachHang = khachHang.maKhachHang',
-    'donHang.maDiaChi = diaChi.maDiaChi'
+    'donHang.maKhachHang = nguoiDung.maNguoiDung',
+    'donHang.maKhuyenMai = phieuGiamGia.maPGG',
+    'donHang.maDiaChi = diaChiNguoiDung.maDiaChi'
 ];
-
-// Điều kiện WHERE
 $conditions = [];
 $params = [];
 
 if (!empty($id)) {
-    $conditions[] = 'donHang.maDonHang LIKE :id';
+    $conditions[] = "donHang.maDonHang LIKE :id";
     $params[':id'] = "%$id%";
 }
-
 if (!empty($status)) {
-    $conditions[] = 'donHang.trangThai = :status';
+    $conditions[] = "donHang.trangThai = :status";
     $params[':status'] = $status;
 }
-
 if (!empty($city)) {
-    $conditions[] = 'diaChi.tinhThanhPho = :city';
+    $conditions[] = "diaChiNguoiDung.tinhThanh = :city";
     $params[':city'] = $city;
 }
-
 if (!empty($district)) {
-    $conditions[] = 'diaChi.quanHuyen = :district';
+    $conditions[] = "diaChiNguoiDung.quanHuyen = :district";
     $params[':district'] = $district;
 }
-
-if (!empty($dateStart)) {
-    $conditions[] = 'donHang.ngayTao >= :dateStart';
-    $params[':dateStart'] = $dateStart;
+if (!empty($ngayTaoDon)) {
+    $conditions[] = "donHang.ngayTaoDon = :ngayTaoDon";
+    $params[':ngayTaoDon'] = $ngayTaoDon;
+}
+if (!empty($ngayCapNhat)) {
+    $conditions[] = "donHang.ngayCapNhat = :ngayCapNhat";
+    $params[':ngayCapNhat'] = $ngayCapNhat;
+}
+if (empty($conditions)) {
+    $conditions = null;
 }
 
-if (!empty($dateEnd)) {
-    $conditions[] = 'donHang.ngayTao <= :dateEnd';
-    $params[':dateEnd'] = $dateEnd;
+$result = $db->joinTables($columns, $tables, $joins, $conditions, $orderByColumn, $orderType, $limit, $offset, $params);
+$result2 = $db->joinTables($columns, $tables, $joins, $conditions, $orderByColumn, $orderType, null, null, $params);
+$pageCount = ceil(count($result2) / ($limit == null ? PHP_INT_MAX : $limit));
+
+if (empty($result)) {
+    echo json_encode(["orderList" => [], "error" => "Không có đơn hàng nào phù hợp!", "pageCount" => 0]);
+    exit();
 }
 
-// Gọi class kết nối DB
-$db = new app_libs_DBConnection();
 
-// Lấy dữ liệu đơn hàng theo phân trang
-$result = $db->joinTables($columns, $tables, $joins, $conditions, $orderBy, $orderType, $limit, $offset, $params);
 
-// Lấy toàn bộ để tính tổng số trang
-$totalResult = $db->joinTables($columns, $tables, $joins, $conditions, $orderBy, $orderType, null, null, $params);
-$pageCount = (is_array($totalResult) && count($totalResult) > 0)
-    ? ceil(count($totalResult) / ($limit ?: 1))
-    : 0;
-
-// Trả dữ liệu JSON
-returnJSONOrders($result, $pageCount);
+returnJSONOrder($result, $pageCount);

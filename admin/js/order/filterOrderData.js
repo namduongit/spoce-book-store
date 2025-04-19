@@ -1,15 +1,5 @@
-// import {renderOrderTable} from "./renderOrderTable";
-
+// import { renderOrderTable } from "./renderOrderTable.js";
 let curentpage = 1;
-// hàm lọc
-// const filterOrder = document.querySelector("#filter-button-order");
-// if (filterOrder) {
-//   filterOrder.addEventListener("click", async (e) => {
-//     e.preventDefault();
-//     curentpage = 1;
-//     await renderOrderTable(1);
-//   });
-// }
 export async function filterOrder(pageIsSelected = 1) {
   let id = document.querySelector("#find-inp-order").value.trim();
   let sort = document
@@ -20,7 +10,7 @@ export async function filterOrder(pageIsSelected = 1) {
   let province = document.querySelector("#city-slt-order").value.trim();
   let district = document.querySelector("#district-slt-order").value.trim();
 
-  let orderBy = "donHang.maDonHang",
+  let orderBy = "maDonHang",
     orderType = "ASC";
 
   switch (sort) {
@@ -28,35 +18,38 @@ export async function filterOrder(pageIsSelected = 1) {
       orderType = "DESC";
       break;
     case "ngày tạo đơn tăng dần":
-      orderBy = "donHang.ngayTao";
+      orderBy = "ngayTao";
       break;
     case "ngày tạo đơn giảm dần":
-      orderBy = "donHang.ngayTao";
+      orderBy = "ngayTao";
       orderType = "DESC";
       break;
     case "tổng thanh toán tăng dần":
-      orderBy = "donHang.tongTien";
+      orderBy = "tongTien";
       break;
     case "tổng thanh toán giảm dần":
-      orderBy = "donHang.tongTien";
+      orderBy = "tongTien";
       orderType = "DESC";
       break;
   }
 
-  let limit = 10;
+  let limit = 5;
   let page = Number(pageIsSelected) || 1;
   let offset = (page - 1) * limit;
 
+  status = status !== "Tất cả" ? status : "";
+  province = province !== "Tất cả" ? province : "";
+  district = district !== "Tất cả" ? district : "";
+
   let params = new URLSearchParams();
   if (id) params.append("id", id);
-  if (status && status !== "Tất cả") params.append("status", status);
-  if (province) params.append("tinh", province);
-  if (district) params.append("district", district); //
-  params.append("orderBy", orderBy);
+  if (status) params.append("status", status);
+  if (province) params.append("city", province);
+  if (district) params.append("district", district);
+  params.append("orderByColumn", orderBy);
   params.append("orderType", orderType);
   params.append("limit", limit);
   params.append("offset", offset);
-
   let url = `api/orders/filter_order.php?${params.toString()}`;
   console.log("Request URL:", url);
 
@@ -66,13 +59,9 @@ export async function filterOrder(pageIsSelected = 1) {
       throw new Error("HTTP status: " + response.status);
     }
 
-    let data = await response.json();
+    let data = await response.text();
     console.log("Dữ liệu nhận được:", data);
-
-    if (data.pageCount !== undefined) {
-      await paginationOrder(data.pageCount); //
-    }
-
+    // await paginationOrder(data.pageCount); // nếu có
     return data.orderList;
   } catch (error) {
     console.error("Lỗi khi fetch dữ liệu:", error);
@@ -83,11 +72,11 @@ export async function filterOrder(pageIsSelected = 1) {
 export function filterOrderData() {
   const filterButton = document.querySelector("#filter-button-order");
 
-  if (filterButton) {
-    filterButton.addEventListener("click", async (e) => {
-      e.preventDefault();
-      curentpage = 1;
-      await renderOrderTable(1);
-    });
-  }
+  // if (filterButton) {
+  //   filterButton.addEventListener("click", async (e) => {
+  //     e.preventDefault();
+  //     curentpage = 1;
+  //     await renderOrderTable(1);
+  //   });
+  // }
 }

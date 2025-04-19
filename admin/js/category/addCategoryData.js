@@ -1,5 +1,7 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
-
+import { toast } from "../../../public/js/toast.js";
+import { showNotification } from "../dialogMessage.js";
+import { renderCategoryTable } from "./renderCategoryTable.js";
 // Hàm thiết lập sự kiện Thêm một thể loại cho bảng
 export function addCategoryData() {
   // Biến chứa đối tượng là nút "Thêm"
@@ -81,40 +83,59 @@ export function addCategoryData() {
         const categoryStatus = document.getElementById("add-category-status").value;
 
           console.log(categoryName, categoryStatus);
-        if(categoryName === ''){
-          alert("Hãy nhập tên đầy đủ");
-        }else{
-  
-          try {
-            const response = await fetch("api/categories/create.php", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-              },
-              body: new URLSearchParams({
-                categoryName: categoryName,
-                categoryStatus: categoryStatus,
-              }),
-            });
-    
-            const result = await response.json();
-            console.log("Server Response:", result);
-    
-            if (result.success) {
-              alert("thêm thể loại thành công!");
-            } else {
-              alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
-            }
-          } catch (error) {
-            console.error("Lỗi fetch API:", error);
-            alert("Không thể kết nối đến server!");
+          let checkName = true;
+          if(categoryName === ''){
+            // alert("Hãy nhập tên đầy đủ");
+            toast({title :"Cảnh báo", message :`Vui lòng nhập tên thể loại.`, type : "warning" , duration : 3000});
+            checkName = false;
           }
-          addDialog.remove();
-          addButton.classList.remove("active");
+          let checkStatus = true;
+          if(categoryStatus === ''){
+            // alert("Hãy nhập tên đầy đủ");
+            toast({title :"Cảnh báo", message :`Vui lòng chọn trạng thái.`, type : "warning" , duration : 3000});
+            checkStatus = false;
+          }
+          if(checkName && checkStatus){
+          let yes = await showNotification("Bạn có đồng ý thêm thể loại này không?");
+            if(yes){
 
-        }
+              try {
+                const response = await fetch("api/categories/create.php", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                  },
+                  body: new URLSearchParams({
+                    categoryName: categoryName,
+                    categoryStatus: categoryStatus,
+                  }),
+                });
+        
+                const result = await response.json();
+                console.log("Server Response:", result);
+        
+                if (result.success) {
+                  // alert("thêm thể loại thành công!");
+              toast({title :"Thành công", message :`Thêm thể loại thành công.`, type : "success" , duration : 3000});
 
-        console.log(categoryName, categoryStatus);
+                } else {
+                  // alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+                 toast({title :"Cảnh báo", message :`${result.message}`, type : "warning" , duration : 3000});
+                  
+                }
+              } catch (error) {
+                console.error("Lỗi fetch API:", error);
+                // alert("Không thể kết nối đến server!");
+                toast({title :"Lỗi", message :`Lỗi fetch API:${error}`, type : "error" , duration : 3000});
+              }
+              addDialog.remove();
+              addButton.classList.remove("active");
+              renderCategoryTable();
+    
+            }
+    
+            // console.log(categoryName, categoryStatus);
+            }
 
       });
 

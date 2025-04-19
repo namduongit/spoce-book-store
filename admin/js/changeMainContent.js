@@ -17,7 +17,7 @@ import { updateCategoryTable } from "./category/updateCategoryTable.js";
 import { updateCoverTable } from "./cover/updateCoverTable.js";
 import { updatePublisherTable } from "./publisher/updatePublisherTable.js";
 import { fetchData } from "../../public/js/book/getDataBook.js";
-
+import { updateAddressSelect } from "../../../api/address/updateAddressSelect.js";
 // import { renderPrivilegeTable } from "./privilege/renderPrivilegeTable.js";
 import { updatePrivilegeTable } from "./privilege/updatePrivilegeTable.js";
 
@@ -227,12 +227,10 @@ const mainContentMap = {
         <span><i class="fa-solid fa-calendar"></i>&nbsp;&nbsp;Ngày tạo đơn</span>
       </div>
       <div class="main__city-slt main__select slt-form-1">
-        <input required="" type="text" id="city-slt-order" />
-        <span><i class="fa-solid fa-city"></i>&nbsp;&nbsp;Chọn Tỉnh / Thành phố</span>
-        <ul>
-          <li>Hà Nội</li>
-          <li>Thành phố Hồ Chí Minh</li>
-        </ul>
+        <label>Tỉnh / thành</label>
+                            <select name="city" id="city">
+                                <option value="default" selected>Chọn tỉnh / thành</option>
+                            </select>
       </div>
       <div class="main__district-slt main__select slt-form-1">
         <input required="" type="text" id="district-slt-order" />
@@ -367,9 +365,10 @@ const mainContentMap = {
         <input required="" type="text" id="privilege-slt-account" />
         <span><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Chọn Nhóm quyền</span>
         <ul>
+        <li>Tất cả</li>
           <li>Quản lý</li>
-          <li>Nhân viên thủ kho</li>
-          <li>Nhân viên bán hàng</li>
+          <li>Nhân viên</li>
+          <li>Quản kho</li>
           <li>Khách hàng</li> 
         </ul>
       </div>
@@ -377,8 +376,10 @@ const mainContentMap = {
         <input required="" type="text" id="status-slt-account" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
-          <li>Hoạt động</li>
-          <li>Tạm dừng</li>
+          <li>Tất cả</li>
+          <li>ACTIVE</li>
+          <li>DISABLED</li>
+          <li>LOCKED</li>
         </ul>
       </div>
       <button class="main__filter-btn" id="filter-button-account">
@@ -406,7 +407,7 @@ const mainContentMap = {
         </tbody>
       </table>
     </div>
-    <div class="main__pagination">
+    <div class="main__pagination" id="main__pagination_account">
       <button class="main-pagination__button previous">
         <i class="icon fa-solid fa-chevron-left"></i>
       </button>
@@ -433,8 +434,9 @@ const mainContentMap = {
         <input required="" type="text" id="type-slt-discount" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Loại khuyến mãi</span>
         <ul>
+          <li>Tất cả</li>
           <li>Phần trăm</li>
-          <li>Tiền</li>
+          <li>Tiền mặt</li>
         </ul>
       </div>
       <div class="main__find-inp inp-text-form-1 date">
@@ -447,6 +449,7 @@ const mainContentMap = {
         <input required="" type="text" id="status-slt-discount" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
+          <li>Tất cả</li>
           <li>Hoạt động</li>
           <li>Tạm dừng</li>
         </ul>
@@ -477,7 +480,7 @@ const mainContentMap = {
         </tbody>
       </table>
     </div>
-    <div class="main__pagination">
+    <div class="main__pagination" id="main__pagination_discount">
       <button class="main-pagination__button previous">
         <i class="icon fa-solid fa-chevron-left"></i>
       </button>
@@ -1069,7 +1072,10 @@ const mainContentMap = {
   </button>
 </div>
 `,
+<<<<<<< HEAD
 
+=======
+>>>>>>> efa680fa0510574d9f72a880a77478eb73ba81c4
 };
 
 // Biến dùng để chuyển nội dung chính tương ứng với từng trang
@@ -1163,11 +1169,9 @@ window.addEventListener("load", function () {
   updateProfitDashboardTable();
 });
 
-
-
 // dùng để hiển thị vào input để chọn để tìm kiếm
 async function showCategory() {
-  let listCategory = await fetchData(`api/categories/get.php`);; // Chờ dữ liệu từ API
+  let listCategory = await fetchData(`api/categories/get.php`); // Chờ dữ liệu từ API
   console.log("Dữ liệu nhận được từ API:", listCategory);
 
   if (!Array.isArray(listCategory)) {
@@ -1175,6 +1179,7 @@ async function showCategory() {
     return;
   }
 
+<<<<<<< HEAD
   const ulElement = document.querySelector('.main__category-slt ul');
   let li = document.createElement('li');
   listCategory.forEach(category => {
@@ -1182,7 +1187,13 @@ async function showCategory() {
     li.textContent = category.name;
     ulElement.appendChild(li);
 
+=======
+  const ulElement = document.querySelector(".main__category-slt ul");
+  let li = document.createElement("li");
+  listCategory.forEach((category) => {
+    let li = document.createElement("li");
+    li.textContent = category.name;
+    ulElement.appendChild(li);
+>>>>>>> efa680fa0510574d9f72a880a77478eb73ba81c4
   });
 }
-
-

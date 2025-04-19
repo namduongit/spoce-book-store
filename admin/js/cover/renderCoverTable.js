@@ -6,8 +6,8 @@ import { filterCover } from "./filterCoverData.js";
 let data = [];
 
 // Hàm cập nhật lại dữ liệu cho bảng Thể loại
-export async function renderCoverTable(pageIsSelected = 1) {
-  data = await filterCover(pageIsSelected);
+export async function renderCoverTable() {
+  data = await filterCover();
   // Biến chứa đối tượng bảng Thể loại
   const bodyInCoverTable = document.querySelector(
     ".main__data > .main__table.cover > tbody"
@@ -32,39 +32,52 @@ export async function renderCoverTable(pageIsSelected = 1) {
           </tr>
       `;
   }
-  // Cập nhật lại giao diện
+  if(data.length == 0){
+    html =  `
+          <tr>
+              <td></td>
+              <td>Danh sách trống</td>             
+              <td></td>
+          </tr>
+      `;
   bodyInCoverTable.innerHTML = html;
 
-  // Gán sự kiện cho các nút sau khi thay đổi giao diện
-  const idColumnInTable = document.querySelectorAll(
-    ".main__data > .main__table.cover > tbody > tr > td:first-of-type"
-  );
-  const listButtonInTable = document.querySelectorAll(
-    ".main__data > .main__table.cover > tbody > tr > td:last-of-type"
-  );
-  listButtonInTable.forEach((buttons, row) => {
-    // Các nút cần gán sự kiện trên mỗi dòng
-    const updateButton = buttons.children[0];
-    const lockButton = buttons.children[1];
-    // Id của đối tượng đã được chọn để thao tác
-    const idCoverSelected = idColumnInTable.item(row).textContent;
+  }else{
 
-    // Gán sự kiện hiện dialog sửa thể loại
-    updateButton.addEventListener("click", (e) => {
-      // Loại bỏ giá trị mặc định
-      e.preventDefault();
-
-      // Gọi hàm sự kiện
-      updateCoverData(idCoverSelected);
+    // Cập nhật lại giao diện
+    bodyInCoverTable.innerHTML = html;
+  
+    // Gán sự kiện cho các nút sau khi thay đổi giao diện
+    const idColumnInTable = document.querySelectorAll(
+      ".main__data > .main__table.cover > tbody > tr > td:first-of-type"
+    );
+    const listButtonInTable = document.querySelectorAll(
+      ".main__data > .main__table.cover > tbody > tr > td:last-of-type"
+    );
+    listButtonInTable.forEach((buttons, row) => {
+      // Các nút cần gán sự kiện trên mỗi dòng
+      const updateButton = buttons.children[0];
+      const lockButton = buttons.children[1];
+      // Id của đối tượng đã được chọn để thao tác
+      const idCoverSelected = idColumnInTable.item(row).textContent;
+  
+      // Gán sự kiện hiện dialog sửa thể loại
+      updateButton.addEventListener("click", (e) => {
+        // Loại bỏ giá trị mặc định
+        e.preventDefault();
+  
+        // Gọi hàm sự kiện
+        updateCoverData(idCoverSelected);
+      });
+  
+      // Gán sự kiện hiện dialog khoá / mở khoá thể loại
+      lockButton.addEventListener("click", (e) => {
+        // Loại bỏ giá trị mặc định
+        e.preventDefault();
+  
+        // Gọi hàm sự kiện
+        lockCoverData(idCoverSelected);
+      });
     });
-
-    // Gán sự kiện hiện dialog khoá / mở khoá thể loại
-    lockButton.addEventListener("click", (e) => {
-      // Loại bỏ giá trị mặc định
-      e.preventDefault();
-
-      // Gọi hàm sự kiện
-      lockCoverData(idCoverSelected);
-    });
-  });
+  }
 }

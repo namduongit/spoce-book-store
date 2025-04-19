@@ -49,7 +49,7 @@ export async function renderOrderTable(pageIsSelected = 1) {
   try {
     // Lấy dữ liệu từ API
     const orders = await filterOrder(pageIsSelected);
-    console.log(orders.list); // Kiểm tra kết quả trả về từ API
+    console.log(orders); // Kiểm tra kết quả trả về từ API
     // Biến chứa đối tượng bảng Đơn hàng
     const bodyInOrderTable = document.querySelector(
       ".main__data > .main__table.order > tbody"

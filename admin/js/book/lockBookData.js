@@ -1,4 +1,7 @@
 import { fetchData } from "../../../public/js/book/getDataBook.js";
+import { toast } from "../../../public/js/toast.js";
+import { showNotification } from "../dialogMessage.js";
+import { renderBookTable } from "./renderBookTable.js";
 
 export async function lockBookData(idBookSelected) {
   const res = await fetchData(`api/books/get.php?bookID=${idBookSelected}`);
@@ -38,41 +41,59 @@ export async function lockBookData(idBookSelected) {
   //  Gửi POST khi đồng ý
   document.querySelector(".yes").addEventListener("click", async (e) => {
     e.preventDefault();
+    let yes = await showNotification("Bạn có đồng ý thay đổi trạng thái không.");
+    if(yes){
+      const idInput = document.getElementById("idBookInput").value;
+      const statusInput = document.getElementById("statusBookInput").value;
+  
+      const formData = new FormData();
+      formData.append("idInput", idInput);
+      formData.append("statusInput", statusInput);
+  
+      try {
+        const response = await fetch("api/books/delete.php", {
+          method: "POST",
+          body: formData
+        });
+  
+        const result = await response.json();
+  
+        if (result.success) {
+          // alert("Cập nhật trạng thái thành công!");
+        toast({title :"Thành công", message :`Lưu chỉnh sửa thành công`, type : "success" , duration : 3000});
 
-    const idInput = document.getElementById("idBookInput").value;
-    const statusInput = document.getElementById("statusBookInput").value;
+        } else {
+          // alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+        toast({title :"Cảnh báo", message :`${result.message}`, type : "warning" , duration : 3000});
 
-    const formData = new FormData();
-    formData.append("idInput", idInput);
-    formData.append("statusInput", statusInput);
+        }
+      } catch (error) {
+        console.error("Lỗi fetch API:", error);
+        // alert("Không thể kết nối đến server!");
+      toast({title :"Lỗi", message :`Lỗi fetch API:${error}`, type : "error" , duration : 3000});
 
-    try {
-      const response = await fetch("api/books/delete.php", {
-        method: "POST",
-        body: formData
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        alert("Cập nhật trạng thái thành công!");
-      } else {
-        alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
       }
-    } catch (error) {
-      console.error("Lỗi fetch API:", error);
-      alert("Không thể kết nối đến server!");
+  
+      lockDialog.remove();
+      renderBookTable();
+    }
+  });
+
+  document.querySelector(".no").addEventListener("click", async (e) => {
+    e.preventDefault();
+    let yes = await showNotification("Bạn có đồng ý thoát không ?");
+    if(yes){
+      lockDialog.remove();
+      lockDialog.classList.remove("active");
+    }
+  });
+
+  document.getElementById("close-book-button").addEventListener("click", async () => {
+    let yes = await showNotification("Bạn có đồng ý thoát không ?");
+    if(yes){
+      lockDialog.remove();
+      lockDialog.classList.remove("active");
     }
 
-    lockDialog.remove();
-  });
-
-  document.querySelector(".no").addEventListener("click", (e) => {
-    e.preventDefault();
-    lockDialog.remove();
-  });
-
-  document.getElementById("close-book-button").addEventListener("click", () => {
-    lockDialog.remove();
   });
 }

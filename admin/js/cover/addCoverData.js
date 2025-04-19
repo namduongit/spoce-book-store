@@ -1,5 +1,7 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
-
+import { toast } from "../../../public/js/toast.js";
+import { showNotification } from "../dialogMessage.js";
+import { renderCoverTable } from "./renderCoverTable.js";
 // Hàm thiết lập sự kiện Thêm một loại bìa cho bảng
 export function addCoverData() {
   // Biến chứa đối tượng là nút "Thêm"
@@ -80,36 +82,56 @@ export function addCoverData() {
         const coverName = document.getElementById("add-cover-name").value;
         const coverStatus = document.getElementById("add-cover-status").value;
           console.log(coverName, coverStatus);
-        if(coverName === ''||coverStatus === '' ){
-          alert("Hãy nhập tên đầy đủ");
-        }else{
-  
-          try {
-            const response = await fetch("api/covers/create.php", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-              },
-              body: new URLSearchParams({
-                coverName: coverName,
-                coverStatus: coverStatus,
-              }),
-            });
-    
-            const result = await response.json();
-            console.log("Server Response:", result);
-    
-            if (result.success) {
-              alert("thêm bìa sách thành công!");
-            } else {
-              alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
-            }
-          } catch (error) {
-            console.error("Lỗi fetch API:", error);
-            alert("Không thể kết nối đến server!");
-          }
-          addDialog.remove();
+        let checkName = true;
+        if(coverName === '' ){
+          // alert("Hãy nhập tên đầy đủ");
+          toast({title :"Cảnh báo", message :`Vui lòng nhập tên loại Bia.`, type : "warning" , duration : 3000});
+          checkName = false;
         }
+        let checkStatus = true;
+        if(coverStatus == ''){
+          toast({title :"Cảnh báo", message :`Vui lòng chọn trạng thái.`, type : "warning" , duration : 3000});
+          checkStatus = false;
+        }
+        if(checkName && checkStatus){
+          let yes = await showNotification("Bạn có đồng ý thêm loại bìa này không?");
+          if(yes){
+            try {
+              const response = await fetch("api/covers/create.php", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({
+                  coverName: coverName,
+                  coverStatus: coverStatus,
+                }),
+              });
+      
+              const result = await response.json();
+              console.log("Server Response:", result);
+      
+              if (result.success) {
+                // alert("thêm bìa sách thành công!");
+                toast({title :"Thành công", message :`Thêm Loại bìa thành công.`, type : "success" , duration : 3000});
+    
+              } else {
+                // alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+                toast({title :"Cảnh báo", message :`${result.message}`, type : "warning" , duration : 3000});
+    
+              }
+            } catch (error) {
+              console.error("Lỗi fetch API:", error);
+              // alert("Không thể kết nối đến server!");
+              toast({title :"Lỗi", message :`Lỗi fetch API:${error}`, type : "error" , duration : 3000});
+    
+            }
+            addDialog.remove();
+            renderCoverTable();
+          }
+        }
+        
+  
       });
 
     // Gán sự kiện cho nút "Đóng" dialog

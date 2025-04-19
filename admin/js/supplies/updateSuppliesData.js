@@ -1,6 +1,8 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 import { fetchData } from "../../../public/js/book/getDataBook.js";
-
+import { toast } from "../../../public/js/toast.js";
+import { showNotification } from "../dialogMessage.js";
+import { renderSuppliesTable } from "./renderSuppliesTable.js";
 
 // Hàm thiết lập sự kiện Sửa một nhà cung cấp cho bảng
 export async function updateSuppliesData(idSuppliesSelected) {
@@ -22,6 +24,7 @@ export async function updateSuppliesData(idSuppliesSelected) {
   updateDialog.style.width = "772px";
   // - Ghi nội dung dialog
   updateDialog.innerHTML = `
+          <div id="toast"></div>--
             <h1 class="dialog__title">Sửa nhà cung cấp</h1>
             <button id="close-supplies-button" class="dialog__close">
                 <i class="fa-solid fa-xmark"></i>
@@ -89,65 +92,108 @@ export async function updateSuppliesData(idSuppliesSelected) {
   });
 
   // Gán sự kiện cho nút "Sửa" dialog
-  document
-    .getElementById("update-supplies-button")
-    .addEventListener("click", async (e) => {
-      e.preventDefault();
-      // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-      const supplierId = document.getElementById("update-supplies-id").value.trim();
-      const suppliername = document.getElementById("update-supplies-name").value.trim();
-      const supplierphone = document.getElementById("update-supplies-phone").value.trim();
-      const supplieremail = document.getElementById("update-supplies-email").value.trim();
-      const supplieraddress = document.getElementById("update-supplies-address").value.trim();
-      const supplierStatus = document.getElementById("update-supplies-status").value.trim();
-     
-
-
-      console.log(supplierId, suppliername, supplierphone, supplieremail, supplieraddress, supplierStatus);
-      if(suppliername === '' || suppliername == '' || supplierphone == '' || supplieremail == '' || supplieraddress == ''|| supplierStatus == '' ){
-        alert("Hãy nhập đầy đủ thông tin");
-      }else{
-
-        try {
-          const response = await fetch("api/supplies/update.php", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: new URLSearchParams({
-              supplierId: supplierId,
-              supplierName: suppliername,
-              supplierPhone: supplierphone,
-              supplierEmail: supplieremail,
-              supplierAddress: supplieraddress,
-              supplierStatus: supplierStatus,
-            }),
-          });
+  document.getElementById("update-supplies-button").addEventListener("click", async (e) => {
+    e.preventDefault();
   
-          const result = await response.json();
-          console.log("Server Response:", result);
+    // Lấy dữ liệu từ form
+    const supplierId = document.getElementById("update-supplies-id").value.trim();
+    const supplierName = document.getElementById("update-supplies-name").value.trim();
+    const supplierPhone = document.getElementById("update-supplies-phone").value.trim();
+    const supplierEmail = document.getElementById("update-supplies-email").value.trim();
+    const supplierAddress = document.getElementById("update-supplies-address").value.trim();
+    const supplierStatus = document.getElementById("update-supplies-status").value.trim();
   
-          if (result.success) {
-            alert("Cập nhật nhà cung cấp thành công!");
-          } else {
-            alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
-          }
-        } catch (error) {
-          console.error("Lỗi fetch API:", error);
-          alert("Không thể kết nối đến server!");
+    // Kiểm tra đầu vào
+    if (!supplierName) {
+      toast({title :"Cảnh báo", message :`Vui lòng nhập tên nhà cung cấp.`, type : "warning" , duration : 3000});
+      
+      return;
+    }
+  
+    if (!supplierPhone) {
+      toast({title :"Cảnh báo", message :`Vui lòng nhập số điện thoại.`, type : "warning" , duration : 3000});
+
+      return;
+    } else if (!/^\d+$/.test(supplierPhone)) {
+      toast({title :"Cảnh báo", message :`Số điện thoại chỉ được chứa chữ số.`, type : "warning" , duration : 3000});
+      return;
+    } else if (supplierPhone.length < 9 || supplierPhone.length > 12) {
+      toast({title :"Cảnh báo", message :`Số điện thoại không hợp lệ (phải từ 9 đến 12 chữ số).`, type : "warning" , duration : 3000});
+      return;
+    }
+    if (!supplierEmail) {
+      toast({title :"Cảnh báo", message :`Vui lòng nhập Email.`, type : "warning" , duration : 3000});
+      return;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(supplierEmail)) {
+      toast({title :"Cảnh báo", message :`Email không hợp lệ.`, type : "warning" , duration : 3000});
+      return;
+    }
+  
+    if (!supplierAddress) {
+      toast({title :"Cảnh báo", message :`Vui lòng nhập địa chỉ.`, type : "warning" , duration : 3000});
+      return;
+    }
+  
+    if (!supplierStatus) {
+      toast({title :"Cảnh báo", message :`Vui lòng chọn trạng thái.`, type : "warning" , duration : 3000});
+      return;
+    }
+    let yes = await showNotification("Bạn có đồng ý lưu thêm nhà cung cấp này không?");
+    if(yes){
+
+      // Nếu mọi thứ hợp lệ, tiếp tục gửi request
+      try {
+        const response = await fetch("api/supplies/update.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            supplierId: supplierId,
+            supplierName: supplierName,
+            supplierPhone: supplierPhone,
+            supplierEmail: supplierEmail,
+            supplierAddress: supplierAddress,
+            supplierStatus: supplierStatus,
+          }),
+        });
+    
+        const result = await response.json();
+        console.log("Server Response:", result);
+    
+        if (result.success) {
+          // alert("Cập nhật nhà cung cấp thành công!");
+          toast({title :"Thành công", message :`Thêm nhà cung cấp thành công`, type : "success" , duration : 3000});
+        } else {
+          // alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
+          toast({title :"Cảnh báo", message :`${result.message}`, type : "warning" , duration : 3000});
+
         }
-        updateDialog.remove();
-      }
-    });
+      } catch (error) {
+        console.error("Lỗi fetch API:", error);
+        // alert("Không thể kết nối đến server!");
+        toast({title :"Lỗi", message :`Lỗi fetch API:${error}`, type : "error" , duration : 3000});
 
+      }
+    
+      updateDialog.remove();
+      updateButton.classList.remove("active");
+      renderSuppliesTable();
+    }
+  
+  });
+  
   // Gán sự kiện cho nút "Đóng" dialog
   document
     .getElementById("close-supplies-button")
-    .addEventListener("click", () => {
-      // Xoá dialog
-      updateDialog.remove();
+    .addEventListener("click", async () => {
+      let confirm = await showNotification("Bạn có đồng ý thoát không?");
+      if(confirm){
+        // Xoá dialog
+        updateDialog.remove();
 
-      // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
-      updateButton.classList.remove("active");
+        // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
+        updateButton.classList.remove("active");
+      }
     });
 }
