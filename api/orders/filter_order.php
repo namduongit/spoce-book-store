@@ -17,8 +17,10 @@ function returnJSONOrder($filters, $pageCount)
             "maKhuyenMai" => $filter['maKhuyenMai'] ?? '',
             "tongTien" => $filter['tongTienThu'] ?? 0,
             "maNhanVien" => $filter['maNhanVien'] ?? '',
-            "maDiaChi" => $filter['maDiaChi'] ?? '',
-            "ngayCapNhat" => $filter['ngayCapNhat'] ?? ''
+            "diaChiGiao" => $filter['diaChiGiao'] ?? '',
+            "ngayCapNhat" => $filter['ngayCapNhat'] ?? '',
+            "maPhuongThuc" => $filter['maPhuongThuc'] ?? '',
+            "trangThaiThanhToan" => $filter['trangThaiThanhToan'] ?? '',
         ];
     }, (is_array($filters) && isset($filters[0])) ? $filters : [$filters]);
 
@@ -45,27 +47,30 @@ $db = new app_libs_DBConnection();
 
 $columns = [
     'donHang.maDonHang',
-    'nguoiDung.maNguoiDung',
-    'nguoiDung.hoVaTen',
-    'nguoiDung.soDT',
-    'nguoiDung.email',
     'donHang.trangThai',
     'donHang.ngayTaoDon',
-    'phieuGiamGia.tenPGG',
+    'khachHang.maNguoiDung',
+    'phieuGiamGia.maPGG',
+    'nhanVien.maNguoiDung',
     'donHang.tongTienThu',
-    'donHang.maNhanVien',
-    'diaChiNguoiDung.tinhThanh',
-    'diaChiNguoiDung.quanHuyen',
-    'diaChiNguoiDung.phuongXa',
-    'diaChiNguoiDung.soNha',
+    'donHang.diaChiGiao',
+    'donHang.trangThaiThanhToan',
+    'phuongThucThanhToan.maPhuongThuc',
     'donHang.ngayCapNhat'
 ];
 
-$tables = ['donHang', 'nguoiDung', 'phieuGiamGia', 'diaChiNguoiDung'];
+$tables = [
+    'donHang',
+    'nguoiDung AS khachHang',
+    'nguoiDung AS nhanVien',
+    'phieuGiamGia',
+    'phuongThucThanhToan'
+];
 $joins = [
-    'donHang.maKhachHang = nguoiDung.maNguoiDung',
+    'donHang.maKhachHang = khachHang.maNguoiDung',
+    'donHang.maNhanVien = nhanVien.maNguoiDung',
     'donHang.maKhuyenMai = phieuGiamGia.maPGG',
-    'donHang.maDiaChi = diaChiNguoiDung.maDiaChi'
+    'donHang.maPhuongThuc = phuongThucThanhToan.maPhuongThuc'
 ];
 $conditions = [];
 $params = [];
@@ -108,5 +113,8 @@ if (empty($result)) {
 }
 
 
-
+echo "<pre>";
+print_r($result);
+echo "</pre>";
+exit();
 returnJSONOrder($result, $pageCount);
