@@ -1,3 +1,5 @@
+import { printTicket } from "../printTicket.js";
+
 export function printInputTicketDashboardTicket() {
   const printButton = document.getElementById(
     "print-button-input_ticket_dashboard"
@@ -124,24 +126,6 @@ export function printInputTicketDashboardTicket() {
       });
 
     // Gán sự kiện in phiếu khi nhấn nút
-    document
-      .getElementById("print-ticket-button")
-      .addEventListener("click", () => {
-        // Định dạng chuỗi ngày
-        const formattedDate = `${day}${
-          month <= 9 ? "0" + month : month
-        }${year}`;
-
-        // In phiếu
-        const element = document.getElementById("content-print");
-        const options = {
-          margin: 5,
-          filename: `${formattedDate}_TKPhieuNhap.pdf`,
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: { scale: 2 }, // Tăng độ phân giải
-          jsPDF: { unit: "mm", format: "a3", orientation: "portrait" },
-        };
-        html2pdf().set(options).from(element).save();
-      });
+    printTicket("print-ticket-button", "content-print", "TKPhieuNhap");
   });
 }

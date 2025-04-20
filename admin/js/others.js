@@ -121,11 +121,19 @@ export function defaultDateSelected(id) {
 }
 
 // Hàm chuyển từ định dạng yyyy-mm-dd sang dd-mm-yyyy
-function formatDate(date) {
+function formatDate1(date) {
   let day = date.getDate().toString().padStart(2, "0");
   let month = (date.getMonth() + 1).toString().padStart(2, "0");
   let year = date.getFullYear().toString().padStart(4, "0");
   return `${day}/${month}/${year}`;
+}
+
+// Hàm chuyển từ định dạng dd-mm-yyyy sang yyyy-mm-dd
+export function formatDate2(date) {
+  let day = date.slice(0, 2);
+  let month = date.slice(3, 5);
+  let year = date.slice(6);
+  return `${year}-${month}-${day}`;
 }
 
 // Hàm lấy ra danh sách các tuần
@@ -156,8 +164,8 @@ export function getWeeksInMonth(year, month) {
     // Thêm vào danh sách
     weeks.push({
       week: weeks.length + 1,
-      start: formatDate(startOfWeek),
-      end: formatDate(endOfWeek),
+      start: formatDate1(startOfWeek),
+      end: formatDate1(endOfWeek),
     });
 
     // Chuyển sang ngày đầu tiên của tuần tiếp theo
@@ -180,8 +188,8 @@ export function getMonthsInYear(year) {
     // Thêm vào danh sách
     months.push({
       month: month + 1,
-      start: formatDate(start),
-      end: formatDate(end),
+      start: formatDate1(start),
+      end: formatDate1(end),
     });
   }
 

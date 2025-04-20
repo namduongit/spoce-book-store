@@ -3,31 +3,10 @@ import { updateInputTicketData } from "./updateInputTicketData.js";
 import { printInputTicket } from "./printInputTicket.js";
 import { filterInputTicket } from "./filterInputTicket.js";
 
-// Dữ liệu tạm thời (sau phải xây dựng hàm truy xuất dữ liệu từ csdl)
-let data = [];
-
-export async function getAllInputTicketData(){
-  let url = `api/input_ticket/get.php`;
-  console.log("Request URL:", url);
-    try {
-      let response = await fetch(url);
-      if (!response.ok) {
-        throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
-      }
-      let data = await response.json();
-      console.log("Dữ liệu nhận được:", data);
-      return data;
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu:", error);
-      alert("Lỗi khi lấy dữ liệu: " + error.message);
-      return [];
-    }
-}
-
-
 // Hàm cập nhật lại dữ liệu cho bảng phiếu nhập hàng
-export async function renderInputTicketTable() {
-  data = await filterInputTicket();
+export async function renderInputTicketTable(currentPage) {
+  //
+  const data = (await filterInputTicket(currentPage)) || [];
   // Biến chứa đối tượng bảng phiếu nhập hàng
   const bodyInputTicketTable = document.querySelector(
     ".main__data > .main__table.input_ticket > tbody"
@@ -39,38 +18,39 @@ export async function renderInputTicketTable() {
     html += `
         <tr>
             <td>${data[i].id}</td>
-            <td>${data[i].suplierName}</td>
-            <td>${data[i].dateCreate}</td>
-            <td>${vietnamMoneyFormat(data[i].inputTotal)}</td>
+            <td>${data[i].supplierId}</td>
+            <td>${data[i].createAt}</td>
+            <td>${vietnamMoneyFormat(data[i].total)}</td>
             <td><span ${
-              data[i].status === "DA_NHAP"
+              data[i].status === "Đã thanh toán"
+                ? 'class="orange"'
+                : data[i].status === "Đã xác nhận"
                 ? 'class="green"'
-                : data[i].status === "CHO_XAC_NHAN"
-                ? 'class="gray"'
-                : 'class="red"'
+                : data[i].status === "Đã huỷ phiếu"
+                ? 'class="red"'
+                : 'class="gray"'
             }>${data[i].status}</span></td>
             <td>
-                <i id="update-button-input_ticket" class="fa-solid fa-pen-to-square"></i>
-                <i id="print-button-input_ticket" class="fa-solid fa-print"></i>
+                <i class="fa-solid fa-pen-to-square"></i>
+                <i class="fa-solid fa-print"></i>
             </td>
         </tr>
     `;
   }
 
-  if(data.length == 0){
-    html =  `
+  if (data.length == 0) {
+    html = `
           <tr>
               <td></td>
               <td>Danh sách trống</td>             
               <td></td>
           </tr>
       `;
-      bodyInputTicketTable.innerHTML = html;
-  }else{
-
+    bodyInputTicketTable.innerHTML = html;
+  } else {
     // Cập nhật lại giao diện
     bodyInputTicketTable.innerHTML = html;
-  
+
     // Gán sự kiện cho các nút sau khi thay đổi giao diện
     const idColumnInTable = document.querySelectorAll(
       ".main__data > .main__table.input_ticket > tbody > tr > td:first-of-type"
@@ -84,28 +64,25 @@ export async function renderInputTicketTable() {
       const printButton = buttons.children[1];
       // Id của đối tượng đã được chọn để thao tác
       const idInputTicketSelected = idColumnInTable.item(row).textContent;
-  
+
       // Gán sự kiện hiện dialog sửa phiếu nhập hàng
       updateButton.addEventListener("click", (e) => {
         // Loại bỏ giá trị mặc định
         e.preventDefault();
-  
+
         // Gọi hàm sự kiện
         console.log(idInputTicketSelected);
         updateInputTicketData(idInputTicketSelected);
       });
-  
+
       // Gán sự kiện hiện dialog in phiếu nhập hàng
       printButton.addEventListener("click", (e) => {
         // Loại bỏ giá trị mặc định
         e.preventDefault();
-  
+
         // Gọi hàm sự kiện
         printInputTicket(idInputTicketSelected);
       });
     });
-   
   }
-
-  
 }

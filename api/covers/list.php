@@ -25,19 +25,18 @@ function returnJSONCover($filters, $pageCount) {
     exit();
 }
 
-$find = isset($_GET['find']) ? trim($_GET['find']) : '';
-$orderByColumn = isset($_GET['orderByColumn']) ? trim($_GET['orderByColumn']) : 'maLoaiBia';
-$orderType = isset($_GET['orderType']) ? trim($_GET['orderType']) : 'ASC';
-$status = isset($_GET['status']) ? trim($_GET['status']) : '';
-$limit = isset($_GET['limit']) ? trim($_GET['limit']) : PHP_INT_MAX;
-$offset = isset($_GET['offset']) ? trim($_GET['offset']) : '0';
-
 $columns = ['*'];
 $tables = ['loaiBia'];
 $joins = [];
 $conditions = [];
 $params = [];
+$limit = isset($_GET['limit']) ? trim($_GET['limit']) : PHP_INT_MAX;
+$offset = isset($_GET['offset']) ? trim($_GET['offset']) : '0';
 
+$find = isset($_GET['find']) ? trim($_GET['find']) : '';
+$orderByColumn = isset($_GET['orderByColumn']) ? trim($_GET['orderByColumn']) : 'maLoaiBia';
+$orderType = isset($_GET['orderType']) ? trim($_GET['orderType']) : 'ASC';
+$status = isset($_GET['status']) ? trim($_GET['status']) : '';
 
 if (!empty($find)) {
     $conditions[] = "(loaiBia.maLoaiBia = :id or loaiBia.tenLoaiBia like :name)";

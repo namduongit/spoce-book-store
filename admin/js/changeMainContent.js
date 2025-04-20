@@ -10,7 +10,7 @@ import { updateOrderTable } from "./order/updateOrderTable.js";
 import { updateAccountTable } from "./account/updateAccountTable.js";
 import { updateDiscountTable } from "./discount/updateDiscountTable.js";
 import { updateSupplierTable } from "./supplier/updateSupplierTable.js";
-import { updateInputTicketTable } from "./input_ticket/updateInputTicketTable.js";
+import { updateInputTicketTable } from "./input_tickets/updateInputTicketTable.js";
 import { updateBookTable } from "./book/updateBookTable.js";
 import { updateAuthorTable } from "./author/updateAuthorTable.js";
 import { updateCategoryTable } from "./category/updateCategoryTable.js";
@@ -541,34 +541,31 @@ const mainContentMap = {
         <input required="" type="text" id="sort-slt-input_ticket" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
         <ul>
-          <li>ID giảm dần</li>
           <li>ID tăng dần</li>
+          <li>ID giảm dần</li>
           <li>Nhà cung cấp tăng dần</li>
           <li>Nhà cung cấp giảm dần</li>
-          <li>Ngày lập phiếu tăng dần</li>
-          <li>Ngày lập phiếu giảm dần</li>
+          <li>Ngày tạo phiếu tăng dần</li>
+          <li>Ngày tạo phiếu giảm dần</li>
           <li>Tổng tiền nhập tăng dần</li>
           <li>Tổng tiền nhập giảm dần</li>
         </ul>
       </div>
       <div class="main__find-inp inp-text-form-1 date">
-        <input required="" type="date" id="find-date-create-before-inp-input_ticket" />
+        <input required="" type="date" id="date-start-inp-input_ticket" />
         <i class="fa-solid fa-minus"></i>
-        <input required="" type="date" id="find-date-create-after-inp-input_ticket" />
+        <input required="" type="date" id="date-end-inp-input_ticket" />
         <span><i class="fa-solid fa-calendar"></i>&nbsp;&nbsp;Ngày lập phiếu</span>
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-input_ticket" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
         <ul>
+          <li>Đã thanh toán</li>
           <li>Đã xác nhận</li>
           <li>Đang chờ xác nhận</li>
           <li>Đã huỷ phiếu</li>
         </ul>
-      </div>
-      <div class="main__find-inp inp-text-form-1">
-        <input required="" type="text" id="show-inp-input_ticket" />
-        <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>
       <button class="main__filter-btn" id="filter-button-input_ticket">
         <i class="fa-solid fa-filter"></i>
@@ -595,15 +592,7 @@ const mainContentMap = {
         </tbody>
       </table>
     </div>
-    <div class="main__pagination" id="main__pagination_input-ticket">
-      <button class="main-pagination__button previous">
-        <i class="icon fa-solid fa-chevron-left"></i>
-      </button>
-      
-      <button class="main-pagination__button next">
-        <i class="icon fa-solid fa-chevron-right"></i>
-      </button>
-    </div>
+    <div class="main__pagination" id="admin-pagination-input_ticket"></div>
   `,
   book: `
     <h1 class="main__title">Sách</h1>

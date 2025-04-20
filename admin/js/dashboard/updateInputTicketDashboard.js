@@ -1,12 +1,13 @@
 import {
   vietnamMoneyFormat,
   numberToVietnamWords,
+  formatDate2,
   getWeeksInMonth,
   getMonthsInYear,
 } from "../others.js";
+import { fetchData } from "../../../public/js/book/getDataBook.js";
 
 // Biến chứa các đối tượng bảng Thống kê doanh thu
-let data = [];
 let headInInputTicketDashboardTable = null;
 let bodyInInputTicketDashboardTable = null;
 let footInInputTicketDashboardTable = null;
@@ -60,7 +61,7 @@ export function updateInputTicketDashboardTable() {
 }
 
 // Hàm cập nhật lại dữ liệu cho bảng Thống kê doanh thu
-export function renderInputTicketDashboardTable(
+export async function renderInputTicketDashboardTable(
   timelineValueSelected,
   timelineDetailValueSelected
 ) {
@@ -108,53 +109,75 @@ export function renderInputTicketDashboardTable(
     ".main__data > .main__table.input_ticket_dashboard > tfoot > tr > td:nth-of-type(4)"
   );
 
-  // Cập nhật lại dữ liệu cho bảng (Cần xử lý truy vấn dữ liệu chỗ này để tính toán)
-  data = [];
+  // Cập nhật lại dữ liệu cho bảng 
   let timeline =
     month !== 0 ? getWeeksInMonth(year, month) : getMonthsInYear(year);
-  timeline.forEach((time) => {
-    data.push({
+  const promises = timeline.map(async (time) => {
+    const inputTicket = await fetchData(
+      `api/input_tickets/list.php?createStart=${formatDate2(
+        time.start
+      )}&createEnd=${formatDate2(time.end)}`
+    );
+
+    let bookNumbersValue = 0,
+      totalPriceValue = 0;
+    if (inputTicket.data) {
+      console.log(inputTicket);
+      for (let i = 0; i < inputTicket.data.length; i++) {
+        totalPriceValue += inputTicket.data[i].total;
+
+        const inputTicketDetails = await fetchData(
+          `api/input_ticket_details/list.php?inputTicketId=${inputTicket.data[i].id}`
+        );
+        if (inputTicketDetails.data) {
+          console.log(inputTicketDetails);
+          for (let i = 0; i < inputTicketDetails.data.length; i++) {
+            bookNumbersValue += inputTicketDetails.data[i].quantity;
+          }
+        }
+      }
+    }
+
+    return {
       time: time.week ? time.week : time.month,
       start: time.start,
       end: time.end,
-      orderNumbers: 0, // Vì chưa xủ lý truy vấn nên mặc định là 0
-      bookNumbers: 0, // Vì chưa xủ lý truy vấn nên mặc định là 0
-    });
+      ticketNumbers: inputTicket.data ? inputTicket.data.length : 0,
+      bookNumbers: bookNumbersValue,
+      totalPrice: totalPriceValue,
+    };
   });
+  const data = await Promise.all(promises);
 
   // Biến tính tổng cho các ô dữ liệu cuối
-  let orderNumbers = 0,
-    bookNumbers = 0,
-    totalInputTicket = 0;
+  let ticketNumbersFinal = 0,
+    bookNumbersFinal = 0,
+    totalPriceFinal = 0;
   // Duyệt qua từng dữ liệu rồi gán (cập nhật lại các ô dữ liệu giữa bảng)
   bodyInInputTicketDashboardTable.innerHTML = data
     .map((row) => {
-      orderNumbers += row.orderNumbers;
-      bookNumbers += row.bookNumbers;
-      totalInputTicket += row.orderNumbers * row.bookNumbers;
+      ticketNumbersFinal += row.ticketNumbers;
+      bookNumbersFinal += row.bookNumbers;
+      totalPriceFinal += row.totalPrice;
 
       return `
                 <tr>
                     <td>${row.time}</td>
                     <td>${row.start}</td>
                     <td>${row.end}</td>
-                    <td>${row.orderNumbers}</td>
+                    <td>${row.ticketNumbers}</td>
                     <td>${row.bookNumbers}</td>
-                    <td>${vietnamMoneyFormat(
-                      row.orderNumbers * row.bookNumbers
-                    )}</td>
+                    <td>${vietnamMoneyFormat(row.totalPrice)}</td>
                 </tr>
             `;
     })
     .join("");
 
   // Tính lại dữ liệu các dòng cuối
-  footColumn2InInputTicketDashboardTable.textContent =
-    vietnamMoneyFormat(orderNumbers);
-  footColumn3InInputTicketDashboardTable.textContent =
-    vietnamMoneyFormat(bookNumbers);
+  footColumn2InInputTicketDashboardTable.textContent = ticketNumbersFinal;
+  footColumn3InInputTicketDashboardTable.textContent = bookNumbersFinal;
   footColumn4InInputTicketDashboardTable.textContent =
-    vietnamMoneyFormat(totalInputTicket);
+    vietnamMoneyFormat(totalPriceFinal);
   totalTextInInputTicketDashboardTable.textContent =
-    numberToVietnamWords(totalInputTicket);
+    numberToVietnamWords(totalPriceFinal);
 }

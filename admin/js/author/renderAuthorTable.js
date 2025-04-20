@@ -2,12 +2,9 @@ import { updateAuthorData } from "./updateAuthorData.js";
 import { lockAuthorData } from "./lockAuthorData.js";
 import { filterAuthor } from "./filterAuthorData.js";
 
-// Dữ liệu tạm thời (sau phải xây dựng hàm truy xuất dữ liệu từ csdl)
-let data = [];
-
 // Hàm cập nhật lại dữ liệu cho bảng Tác giả
 export async function renderAuthorTable(currentPage) {
-  data = await filterAuthor(currentPage);
+  const data = await filterAuthor(currentPage) || [];
   // Biến chứa đối tượng bảng Tác giả
   const bodyInAuthorTable = document.querySelector(
     ".main__data > .main__table.author > tbody"

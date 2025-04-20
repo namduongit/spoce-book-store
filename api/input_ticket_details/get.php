@@ -6,15 +6,15 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
-function returnJSONInputTicketDetail($InputTicketDetails, $InputTicketId) {
-    if (!$InputTicketDetails) {
+function returnJSONInputTicketDetail($inputTicketDetails, $inputTicketId) {
+    if (!$inputTicketDetails) {
     $allDetail = [];
        
     }else{
         $allDetail = [];
         $book_model = new app_models_Sach();
         // $cover_model = new app_models_LoaiBia();
-        foreach ($InputTicketDetails as $InputTicket) {
+        foreach ($inputTicketDetails as $InputTicket) {
             $book = $book_model->getBookById( $InputTicket['maSach']);
             // $cover = $cover_model->getCoverById( $book['maLoaiBia']);
             
@@ -22,9 +22,7 @@ function returnJSONInputTicketDetail($InputTicketDetails, $InputTicketId) {
                 // "id" => $InputTicket['maPhieuNhap'],
                 "bookId" => $InputTicket['maSach'],
                 "bookName" => $book['tenSach'],
-                "sellingPrice" => $book['giaBan'],
                 "inputPrice" => $InputTicket['giaNhap'],
-                "basePrice" => $book['giaTran'],
                 "quantity" => $InputTicket['soLuong'],
                 // "total" => $InputTicket['tienNhap'],                
             ];
@@ -35,7 +33,7 @@ function returnJSONInputTicketDetail($InputTicketDetails, $InputTicketId) {
 
     
     $inputTicket_model = new app_models_PhieuNhap();
-    $inputTicket = $inputTicket_model->getInputTicketById( $InputTicketId);
+    $inputTicket = $inputTicket_model->getInputTicketById( $inputTicketId);
     $supplier_model = new app_models_NhaCungCap();
     $supplier = $supplier_model->getSupplierById( $inputTicket['maNCC']);
     $response = [];
@@ -58,7 +56,7 @@ $inputTicket_model = new app_models_ChitietPhieuNhap();
 
 $inputTicketId = isset($_GET['inputTicketId']) ? $_GET['inputTicketId'] : '1';
 
-$result = $inputTicket_model->getInputTicketDetailByInputTicketId($inputTicketId);
+$result = $inputTicket_model->getInputTicketDetailByinputTicketId($inputTicketId);
 // $authors = $author_model->getAllAuthors();
 
 returnJSONInputTicketDetail($result, $inputTicketId);

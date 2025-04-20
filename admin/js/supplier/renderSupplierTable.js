@@ -3,10 +3,10 @@ import { detailSupplierData } from "./detailSupplierData.js";
 import { lockSupplierData } from "./lockSupplierData.js";
 import { filterSupplier } from "./filterSupplierData.js";
 
-// Hàm cập nhật lại dữ liệu cho bảng Người dùng
+// Hàm cập nhật lại dữ liệu cho bảng Nhà cung cấp
 export async function renderSupplierTable(currentPage) {
-  const data = await filterSupplier(currentPage);
-  // Biến chứa đối tượng bảng Người dùng
+  const data = (await filterSupplier(currentPage)) || [];
+  // Biến chứa đối tượng bảng Nhà cung cấp
   const bodyInSupplierTable = document.querySelector(
     ".main__data > .main__table.supplier > tbody"
   );
@@ -62,7 +62,7 @@ export async function renderSupplierTable(currentPage) {
       // Id của đối tượng đã được chọn để thao tác
       const idSupplierSelected = idColumnInTable.item(row).textContent;
 
-      // Gán sự kiện hiện dialog chi tiết người dùng
+      // Gán sự kiện hiện dialog chi tiết Nhà cung cấp
       detailButton.addEventListener("click", (e) => {
         // Loại bỏ giá trị mặc định
         e.preventDefault();
@@ -71,7 +71,7 @@ export async function renderSupplierTable(currentPage) {
         detailSupplierData(idSupplierSelected);
       });
 
-      // Gán sự kiện hiện dialog sửa người dùng
+      // Gán sự kiện hiện dialog sửa Nhà cung cấp
       updateButton.addEventListener("click", (e) => {
         // Loại bỏ giá trị mặc định
         e.preventDefault();
@@ -80,7 +80,7 @@ export async function renderSupplierTable(currentPage) {
         updateSupplierData(idSupplierSelected);
       });
 
-      // Gán sự kiện hiện dialog khoá / mở khoá người dùng
+      // Gán sự kiện hiện dialog khoá / mở khoá Nhà cung cấp
       lockButton.addEventListener("click", (e) => {
         // Loại bỏ giá trị mặc định
         e.preventDefault();

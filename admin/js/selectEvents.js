@@ -85,7 +85,7 @@ export function updateTimelineSelects() {
   );
 
   // Tuỳ chỉnh thời gian khi "lọc theo năm" hoặc "lọc theo tháng"
-  const yearStart = 2020,
+  const yearStart = 2010,
     yearEnd = 2030;
   let timelineDetailYearFormat = ``;
   for (let year = yearStart; year <= yearEnd; year++) {

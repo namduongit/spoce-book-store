@@ -1,9 +1,11 @@
 import {
   vietnamMoneyFormat,
   numberToVietnamWords,
+  formatDate2,
   getWeeksInMonth,
   getMonthsInYear,
 } from "../others.js";
+import { fetchData } from "../../../public/js/book/getDataBook.js";
 
 // Biến chứa các đối tượng bảng Thống kê lợi nhuận
 let data = [];
@@ -60,7 +62,7 @@ export function updateProfitDashboardTable() {
 }
 
 // Hàm cập nhật lại dữ liệu cho bảng Thống kê lợi nhuận
-export function renderProfitDashboardTable(
+export async function renderProfitDashboardTable(
   timelineValueSelected,
   timelineDetailValueSelected
 ) {
@@ -83,8 +85,8 @@ export function renderProfitDashboardTable(
         <th width="10%">${month !== 0 ? "Tuần" : "Tháng"}</th>
         <th width="12%">Từ ngày</th>
         <th width="12%">Đến ngày</th>
-        <th width="20%">Chi (VNĐ)</th>
         <th width="20%">Doanh thu (VNĐ)</th>
+        <th width="20%">Chi (VNĐ)</th>
         <th width="26%">Lợi nhuận (VNĐ)</th>
     </tr>
   `;
@@ -108,48 +110,74 @@ export function renderProfitDashboardTable(
     ".main__data > .main__table.profit_dashboard > tfoot > tr > td:nth-of-type(4)"
   );
 
-  // Cập nhật lại dữ liệu cho bảng (Cần xử lý truy vấn dữ liệu chỗ này để tính toán)
-  data = [];
+  // Cập nhật lại dữ liệu cho bảng
   let timeline =
     month !== 0 ? getWeeksInMonth(year, month) : getMonthsInYear(year);
-  timeline.forEach((time) => {
-    data.push({
+  const promises = timeline.map(async (time) => {
+    const inputTicket = await fetchData(
+      `api/input_tickets/list.php?createStart=${formatDate2(
+        time.start
+      )}&createEnd=${formatDate2(time.end)}`
+    );
+    const order = await fetchData(
+      `api/orders/list.php?createStart=${formatDate2(
+        time.start
+      )}&createEnd=${formatDate2(time.end)}`
+    );
+
+    let revenueValue = 0,
+      costValue = 0;
+    if (order.data) {
+      console.log(order);
+      for (let i = 0; i < order.data.length; i++) {
+        revenueValue += order.data[i].total;
+      }
+    }
+    if (inputTicket.data) {
+      console.log(inputTicket);
+      for (let i = 0; i < inputTicket.data.length; i++) {
+        costValue -= inputTicket.data[i].total;
+      }
+    }
+
+    return {
       time: time.week ? time.week : time.month,
       start: time.start,
       end: time.end,
-      cost: 0, // Vì chưa xủ lý truy vấn nên mặc định là 0
-      revenue: 0, // Vì chưa xủ lý truy vấn nên mặc định là 0
-    });
+      revenue: revenueValue,
+      cost: costValue,
+    };
   });
+  const data = await Promise.all(promises);
 
   // Biến tính tổng cho các ô dữ liệu cuối
-  let totalCost = 0,
-    totalRevenue = 0,
+  let totalRevenue = 0,
+    totalCost = 0,
     totalProfit = 0;
   // Duyệt qua từng dữ liệu rồi gán (cập nhật lại các ô dữ liệu giữa bảng)
   bodyInProfitDashboardTable.innerHTML = data
     .map((row) => {
-      totalCost += row.cost;
       totalRevenue += row.revenue;
-      totalProfit += row.revenue - row.cost;
+      totalCost += row.cost;
+      totalProfit += row.revenue + row.cost;
 
       return `
             <tr>
                 <td>${row.time}</td>
                 <td>${row.start}</td>
                 <td>${row.end}</td>
-                <td>${vietnamMoneyFormat(row.cost)}</td>
                 <td>${vietnamMoneyFormat(row.revenue)}</td>
-                <td>${vietnamMoneyFormat(row.revenue - row.cost)}</td>
+                <td>${vietnamMoneyFormat(row.cost)}</td>
+                <td>${vietnamMoneyFormat(row.revenue + row.cost)}</td>
             </tr>
         `;
     })
     .join("");
 
   // Tính lại dữ liệu các dòng cuối
-  footColumn2InProfitDashboardTable.textContent = vietnamMoneyFormat(totalCost);
-  footColumn3InProfitDashboardTable.textContent =
+  footColumn2InProfitDashboardTable.textContent =
     vietnamMoneyFormat(totalRevenue);
+  footColumn3InProfitDashboardTable.textContent = vietnamMoneyFormat(totalCost);
   footColumn4InProfitDashboardTable.textContent =
     vietnamMoneyFormat(totalProfit);
   totalTextInProfitDashboardTable.textContent =

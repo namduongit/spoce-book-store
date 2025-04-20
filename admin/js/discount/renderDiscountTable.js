@@ -6,7 +6,7 @@ import { filterDiscount } from "./filterDiscountData.js";
 // Hàm cập nhật lại dữ liệu cho bảng khuyến mãi
 export async function renderDiscountTable(currentPage) {
   // Lấy dữ liệu từ API
-  const data = await filterDiscount(currentPage);
+  const data = (await filterDiscount(currentPage)) || [];
   // Biến chứa đối tượng bảng khuyến mãi
   const bodyInDiscountTable = document.querySelector(
     ".main__data > .main__table.discount > tbody"

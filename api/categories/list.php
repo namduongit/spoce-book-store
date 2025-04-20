@@ -25,19 +25,18 @@ function returnJSONCategory($filters, $pageCount) {
         exit();
 }
 
-$find = isset($_GET['find']) ? trim($_GET['find']) : '';
-$orderByColumn = isset($_GET['orderByColumn']) ? trim($_GET['orderByColumn']) : 'maTheLoai';
-$orderType = isset($_GET['orderType']) ? trim($_GET['orderType']) : 'ASC';
-$status = isset($_GET['status']) ? trim($_GET['status']) : '';
-$limit = isset($_GET['limit']) ? trim($_GET['limit']) : PHP_INT_MAX;
-$offset = isset($_GET['offset']) ? trim($_GET['offset']) : '0';
-
 $columns = ['*'];
 $tables = ['theLoai'];
 $joins = [];
 $conditions = [];
 $params = [];
+$limit = isset($_GET['limit']) ? trim($_GET['limit']) : PHP_INT_MAX;
+$offset = isset($_GET['offset']) ? trim($_GET['offset']) : '0';
 
+$find = isset($_GET['find']) ? trim($_GET['find']) : '';
+$orderByColumn = isset($_GET['orderByColumn']) ? trim($_GET['orderByColumn']) : 'maTheLoai';
+$orderType = isset($_GET['orderType']) ? trim($_GET['orderType']) : 'ASC';
+$status = isset($_GET['status']) ? trim($_GET['status']) : '';
 if (!empty($find)) {
     $conditions[] = "(theLoai.maTheLoai = :id or theLoai.tenTheLoai like :name)";
     $params[':id'] = $find;

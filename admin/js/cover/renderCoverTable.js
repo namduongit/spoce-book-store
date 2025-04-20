@@ -2,12 +2,9 @@ import { updateCoverData } from "./updateCoverData.js";
 import { lockCoverData } from "./lockCoverData.js";
 import { filterCover } from "./filterCoverData.js";
 
-// Dữ liệu tạm thời (sau phải xây dựng hàm truy xuất dữ liệu từ csdl)
-let data = [];
-
 // Hàm cập nhật lại dữ liệu cho bảng Thể loại
 export async function renderCoverTable(currentPage) {
-  data = await filterCover(currentPage);
+  const data = (await filterCover(currentPage)) || [];
   // Biến chứa đối tượng bảng Thể loại
   const bodyInCoverTable = document.querySelector(
     ".main__data > .main__table.cover > tbody"
