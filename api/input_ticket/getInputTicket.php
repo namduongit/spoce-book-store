@@ -78,8 +78,6 @@ $limit = isset($_GET['limit']) ? trim($_GET['limit']) : '10';
 $offset = isset($_GET['offset']) ? trim($_GET['offset']) : '0';
 
 
-
-
 $db = new app_libs_DBConnection();
 $result = $db->joinTables( $columns, $tables, $joins, $conditions, $orderByColumn, $orderType, $limit, $offset, $params);
 $result2 = $db->joinTables( $columns, $tables, $joins, $conditions, $orderByColumn, $orderType, null, null, $params);

@@ -6,5 +6,5 @@ import { renderCoverTable } from "./renderCoverTable.js";
 export function updateCoverTable() {
   filterCoverData();
   addCoverData();
-  renderCoverTable();
+  renderCoverTable(1);
 }

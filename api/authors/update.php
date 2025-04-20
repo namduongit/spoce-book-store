@@ -8,31 +8,28 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Nhận dữ liệu từ POST
-$authorStatus = isset($_POST['authorStatus']) ? $_POST['authorStatus'] : '';
-$authorId = isset($_POST['authorId']) ? $_POST['authorId'] : '1';
-$authorName = isset($_POST['authorName']) ? $_POST['authorName'] : '';
-$updateDateTime = date("Y-m-d H:i:s");
+$id = isset($_POST['id']) ? $_POST['id'] : '1';
+$name = isset($_POST['name']) ? $_POST['name'] : '';
+$updateAt = date("Y-m-d H:i:s");
 
-// Kiểm tra authorId có hợp lệ không
-if (empty($authorId)) {
+// Kiểm tra id có hợp lệ không
+if (empty($id)) {
     echo json_encode(["success" => false, "message" => "Thiếu ID tác giả."]);
     exit;
 }
 
-// Chuyển trạng thái tác giả
-$authorStatus = ($authorStatus === 'ACTIVE') ? 'ACTIVE' : 'INACTIVE';
-
 try {
    
-    $author_model = new app_models_TacGia();
+    $model = new app_models_TacGia();
 
     // Cập nhật trạng thái tác giả trong database
-    $result = $author_model->updateAuthor(
-        $authorId,
-        [  "tenTacGia" => $authorName,
-            "trangThai" => $authorStatus,
-            "ngayCapNhat" => $updateDateTime
-        ]);
+    $result = $model->updateAuthor(
+        $id,
+        [  
+            "tenTacGia" => $name,
+            "ngayCapNhat" => $updateAt
+        ]
+    );
 
     // Kiểm tra số dòng bị ảnh hưởng
     if ($result && $result->rowCount() > 0) {

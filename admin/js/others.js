@@ -106,6 +106,11 @@ export function clickToShowDatePicker(id) {
 export function defaultDateSelected(id) {
   const date = document.getElementById(id);
 
+  if (!date.value) {
+    date.classList.remove("hasValidDate");
+  } else {
+    date.classList.add("hasValidDate");
+  }
   date.addEventListener("change", (e) => {
     if (!date.value) {
       date.classList.remove("hasValidDate");

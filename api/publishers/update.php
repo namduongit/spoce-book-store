@@ -8,31 +8,26 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Nhận dữ liệu từ POST
-$publisherStatus = isset($_POST['publisherStatus']) ? $_POST['publisherStatus'] : '';
-$publisherId = isset($_POST['publisherId']) ? $_POST['publisherId'] : '1';
-$publisherName = isset($_POST['publisherName']) ? $_POST['publisherName'] : '';
-$updateDateTime = date("Y-m-d H:i:s");
+$id = isset($_POST['id']) ? $_POST['id'] : '1';
+$name = isset($_POST['name']) ? $_POST['name'] : '';
+$updateAt = date("Y-m-d H:i:s");
 
-// Kiểm tra publisherId có hợp lệ không
-if (empty($publisherId)) {
+// Kiểm tra id có hợp lệ không
+if (empty($id)) {
     echo json_encode(["success" => false, "message" => "Thiếu ID nhà xuất bản."]);
     exit;
 }
 
-// Chuyển trạng thái tác giả
-$publisherStatus = ($publisherStatus === 'ACTIVE') ? 'ACTIVE' : 'INACTIVE';
-
 try {
-   
-    $publisher_model = new app_models_NhaXuatBan();
+    $model = new app_models_NhaXuatBan();
 
     // Cập nhật trạng thái tác giả trong database
-    $result = $publisher_model->updatePublisher(
-        $publisherId,
-        [  "tenNXB" => $publisherName,
-            "trangThai" => $publisherStatus,
-            "ngayCapNhat" => $updateDateTime
-        ]);
+    $result = $model->updatePublisher(
+        $id,
+        [  "tenNXB" => $name,
+            "ngayCapNhat" => $updateAt
+        ]
+    );
 
     // Kiểm tra số dòng bị ảnh hưởng
     if ($result && $result->rowCount() > 0) {

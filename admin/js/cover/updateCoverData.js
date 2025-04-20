@@ -3,62 +3,57 @@ import { fetchData } from "../../../public/js/book/getDataBook.js";
 import { toast } from "../../../public/js/toast.js";
 import { showNotification } from "../dialogMessage.js";
 import { renderCoverTable } from "./renderCoverTable.js";
+
 // Hàm thiết lập sự kiện Sửa một loại bìa cho bảng
 export async function updateCoverData(idCoverSelected) {
-  // Phải truy vấn từ CSDL thông qua idCoverSelected để lấy được dữ liệu của đối tượng hiện tại
-  // ...
-    let cover = await fetchData(`api/covers/get.php?coverId=${idCoverSelected}`);
+  // Gọi api để lấy được thông tin loại bìa được nhấn
+  let cover = await fetchData(`api/covers/detail.php?id=${idCoverSelected}`);
 
-  // Biến chứa đối tượng là nút "Sửa"
-  const updateButton = document.getElementById("update-button-cover");
+  // // Biến chứa đối tượng là nút "Sửa"
+  // const updateButton = document.getElementById("update-button-cover");
 
-  // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
-  updateButton.classList.add("active");
+  // // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
+  // updateButton.classList.add("active");
 
   // Tạo một dialog để sửa một loại bìa
   const updateDialog = document.createElement("dialog");
   // - Định dạng dialog
   updateDialog.classList.add("dialog");
   updateDialog.classList.add("cover");
-  updateDialog.style.width = "398px";
+  updateDialog.style.width = "30%";
   // - Ghi nội dung dialog
   updateDialog.innerHTML = `
-          <h1 class="dialog__title">Sửa loại bìa</h1>
-          <button id="close-cover-button" class="dialog__close">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-          <div class="dialog__line"></div>
-          <form method="post" class="dialog__form">
-            <div class="dialog__row">
-              <div class="dialog__form-group full">
-                <label>Mã loại bìa</label>
-                <input type="text" id="update-cover-id"  value="${cover[0].id}" readonly />
-              </div>
-            </div>
-            <div class="dialog__row">
-              <div class="dialog__form-group full">
-                <label>Tên loại bìa</label>
-                <input type="text" id="update-cover-name" placeholder="Nhập Tên loại bìa"  value="${cover[0].name}" autofocus/>
-              </div>
-            </div>
-            <div class="dialog__row">
-              <div class="dialog__form-group full">
-                <label>Trạng thái</label>
-                <select id="update-cover-status" disabled>
-                  <option value="" selected>Chọn Trạng thái</option>
-                  <option selected value="${cover[0].status}">${cover[0].status}</option>
-                  <option value="ACTIVE">ACTIVE</option>
-                  <option value="INACTIVE">INACTIVE</option>
-                  <option value="SUSPENDED">SUSPENDED</option>
-                </select>
-              </div>
-            </div>
-            <div class="dialog__buttons">
-              <button id="update-cover-button" class="update">Sửa</button>
-            </div>
-          </form >
-        `;
-
+      <h1 class="dialog__title">Sửa loại bìa</h1>
+      <button id="close-cover-button" class="dialog__close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="dialog__line"></div>
+      <form class="dialog__form" autocomplete="off">
+        <div class="dialog__row">
+          <div class="dialog__form-group full">
+            <label>Mã loại bìa</label>
+            <input type="text" id="update-cover-id" class="text-center" value="${cover.data.id}" readonly />
+          </div>
+        </div>
+        <div class="dialog__row">
+          <div class="dialog__form-group full">
+            <label>Tên loại bìa<span>*<span></label>
+            <input type="text" id="update-cover-name" placeholder="Nhập Tên loại bìa"  value="${cover.data.name}" autofocus/>
+          </div>
+        </div>
+        <div class="dialog__row">
+          <div class="dialog__form-group full">
+            <label>Trạng thái</label>
+            <select id="update-cover-status" disabled>
+              <option selected value="${cover.data.status}">${cover.data.status}</option>
+            </select>
+          </div>
+        </div>
+        <div class="dialog__buttons">
+          <button id="update-cover-button" class="update">Sửa</button>
+        </div>
+      </form >
+    `;
 
   // Thêm vào body
   document.body.appendChild(updateDialog);
@@ -79,19 +74,26 @@ export async function updateCoverData(idCoverSelected) {
   document
     .getElementById("update-cover-button")
     .addEventListener("click", async (e) => {
+      // Ngăn ...
       e.preventDefault();
-      // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-      const coverId = document.getElementById("update-cover-id").value.trim();
-      const coverName = document.getElementById("update-cover-name").value.trim();
-      const coverStatus = document.getElementById("update-cover-status").value.trim();
-      console.log(coverId, coverName, coverStatus);
-      if(coverName === ''){
-        // alert("Hãy nhập tên đầy đủ");
-        toast({title :"Lỗi", message :`Hãy nhập tên loại bìa`, type : "warning" , duration : 3000});
-      }else{
-        let yes = await showNotification("Bạn có đồng ý lưu chỉnh sửa không.");
-        if(yes){
 
+      // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
+      const id = document.getElementById("update-cover-id").value;
+      const name = document.getElementById("update-cover-name").value
+        ? document.getElementById("update-cover-name").value
+        : null;
+
+      //
+      if (!name) {
+        toast({
+          title: "Lỗi",
+          message: `Hãy nhập tên loại bìa`,
+          type: "warning",
+          duration: 3000,
+        });
+      } else {
+        let yes = await showNotification("Bạn có đồng ý lưu chỉnh sửa không.");
+        if (yes) {
           try {
             const response = await fetch("api/covers/update.php", {
               method: "POST",
@@ -99,33 +101,38 @@ export async function updateCoverData(idCoverSelected) {
                 "Content-Type": "application/x-www-form-urlencoded",
               },
               body: new URLSearchParams({
-                coverId: coverId,
-                coverName: coverName,
-                coverStatus: coverStatus,
+                id: id,
+                name: name,
               }),
             });
-    
+
             const result = await response.json();
-            console.log("Server Response:", result);
-    
             if (result.success) {
-              // alert("Cập nhật loại bìa thành công!");
-              toast({title :"Thành công", message :`Lưu chỉnh sửa thành công`, type : "success" , duration : 3000});
+              toast({
+                title: "Thành công",
+                message: `Cập nhật thành công`,
+                type: "success",
+                duration: 3000,
+              });
             } else {
-              // alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
-              toast({title :"Cảnh báo", message :`${result.message}`, type : "warning" , duration : 3000});
-  
+              toast({
+                title: "Cảnh báo",
+                message: `${result.message}`,
+                type: "warning",
+                duration: 3000,
+              });
             }
           } catch (error) {
-            console.error("Lỗi fetch API:", error);
-            // alert("Không thể kết nối đến server!");
-            toast({title :"Lỗi", message :`Lỗi fetch API:${error}`, type : "error" , duration : 3000});
-  
+            toast({
+              title: "Lỗi",
+              message: `Lỗi fetch API:${error}`,
+              type: "error",
+              duration: 3000,
+            });
           }
           updateDialog.remove();
-          renderCoverTable();
+          renderCoverTable(1);
         }
-
       }
     });
 
@@ -137,6 +144,6 @@ export async function updateCoverData(idCoverSelected) {
       updateDialog.remove();
 
       // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
-      updateButton.classList.remove("active");
+      // updateButton.classList.remove("active");
     });
 }

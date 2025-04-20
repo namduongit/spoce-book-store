@@ -6,5 +6,5 @@ import { renderAuthorTable } from "./renderAuthorTable.js";
 export function updateAuthorTable() {
   filterAuthorData();
   addAuthorData();
-  renderAuthorTable();
+  renderAuthorTable(1);
 }

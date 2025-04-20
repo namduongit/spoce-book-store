@@ -336,6 +336,9 @@ body {
   text-align: center;
   padding: 4px 6px;
   line-height: var(--table-height);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /* .main__table.order td {
   height: calc(var(--table-height) * 2);
