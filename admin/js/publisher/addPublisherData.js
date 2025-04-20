@@ -20,43 +20,42 @@ export function addPublisherData() {
     // - Định dạng dialog
     addDialog.classList.add("dialog");
     addDialog.classList.add("publisher");
-    addDialog.style.width = "398px";
+    addDialog.style.width = "30%";
     // - Ghi nội dung dialog
     addDialog.innerHTML = `
-              <h1 class="dialog__title">Thêm nhà xuất bản</h1>
-              <button id="close-publisher-button" class="dialog__close">
-                <i class="fa-solid fa-xmark"></i>
-              </button>
-              <div class="dialog__line"></div>
-              <form method="post" class="dialog__form">
-                <div class="dialog__row">
-                  <div class="dialog__form-group full">
-                    <label>Mã nhà xuất bản</label>
-                    <input type="text" id="add-publisher-id" readonly />
-                  </div>
-                </div>
-                <div class="dialog__row">
-                  <div class="dialog__form-group full">
-                    <label>Tên nhà xuất bản</label>
-                    <input type="text" id="add-publisher-name" placeholder="Nhập Tên nhà xuất bản" autofocus/>
-                  </div>
-                </div>
-                <div class="dialog__row">
-                  <div class="dialog__form-group full">
-                    <label>Trạng thái</label>
-                    <select id="add-publisher-status">
-                      <option selected value="">Chọn trạng thái</option>
-                      <option  value="ACTIVE">ACTIVE</option>
-                      <option value="INACTIVE">INACTIVE</option>
-                      <option value="SUSPENDED">SUSPENDED</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="dialog__buttons">
-                  <button id="add-publisher-button" class="add">Thêm</button>
-                </div>
-              </form>
-            `;
+      <h1 class="dialog__title">Thêm nhà xuất bản</h1>
+      <button id="close-publisher-button" class="dialog__close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="dialog__line"></div>
+      <form class="dialog__form" autocomplete="off">
+        <div class="dialog__row">
+          <div class="dialog__form-group full">
+            <label>Mã nhà xuất bản<span>*<span></label>
+            <input type="text" id="add-publisher-id" class="text-center" value="Được xác định sau khi xác nhận thêm !" readonly />
+          </div>
+        </div>
+        <div class="dialog__row">
+          <div class="dialog__form-group full">
+            <label>Tên nhà xuất bản<span>*<span></label>
+            <input type="text" id="add-publisher-name" placeholder="Nhập Tên nhà xuất bản" autofocus/>
+          </div>
+        </div>
+        <div class="dialog__row">
+          <div class="dialog__form-group full">
+            <label>Trạng thái<span>*<span></label>
+            <select id="add-publisher-status">
+              <option selected value="">Chọn trạng thái</option>
+              <option value="Hoạt động">Hoạt động</option>
+              <option value="Tạm dừng">Tạm dừng</option>
+            </select>
+          </div>
+        </div>
+        <div class="dialog__buttons">
+          <button id="add-publisher-button" class="add">Thêm</button>
+        </div>
+      </form>
+    `;
 
     // Thêm vào body
     document.body.appendChild(addDialog);
@@ -79,24 +78,39 @@ export function addPublisherData() {
       .addEventListener("click", async (e) => {
         e.preventDefault();
         // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-        const publisherName = document.getElementById("add-publisher-name").value;
-        const publisherStatus = document.getElementById("add-publisher-status").value;
-          console.log(publisherName, publisherStatus);
-          let checkName = true;
-        if(publisherName === ''){
-          // alert("Hãy nhập tên đầy đủ");
-          toast({title :"Cảnh báo", message :`Vui lòng nhập tên nhà xuất bản.`, type : "warning" , duration : 3000});
+        const name = document.getElementById("add-publisher-name").value
+          ? document.getElementById("add-publisher-name").value
+          : null;
+        const status = document.getElementById("add-publisher-status").value
+          ? document.getElementById("add-publisher-status").value
+          : null;
+
+        // Kiểm tra dữ liệu có hợp lệ
+        let checkName = true,
+          checkStatus = true;
+        if (!name) {
+          toast({
+            title: "Cảnh báo",
+            message: `Vui lòng nhập tên nhà xuất bản.`,
+            type: "warning",
+            duration: 3000,
+          });
           checkName = false;
         }
-        let checkStatus = true;
-        if(publisherStatus === ''){
-          // alert("Hãy nhập tên đầy đủ");
-          toast({title :"Cảnh báo", message :`Vui lòng chọn trạng thái.`, type : "warning" , duration : 3000});
+        if (!status) {
+          toast({
+            title: "Cảnh báo",
+            message: `Vui lòng chọn trạng thái.`,
+            type: "warning",
+            duration: 3000,
+          });
           checkStatus = false;
         }
-        if(checkName && checkStatus){
-          let yes = await showNotification("Bạn có đồng ý thêm nhà xuất bản này không?");
-          if(yes){
+        if (checkName && checkStatus) {
+          let yes = await showNotification(
+            "Bạn có đồng ý thêm nhà xuất bản này không?"
+          );
+          if (yes) {
             try {
               const response = await fetch("api/publishers/create.php", {
                 method: "POST",
@@ -104,31 +118,39 @@ export function addPublisherData() {
                   "Content-Type": "application/x-www-form-urlencoded",
                 },
                 body: new URLSearchParams({
-                  publisherName: publisherName,
-                  publisherStatus: publisherStatus,
+                  name: name,
+                  status: status,
                 }),
               });
-      
-              const result = await response.json();
-              console.log("Server Response:", result);
-      
-              if (result.success) {
-                // alert("thêm tác giả thành công!");
-              toast({title :"Thành công", message :`Thêm nhà xuất bản thành công.`, type : "success" , duration : 3000});
 
+              //
+              const result = await response.json();
+              if (result.success) {
+                toast({
+                  title: "Thành công",
+                  message: `Thêm nhà xuất bản thành công.`,
+                  type: "success",
+                  duration: 3000,
+                });
               } else {
-                // alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
-              toast({title :"Cảnh báo", message :`${result.message}`, type : "warning" , duration : 3000});
-                
+                toast({
+                  title: "Cảnh báo",
+                  message: `${result.message}`,
+                  type: "warning",
+                  duration: 3000,
+                });
               }
             } catch (error) {
-              console.error("Lỗi fetch API:", error);
-              // alert("Không thể kết nối đến server!");
-            toast({title :"Lỗi", message :`Lỗi fetch API:${error}`, type : "error" , duration : 3000});
+              toast({
+                title: "Lỗi",
+                message: `Lỗi fetch API:${error}`,
+                type: "error",
+                duration: 3000,
+              });
             }
+            addButton.classList.remove("active");
             addDialog.remove();
-          renderPublisherTable();
-
+            renderPublisherTable(1);
           }
         }
       });

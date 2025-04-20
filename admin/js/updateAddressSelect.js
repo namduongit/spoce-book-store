@@ -1,1410 +1,323 @@
-import { isNotFirstItemSelected } from "./selectEvents.js";
+import { toast } from "../../public/js/toast.js";
 
-// Hàm thay đổi địa chỉ giao hàng mới từ người dùng nhập vào
-export function updateAddressSelect(city, district, ward) {
-  // Biến giữ thông tin các select lần lượt là Tỉnh thành - Quận / Huyện - Phường / Xã
-  const citySelect = document.getElementById("city-select");
-  const districtSelect = document.getElementById("district-select");
-  const wardSelect = document.getElementById("ward-select");
+// Mục mặc định của mỗi danh sách chọn địa chỉ
+const wardDefault = "Chọn Phường / Xã";
+const districtDefault = "Chọn Quận / Huyện";
+const provinceDefault = "Chọn Tỉnh / Thành phố";
 
-  // Gán sự kiện nếu không chọn giá trị ban đầu thì thay đổi định dạng
-  isNotFirstItemSelected(citySelect);
-  isNotFirstItemSelected(districtSelect);
-  isNotFirstItemSelected(wardSelect);
+//
+function updateAddressSelect(
+  province,
+  district,
+  ward,
+  provinceDefault,
+  districtDefault,
+  wardDefault
+) {
+  // Đổi về định dạng mặc định
+  province.innerHTML = `
+        <option value="0" selected>${provinceDefault}</option>
+    `;
+  province.classList.remove("changed");
+  district.innerHTML = `
+        <option value="0" selected>${districtDefault}</option>
+    `;
+  district.classList.remove("changed");
+  ward.innerHTML = `
+        <option value="0" selected>${wardDefault}</option>
+    `;
+  ward.classList.remove("changed");
 
-  // Hàm đặt lại các lựa chọn
-  function resetAllSelect(condition) {
-    if (condition === 1) {
-      citySelect.innerHTML = `<option>Chọn Tỉnh thành</option>`;
-      districtSelect.innerHTML = `<option>Chọn Quận / Huyện</option>`;
-    }
-    if (condition === 2) {
-      districtSelect.innerHTML = `<option>Chọn Quận / Huyện</option>`;
-    }
-    wardSelect.innerHTML = `<option>Chọn Phường / Xã</option>`;
-  }
-
-  // Đặt lại các lựa chọn
-  resetAllSelect(1);
-  // Cập nhật dữ liệu Thành phố
-  let cityItems = "";
-  for (let i = 0; i < locationToSelectArray.length; i++) {
-    const city = locationToSelectArray[i];
-    cityItems += `<option value="${city.id}">${city.name}</option>`;
-  }
-  citySelect.innerHTML = cityItems;
-
-  // Khi người dùng lựa chọn Thành phố
-  citySelect.addEventListener("change", function () {
-    const cityIDSelected = citySelect.value;
-    let districtsFromCitySelected;
-    for (let i = 0; i < locationToSelectArray.length; i++) {
-      if (locationToSelectArray[i].id == cityIDSelected) {
-        districtsFromCitySelected = locationToSelectArray[i].districts;
-        break;
+  // Cập nhật Tỉnh / Thành phố (mặc định)
+  fetch(`https://esgoo.net/api-tinhthanh/1/0.htm`, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Xem chi tiết thất bại!");
       }
+      return response.json();
+    })
+    .then((json) => {
+      for (let i = 0; i < 63; i++) {
+        province.innerHTML += `
+            <option value="${json.data[i].id}">${json.data[i].full_name}</option>
+        `;
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      alert("Xem chi tiết thất bại!");
+    });
+
+  // Gán sự kiện khi thay đổi Tỉnh / Thành phố
+  province.addEventListener("change", (e) => {
+    // Loại bỏ giá trị mặc định
+    e.preventDefault();
+
+    // Thay đổi định dạng nếu không chọn mục mặc định
+    if (e.target.value != 0) {
+      e.target.classList.add("changed");
+    } else {
+      e.target.classList.remove("changed");
     }
 
-    // Đặt lại các lựa chọn
-    resetAllSelect(2);
-    // Cập nhật dữ liệu Quận / Huyện khi đã biết tên Thành phố
-    let districtItems = "";
-    for (let i = 0; i < districtsFromCitySelected.length; i++) {
-      const district = districtsFromCitySelected[i];
-      districtItems += `<option value="${district.id}">${district.name}</option>`;
-    }
-    districtSelect.innerHTML = districtItems;
+    // Lấy ra id của Tỉnh / Thành phố được chọn
+    const provinceIdSelected = e.target.value;
 
-    // Khi người dùng lựa chọn Quận / Huyện
-    districtSelect.addEventListener("change", function () {
-      const districtIDSelected = districtSelect.value;
-      let wardsFromDistrictSelected;
-      for (let i = 0; i < districtsFromCitySelected.length; i++) {
-        if (districtsFromCitySelected[i].id == districtIDSelected) {
-          wardsFromDistrictSelected = districtsFromCitySelected[i].wards;
-          break;
+    // Cập nhật Quận / Huyện tương ứng
+    district.innerHTML = `
+        <option value="0" selected>${districtDefault}</option>
+    `;
+    district.classList.remove("changed");
+    ward.innerHTML = `
+          <option value="0" selected>${wardDefault}</option>
+      `;
+    ward.classList.remove("changed");
+    fetch(`https://esgoo.net/api-tinhthanh/2/${provinceIdSelected}.htm`, {
+      method: "GET",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Xem chi tiết thất bại!");
         }
+        return response.json();
+      })
+      .then((json) => {
+        for (let i = 0; i < json.data.length; i++) {
+          district.innerHTML += `
+            <option value="${json.data[i].id}">${json.data[i].full_name}</option>
+          `;
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Xem chi tiết thất bại!");
+      });
+
+    // Gán sự kiện thay đổi Quận / Huyện
+    district.addEventListener("change", (e) => {
+      // Loại bỏ giá trị mặc định
+      e.preventDefault();
+
+      // Thay đổi định dạng nếu không chọn mục mặc định
+      if (e.target.value != 0) {
+        e.target.classList.add("changed");
+      } else {
+        e.target.classList.remove("changed");
       }
 
-      // Đặt lại các lựa chọn
-      resetAllSelect(0);
-      // Cập nhật dữ liệu Phường / Xã khi đã biết tên Quận / Huyện
-      let wardItems = "";
-      for (let i = 0; i < wardsFromDistrictSelected.length; i++) {
-        const ward = wardsFromDistrictSelected[i];
-        wardItems += `<option value="${ward.id}">${ward.name}</option>`;
-      }
-      wardSelect.innerHTML = wardItems;
+      // Lấy ra id của Quận / Huyện phố được chọn
+      const districtIdSelected = e.target.value;
+
+      // Cập nhật Quận / Huyện tương ứng
+      ward.innerHTML = `
+          <option value="0" selected>${wardDefault}</option>
+      `;
+      ward.classList.remove("changed");
+      fetch(`https://esgoo.net/api-tinhthanh/3/${districtIdSelected}.htm`, {
+        method: "GET",
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Xem chi tiết thất bại!");
+          }
+          return response.json();
+        })
+        .then((json) => {
+          for (let i = 0; i < json.data.length; i++) {
+            ward.innerHTML += `
+        <option value="${json.data[i].id}">${json.data[i].full_name}</option>
+      `;
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          alert("Xem chi tiết thất bại!");
+        });
+
+      // Gán sự kiện khi thay đổi Tỉnh / Thành phố
+      ward.addEventListener("change", (e) => {
+        // Loại bỏ giá trị mặc định
+        e.preventDefault();
+
+        // Thay đổi định dạng nếu không chọn mục mặc định
+        if (e.target.value != 0) {
+          e.target.classList.add("changed");
+        } else {
+          e.target.classList.remove("changed");
+        }
+      });
     });
   });
-
 }
 
-// Mảng chứa thông tin của tỉnh thành, quận huyện, phường xã để nhập địa chỉ cho người dùng
-const locationToSelectArray = [
-  {
-    name: "Chọn Tỉnh thành",
-    id: "",
-    districts: [
-      {
-        name: "Chọn Quận / Huyện",
-        id: "",
-        wards: [
-          {
-            name: "Chọn Phường / Xã",
-            id: "0",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    name: "Thủ đô Hà Nội",
-    id: "hanoi",
-    districts: [
-      {
-        name: "Chọn Quận / Huyện",
-        id: "",
-        wards: [
-          {
-            name: "Chọn Phường / Xã",
-            id: "",
-          },
-        ],
-      },
-      {
-        name: "Quận Cầu Giấy",
-        id: "caugiay",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Dịch Vọng", id: "dichvong" },
-          { name: "Phường Dịch Vọng Hậu", id: "dichvonghau" },
-          { name: "Phường Mai Dịch", id: "maidich" },
-          { name: "Phường Nghĩa Đô", id: "nghiado" },
-          { name: "Phường Nghĩa Tân", id: "nghiatan" },
-          { name: "Phường Quan Hoa", id: "quanhoa" },
-          { name: "Phường Trung Hòa", id: "trunghoa" },
-          { name: "Phường Yên Hòa", id: "yenhoa" },
-        ],
-      },
-      {
-        name: "Quận Thanh Xuân",
-        id: "thanhxuan",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Hạ Đình", id: "hadinh" },
-          { name: "Phường Khương Đình", id: "khuongdinh" },
-          { name: "Phường Khương Mai", id: "khuongmai" },
-          { name: "Phường Láng Hạ", id: "langha" },
-          { name: "Phường Lê Văn Lương", id: "levanluong" },
-          { name: "Phường Nhân Chính", id: "nhanchinh" },
-          { name: "Phường Phương Liệt", id: "phuonglien" },
-          { name: "Phường Quang Trung", id: "quangtrung" },
-          { name: "Phường Thanh Xuân Bắc", id: "thanhxuanbac" },
-          { name: "Phường Thanh Xuân Nam", id: "thanhxuannam" },
-          { name: "Phường Thượng Đình", id: "thuongdinh" },
-          { name: "Phường Tân Mai", id: "tanmai" },
-          { name: "Phường Tân Triều", id: "tantrieu" },
-        ],
-      },
-      {
-        name: "Quận Hoàng Mai",
-        id: "hoangmai",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Đại Kim", id: "daikim" },
-          { name: "Phường Định Công", id: "dinhcong" },
-          { name: "Phường Giáp Bát", id: "giapbat" },
-          { name: "Phường Hoàng Liệt", id: "hoangliet" },
-          { name: "Phường Hoàng Văn Thụ", id: "hoangvanthu" },
-          { name: "Phường Lĩnh Nam", id: "linhnam" },
-          { name: "Phường Mai Động", id: "maidong" },
-          { name: "Phường Tân Mai", id: "tanmai" },
-          { name: "Phường Thanh Trì", id: "thanhtri" },
-          { name: "Phường Thịnh Liệt", id: "thinhlie" },
-          { name: "Phường Trần Phú", id: "tranphu" },
-          { name: "Phường Tương Mai", id: "tuongmai" },
-          { name: "Phường Vĩnh Hưng", id: "vinhhung" },
-          { name: "Phường Yên Sở", id: "yenso" },
-        ],
-      },
-      // {
-      //   name: "Quận Đống Đa",
-      //   id: "dongda",
-      //   wards: [
-      //     { name: "Chọn Phường / Xã", id: "" },
-      //     { name: "Phường Cát Linh", id: "catlinh" },
-      //     { name: "Phường Hàng Bột", id: "hangbot" },
-      //     { name: "Phường Khâm Thiên", id: "khamthien" },
-      //     { name: "Phường Khương Thượng", id: "khuongthuong" },
-      //     { name: "Phường Kim Liên", id: "kimlien" },
-      //     { name: "Phường Láng Hạ", id: "langha" },
-      //     { name: "Phường Láng Thượng", id: "langthuong" },
-      //     { name: "Phường Nam Đồng", id: "namdong" },
-      //     { name: "Phường Ngã Tư Sở", id: "ngatuso" },
-      //     { name: "Phường Ô Chợ Dừa", id: "ochodua" },
-      //     { name: "Phường Phương Liên", id: "phuonglien" },
-      //     { name: "Phường Phương Mai", id: "phuongmai" },
-      //     { name: "Phường Quang Trung", id: "quangtrung" },
-      //     { name: "Phường Thịnh Quang", id: "thinhquang" },
-      //     { name: "Phường Thổ Quan", id: "thoquan" },
-      //     { name: "Phường Trung Liệt", id: "trungliet" },
-      //     { name: "Phường Trung Phụng", id: "trungphung" },
-      //     { name: "Phường Văn Chương", id: "vanchuong" },
-      //     { name: "Phường Văn Miếu", id: "vanmieu" },
-      //   ],
-      // },
-      // {
-      //   name: "Quận Hà Đông",
-      //   id: "hadong",
-      //   wards: [
-      //     { name: "Chọn Phường / Xã", id: "" },
-      //     { name: "Phường Biên Giang", id: "biengiang" },
-      //     { name: "Phường Dương Nội", id: "duongnoi" },
-      //     { name: "Phường Đồng Mai", id: "dongmai" },
-      //     { name: "Phường Hà Cầu", id: "hacau" },
-      //     { name: "Phường Kiến Hưng", id: "kienhung" },
-      //     { name: "Phường La Khê", id: "lakhe" },
-      //     { name: "Phường Mộ Lao", id: "molao" },
-      //     { name: "Phường Nguyễn Trãi", id: "nguyentrai" },
-      //     { name: "Phường Phú La", id: "phula" },
-      //     { name: "Phường Phú Lãm", id: "phulam" },
-      //     { name: "Phường Phú Lương", id: "phuluong" },
-      //     { name: "Phường Quang Trung", id: "quangtrung" },
-      //     { name: "Phường Vạn Phúc", id: "vanphuc" },
-      //     { name: "Phường Yên Nghĩa", id: "yennghia" },
-      //     { name: "Phường Yết Kiêu", id: "yetkieu" },
-      //   ],
-      // },
-      {
-        name: "Quận Hai Bà Trưng",
-        id: "haibatrung",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Bạch Đằng", id: "bachdang" },
-          { name: "Phường Bách Khoa", id: "bachkhoa" },
-          { name: "Phường Cầu Dền", id: "cauden" },
-          { name: "Phường Đồng Nhân", id: "dongnhan" },
-          { name: "Phường Đồng Tâm", id: "dongtam" },
-          { name: "Phường Hai Bà Trưng", id: "haibatrung" },
-          { name: "Phường Lê Đại Hành", id: "ledaiahanh" },
-          { name: "Phường Minh Khai", id: "minhkhai" },
-          { name: "Phường Nguyễn Du", id: "nguyendu" },
-          { name: "Phường Phạm Đình Hổ", id: "phamdinhho" },
-          { name: "Phường Phố Huế", id: "phohue" },
-          { name: "Phường Quỳnh Lôi", id: "quynhloi" },
-          { name: "Phường Quỳnh Mai", id: "quynhmai" },
-          { name: "Phường Thanh Lương", id: "thanhluong" },
-          { name: "Phường Thanh Nhàn", id: "thanhnhan" },
-          { name: "Phường Trương Định", id: "truongdinh" },
-          { name: "Phường Vĩnh Tuy", id: "vinhtuy" },
-        ],
-      },
-      {
-        name: "Quận Ba Đình",
-        id: "badinh",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Cống Vị", id: "congvi" },
-          { name: "Phường Điện Biên", id: "dienbien" },
-          { name: "Phường Đội Cấn", id: "doican" },
-          { name: "Phường Giảng Võ", id: "giangvo" },
-          { name: "Phường Kim Mã", id: "kimma" },
-          { name: "Phường Liễu Giai", id: "lieugiai" },
-          { name: "Phường Ngọc Hà", id: "ngocha" },
-          { name: "Phường Ngọc Khánh", id: "ngockhanh" },
-          { name: "Phường Nguyễn Trung Trực", id: "nguyentrungtruc" },
-          { name: "Phường Phúc Xá", id: "phucxa" },
-          { name: "Phường Quán Thánh", id: "quanthanh" },
-          { name: "Phường Thành Công", id: "thanhcong" },
-          { name: "Phường Trúc Bạch", id: "trucbach" },
-          { name: "Phường Vĩnh Phúc", id: "vinhphuc" },
-        ],
-      },
-      {
-        name: "Quận Hoàn Kiếm",
-        id: "hoankiem",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Chương Dương", id: "chuongduong" },
-          { name: "Phường Cửa Đông", id: "cuadong" },
-          { name: "Phường Cửa Nam", id: "cuanam" },
-          { name: "Phường Đồng Xuân", id: "dongxuan" },
-          { name: "Phường Hàng Bạc", id: "hangbac" },
-          { name: "Phường Hàng Bài", id: "hangbai" },
-          { name: "Phường Hàng Bồ", id: "hangbo" },
-          { name: "Phường Hàng Bông", id: "hangbong" },
-          { name: "Phường Hàng Buồm", id: "hangbuom" },
-          { name: "Phường Hàng Đào", id: "hangdao" },
-          { name: "Phường Hàng Gai", id: "hanggai" },
-          { name: "Phường Hàng Mã", id: "hangma" },
-          { name: "Phường Hàng Trống", id: "hangtrong" },
-          { name: "Phường Lý Thái Tổ", id: "lythaito" },
-          { name: "Phường Phan Chu Trinh", id: "phanchutrinh" },
-          { name: "Phường Phúc Tân", id: "phuctan" },
-          { name: "Phường Tràng Tiền", id: "trangtien" },
-          { name: "Phường Trần Hưng Đạo", id: "tranhungdao" },
-        ],
-      },
-      {
-        name: "Quận Long Biên",
-        id: "longbien",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Bồ Đề", id: "bode" },
-          { name: "Phường Cự Khối", id: "cukhoi" },
-          { name: "Phường Đức Giang", id: "ducgiang" },
-          { name: "Phường Gia Thụy", id: "giathuy" },
-          { name: "Phường Giang Biên", id: "giangbien" },
-          { name: "Phường Long Biên", id: "longbien" },
-          { name: "Phường Ngọc Lâm", id: "ngoclam" },
-          { name: "Phường Ngọc Thụy", id: "ngocthuy" },
-          { name: "Phường Phúc Đồng", id: "phucdong" },
-          { name: "Phường Phúc Lợi", id: "phucloi" },
-          { name: "Phường Sài Đồng", id: "saidong" },
-          { name: "Phường Thạch Bàn", id: "thachban" },
-          { name: "Phường Thượng Thanh", id: "thuongthanh" },
-          { name: "Phường Việt Hưng", id: "viethung" },
-        ],
-      },
-      {
-        name: "Quận Tây Hồ",
-        id: "tayho",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Bưởi", id: "buoi" },
-          { name: "Phường Nhật Tân", id: "nhattan" },
-          { name: "Phường Phú Thượng", id: "phuthuong" },
-          { name: "Phường Quảng An", id: "quangan" },
-          { name: "Phường Thụy Khuê", id: "thuykhue" },
-          { name: "Phường Tứ Liên", id: "tulien" },
-          { name: "Phường Xuân La", id: "xuanla" },
-          { name: "Phường Yên Phụ", id: "yenphu" },
-        ],
-      },
-      {
-        name: "Quận Nam Từ Liêm",
-        id: "namtuliem",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Cầu Diễn", id: "caudien" },
-          { name: "Phường Đại Mỗ", id: "daimo" },
-          { name: "Phường Mễ Trì", id: "metri" },
-          { name: "Phường Mỹ Đình 1", id: "mydinh1" },
-          { name: "Phường Mỹ Đình 2", id: "mydinh2" },
-          { name: "Phường Phú Đô", id: "phudo" },
-          { name: "Phường Tây Mỗ", id: "taymo" },
-          { name: "Phường Trung Văn", id: "trungvan" },
-          { name: "Phường Xuân Phương", id: "xuanphuong" },
-        ],
-      },
-      {
-        name: "Quận Bắc Từ Liêm",
-        id: "bactuliem",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Cổ Nhuế 1", id: "conhue1" },
-          { name: "Phường Cổ Nhuế 2", id: "conhue2" },
-          { name: "Phường Đông Ngạc", id: "dongngac" },
-          { name: "Phường Đức Thắng", id: "ducthang" },
-          { name: "Phường Liên Mạc", id: "lienmac" },
-          { name: "Phường Minh Khai", id: "minhkhai" },
-          { name: "Phường Phú Diễn", id: "phudien" },
-          { name: "Phường Phúc Diễn", id: "phucdien" },
-          { name: "Phường Tây Tựu", id: "taytuu" },
-          { name: "Phường Thượng Cát", id: "thuongcat" },
-          { name: "Phường Thụy Phương", id: "thuyphuong" },
-          { name: "Phường Xuân Đỉnh", id: "xuandinh" },
-          { name: "Phường Xuân Tảo", id: "xuantao" },
-        ],
-      },
-      // {
-      //   name: "Huyện Ba Vì",
-      //   id: "bavi",
-      //   wards: [
-      //     { name: "Chọn Phường / Xã", id: "" },
-      //     { name: "Xã Ba Trại", id: "batrai" },
-      //     { name: "Xã Ba Vì", id: "bavi" },
-      //     { name: "Xã Cẩm Lĩnh", id: "camlinh" },
-      //     { name: "Xã Châu Sơn", id: "chauson" },
-      //     { name: "Xã Chu Minh", id: "chuminh" },
-      //     { name: "Xã Cổ Đô", id: "codo" },
-      //     { name: "Xã Đông Quang", id: "dongquang" },
-      //     { name: "Xã Đồng Thái", id: "dongthai" },
-      //     { name: "Xã Khánh Thượng", id: "khanhthuong" },
-      //     { name: "Xã Minh Châu", id: "minhchau" },
-      //     { name: "Xã Minh Quang", id: "minhquang" },
-      //     { name: "Xã Phong Vân", id: "phongvan" },
-      //     { name: "Xã Phú Châu", id: "phuchau" },
-      //     { name: "Xã Phú Cường", id: "phucuong" },
-      //     { name: "Xã Phú Đông", id: "phudong" },
-      //     { name: "Xã Phú Phương", id: "phuphuong" },
-      //     { name: "Xã Phú Sơn", id: "phuson" },
-      //     { name: "Xã Sơn Đà", id: "sonda" },
-      //     { name: "Xã Tản Hồng", id: "tanhong" },
-      //     { name: "Xã Tản Lĩnh", id: "tanlinh" },
-      //     { name: "Xã Thái Hòa", id: "thaihoa" },
-      //     { name: "Xã Thuần Mỹ", id: "thuanmy" },
-      //     { name: "Xã Tiên Phong", id: "tienphong" },
-      //     { name: "Xã Tòng Bạt", id: "tongbat" },
-      //     { name: "Xã Vân Hòa", id: "vanhoa" },
-      //     { name: "Xã Vạn Thắng", id: "vanthang" },
-      //     { name: "Xã Vật Lại", id: "vatlai" },
-      //     { name: "Xã Yên Bài", id: "yenbai" },
-      //   ],
-      // },
-      // {
-      //   name: "Huyện Thạch Thất",
-      //   id: "thachthat",
-      //   wards: [
-      //     { name: "Chọn Phường / Xã", id: "" },
-      //     { name: "Xã Bình Phú", id: "binhphu" },
-      //     { name: "Xã Bình Yên", id: "binhyen" },
-      //     { name: "Xã Cẩm Yên", id: "camyen" },
-      //     { name: "Xã Canh Nậu", id: "canhnau" },
-      //     { name: "Xã Chàng Sơn", id: "changson" },
-      //     { name: "Xã Đại Đồng", id: "daidong" },
-      //     { name: "Xã Dị Nậu", id: "dinau" },
-      //     { name: "Xã Đồng Trúc", id: "dongtruc" },
-      //     { name: "Xã Hạ Bằng", id: "habang" },
-      //     { name: "Xã Hương Ngải", id: "huongngai" },
-      //     { name: "Xã Hữu Bằng", id: "huubang" },
-      //     { name: "Xã Kim Quan", id: "kimquan" },
-      //     { name: "Xã Lại Thượng", id: "laithuong" },
-      //     { name: "Xã Liên Quan", id: "lienquan" },
-      //     { name: "Xã Phú Kim", id: "phukim" },
-      //     { name: "Xã Phùng Xá", id: "phungxa" },
-      //     { name: "Xã Tân Xã", id: "tanxa" },
-      //     { name: "Xã Thạch Hòa", id: "thachhoa" },
-      //     { name: "Xã Thạch Xá", id: "thachxa" },
-      //     { name: "Xã Tiến Xuân", id: "tienxuan" },
-      //     { name: "Xã Yên Bình", id: "yenbinh" },
-      //     { name: "Xã Yên Trung", id: "yentrung" },
-      //   ],
-      // },
-      {
-        name: "Huyện Gia Lâm",
-        id: "gialam",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Trâu Quỳ", id: "trauquy" },
-          { name: "Xã Bát Tràng", id: "battrang" },
-          { name: "Xã Cổ Bi", id: "cobi" },
-          { name: "Xã Đa Tốn", id: "daton" },
-          { name: "Xã Đặng Xá", id: "dangxa" },
-          { name: "Xã Đình Xuyên", id: "dinhxuyen" },
-          { name: "Xã Đông Dư", id: "dongdu" },
-          { name: "Xã Dương Hà", id: "duongha" },
-          { name: "Xã Dương Quang", id: "duongquang" },
-          { name: "Xã Dương Xá", id: "duongxa" },
-          { name: "Xã Kiêu Kỵ", id: "kieuky" },
-          { name: "Xã Kim Lan", id: "kimlan" },
-          { name: "Xã Kim Sơn", id: "kimson" },
-          { name: "Xã Lệ Chi", id: "lechi" },
-          { name: "Xã Ninh Hiệp", id: "ninhhiep" },
-          { name: "Xã Phù Đổng", id: "phudong" },
-          { name: "Xã Phú Thị", id: "phuthi" },
-          { name: "Xã Trung Mầu", id: "trungmau" },
-          { name: "Xã Văn Đức", id: "vanduc" },
-          { name: "Xã Yên Thường", id: "yenthuong" },
-          { name: "Xã Yên Viên", id: "yenvien" },
-        ],
-      },
-      // {
-      //   name: "Huyện Đan Phượng",
-      //   id: "danphuong",
-      //   wards: [
-      //     { name: "Chọn Phường / Xã", id: "" },
-      //     { name: "Thị trấn Phùng", id: "phung" },
-      //     { name: "Xã Đan Phượng", id: "danphuong" },
-      //     { name: "Xã Đồng Tháp", id: "dongthap" },
-      //     { name: "Xã Hạ Mỗ", id: "hamo" },
-      //     { name: "Xã Hồng Hà", id: "hongha" },
-      //     { name: "Xã Liên Hà", id: "lienha" },
-      //     { name: "Xã Liên Hồng", id: "lienhong" },
-      //     { name: "Xã Liên Trung", id: "lientrung" },
-      //     { name: "Xã Phương Đình", id: "phuongdinh" },
-      //     { name: "Xã Song Phượng", id: "songphuong" },
-      //     { name: "Xã Tân Hội", id: "tanhoi" },
-      //     { name: "Xã Tân Lập", id: "tanlap" },
-      //     { name: "Xã Thọ An", id: "thoan" },
-      //     { name: "Xã Thọ Xuân", id: "thoxuan" },
-      //     { name: "Xã Trung Châu", id: "trungchau" },
-      //   ],
-      // },
-      {
-        name: "Huyện Thường Tín",
-        id: "thuongtin",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Thường Tín", id: "thuongtin" },
-          { name: "Xã Chương Dương", id: "chuongduong" },
-          { name: "Xã Dũng Tiến", id: "dungtien" },
-          { name: "Xã Duyên Thái", id: "duyenthai" },
-          { name: "Xã Hà Hồi", id: "hahoi" },
-          { name: "Xã Hiền Giang", id: "hiengiang" },
-          { name: "Xã Hòa Bình", id: "hoabinh" },
-          { name: "Xã Hồng Vân", id: "hongvan" },
-          { name: "Xã Khánh Hà", id: "khanhha" },
-          { name: "Xã Lê Lợi", id: "leloi" },
-          { name: "Xã Minh Cường", id: "minhcuong" },
-          { name: "Xã Nghiêm Xuyên", id: "nghiemxuyen" },
-          { name: "Xã Nguyễn Trãi", id: "nguyentrai" },
-          { name: "Xã Nhị Khê", id: "nhikhe" },
-          { name: "Xã Ninh Sở", id: "ninhoso" },
-          { name: "Xã Quất Động", id: "quatdong" },
-          { name: "Xã Tân Minh", id: "tanminh" },
-          { name: "Xã Thắng Lợi", id: "thangloi" },
-          { name: "Xã Thống Nhất", id: "thongnhat" },
-          { name: "Xã Tô Hiệu", id: "tohieu" },
-          { name: "Xã Văn Bình", id: "vanbinh" },
-          { name: "Xã Văn Phú", id: "vanphu" },
-          { name: "Xã Văn Tự", id: "vantu" },
-          { name: "Xã Vạn Điểm", id: "vandiem" },
-          { name: "Xã Vân Tảo", id: "vantao" },
-        ],
-      },
-      {
-        name: "Huyện Chương Mỹ",
-        id: "chuongmy",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Chúc Sơn", id: "chucson" },
-          { name: "Thị trấn Xuân Mai", id: "xuanmai" },
-          { name: "Xã Đại Yên", id: "daiyen" },
-          { name: "Xã Đông Phương Yên", id: "dongphuongyen" },
-          { name: "Xã Đông Sơn", id: "dongson" },
-          { name: "Xã Hoàng Diệu", id: "hoangdieu" },
-          { name: "Xã Hòa Chính", id: "hoachinh" },
-          { name: "Xã Hồng Phong", id: "hongphong" },
-          { name: "Xã Hợp Đồng", id: "hopdong" },
-          { name: "Xã Hữu Văn", id: "huuvan" },
-          { name: "Xã Lam Điền", id: "lamdien" },
-          { name: "Xã Liên Châu", id: "lienchau" },
-          { name: "Xã Mỹ Lương", id: "myluong" },
-          { name: "Xã Nam Phương Tiến", id: "namphuongtien" },
-          { name: "Xã Ngọc Hòa", id: "ngochoa" },
-          { name: "Xã Phú Nam An", id: "phunaman" },
-          { name: "Xã Phú Nghĩa", id: "phunghia" },
-          { name: "Xã Quảng Bị", id: "quangbi" },
-          // { name: "Xã Thượng Vực", id: "thuongvuc" },
-          // { name: "Xã Thụy Hương", id: "thuyhuong" },
-          // { name: "Xã Tiên Phương", id: "tienphuong" },
-          // { name: "Xã Tốt Động", id: "totdong" },
-          // { name: "Xã Trường Yên", id: "truongyen" },
-          // { name: "Xã Trung Hòa", id: "trunghoa" },
-          // { name: "Xã Trần Phú", id: "tranphu" },
-          // { name: "Xã Văn Võ", id: "vanvo" },
-          // { name: "Xã Văn Bình", id: "vanbinh" },
-        ],
-      },
-      {
-        name: "Huyện Hoài Đức",
-        id: "hoaiduc",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Trạm Trôi", id: "tramtroi" },
-          { name: "Xã An Khánh", id: "ankhanh" },
-          { name: "Xã An Thượng", id: "anthuong" },
-          { name: "Xã Cát Quế", id: "catque" },
-          { name: "Xã Di Trạch", id: "ditrach" },
-          { name: "Xã Đắc Sở", id: "dacs" },
-          { name: "Xã Đông La", id: "dongla" },
-          { name: "Xã Đức Giang", id: "ducgiang" },
-          { name: "Xã Đức Thượng", id: "ducthuong" },
-          { name: "Xã Kim Chung", id: "kimchung" },
-          { name: "Xã La Phù", id: "laphu" },
-          { name: "Xã Lại Yên", id: "laiyen" },
-          { name: "Xã Minh Khai", id: "minhkhai" },
-          { name: "Xã Sơn Đồng", id: "sondong" },
-          { name: "Xã Song Phương", id: "songphuong" },
-          { name: "Xã Tiền Yên", id: "tienyen" },
-          { name: "Xã Vân Canh", id: "vancanh" },
-          { name: "Xã Vân Côn", id: "vancon" },
-          { name: "Xã Yên Sở", id: "yenso" },
-        ],
-      },
-      {
-        name: "Huyện Mê Linh",
-        id: "melinh",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Quang Minh", id: "quangminh" },
-          { name: "Thị trấn Chi Đông", id: "chidong" },
-          { name: "Xã Đại Thịnh", id: "daithinh" },
-          { name: "Xã Hoàng Kim", id: "hoangkim" },
-          { name: "Xã Kim Hoa", id: "kimhoa" },
-          { name: "Xã Liên Mạc", id: "lienmac" },
-          { name: "Xã Mê Linh", id: "melinh" },
-          { name: "Xã Tam Đồng", id: "tamdong" },
-          { name: "Xã Thanh Lâm", id: "thanhlam" },
-          { name: "Xã Tiến Thắng", id: "tienthang" },
-          { name: "Xã Tiến Thịnh", id: "tienthinh" },
-          { name: "Xã Thạch Đà", id: "thachda" },
-          { name: "Xã Tự Lập", id: "tulap" },
-          { name: "Xã Vạn Yên", id: "vanyen" },
-          { name: "Xã Văn Khê", id: "vankhe" },
-          { name: "Xã Tráng Việt", id: "trangviet" },
-        ],
-      },
-      {
-        name: "Huyện Thanh Trì",
-        id: "thanhtri",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Văn Điển", id: "vandien" },
-          { name: "Xã Đại Áng", id: "daiang" },
-          { name: "Xã Duyên Hà", id: "duyenha" },
-          { name: "Xã Đông Mỹ", id: "dongmy" },
-          { name: "Xã Hữu Hòa", id: "huuhoa" },
-          { name: "Xã Liên Ninh", id: "lienninh" },
-          { name: "Xã Ngọc Hồi", id: "ngochoi" },
-          { name: "Xã Tả Thanh Oai", id: "tathanhoai" },
-          { name: "Xã Tam Hiệp", id: "tamhiep" },
-          { name: "Xã Thanh Liệt", id: "thanhliet" },
-          { name: "Xã Tứ Hiệp", id: "tuhiep" },
-          { name: "Xã Vạn Phúc", id: "vanphuc" },
-          { name: "Xã Yên Mỹ", id: "yenmy" },
-        ],
-      },
-      {
-        name: "Huyện Thanh Oai",
-        id: "thanhoai",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Kim Bài", id: "kimbai" },
-          { name: "Xã Bích Hòa", id: "bichhoa" },
-          { name: "Xã Bình Minh", id: "binhminh" },
-          { name: "Xã Cao Dương", id: "caoduong" },
-          { name: "Xã Cao Viên", id: "caovien" },
-          { name: "Xã Cự Khê", id: "cukhe" },
-          { name: "Xã Dân Hòa", id: "danhoa" },
-          { name: "Xã Đỗ Động", id: "dodong" },
-          { name: "Xã Hồng Dương", id: "hongduong" },
-          { name: "Xã Kim An", id: "kiman" },
-          { name: "Xã Kim Thư", id: "kimthu" },
-          { name: "Xã Liên Châu", id: "lienchau" },
-          { name: "Xã Mỹ Hưng", id: "myhung" },
-          { name: "Xã Phương Trung", id: "phuongtrung" },
-          { name: "Xã Tam Hưng", id: "tamhung" },
-          { name: "Xã Tân Ước", id: "tanuoc" },
-          { name: "Xã Thanh Cao", id: "thanhcao" },
-          { name: "Xã Thanh Mai", id: "thanhmai" },
-          { name: "Xã Thanh Thùy", id: "thanhthuy" },
-          { name: "Xã Xuân Dương", id: "xuanduong" },
-        ],
-      },
-      {
-        name: "Huyện Mỹ Đức",
-        id: "myduc",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Đại Nghĩa", id: "dainghia" },
-          { name: "Xã An Mỹ", id: "anmy" },
-          { name: "Xã An Phú", id: "anphu" },
-          { name: "Xã Bột Xuyên", id: "botxuyen" },
-          { name: "Xã Đại Hưng", id: "daihung" },
-          { name: "Xã Đồng Tâm", id: "dongtam" },
-          { name: "Xã Đồng Tiến", id: "dongtien" },
-          { name: "Xã Hồng Sơn", id: "hongson" },
-          { name: "Xã Hợp Thanh", id: "hopthanh" },
-          { name: "Xã Hùng Tiến", id: "hungtien" },
-          { name: "Xã Lê Thanh", id: "lethanh" },
-          { name: "Xã Mỹ Thành", id: "mythanh" },
-          // { name: "Xã Phù Lưu Tế", id: "phuluute" },
-          // { name: "Xã Phúc Lâm", id: "phuclam" },
-          // { name: "Xã Thượng Lâm", id: "thuonglam" },
-          // { name: "Xã Tuy Lai", id: "tuylai" },
-          // { name: "Xã Vạn Kim", id: "vankim" },
-          // { name: "Xã Xuy Xá", id: "xuyxa" },
-        ],
-      },
-      {
-        name: "Huyện Sóc Sơn",
-        id: "socson",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Sóc Sơn", id: "socson" },
-          { name: "Xã Bắc Phú", id: "bacphu" },
-          { name: "Xã Bắc Sơn", id: "bacson" },
-          { name: "Xã Đông Xuân", id: "dongxuan" },
-          { name: "Xã Đức Hòa", id: "duchoa" },
-          { name: "Xã Hiền Ninh", id: "hienninh" },
-          { name: "Xã Hồng Kỳ", id: "hongky" },
-          { name: "Xã Kim Lũ", id: "kimlu" },
-          { name: "Xã Mai Đình", id: "maidinh" },
-          { name: "Xã Minh Phú", id: "minhphu" },
-          { name: "Xã Minh Trí", id: "minhtri" },
-          { name: "Xã Nam Sơn", id: "namson" },
-          { name: "Xã Phú Cường", id: "phucuong" },
-          { name: "Xã Phù Linh", id: "phulinh" },
-          { name: "Xã Phù Lỗ", id: "phulo" },
-          { name: "Xã Quang Tiến", id: "quangtien" },
-          { name: "Xã Tân Dân", id: "tandan" },
-          { name: "Xã Tân Hưng", id: "tanhung" },
-          { name: "Xã Tân Minh", id: "tanminh" },
-          { name: "Xã Thanh Xuân", id: "thanhxuan" },
-          { name: "Xã Tiên Dược", id: "tienduoc" },
-          { name: "Xã Việt Long", id: "vietlong" },
-          { name: "Xã Xuân Giang", id: "xgiang" },
-          { name: "Xã Xuân Thu", id: "xuanthu" },
-        ],
-      },
-      {
-        name: "Huyện Phúc Thọ",
-        id: "phuctho",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Phúc Thọ", id: "phuctho" },
-          { name: "Xã Cẩm Đình", id: "camdinh" },
-          { name: "Xã Hiệp Thuận", id: "hiepthuan" },
-          { name: "Xã Liên Hiệp", id: "lienhiep" },
-          { name: "Xã Long Xuyên", id: "longxuyen" },
-          { name: "Xã Ngọc Tảo", id: "ngoctao" },
-          { name: "Xã Phúc Hòa", id: "phuchoang" },
-          { name: "Xã Sen Chiểu", id: "senchieu" },
-          { name: "Xã Tam Hiệp", id: "tamthoi" },
-          { name: "Xã Thọ Lộc", id: "tholoc" },
-          { name: "Xã Thượng Cốc", id: "thuongcoc" },
-          { name: "Xã Tích Giang", id: "tichgiang" },
-          { name: "Xã Trạch Mỹ Lộc", id: "trachmyloc" },
-          { name: "Xã Vân Hà", id: "vanha" },
-          { name: "Xã Vân Nam", id: "vannam" },
-          { name: "Xã Vân Phúc", id: "vanphuc" },
-          { name: "Xã Võng Xuyên", id: "vongxuyen" },
-          { name: "Xã Xuân Đình", id: "xuandinh" },
-        ],
-      },
-      {
-        name: "Huyện Đông Anh",
-        id: "donganh",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Đông Anh", id: "donganh" },
-          { name: "Xã Bắc Hồng", id: "bachong" },
-          { name: "Xã Cổ Loa", id: "coloa" },
-          { name: "Xã Dục Tú", id: "ductu" },
-          { name: "Xã Hải Bối", id: "haiboi" },
-          { name: "Xã Kim Chung", id: "kimchung" },
-          { name: "Xã Kim Nỗ", id: "kimno" },
-          { name: "Xã Liên Hà", id: "lienha" },
-          { name: "Xã Mai Lâm", id: "mailam" },
-          // { name: "Xã Nam Hồng", id: "namhong" },
-          // { name: "Xã Nguyên Khê", id: "nguyenkhe" },
-          // { name: "Xã Tàm Xá", id: "tamxa" },
-          // { name: "Xã Tiên Dương", id: "tienduong" },
-          // { name: "Xã Uy Nỗ", id: "uyno" },
-          // { name: "Xã Vân Hà", id: "vanha" },
-          // { name: "Xã Vân Nội", id: "vannoi" },
-          // { name: "Xã Việt Hùng", id: "viethung" },
-          // { name: "Xã Vĩnh Ngọc", id: "vinhngoc" },
-          // { name: "Xã Xuân Canh", id: "xuancanh" },
-          // { name: "Xã Xuân Nộn", id: "xuanmon" },
-        ],
-      },
-      {
-        name: "Huyện Phú Xuyên",
-        id: "phuxuyen",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Phú Minh", id: "phuminh" },
-          { name: "Thị trấn Phú Xuyên", id: "phuxuyen" },
-          { name: "Xã Bạch Hạ", id: "bachha" },
-          { name: "Xã Châu Can", id: "chaucan" },
-          { name: "Xã Đại Xuyên", id: "daixuyen" },
-          { name: "Xã Hồng Minh", id: "hongminh" },
-          { name: "Xã Hoàng Long", id: "hoanglong" },
-          { name: "Xã Khai Thái", id: "khaithai" },
-          { name: "Xã Minh Tân", id: "minhtan" },
-          { name: "Xã Nam Phong", id: "namphong" },
-          { name: "Xã Nam Triều", id: "namtrieu" },
-          { name: "Xã Phú Túc", id: "phutuc" },
-          { name: "Xã Phúc Tiến", id: "phuctien" },
-          // { name: "Xã Phượng Dực", id: "phuongduc" },
-          // { name: "Xã Quang Lãng", id: "quanglang" },
-          // { name: "Xã Sơn Hà", id: "sonha" },
-          // { name: "Xã Tân Dân", id: "tandan" },
-          // { name: "Xã Tri Trung", id: "tritrung" },
-          // { name: "Xã Văn Hoàng", id: "vanhoang" },
-          // { name: "Xã Văn Nhân", id: "vannhan" },
-        ],
-      },
-      // {
-      //   name: "Huyện Quốc Oai",
-      //   id: "quocoai",
-      //   wards: [
-      //     { name: "Chọn Phường / Xã", id: "" },
-      //     { name: "Thị trấn Quốc Oai", id: "quocoai" },
-      //     { name: "Xã Cấn Hữu", id: "canhuu" },
-      //     { name: "Xã Cộng Hòa", id: "conghoa" },
-      //     { name: "Xã Đại Thành", id: "daithanh" },
-      //     { name: "Xã Đồng Quang", id: "dongquang" },
-      //     { name: "Xã Đông Xuân", id: "dongxuan" },
-      //     { name: "Xã Hòa Thạch", id: "hoathach" },
-      //     { name: "Xã Liệp Tuyết", id: "lieptuyet" },
-      //     { name: "Xã Nghĩa Hương", id: "nghiahuong" },
-      //     { name: "Xã Ngọc Liệp", id: "ngocliep" },
-      //     { name: "Xã Ngọc Mỹ", id: "ngocmy" },
-      //     { name: "Xã Phú Cát", id: "phucat" },
-      //     { name: "Xã Phú Mãn", id: "phuman" },
-      //     { name: "Xã Sài Sơn", id: "saison" },
-      //     { name: "Xã Tân Hòa", id: "tanhoa" },
-      //     { name: "Xã Tân Phú", id: "tanphu" },
-      //     { name: "Xã Thạch Thán", id: "thachthan" },
-      //     { name: "Xã Tuyết Nghĩa", id: "tuyetnghia" },
-      //     { name: "Xã Yên Sơn", id: "yenson" },
-      //     { name: "Xã Phượng Cách", id: "phuongcach" },
-      //   ],
-      // },
-      // {
-      //   name: "Huyện Ứng Hòa",
-      //   id: "unghoa",
-      //   wards: [
-      //     { name: "Chọn Phường / Xã", id: "" },
-      //     { name: "Thị trấn Vân Đình", id: "vandinh" },
-      //     { name: "Xã Cao Thành", id: "caothanh" },
-      //     { name: "Xã Đại Cường", id: "daicuong" },
-      //     { name: "Xã Đại Hùng", id: "daihung" },
-      //     { name: "Xã Đội Bình", id: "doibinh" },
-      //     { name: "Xã Đồng Tân", id: "dongtan" },
-      //     { name: "Xã Đồng Tiến", id: "dongtien" },
-      //     { name: "Xã Đông Lỗ", id: "donglo" },
-      //     { name: "Xã Hòa Lâm", id: "hoalam" },
-      //     { name: "Xã Hòa Nam", id: "hoanam" },
-      //     { name: "Xã Hòa Phú", id: "hoaphu" },
-      //     { name: "Xã Kim Đường", id: "kimduong" },
-      //     { name: "Xã Liên Bạt", id: "lienbat" },
-      //     { name: "Xã Lưu Hoàng", id: "luuhoang" },
-      //     { name: "Xã Minh Đức", id: "minhduc" },
-      //     { name: "Xã Phù Lưu", id: "phuluu" },
-      //     { name: "Xã Phương Tú", id: "phuongtu" },
-      //     { name: "Xã Quảng Phú Cầu", id: "quangphucau" },
-      //     { name: "Xã Sơn Công", id: "soncong" },
-      //     { name: "Xã Tảo Dương Văn", id: "taoduongvan" },
-      //     { name: "Xã Trầm Lộng", id: "traml" },
-      //     { name: "Xã Trung Tú", id: "trungtu" },
-      //     { name: "Xã Trường Thịnh", id: "truongthinh" },
-      //     { name: "Xã Viên An", id: "vienan" },
-      //     { name: "Xã Viên Nội", id: "viennoi" },
-      //   ],
-      // },
-    ],
-  },
-  {
-    name: "Thành phố Hồ Chí Minh",
-    id: "tphcm",
-    districts: [
-      {
-        name: "Chọn Quận / Huyện",
-        id: "",
-        wards: [
-          {
-            name: "Chọn Phường / Xã",
-            id: "",
-          },
-        ],
-      },
-      {
-        name: "Quận 1",
-        id: "quan1",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Bến Nghé", id: "bennghe" },
-          { name: "Phường Bến Thành", id: "benthanh" },
-          { name: "Phường Cầu Kho", id: "caukho" },
-          { name: "Phường Cầu Ông Lãnh", id: "cauonglanh" },
-          { name: "Phường Đa Kao", id: "dakao" },
-          { name: "Phường Nguyễn Cư Trinh", id: "nguyencutrinh" },
-          { name: "Phường Nguyễn Thái Bình", id: "nguyenthaibinh" },
-          { name: "Phường Phạm Ngũ Lão", id: "phamngulao" },
-          { name: "Phường Tân Định", id: "tandinh" },
-        ],
-      },
-      {
-        name: "Quận 3",
-        id: "quan3",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường 1", id: "phuong1" },
-          { name: "Phường 2", id: "phuong2" },
-          { name: "Phường 3", id: "phuong3" },
-          { name: "Phường 4", id: "phuong4" },
-          { name: "Phường 5", id: "phuong5" },
-          { name: "Phường 6", id: "phuong6" },
-          { name: "Phường 7", id: "phuong7" },
-          { name: "Phường 8", id: "phuong8" },
-          { name: "Phường 9", id: "phuong9" },
-          { name: "Phường 10", id: "phuong10" },
-          { name: "Phường 11", id: "phuong11" },
-          { name: "Phường 12", id: "phuong12" },
-          { name: "Phường 13", id: "phuong13" },
-          { name: "Phường 14", id: "phuong14" },
-        ],
-      },
-      {
-        name: "Quận 4",
-        id: "quan4",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường 1", id: "phuong1" },
-          { name: "Phường 2", id: "phuong2" },
-          { name: "Phường 3", id: "phuong3" },
-          { name: "Phường 4", id: "phuong4" },
-          { name: "Phường 5", id: "phuong5" },
-          { name: "Phường 6", id: "phuong6" },
-          { name: "Phường 8", id: "phuong8" },
-          { name: "Phường 9", id: "phuong9" },
-          { name: "Phường 10", id: "phuong10" },
-          { name: "Phường 12", id: "phuong12" },
-          { name: "Phường 13", id: "phuong13" },
-          { name: "Phường 14", id: "phuong14" },
-          { name: "Phường 15", id: "phuong15" },
-          { name: "Phường 16", id: "phuong16" },
-          { name: "Phường 18", id: "phuong18" },
-        ],
-      },
-      {
-        name: "Quận 5",
-        id: "quan5",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường 1", id: "phuong1" },
-          { name: "Phường 2", id: "phuong2" },
-          { name: "Phường 3", id: "phuong3" },
-          { name: "Phường 4", id: "phuong4" },
-          { name: "Phường 5", id: "phuong5" },
-          { name: "Phường 6", id: "phuong6" },
-          { name: "Phường 7", id: "phuong7" },
-          { name: "Phường 8", id: "phuong8" },
-          { name: "Phường 9", id: "phuong9" },
-          { name: "Phường 10", id: "phuong10" },
-          { name: "Phường 11", id: "phuong11" },
-          { name: "Phường 12", id: "phuong12" },
-          { name: "Phường 13", id: "phuong13" },
-          { name: "Phường 14", id: "phuong14" },
-          { name: "Phường 15", id: "phuong15" },
-        ],
-      },
-      {
-        name: "Quận 6",
-        id: "quan6",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường 1", id: "phuong1" },
-          { name: "Phường 2", id: "phuong2" },
-          { name: "Phường 3", id: "phuong3" },
-          { name: "Phường 4", id: "phuong4" },
-          { name: "Phường 5", id: "phuong5" },
-          { name: "Phường 6", id: "phuong6" },
-          { name: "Phường 7", id: "phuong7" },
-          { name: "Phường 8", id: "phuong8" },
-          { name: "Phường 9", id: "phuong9" },
-          { name: "Phường 10", id: "phuong10" },
-          { name: "Phường 11", id: "phuong11" },
-          { name: "Phường 12", id: "phuong12" },
-          { name: "Phường 13", id: "phuong13" },
-          { name: "Phường 14", id: "phuong14" },
-        ],
-      },
-      {
-        name: "Quận 7",
-        id: "quan7",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Tân Thuận Đông", id: "tanthuandong" },
-          { name: "Phường Tân Thuận Tây", id: "tanthuantay" },
-          { name: "Phường Tân Kiểng", id: "tankieng" },
-          { name: "Phường Tân Hưng", id: "tanhung" },
-          { name: "Phường Tân Phong", id: "tanphong" },
-          { name: "Phường Tân Quy", id: "tanquy" },
-          { name: "Phường Bình Thuận", id: "binhthuan" },
-          { name: "Phường Phú Mỹ", id: "phumy" },
-          { name: "Phường Phú Thuận", id: "phuthuan" },
-          { name: "Phường Phú Tân", id: "phutan" },
-        ],
-      },
-      {
-        name: "Quận 8",
-        id: "quan8",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường 1", id: "phuong1" },
-          { name: "Phường 2", id: "phuong2" },
-          { name: "Phường 3", id: "phuong3" },
-          { name: "Phường 4", id: "phuong4" },
-          { name: "Phường 5", id: "phuong5" },
-          { name: "Phường 6", id: "phuong6" },
-          { name: "Phường 7", id: "phuong7" },
-          { name: "Phường 8", id: "phuong8" },
-          { name: "Phường 9", id: "phuong9" },
-          { name: "Phường 10", id: "phuong10" },
-          { name: "Phường 11", id: "phuong11" },
-          { name: "Phường 12", id: "phuong12" },
-          { name: "Phường 13", id: "phuong13" },
-          { name: "Phường 14", id: "phuong14" },
-          { name: "Phường 15", id: "phuong15" },
-          { name: "Phường 16", id: "phuong16" },
-        ],
-      },
-      {
-        name: "Quận 10",
-        id: "quan10",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường 1", id: "phuong1" },
-          { name: "Phường 2", id: "phuong2" },
-          { name: "Phường 3", id: "phuong3" },
-          { name: "Phường 4", id: "phuong4" },
-          { name: "Phường 5", id: "phuong5" },
-          { name: "Phường 6", id: "phuong6" },
-          { name: "Phường 7", id: "phuong7" },
-          { name: "Phường 8", id: "phuong8" },
-          { name: "Phường 9", id: "phuong9" },
-          { name: "Phường 10", id: "phuong10" },
-          { name: "Phường 11", id: "phuong11" },
-          { name: "Phường 12", id: "phuong12" },
-          { name: "Phường 13", id: "phuong13" },
-          { name: "Phường 14", id: "phuong14" },
-          { name: "Phường 15", id: "phuong15" },
-        ],
-      },
-      {
-        name: "Quận 11",
-        id: "quan11",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường 1", id: "phuong1" },
-          { name: "Phường 2", id: "phuong2" },
-          { name: "Phường 3", id: "phuong3" },
-          { name: "Phường 4", id: "phuong4" },
-          { name: "Phường 5", id: "phuong5" },
-          { name: "Phường 6", id: "phuong6" },
-          { name: "Phường 7", id: "phuong7" },
-          { name: "Phường 8", id: "phuong8" },
-          { name: "Phường 9", id: "phuong9" },
-          { name: "Phường 10", id: "phuong10" },
-          { name: "Phường 11", id: "phuong11" },
-          { name: "Phường 12", id: "phuong12" },
-          { name: "Phường 13", id: "phuong13" },
-          { name: "Phường 14", id: "phuong14" },
-          { name: "Phường 15", id: "phuong15" },
-        ],
-      },
-      {
-        name: "Quận 12",
-        id: "quan12",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường An Phú Đông", id: "anphudong" },
-          { name: "Phường Đông Hưng Thuận", id: "donghungthuan" },
-          { name: "Phường Hiệp Thành", id: "hiepthanh" },
-          { name: "Phường Tân Chánh Hiệp", id: "tanchanhhiep" },
-          { name: "Phường Tân Hưng Thuận", id: "tanhungthuan" },
-          { name: "Phường Tân Thới Hiệp", id: "tanthoihiep" },
-          { name: "Phường Tân Thới Nhất", id: "tanthoinhat" },
-          { name: "Phường Thạnh Lộc", id: "thanhloc" },
-          { name: "Phường Thạnh Xuân", id: "thanhxuan" },
-          { name: "Phường Trung Mỹ Tây", id: "trungmytay" },
-        ],
-      },
-      {
-        name: "Quận Phú Nhuận",
-        id: "phunhuan",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường 1", id: "phuong1" },
-          { name: "Phường 2", id: "phuong2" },
-          { name: "Phường 3", id: "phuong3" },
-          { name: "Phường 4", id: "phuong4" },
-          { name: "Phường 5", id: "phuong5" },
-          { name: "Phường 7", id: "phuong7" },
-          { name: "Phường 8", id: "phuong8" },
-          { name: "Phường 9", id: "phuong9" },
-          { name: "Phường 10", id: "phuong10" },
-          { name: "Phường 11", id: "phuong11" },
-          { name: "Phường 12", id: "phuong12" },
-          { name: "Phường 13", id: "phuong13" },
-          { name: "Phường 14", id: "phuong14" },
-          { name: "Phường 15", id: "phuong15" },
-          { name: "Phường 17", id: "phuong17" },
-        ],
-      },
-      {
-        name: "Quận Bình Thạnh",
-        id: "binhthanh",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường 1", id: "phuong1" },
-          { name: "Phường 2", id: "phuong2" },
-          { name: "Phường 3", id: "phuong3" },
-          { name: "Phường 5", id: "phuong5" },
-          { name: "Phường 6", id: "phuong6" },
-          { name: "Phường 7", id: "phuong7" },
-          { name: "Phường 11", id: "phuong11" },
-          { name: "Phường 12", id: "phuong12" },
-          { name: "Phường 13", id: "phuong13" },
-          { name: "Phường 14", id: "phuong14" },
-          { name: "Phường 15", id: "phuong15" },
-          { name: "Phường 17", id: "phuong17" },
-          { name: "Phường 19", id: "phuong19" },
-          { name: "Phường 21", id: "phuong21" },
-          { name: "Phường 22", id: "phuong22" },
-          { name: "Phường 24", id: "phuong24" },
-          { name: "Phường 25", id: "phuong25" },
-          { name: "Phường 26", id: "phuong26" },
-          { name: "Phường 27", id: "phuong27" },
-          { name: "Phường 28", id: "phuong28" },
-        ],
-      },
-      {
-        name: "Quận Gò Vấp",
-        id: "govap",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường 1", id: "phuong1" },
-          { name: "Phường 3", id: "phuong3" },
-          { name: "Phường 4", id: "phuong4" },
-          { name: "Phường 5", id: "phuong5" },
-          { name: "Phường 6", id: "phuong6" },
-          { name: "Phường 7", id: "phuong7" },
-          { name: "Phường 8", id: "phuong8" },
-          { name: "Phường 9", id: "phuong9" },
-          { name: "Phường 10", id: "phuong10" },
-          { name: "Phường 11", id: "phuong11" },
-          { name: "Phường 12", id: "phuong12" },
-          { name: "Phường 13", id: "phuong13" },
-          { name: "Phường 14", id: "phuong14" },
-          { name: "Phường 15", id: "phuong15" },
-          { name: "Phường 16", id: "phuong16" },
-          { name: "Phường 17", id: "phuong17" },
-        ],
-      },
-      {
-        name: "Quận Tân Bình",
-        id: "tanbinh",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường 1", id: "phuong1" },
-          { name: "Phường 2", id: "phuong2" },
-          { name: "Phường 3", id: "phuong3" },
-          { name: "Phường 4", id: "phuong4" },
-          { name: "Phường 5", id: "phuong5" },
-          { name: "Phường 6", id: "phuong6" },
-          { name: "Phường 7", id: "phuong7" },
-          { name: "Phường 8", id: "phuong8" },
-          { name: "Phường 9", id: "phuong9" },
-          { name: "Phường 10", id: "phuong10" },
-          { name: "Phường 11", id: "phuong11" },
-          { name: "Phường 12", id: "phuong12" },
-          { name: "Phường 13", id: "phuong13" },
-          { name: "Phường 14", id: "phuong14" },
-          { name: "Phường 15", id: "phuong15" },
-        ],
-      },
-      {
-        name: "Quận Bình Tân",
-        id: "binhtan",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường An Lạc", id: "anlac" },
-          { name: "Phường An Lạc A", id: "anlaca" },
-          { name: "Phường Bình Hưng Hòa", id: "binhhunghoa" },
-          { name: "Phường Bình Hưng Hòa A", id: "binhhunghoaa" },
-          { name: "Phường Bình Hưng Hòa B", id: "binhhunghoab" },
-          { name: "Phường Bình Trị Đông", id: "binhtridong" },
-          { name: "Phường Bình Trị Đông A", id: "binhtridonga" },
-          { name: "Phường Bình Trị Đông B", id: "binhtridongb" },
-          { name: "Phường Tân Tạo", id: "tantao" },
-          { name: "Phường Tân Tạo A", id: "tantaoa" },
-        ],
-      },
-      {
-        name: "Quận Tân Phú",
-        id: "tanphu",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Hiệp Tân", id: "hieptan" },
-          { name: "Phường Hòa Thạnh", id: "hoathanh" },
-          { name: "Phường Phú Thạnh", id: "phuthanh" },
-          { name: "Phường Phú Thọ Hòa", id: "phuthohoa" },
-          { name: "Phường Phú Trung", id: "phutrung" },
-          { name: "Phường Sơn Kỳ", id: "sonky" },
-          { name: "Phường Tân Quý", id: "tanquy" },
-          { name: "Phường Tân Sơn Nhì", id: "tansonnhì" },
-          { name: "Phường Tân Thành", id: "tanthanh" },
-          { name: "Phường Tân Thới Hòa", id: "tanthoihoa" },
-          { name: "Phường Tây Thạnh", id: "taythanh" },
-        ],
-      },
-      {
-        name: "Huyện Bình Chánh",
-        id: "binhchanh",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Tân Túc", id: "tantuc" },
-          { name: "Xã An Phú Tây", id: "anphutay" },
-          { name: "Xã Bình Chánh", id: "binhchanh" },
-          { name: "Xã Bình Hưng", id: "binhhung" },
-          { name: "Xã Bình Lợi", id: "binhloi" },
-          { name: "Xã Đa Phước", id: "daphuoc" },
-          { name: "Xã Hưng Long", id: "hunglong" },
-          { name: "Xã Lê Minh Xuân", id: "leminhxuan" },
-          { name: "Xã Phạm Văn Hai", id: "phamvanhai" },
-          { name: "Xã Phong Phú", id: "phongphu" },
-          { name: "Xã Qui Đức", id: "quiduc" },
-          { name: "Xã Tân Kiên", id: "tankien" },
-          { name: "Xã Tân Nhựt", id: "tannhut" },
-          { name: "Xã Tân Quý Tây", id: "tanquytay" },
-          { name: "Xã Vĩnh Lộc A", id: "vinhloca" },
-          { name: "Xã Vĩnh Lộc B", id: "vinhlocb" },
-        ],
-      },
-      {
-        name: "Huyện Hóc Môn",
-        id: "hocmon",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Hóc Môn", id: "hocmon" },
-          { name: "Xã Bà Điểm", id: "badiem" },
-          { name: "Xã Đông Thạnh", id: "dongthanh" },
-          { name: "Xã Nhị Bình", id: "nhibinh" },
-          { name: "Xã Tân Hiệp", id: "tanhiep" },
-          { name: "Xã Tân Thới Nhì", id: "tanthoinhi" },
-          { name: "Xã Thới Tam Thôn", id: "thoitamthon" },
-          { name: "Xã Trung Chánh", id: "trungchanh" },
-          { name: "Xã Xuân Thới Đông", id: "xuanthoibong" },
-          { name: "Xã Xuân Thới Sơn", id: "xuanthoison" },
-          { name: "Xã Xuân Thới Thượng", id: "xuanthoithuong" },
-        ],
-      },
-      {
-        name: "Huyện Củ Chi",
-        id: "cuchi",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Củ Chi", id: "cuchi" },
-          { name: "Xã An Nhơn Tây", id: "annhontay" },
-          { name: "Xã An Phú", id: "anphu" },
-          { name: "Xã Bình Mỹ", id: "binhmy" },
-          { name: "Xã Hòa Phú", id: "hoaphu" },
-          { name: "Xã Nhuận Đức", id: "nhuanduc" },
-          { name: "Xã Phạm Văn Cội", id: "phamvancoi" },
-          { name: "Xã Phú Hòa Đông", id: "phuhoadong" },
-          { name: "Xã Phú Mỹ Hưng", id: "phumyhung" },
-          { name: "Xã Phước Hiệp", id: "phuochiep" },
-          { name: "Xã Phước Thạnh", id: "phuocthanh" },
-          { name: "Xã Phước Vĩnh An", id: "phuocvinhan" },
-          { name: "Xã Tân An Hội", id: "tananhoi" },
-          { name: "Xã Tân Phú Trung", id: "tanphutrung" },
-          { name: "Xã Tân Thạnh Đông", id: "tanthanhdong" },
-          { name: "Xã Tân Thạnh Tây", id: "tanthanhtay" },
-          { name: "Xã Tân Thông Hội", id: "tanthonghoi" },
-          { name: "Xã Thái Mỹ", id: "thaimy" },
-          { name: "Xã Trung An", id: "trungan" },
-          { name: "Xã Trung Lập Hạ", id: "trunglaphha" },
-          { name: "Xã Trung Lập Thượng", id: "trunglapthuong" },
-        ],
-      },
-      {
-        name: "Huyện Cần Giờ",
-        id: "cangio",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Cần Thạnh", id: "canthanh" },
-          { name: "Xã An Thới Đông", id: "anthoidong" },
-          { name: "Xã Bình Khánh", id: "binhkhánh" },
-          { name: "Xã Long Hòa", id: "longhoa" },
-          { name: "Xã Lý Nhơn", id: "lynhon" },
-          { name: "Xã Tam Thôn Hiệp", id: "tamthonhiep" },
-          { name: "Xã Thạnh An", id: "thanhan" },
-        ],
-      },
-      {
-        name: "Huyện Nhà Bè",
-        id: "nhabe",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Nhà Bè", id: "nhabe" },
-          { name: "Xã Hiệp Phước", id: "hiepphuoc" },
-          { name: "Xã Long Thới", id: "longthoi" },
-          { name: "Xã Nhơn Đức", id: "nhonduc" },
-          { name: "Xã Phú Xuân", id: "phuxuan" },
-          { name: "Xã Phước Kiển", id: "phuockien" },
-          { name: "Xã Phước Lộc", id: "phuocloc" },
-        ],
-      },
-    ],
-  },
-  {
-    name: "Thành phố Đà Nẵng",
-    id: "danang",
-    districts: [
-      {
-        name: "Chọn Quận / Huyện",
-        id: "",
-        wards: [
-          {
-            name: "Chọn Phường / Xã",
-            id: "",
-          },
-        ],
-      },
-      {
-        name: "Quận Liên Chiểu",
-        id: "lienchieu",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Hòa Hiệp Bắc", id: "hoahiepbac" },
-          { name: "Phường Hòa Hiệp Nam", id: "hoahiepnam" },
-          { name: "Phường Hòa Khánh Bắc", id: "hoakhanhbac" },
-          { name: "Phường Hòa Khánh Nam", id: "hoakhanhnam" },
-          { name: "Phường Hòa Minh", id: "hoaminh" },
-        ],
-      },
-      {
-        name: "Quận Hải Châu",
-        id: "haichau",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Bình Hiên", id: "binhhien" },
-          { name: "Phường Bình Thuận", id: "binhthuan" },
-          { name: "Phường Hòa Cường Bắc", id: "hoacuongbac" },
-          { name: "Phường Hòa Cường Nam", id: "hoacuongnam" },
-          { name: "Phường Hải Châu I", id: "haichaui" },
-          { name: "Phường Hải Châu II", id: "haichauii" },
-          { name: "Phường Hòa Thuận Đông", id: "hoathuandong" },
-          { name: "Phường Hòa Thuận Tây", id: "hoathuantay" },
-          { name: "Phường Nam Dương", id: "namduong" },
-          { name: "Phường Phước Ninh", id: "phuocninh" },
-          { name: "Phường Thạch Thang", id: "thachthang" },
-          { name: "Phường Thanh Bình", id: "thanhbinh" },
-          { name: "Phường Thuận Phước", id: "thuanphuoc" },
-        ],
-      },
-      {
-        name: "Quận Ngũ Hành Sơn",
-        id: "nguhanhson",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Hòa Hải", id: "hoahai" },
-          { name: "Phường Hòa Quý", id: "hoaquy" },
-          { name: "Phường Khuê Mỹ", id: "khuemy" },
-          { name: "Phường Mỹ An", id: "myan" },
-        ],
-      },
-      {
-        name: "Quận Sơn Trà",
-        id: "sontra",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường An Hải Bắc", id: "anhaibac" },
-          { name: "Phường An Hải Đông", id: "anhaidong" },
-          { name: "Phường An Hải Tây", id: "anhaitay" },
-          { name: "Phường Mân Thái", id: "manthai" },
-          { name: "Phường Nại Hiên Đông", id: "naihiendong" },
-          { name: "Phường Phước Mỹ", id: "phuocmy" },
-          { name: "Phường Thọ Quang", id: "thoquang" },
-        ],
-      },
-      {
-        name: "Quận Cẩm Lệ",
-        id: "camle",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường Hòa An", id: "hoaan" },
-          { name: "Phường Hòa Phát", id: "hoaphat" },
-          { name: "Phường Hòa Thọ Đông", id: "hoathodong" },
-          { name: "Phường Hòa Thọ Tây", id: "hoathotay" },
-          { name: "Phường Hòa Xuân", id: "hoaxuan" },
-          { name: "Phường Khuê Trung", id: "khuetrung" },
-        ],
-      },
-      {
-        name: "Quận Thanh Khê",
-        id: "thanhkhe",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Phường An Khê", id: "ankhe" },
-          { name: "Phường Chính Gián", id: "chinhgian" },
-          { name: "Phường Hòa Khê", id: "hoakhe" },
-          { name: "Phường Tam Thuận", id: "tamthuan" },
-          { name: "Phường Tân Chính", id: "tanchinh" },
-          { name: "Phường Thạc Gián", id: "thacgian" },
-          { name: "Phường Thanh Khê Đông", id: "thanhkhedong" },
-          { name: "Phường Thanh Khê Tây", id: "thanhkhetay" },
-          { name: "Phường Vĩnh Trung", id: "vinhtrung" },
-          { name: "Phường Xuân Hà", id: "xuanha" },
-        ],
-      },
-      {
-        name: "Huyện Hòa Vang",
-        id: "hoavang",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Xã Hòa Bắc", id: "hoabac" },
-          { name: "Xã Hòa Châu", id: "hoachau" },
-          { name: "Xã Hòa Liên", id: "hoalien" },
-          { name: "Xã Hòa Ninh", id: "hoaninh" },
-          { name: "Xã Hòa Phước", id: "hoaphuoc" },
-          { name: "Xã Hòa Sơn", id: "hoason" },
-          { name: "Xã Hòa Tiến", id: "hoatien" },
-          { name: "Xã Hòa Vinh", id: "hoavinh" },
-          { name: "Thị trấn Hòa Vang", id: "hoavangtown" },
-        ],
-      },
-      {
-        name: "Huyện Hoàng Sa",
-        id: "hoangsa",
-        wards: [
-          { name: "Chọn Phường / Xã", id: "" },
-          { name: "Thị trấn Tây Sơn", id: "tayson" },
-          { name: "Xã An Hải Bắc", id: "anhai-bac" },
-          { name: "Xã An Hải Đông", id: "anhai-dong" },
-          { name: "Xã An Vĩnh", id: "anvinh" },
-          { name: "Xã Bình Minh", id: "binhminh" },
-          { name: "Xã Hoàng Sa", id: "hoangsa" },
-        ],
-      },
-    ],
-  },
-];
+// Hàm hiện dialog cho việc "chọn" địa chỉ
+export function showAddressSelectDialog(idAddressInput, idAddressButton) {
+  //
+  const addressButton = document.getElementById(idAddressButton);
+
+  //
+  addressButton.addEventListener("click", (e) => {
+    // - Loại bỏ giá trị mặc định
+    e.preventDefault();
+
+    // - Thể hiện là nút đang được nhấn
+    addressButton.classList.add("active");
+
+    // Tạo một dialog để thêm một người dùng
+    const addAddressDialog = document.createElement("dialog");
+    // - Định dạng dialog
+    addAddressDialog.classList.add("dialog");
+    addAddressDialog.classList.add("address-select");
+    addAddressDialog.style.width = "34%";
+    // - Ghi nội dung dialog
+    addAddressDialog.innerHTML = `
+    <h1 class="dialog__title">Tạo địa chỉ</h1>
+    <button id="close-address-select-button" class="dialog__close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="dialog__line"></div>
+    <div class="dialog__row">
+      <div class="dialog__form-group full">
+        <label for="number-street-input">Số nhà và tên đường</label>
+        <input
+          type="text" id="number-street-input"
+          placeholder="Nhập Số nhà và tên đường"
+          autocomplete="off"
+          autofocus
+        />
+      </div>
+    </div>
+    <div class="dialog__row">
+      <div class="dialog__form-group full">
+        <label>Tỉnh / Thành phố</label>
+        <select id="province-select"></select>
+      </div>
+    </div>
+    <div class="dialog__row">
+      <div class="dialog__form-group full">
+        <label>Quận / Huyện</label>
+        <select id="district-select"></select>
+      </div>
+    </div>
+    <div class="dialog__row">
+      <div class="dialog__form-group full">
+        <label>Phường / Xã</label>
+        <select id="ward-select"></select>
+      </div>
+    </div>
+    <div class="dialog__buttons">
+      <button id="address-select-button" class="btn yes">Xác nhận</button>
+    </div>
+  `;
+
+    // Thêm vào body
+    document.body.appendChild(addAddressDialog);
+
+    // Hiển thị addAddressDialog
+    addAddressDialog.showModal();
+
+    // - Gọi hàm cập nhật địa chỉ
+    const numberStreetInput = document.getElementById("number-street-input");
+    const provinceSelect = document.getElementById("province-select");
+    const districtSelect = document.getElementById("district-select");
+    const wardSelect = document.getElementById("ward-select");
+    updateAddressSelect(
+      provinceSelect,
+      districtSelect,
+      wardSelect,
+      provinceDefault,
+      districtDefault,
+      wardDefault
+    );
+
+    // Gán sự kiện cho nút "Xác nhận"
+    document
+      .getElementById("address-select-button")
+      .addEventListener("click", (e) => {
+        // Gán địa chỉ đã tạo cho input tương ứng
+        const numberStreetValue = numberStreetInput.value || null;
+        const wardValue =
+          wardSelect.options[wardSelect.selectedIndex].text == wardDefault
+            ? null
+            : wardSelect.options[wardSelect.selectedIndex].text;
+        const districtValue =
+          districtSelect.options[districtSelect.selectedIndex].text ==
+          districtDefault
+            ? null
+            : districtSelect.options[districtSelect.selectedIndex].text;
+        const provinceValue =
+          provinceSelect.options[provinceSelect.selectedIndex].text ==
+          provinceDefault
+            ? null
+            : provinceSelect.options[provinceSelect.selectedIndex].text;
+
+        if (numberStreetValue && wardValue && districtValue && provinceValue) {
+          // Thông báo tạo thành công
+          toast({
+            title: "Thành công",
+            message: "Tạo địa chỉ thành công !",
+            type: "success",
+            duration: 1200,
+          });
+
+          // Đợi thông báo thành công thì thực hiện việc thay đổi định dạng và gán
+          setTimeout(() => {
+            // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
+            addressButton.classList.remove("active");
+
+            document.getElementById(
+              `${idAddressInput}`
+            ).value = `${numberStreetValue}, ${wardValue}, ${districtValue}, ${provinceValue}`;
+
+            // Xoá dialog
+            addAddressDialog.remove();
+          }, 1700);
+        } else {
+          let errors = [];
+          if (!numberStreetValue) {
+            errors.push({
+              field: "number-street",
+              defaultMessage: "Số nhà và tên đường không được để trống !",
+            });
+          }
+          if (!wardValue) {
+            errors.push({
+              field: "ward",
+              defaultMessage: `${wardDefault} không được để trống !`,
+            });
+          }
+          if (!districtValue) {
+            errors.push({
+              field: "district",
+              defaultMessage: `${districtDefault} không được để trống !`,
+            });
+          }
+          if (!provinceValue) {
+            errors.push({
+              field: "province",
+              message: `${provinceDefault} không được để trống !`,
+            });
+          }
+          toast({
+            title: "Thất bại",
+            message: "Tạo địa chỉ bhất bại !",
+            type: "error",
+            duration: 1200,
+          });
+        }
+      });
+
+    // Gán sự kiện cho nút "Đóng"
+    document
+      .getElementById("close-address-select-button")
+      .addEventListener("click", () => {
+        // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
+        addressButton.classList.remove("active");
+
+        // Xoá dialog
+        addAddressDialog.remove();
+      });
+  });
+}

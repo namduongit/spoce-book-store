@@ -6,5 +6,5 @@ import { renderPublisherTable } from "./renderPublisherTable.js";
 export function updatePublisherTable() {
   filterPublisherData();
   addPublisherData();
-  renderPublisherTable();
+  renderPublisherTable(1);
 }

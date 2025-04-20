@@ -6,5 +6,5 @@ import { renderCategoryTable } from "./renderCategoryTable.js";
 export function updateCategoryTable() {
   filterCategoryData();
   addCategoryData();
-  renderCategoryTable();
+  renderCategoryTable(1);
 }

@@ -60,7 +60,7 @@ export function updateRevenueDashboardTable() {
 }
 
 // Hàm cập nhật lại dữ liệu cho bảng Thống kê doanh thu
-export function renderRevenueDashboardTable(
+export async function renderRevenueDashboardTable(
   timelineValueSelected,
   timelineDetailValueSelected
 ) {
@@ -108,11 +108,23 @@ export function renderRevenueDashboardTable(
     ".main__data > .main__table.revenue_dashboard > tfoot > tr > td:nth-of-type(4)"
   );
 
+  //
+  // const orders = await fetch("/api/orders/get_orders.php", {
+  //   method: "GET",
+  // }).then((response) => {
+  //   if (!response.ok) {
+  //     throw new Error("Xem chi tiết thất bại!");
+  //   }
+  //   return response.json();
+  // });
+  // console.log(orders);
+
   // Cập nhật lại dữ liệu cho bảng (Cần xử lý truy vấn dữ liệu chỗ này để tính toán)
   data = [];
   let timeline =
     month !== 0 ? getWeeksInMonth(year, month) : getMonthsInYear(year);
   timeline.forEach((time) => {
+    console.log(time);
     data.push({
       time: time.week ? time.week : time.month,
       start: time.start,

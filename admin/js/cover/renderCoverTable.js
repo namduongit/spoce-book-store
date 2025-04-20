@@ -6,8 +6,8 @@ import { filterCover } from "./filterCoverData.js";
 let data = [];
 
 // Hàm cập nhật lại dữ liệu cho bảng Thể loại
-export async function renderCoverTable() {
-  data = await filterCover();
+export async function renderCoverTable(currentPage) {
+  data = await filterCover(currentPage);
   // Biến chứa đối tượng bảng Thể loại
   const bodyInCoverTable = document.querySelector(
     ".main__data > .main__table.cover > tbody"
@@ -21,32 +21,30 @@ export async function renderCoverTable() {
               <td>${data[i].id}</td>
               <td>${data[i].name}</td>
               <td><span ${
-                data[i].status === "ACTIVE" ? 'class="green"' : 'class="red"'
+                data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
               }>${data[i].status}</span></td>
               <td>
-                  <i id="update-button-cover" class="fa-solid fa-pen-to-square"></i>
-                  <i id="lock-button-cover" class="fa-solid fa-${
-                    data[i].status === "ACTIVE" ? "" : "un"
+                  <i class="fa-solid fa-pen-to-square"></i>
+                  <i class="fa-solid fa-${
+                    data[i].status === "Hoạt động" ? "" : "un"
                   }lock"></i>
               </td>
           </tr>
       `;
   }
-  if(data.length == 0){
-    html =  `
+  if (data.length == 0) {
+    html = `
           <tr>
               <td></td>
               <td>Danh sách trống</td>             
               <td></td>
           </tr>
       `;
-  bodyInCoverTable.innerHTML = html;
-
-  }else{
-
+    bodyInCoverTable.innerHTML = html;
+  } else {
     // Cập nhật lại giao diện
     bodyInCoverTable.innerHTML = html;
-  
+
     // Gán sự kiện cho các nút sau khi thay đổi giao diện
     const idColumnInTable = document.querySelectorAll(
       ".main__data > .main__table.cover > tbody > tr > td:first-of-type"
@@ -60,21 +58,21 @@ export async function renderCoverTable() {
       const lockButton = buttons.children[1];
       // Id của đối tượng đã được chọn để thao tác
       const idCoverSelected = idColumnInTable.item(row).textContent;
-  
+
       // Gán sự kiện hiện dialog sửa thể loại
       updateButton.addEventListener("click", (e) => {
         // Loại bỏ giá trị mặc định
         e.preventDefault();
-  
+
         // Gọi hàm sự kiện
         updateCoverData(idCoverSelected);
       });
-  
+
       // Gán sự kiện hiện dialog khoá / mở khoá thể loại
       lockButton.addEventListener("click", (e) => {
         // Loại bỏ giá trị mặc định
         e.preventDefault();
-  
+
         // Gọi hàm sự kiện
         lockCoverData(idCoverSelected);
       });

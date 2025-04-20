@@ -8,31 +8,27 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Nhận dữ liệu từ POST
-$coverStatus = isset($_POST['coverStatus']) ? $_POST['coverStatus'] : '';
-$coverId = isset($_POST['coverId']) ? $_POST['coverId'] : '1';
-$coverName = isset($_POST['coverName']) ? $_POST['coverName'] : '';
-$updateDateTime = date("Y-m-d H:i:s");
+$id = isset($_POST['id']) ? $_POST['id'] : '1';
+$name = isset($_POST['name']) ? $_POST['name'] : '';
+$updateAt = date("Y-m-d H:i:s");
 
-// Kiểm tra coverId có hợp lệ không
-if (empty($coverId)) {
-    echo json_encode(["success" => false, "message" => "Thiếu ID tthể loại."]);
+// Kiểm tra id có hợp lệ không
+if (empty($id)) {
+    echo json_encode(["success" => false, "message" => "Thiếu ID loại bìa."]);
     exit;
 }
 
-// Chuyển trạng thái tác giả
-$coverStatus = ($coverStatus === 'ACTIVE') ? 'ACTIVE' : 'INACTIVE';
-
 try {
-   
-    $cover_model = new app_models_LoaiBia();
+    $model = new app_models_LoaiBia();
 
     // Cập nhật trạng thái tác giả trong database
-    $result = $cover_model->updatecover(
-        $coverId,
-        [  "tenLoaiBia" => $coverName,
-            "trangThai" => $coverStatus,
-            "ngayCapNhat" => $updateDateTime
-        ]);
+    $result = $model->updateCover(
+        $id,
+        [  
+            "tenLoaiBia" => $name,
+            "ngayCapNhat" => $updateAt
+        ]
+    );
 
     // Kiểm tra số dòng bị ảnh hưởng
     if ($result && $result->rowCount() > 0) {

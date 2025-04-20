@@ -1,24 +1,21 @@
 /* thoong bao */
 #notification-dialog {
-  max-width: 400px;
-  margin: 0 auto;
-  border-radius: 8px;
-  background-color: #ffffff;
-  text-align: center;
-  border: 0;
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate3d(-50%, -50%, 0);
+  max-width: 400px;
+  background-color: #ffffff;
   border: none;
+  border-radius: 8px;
   box-shadow: 0 5px 30px 0 rgba(0, 0, 0, 0.2);
 }
 
 #notification-title {
   background-color: #044785;
-  margin: 0px;
   line-height: 35px;
   color: white;
+  text-align: center;
 }
 
 #notification-dialog::backdrop {
@@ -48,20 +45,18 @@
 
 /* <===== Input Text Form 1 =====> */
 
-.main__row_item{
+.main__row_item {
   display: flex;
   flex-direction: column;
 }
 
 .main__find-inp-book-constainer input,
 .main__row_item select {
-  padding: 0.5rem 0.8rem; 
+  padding: 0.5rem 0.8rem;
   width: 100%;
   border-radius: 7px;
   border: 1px solid gray;
 }
-
-
 
 .inp-text-form-1 {
   position: relative;
@@ -230,7 +225,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     .privilege,
     .account,
     .discount,
-    .supplies,
+    .supplier,
     .input_ticket,
     .book,
     .author,
@@ -241,10 +236,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     .address-select,
     .input_ticket-detail
   ) {
+  all: unset;
+  display: block;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 2 !important;
   /* width: 300px; */
   background: white;
   padding: 22px 24px;
@@ -256,6 +254,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   position: relative;
   top: -4px;
   font-size: 20px;
+  font-weight: 700;
   text-align: center;
 }
 .dialog__line {
@@ -301,6 +300,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-size: 16px;
   transition: 0.3s ease-in-out;
 }
+.dialog__form-group label {
+  position: relative;
+}
+.dialog__form-group label span {
+  position: absolute;
+  top: -6px;
+  left: calc(100% + 6px);
+  color: #dedede;
+  font-size: 20px;
+  transition: 0.3s ease-in-out;
+}
 .dialog__form-group :is(input, textarea) {
   padding-left: 8px;
   outline: none;
@@ -308,6 +318,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   margin-top: 4px;
   border-radius: 12px;
   pointer-events: auto;
+}
+.dialog__form-group input.text-center {
+  text-align: center;
 }
 .dialog__form-group :is(input, textarea):read-only {
   background: #dedede;
@@ -327,12 +340,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .dialog__form-group:has(:is(input, textarea):where(:focus, :hover)) label {
   color: #000;
 }
+.dialog__form-group:has(:is(input, textarea):where(:focus, :hover)) label span {
+  color: red;
+}
 .dialog__form-group :is(input, textarea):is(:focus, :hover) {
   border-color: #000;
   color: #000;
 }
 .dialog__form-group:has(:is(input, textarea):not(:placeholder-shown)) label {
   color: #000;
+}
+.dialog__form-group:has(:is(input, textarea):not(:placeholder-shown))
+  label
+  span {
+  color: red;
 }
 .dialog__form-group:has(input:not(:placeholder-shown)) input,
 .dialog__form-group:has(textarea:not(:placeholder-shown)) textarea {
@@ -356,8 +377,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .dialog__form-group:has(select:hover, select.changed) label {
   color: #000;
 }
+.dialog__form-group:has(select:hover, select.changed) label span {
+  color: red;
+}
 .dialog__form-group:has(select:disabled) label {
   color: #000;
+}
+.dialog__form-group:has(select:disabled) label span {
+  color: red;
 }
 .dialog__form-group select:disabled {
   background: #dedede;
@@ -556,7 +583,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #ffffff;
   line-height: var(--table-height);
   font-weight: bold;
-
 }
 .dialog__form-group table th,
 .dialog__form-group table td {
