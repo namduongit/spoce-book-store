@@ -44,7 +44,7 @@ export async function renderDiscountTable(pageIsSelected = 1) {
   try {
     // Lấy dữ liệu từ API
     const data = await filterDiscount(pageIsSelected);
-    console.log("Dữ liệu khuyến mãi:", data.discountList);
+    // console.log("Dữ liệu khuyến mãi:", data.discountList);
     if (!data || !data.discountList || data.discountList.length === 0) {
       console.log("Không có dữ liệu");
       return;

@@ -5,6 +5,7 @@ import { getBookByID } from "../book/getDataBook.js";
 import { showAddressInCurrentUser } from "../auth/displayInfoUser.js";
 import { getCurrentUser } from "../auth/displayInfoUser.js";
 import { updateAddressSelect } from "../../../api/address/updateAddressSelect.js";
+import { showConfirmationDialog } from "../question.js";
 
 
 window.onload = async function() {
@@ -825,9 +826,9 @@ async function checkOutBill() {
     });
 
     
+
     // Submit gửi đơn hàng lên Server
-    document.querySelector('.checkout__submit-btn-final').addEventListener('click', function() {
-        console.log('Đã ấn hoàn tất đơn hàng');
+    document.querySelector('.checkout__submit-btn-final').addEventListener('click', async function() {
         let pickUpAddress = null;
         let customerName = null;
         let customerNumberphone = null;
@@ -868,6 +869,117 @@ async function checkOutBill() {
         if (selectedPayment) {
             paymentMethod = selectedPayment.value;
         }
+
+        if (pickUpAddress == null || pickUpAddress.replace(/\s|\/+/g, '').length === 0) {
+            toast({
+                type: 'warning',
+                message: 'Bạn chưa điền địa chỉ',
+                title: 'Thông báo',
+                duration: 3000
+            });
+            return;
+        }
+
+        if (customerName == null || customerName.length == 0) {
+            toast({
+                type: 'warning',
+                message: 'Bạn chưa điền tên người nhận hàng',
+                title: 'Thông báo',
+                duration: 3000
+            });
+            return;
+        }
+
+        if (customerNumberphone == null || customerNumberphone.length == 0) {
+            toast({
+                type: 'warning',
+                message: 'Bạn chưa nhập số điện thoại người nhận hàng',
+                title: 'Thông báo',
+                duration: 3000
+            });
+            return;
+        }
+
+        if (customerNumberphone.length != 10) {
+            toast({
+                type: 'warning',
+                message: 'Vui lòng nhập đúng định dạng số điện thoại đầu số Việt Nam',
+                title: 'Thông báo',
+                duration: 3000
+            });
+            return;
+        }
+
+        if (shipMethod == null || shipMethod.length == 0) {
+            toast({
+                type: 'warning',
+                message: 'Bạn chưa chọn phương thức vận chuyển',
+                title: 'Thông báo',
+                duration: 3000
+            });
+            return;
+        }
+
+        if (paymentMethod == null || paymentMethod.length == 0) {
+            toast({
+                type: 'warning',
+                message: 'Bạn chưa chọn phương thức thanh toán',
+                title: 'Thông báo',
+                duration: 3000
+            });
+            return;
+        }
+
+
+
+        const resultOrder = await showConfirmationDialog('Xác nhận đặt hàng ?');
+        if (resultOrder == true) {
+            console.log('Đồng ý thanh toán');
+            
+            if (paymentMethod != -1) {
+                console.log('Không phải thanh toán VNPAY');
+
+            } else {
+                showLoading();
+
+
+                const response = await fetch('../../../vnpay_php/vnpay_create_payment.php', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        order_id: "Thời gian hiện tại",        
+                        order_type: 'billpayment',    
+                        amount: 'Số tiền',        
+                        order_desc: "SpoceBookStore + Thời gian hiện tại",            
+                        bank_code: '',           
+                        language: 'vn', 
+                        txtexpire: 'Thời gian hiện tại + 15p',
+                        txt_billing_fullname: "Tên người dùng hiện tại trong hệ thống",
+                        txt_billing_email: "email người dùng hiện tại trong hệ thống nếu không có để spocesupport@gmail.com",
+                        txt_billing_mobile: "Tương tự 0388853835",
+                        txt_billing_addr1: "Địa chỉ đang chọn",
+                        txt_postalcode: "Này để fetch api lấy",
+                        txt_bill_city: "Địa chỉ đang chọn",
+                        txt_bill_country: "VN",
+                        txt_ship_fullname: "Tập đoàn Spoce Tech",
+                        txt_ship_email: "nguyennamduong205@gmail.com",
+                        txt_ship_mobile: "0388853835",
+                        txt_ship_addr1: "Tổ 12 KP Phú Mỹ, Phường Xuân Lập, Thành phố Long Khánh, tỉnh Đồng Nai",
+                        txt_ship_postalcode: "76468",
+                        txt_ship_city: "Đồng Nai",
+                        txt_ship_country: "VN",
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                hideLoading();
+            }
+        } else {
+            console.log('Không đồng ý');
+
+        }
+
+
 
 
 

@@ -231,3 +231,8 @@
 
     </body>
 </html>
+
+<!-- 
+'chiTietPhieuNhap', 'CREATE TABLE `chiTietPhieuNhap` (\n  `maPhieuNhap` int NOT NULL,\n  `maSach` int NOT NULL,\n  `giaNhap` int NOT NULL,\n  `soLuong` int NOT NULL,\n  `tienNhap` int NOT NULL,\n  PRIMARY KEY (`maPhieuNhap`,`maSach`),\n  KEY `maSach` (`maSach`),\n  CONSTRAINT `chiTietPhieuNhap_ibfk_1` FOREIGN KEY (`maPhieuNhap`) REFERENCES `phieuNhap` (`maPhieuNhap`) ON DELETE CASCADE,\n  CONSTRAINT `chiTietPhieuNhap_ibfk_2` FOREIGN KEY (`maSach`) REFERENCES `sach` (`maSach`) ON DELETE CASCADE,\n  CONSTRAINT `chiTietPhieuNhap_chk_1` CHECK ((`giaNhap` > 0)),\n  CONSTRAINT `chiTietPhieuNhap_chk_2` CHECK ((`soLuong` > 0)),\n  CONSTRAINT `chiTietPhieuNhap_chk_3` CHECK ((`tienNhap` >= 0))\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci'
+
+-->

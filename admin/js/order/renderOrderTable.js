@@ -3,6 +3,8 @@ import { updateOrderData } from "./updateOrderData.js";
 import { printOrderTicket } from "./printOrderTicket.js";
 import { filterOrder } from "./filterOrderData.js";
 
+
+
 // Hàm tách các thông tin trong địa chỉ giao hàng (địa chỉ hợp lệ)
 function splitAddressToShip(address) {
   if (!address) return "Không có địa chỉ";

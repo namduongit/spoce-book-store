@@ -4,7 +4,7 @@ export function updateAddressSelect(province, district, ward) {
     var callAPI = (api, callback) => {
         axios.get(api)
             .then(response => callback(response.data))
-            .catch(error => console.error("Lỗi API:", error));
+            .catch(error => console.log("Lỗi API:", error));
     };
 
     // Load danh sách tỉnh/thành phố
@@ -150,4 +150,78 @@ export function autoSelectAddressByName(province, district, ward, provinceName =
             });
         }
     });
+}
+
+
+export function loadProvinceAndDistrictUl(provinceUlId, districtUlId) {
+    const provinceUl = document.getElementById(provinceUlId);
+    const districtUl = document.getElementById(districtUlId);
+
+    console.log('Bắt đầu render')
+
+    if (provinceUl && districtUl) {
+        console.log('Chạy vào đây và không NULL');
+        return;
+    }
+
+    const callAPI = (url, callback) => {
+        axios.get(url)
+            .then(res => callback(res.data))
+            .catch(err => console.error("Lỗi API:", err));
+    };
+
+    const renderUl = (array, ulElement, onClickItem) => {
+        ulElement.innerHTML = "";
+        array.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = item.name;
+            li.dataset.code = item.code;
+            li.addEventListener("click", () => {
+                if (typeof onClickItem === "function") {
+                    onClickItem(item);
+                }
+            });
+            ulElement.appendChild(li);
+        });
+    };
+
+    // Gọi API để lấy danh sách tỉnh/thành
+    callAPI(`${host}?depth=1`, (provinces) => {
+        renderUl(provinces, provinceUl, (province) => {
+            // Khi chọn tỉnh, load quận/huyện tương ứng
+            callAPI(`${host}p/${province.code}?depth=2`, (provinceData) => {
+                renderUl(provinceData.districts, districtUl);
+            });
+        });
+    });
+}
+
+
+export async function getProvinceUlHtml() {
+    try {
+        const res = await axios.get(`${host}?depth=1`);
+        const provinces = res.data;
+
+        return provinces.map(province =>
+            `<li data-code="${province.code}">${province.name}</li>`
+        ).join("");
+    } catch (err) {
+        console.error("Lỗi API khi load tỉnh/thành:", err);
+        return "<li>Không thể tải dữ liệu</li>";
+    }
+}
+
+
+export async function getDistrictUlHtml(provinceCode) {
+    try {
+        const res = await axios.get(`${host}p/${provinceCode}?depth=2`);
+        const districts = res.data.districts;
+
+        return districts.map(d =>
+            `<li data-code="${d.code}">${d.name}</li>`
+        ).join("");
+    } catch (err) {
+        console.error("Lỗi API khi load quận/huyện:", err);
+        return "<li>Không thể tải dữ liệu</li>";
+    }
 }

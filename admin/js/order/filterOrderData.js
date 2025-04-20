@@ -60,7 +60,7 @@ export async function filterOrder(pageIsSelected = 1) {
     }
 
     let data = await response.text();
-    console.log("Dữ liệu nhận được:", data);
+    // console.log("Dữ liệu nhận được:", data);
     // await paginationOrder(data.pageCount); // nếu có
     return data.orderList;
   } catch (error) {

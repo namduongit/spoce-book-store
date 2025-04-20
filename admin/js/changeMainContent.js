@@ -1072,10 +1072,6 @@ const mainContentMap = {
   </button>
 </div>
 `,
-<<<<<<< HEAD
-
-=======
->>>>>>> efa680fa0510574d9f72a880a77478eb73ba81c4
 };
 
 // Biến dùng để chuyển nội dung chính tương ứng với từng trang
@@ -1179,7 +1175,6 @@ async function showCategory() {
     return;
   }
 
-<<<<<<< HEAD
   const ulElement = document.querySelector('.main__category-slt ul');
   let li = document.createElement('li');
   listCategory.forEach(category => {
@@ -1187,13 +1182,5 @@ async function showCategory() {
     li.textContent = category.name;
     ulElement.appendChild(li);
 
-=======
-  const ulElement = document.querySelector(".main__category-slt ul");
-  let li = document.createElement("li");
-  listCategory.forEach((category) => {
-    let li = document.createElement("li");
-    li.textContent = category.name;
-    ulElement.appendChild(li);
->>>>>>> efa680fa0510574d9f72a880a77478eb73ba81c4
   });
 }
