@@ -9,11 +9,11 @@ function splitAddressToShip(address) {
 function getRoleName(maQuyen) {
   switch (parseInt(maQuyen)) {
     case 1:
-      return "Quản lý";
-    case 2:
-      return "Nhân viên thủ kho";
-    case 3:
       return "Nhân viên bán hàng";
+    case 2:
+      return "Quản lí";
+    case 3:
+      return "Nhân viên thủ kho";
     case 4:
       return "Khách hàng";
     default:
@@ -71,13 +71,13 @@ export function detailAccountData(idAccountSelected) {
               <div class="dialog__form-group">
                 <label>Số điện thoại</label>
                 <input type="text" id="detail-account-phone" readonly value="${
-                  user.soDT
+                  user.soDT == "" ? "Chưa có số điện thoại" : user.soDT
                 }" />
               </div>
               <div class="dialog__form-group">
                 <label>Email</label>
                 <input type="text" id="detail-account-email" readonly value="${
-                  user.email
+                  user.email == "" ? "Chưa có email" : user.email
                 }" />
               </div>
             </div>
@@ -85,10 +85,10 @@ export function detailAccountData(idAccountSelected) {
               <div class="dialog__form-group full">
                 <label>Địa chỉ</label>
                 <input type="text" id="detail-account-address" readonly value="${
-                  address[0].street
-                }, ${address[0].ward}, ${address[0].district}, ${
-          address[0].province
-        }" />
+                  address && address.length > 0
+                    ? `${address[0].street}, ${address[0].ward}, ${address[0].district}, ${address[0].province}`
+                    : "Chưa có địa chỉ"
+                }" />
               </div>
             </div>
             <div class="dialog__row">
@@ -146,11 +146,11 @@ export function detailAccountData(idAccountSelected) {
             detailDialog.remove();
           });
       } else {
-        alert("Không tìm thấy thông tin người dùng hoặc địa chỉ");
+        // alert("Không tìm thấy thông tin người dùng hoặc địa chỉ");
       }
     })
     .catch((error) => {
       console.error("Lỗi khi gọi API:", error);
-      alert("Có lỗi xảy ra khi tải dữ liệu");
+      // alert("Có lỗi xảy ra khi tải dữ liệu");
     });
 }

@@ -1,6 +1,8 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 import { updateAddressSelect } from "../../../api/address/updateAddressSelect.js";
-
+import { renderAccountTable } from "./renderAccountTable.js";
+import { toast } from "../../../public/js/toast.js";
+import { showNotification } from "../dialogMessage.js";
 // Hàm hiện dialog cho việc "chọn" địa chỉ
 function showAddressSelectDialog() {
   // Tạo một dialog để thêm một người dùng
@@ -76,7 +78,7 @@ function showAddressSelectDialog() {
 }
 
 // Hàm thiết lập sự kiện thêm một người dùng cho bảng
-export function addAccountData() {
+export async function addAccountData() {
   // Biến chứa đối tượng là nút "Thêm"
   const addButton = document.getElementById("add-button-account");
 
@@ -144,18 +146,18 @@ export function addAccountData() {
             <label>Nhóm quyền</label>
             <select id="add-account-privilege">
                 <option value="" selected>Chọn Nhóm quyền</option>
-                <option value="1">Quản lý</option>
-                <option value="2">Nhân viên thủ kho</option>
-                <option value="2">Nhân viên bán hàng</option>
-                <option value="3">Khách hàng</option>
+                <option value="2">Quản lý</option>
+                <option value="3">Nhân viên thủ kho</option>
+                <option value="1">Nhân viên bán hàng</option>
+                <option value="4">Khách hàng</option>
             </select>
           </div>
           <div class="dialog__form-group">
             <label>Trạng thái</label>
             <select id="add-account-status">
               <option value="" selected>Chọn Trạng thái</option>
-              <option value="1">Hoạt động</option>
-              <option value="0">Tạm dừng</option>
+              <option value="Hoạt động">Hoạt động</option>
+              <option value="Tạm dừng">Tạm dừng</option>
             </select>
           </div>
         </div>
@@ -193,30 +195,120 @@ export function addAccountData() {
 
     // Gán sự kiện cho nút "Thêm" dialog
     document
-      .getElementById("add-account-button")
-      .addEventListener("click", () => {
+      .getElementsByClassName("add")[0]
+      .addEventListener("click", async (e) => {
+        e.preventDefault();
         // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-        const id = document.getElementById("add-account-id");
-        const fullname = document.getElementById("add-account-fullname");
-        const phone = document.getElementById("add-account-phone");
-        const email = document.getElementById("add-account-email");
-        const address = document.getElementById("add-account-address");
-        const username = document.getElementById("add-account-username");
-        const password = document.getElementById("add-account-password");
-        const privilege = document.getElementById("add-account-privilege");
+        const id = document.getElementById("add-account-id").value.trim();
+        const fullname = document
+          .getElementById("add-account-fullname")
+          .value.trim();
+        const phone = document.getElementById("add-account-phone").value.trim();
+        const email = document.getElementById("add-account-email").value.trim();
+        const address = document
+          .getElementById("add-account-address")
+          .value.trim();
+        const username = document
+          .getElementById("add-account-username")
+          .value.trim();
+        const password = document
+          .getElementById("add-account-password")
+          .value.trim();
+        const privilege = document
+          .getElementById("add-account-privilege")
+          .value.trim();
         // - Chi tiết quyền
-        const status = document.getElementById("add-account-status");
+        const status = document
+          .getElementById("add-account-status")
+          .value.trim();
 
-        // ... (Xử lý tiếp ở đây)
-        console.log(id.value);
-        console.log(fullname.value);
-        console.log(phone.value);
-        console.log(email.value);
-        console.log(address.value);
-        console.log(username.value);
-        console.log(password.value);
-        console.log(privilege.value);
-        console.log(status.value);
+        // Kiểm tra tính hợp lệ của các biến
+        const validations = [
+          { condition: !fullname, message: "Vui lòng nhập họ và tên." },
+          { condition: !phone, message: "Vui lòng nhập số điện thoại." },
+          {
+            condition: !/^\d{10,11}$/.test(phone),
+            message: "Số điện thoại không hợp lệ.",
+          },
+          { condition: !email, message: "Vui lòng nhập email." },
+          {
+            condition: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+            message: "Email không hợp lệ.",
+          },
+          // { condition: !address, message: "Vui lòng nhập địa chỉ." },
+          { condition: !username, message: "Vui lòng nhập tên tài khoản." },
+          { condition: !password, message: "Vui lòng nhập mật khẩu." },
+          { condition: !privilege, message: "Vui lòng chọn nhóm quyền." },
+          { condition: !status, message: "Vui lòng chọn trạng thái." },
+        ];
+
+        // Duyệt qua từng điều kiện và hiển thị toast nếu có lỗi
+        for (const v of validations) {
+          if (v.condition) {
+            toast({
+              title: "Lỗi",
+              message: v.message,
+              type: "warning",
+              duration: 3000,
+            });
+            return;
+          }
+        }
+
+        let yes = await showNotification("Bạn có đồng ý thêm sách này không?");
+        const formData = new FormData();
+        if (yes) {
+          // Nếu hợp lệ thì tiếp tục gửi dữ liệu
+          formData.append("accountEmail", email);
+          formData.append("accountPhone", phone);
+          formData.append("accountFullName", fullname);
+          // formData.append("accountAddress", address);
+          formData.append("accountName", username);
+          formData.append("accountPassword", password);
+          formData.append("accountRole", parseInt(privilege));
+          formData.append("accountStatus", status);
+        }
+
+        try {
+          const response = await fetch("api/account/add_account.php", {
+            method: "POST",
+            body: formData,
+          });
+
+          const result = await response.json();
+          console.log(result);
+
+          if (result.success) {
+            // alert("Thêm sách thành công!");
+            toast({
+              title: "Thành công",
+              message: `Thêm sách thành công`,
+              type: "success",
+              duration: 3000,
+            });
+          } else {
+            // alert("Lỗi thêm sách: " + (result.error || "Không rõ nguyên nhân"));
+            toast({
+              title: "Cảnh báo",
+              message: `${result.message}`,
+              type: "warning",
+              duration: 3000,
+            });
+          }
+        } catch (error) {
+          console.error("Lỗi fetch API:", error);
+          // alert("Không thể kết nối đến server!");
+          toast({
+            title: "Lỗi",
+            message: `Lỗi fetch API:${error}`,
+            type: "error",
+            duration: 3000,
+          });
+        }
+
+        addDialog.remove();
+        addButton.classList.remove("active");
+        renderAccountTable();
       });
 
     // Gán sự kiện cho nút "Đóng" dialog
