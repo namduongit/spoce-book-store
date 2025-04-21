@@ -1,14 +1,17 @@
 <?php
-class app_models_DiaChiNguoiDung extends app_libs_DBConnection {
+class app_models_DiaChiNguoiDung extends app_libs_DBConnection
+{
     protected $table_name = 'diaChiNguoiDung';
 
     // Lấy tất cả địa chỉ
-    public function getAllAddresses() {
+    public function getAllAddresses()
+    {
         return $this->building_queryParam()->select();
     }
 
     // Lấy địa chỉ theo mã người dùng
-    public function getAddressesByUserId($maNguoiDung) {
+    public function getAddressesByUserId($maNguoiDung)
+    {
         return $this->building_queryParam([
             'where' => 'maNguoiDung = ?',
             'params' => [$maNguoiDung]
@@ -16,25 +19,28 @@ class app_models_DiaChiNguoiDung extends app_libs_DBConnection {
     }
 
     // Thêm địa chỉ mới
-    public function insertAddress($data) {
+    public function insertAddress($data)
+    {
         return $this->building_queryParam([
             'field' => $data
         ])->insert();
     }
 
-    // Cập nhật địa chỉ
-    public function updateAddress($maDiaChi, $data) {
-        $data['maDiaChi'] = $maDiaChi;
-    
+    public function updateAddress($maNguoiDung, $data)
+    {
+        // Thêm mã người dùng vào dữ liệu cần truyền
+        $data['maNguoiDung'] = $maNguoiDung;
+
         return $this->building_queryParam([
             'value' => $data,
-            'where' => 'maDiaChi = :maDiaChi',
+            'where' => 'maNguoiDung = :maNguoiDung',
             'params' => $data
         ])->update();
     }
-    
 
-    public function getAddressById($idAddress) {
+
+    public function getAddressById($idAddress)
+    {
         return $this->building_queryParam([
             'where' => 'maDiaChi = ?',
             'params' => [$idAddress]
@@ -42,19 +48,19 @@ class app_models_DiaChiNguoiDung extends app_libs_DBConnection {
     }
 
     // Xóa địa chỉ
-    public function deleteAddress($maDiaChi) {
+    public function deleteAddress($maDiaChi)
+    {
         return $this->building_queryParam([
             'where' => 'maDiaChi = ?',
             'params' => [$maDiaChi]
         ])->delete();
     }
 
-    public function deleteAddressByUser($maDiaChi, $maNguoiDung) {
+    public function deleteAddressByUser($maDiaChi, $maNguoiDung)
+    {
         return $this->building_queryParam([
             'where' => 'maDiaChi = ? AND maNguoiDung = ?',
             'params' => [$maDiaChi, $maNguoiDung]
         ])->delete();
     }
-    
 }
-?>

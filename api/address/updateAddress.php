@@ -11,14 +11,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(["success" => false, "message" => "Phương thức không được phép"]);
     exit();
 }
-
-$maDiaChi = $_POST['idAddress'] ?? '';
 $soNha = $_POST['houseAddress'] ?? '';
 $tinhThanh = $_POST['provinceAddress'] ?? '';
 $quanHuyen = $_POST['cityAddress'] ?? '';
 $phuongXa = $_POST['wardAddress'] ?? '';
+$maNguoiDung = $_POST['idUser'] ?? '';
 
-if (empty($maDiaChi) || empty($soNha) || empty($tinhThanh) || empty($quanHuyen) || empty($phuongXa)) {
+if (empty($maNguoiDung) || empty($soNha) || empty($tinhThanh) || empty($quanHuyen) || empty($phuongXa)) {
     http_response_code(400);
     echo json_encode([
         "success" => false,
@@ -30,7 +29,7 @@ if (empty($maDiaChi) || empty($soNha) || empty($tinhThanh) || empty($quanHuyen) 
 try {
     $address_model = new app_models_DiaChiNguoiDung();
 
-    $result = $address_model->updateAddress($maDiaChi, [
+    $result = $address_model->updateAddress($maNguoiDung, [
         'soNha' => $soNha,
         'tinhThanh' => $tinhThanh,
         'quanHuyen' => $quanHuyen,
@@ -50,4 +49,3 @@ try {
         "message" => "Đã xảy ra lỗi: " . $e->getMessage()
     ]);
 }
-?>
