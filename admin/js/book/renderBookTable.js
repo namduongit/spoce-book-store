@@ -5,7 +5,6 @@ import { filterBook } from "./filterBookData.js";
 
 // Hàm cập nhật lại dữ liệu cho bảng Thể loại
 export async function renderBookTable(currentPage) {
-  console.log("khangggg");
   const data = await filterBook(currentPage);
 
   // Biến chứa đối tượng bảng Thể loại

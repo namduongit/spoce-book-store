@@ -32,8 +32,6 @@ export  async function addBookData() {
     addDialog.style.width = "1178px";
     // - Ghi nội dung dialog
     addDialog.innerHTML = `
-    <div id="toast"></div>
-
         <h1 class="dialog__title">Thêm sách</h1>
         <button id="close-book-button" class="dialog__close">
             <i class="fa-solid fa-xmark"></i>
@@ -121,8 +119,8 @@ export  async function addBookData() {
             <div class="dialog__row">
                 <div class="dialog__form-group book"></div>
                 <div class="dialog__form-group book">
-                    <label>Giá bìa</label>
-                    <input type="text" id="add-book-price-base" placeholder="Nhập Giá bìa" />
+                    <label>Giá gốc</label>
+                    <input type="text" id="add-book-price-base" placeholder="Nhập Giá Gốc" />
                 </div>
                 <div class="dialog__form-group book">
                     <label>Giá bán</label>
@@ -393,9 +391,9 @@ defaultDateSelected("add-book-publish-year");
 
             }
         
+            await renderBookTable(1);
             addDialog.remove();
             addButton.classList.remove("active");
-            renderBookTable(1);
         }
 
     });
