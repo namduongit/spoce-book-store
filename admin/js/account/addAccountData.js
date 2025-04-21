@@ -182,15 +182,52 @@ export async function addAccountData() {
       isNotFirstItemSelected(select);
     });
     // - Nút hiển thị dialog cho phép chọn được địa chỉ gần hợp lệ
+    let fullAddress = ""; // Biến chứa địa chỉ đầy đủ
     const addressButton = document.querySelector(
       ".dialog__form-group > button.address"
     );
+
     addressButton.addEventListener("click", (e) => {
       // - Loại bỏ giá trị mặc định
       e.preventDefault();
 
-      // -
       showAddressSelectDialog();
+      document
+        .getElementById("address-select-button")
+        .addEventListener("click", (e) => {
+          e.preventDefault();
+          console.log("ok");
+
+          const numberHomeAndStreetName = document.getElementById(
+            "number-home-and-street-name-input"
+          ).value;
+          const province = document
+            .getElementById("province-select")
+            .selectedOptions[0].textContent.trim();
+          const district = document
+            .getElementById("district-select")
+            .selectedOptions[0].textContent.trim();
+          const ward = document
+            .getElementById("ward-select")
+            .selectedOptions[0].textContent.trim();
+
+          if (!numberHomeAndStreetName || !province || !district || !ward) {
+            toast({
+              title: "Lỗi",
+              message: "Vui lòng chọn đầy đủ thông tin.",
+              type: "warning",
+              duration: 3000,
+            });
+            return;
+          }
+
+          fullAddress = `${numberHomeAndStreetName}, ${ward}, ${district}, ${province}`;
+          document.getElementById("add-account-address").value = fullAddress;
+
+          // Tự đóng dialog địa chỉ
+          const addressDialog = document.querySelector("dialog.address-select");
+          if (addressDialog) addressDialog.remove();
+        });
     });
 
     // Gán sự kiện cho nút "Thêm" dialog
@@ -221,7 +258,15 @@ export async function addAccountData() {
         const status = document
           .getElementById("add-account-status")
           .value.trim();
+        // Regex kiểm tra địa chỉ hợp lệ: "Số nhà Tên đường, Phường ..., Quận/Huyện ..., Tỉnh/TP ..."
+        const addressFormatRegex =
+          /^.+?,\s*(phường|Phường)\s+.+?,\s*(quận|Quận|huyện|Huyện)\s+.+?,\s*(tỉnh|Tỉnh|tp|TP|Thành Phố|Thành phố)\.?\s+.+$/;
 
+        const addressUser = address.split(",");
+        const numberHomeAndStreetName = addressUser[0];
+        const province = addressUser[3];
+        const district = addressUser[2];
+        const ward = addressUser[1];
         // Kiểm tra tính hợp lệ của các biến
         const validations = [
           { condition: !fullname, message: "Vui lòng nhập họ và tên." },
@@ -235,7 +280,12 @@ export async function addAccountData() {
             condition: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
             message: "Email không hợp lệ.",
           },
-          // { condition: !address, message: "Vui lòng nhập địa chỉ." },
+          { condition: !address, message: "Vui lòng nhập địa chỉ." },
+          {
+            condition: address && !addressFormatRegex.test(address),
+            message:
+              "Địa chỉ không đúng định dạng. Ví dụ: '12 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP Hồ Chí Minh'",
+          },
           { condition: !username, message: "Vui lòng nhập tên tài khoản." },
           { condition: !password, message: "Vui lòng nhập mật khẩu." },
           { condition: !privilege, message: "Vui lòng chọn nhóm quyền." },
@@ -256,51 +306,83 @@ export async function addAccountData() {
         }
 
         let yes = await showNotification("Bạn có đồng ý thêm sách này không?");
-        const formData = new FormData();
-        if (yes) {
-          // Nếu hợp lệ thì tiếp tục gửi dữ liệu
-          formData.append("accountEmail", email);
-          formData.append("accountPhone", phone);
-          formData.append("accountFullName", fullname);
-          // formData.append("accountAddress", address);
-          formData.append("accountName", username);
-          formData.append("accountPassword", password);
-          formData.append("accountRole", parseInt(privilege));
-          formData.append("accountStatus", status);
+        if (!yes) return;
+
+        const formData = new URLSearchParams();
+        formData.append("accountEmail", email);
+        formData.append("accountPhone", phone);
+        formData.append("accountFullName", fullname);
+        formData.append("accountName", username);
+        formData.append("accountPassword", password);
+        formData.append("accountRole", parseInt(privilege));
+        formData.append("accountStatus", status);
+        for (let [key, value] of formData.entries()) {
+          console.log(`${key}: ${value}`);
         }
 
         try {
+          // Gửi form tạo người dùng
           const response = await fetch("api/account/add_account.php", {
             method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
             body: formData,
           });
 
           const result = await response.json();
           console.log(result);
 
-          if (result.success) {
-            // alert("Thêm sách thành công!");
-            toast({
-              title: "Thành công",
-              message: `Thêm sách thành công`,
-              type: "success",
-              duration: 3000,
+          if (result.status.trim() === "success") {
+            const id = result.id; // Lấy ID người dùng vừa tạo từ phản hồi
+            console.log("ok", id);
+
+            // Gửi form tạo địa chỉ
+            const addressData = new URLSearchParams();
+            addressData.append("idUser", id);
+            addressData.append("numberHouse", numberHomeAndStreetName.trim());
+            addressData.append("province", province.trim());
+            addressData.append("city", district.trim());
+            addressData.append("ward", ward.trim());
+
+            const addressRes = await fetch("api/address/insertAddress.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: addressData,
             });
+
+            const addressResult = await addressRes.json();
+
+            if (addressResult.success) {
+              toast({
+                title: "Thành công",
+                message: "Thêm người dùng và địa chỉ thành công",
+                type: "success",
+                duration: 3000,
+              });
+            } else {
+              toast({
+                title: "Lỗi địa chỉ",
+                message: addressResult.message,
+                type: "warning",
+                duration: 3000,
+              });
+            }
           } else {
-            // alert("Lỗi thêm sách: " + (result.error || "Không rõ nguyên nhân"));
             toast({
               title: "Cảnh báo",
-              message: `${result.message}`,
+              message: result.message,
               type: "warning",
               duration: 3000,
             });
           }
         } catch (error) {
           console.error("Lỗi fetch API:", error);
-          // alert("Không thể kết nối đến server!");
           toast({
             title: "Lỗi",
-            message: `Lỗi fetch API:${error}`,
+            message: `Lỗi fetch API: ${error}`,
             type: "error",
             duration: 3000,
           });
