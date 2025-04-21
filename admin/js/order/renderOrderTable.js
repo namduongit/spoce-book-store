@@ -1,96 +1,102 @@
+import { fetchData } from "../../../public/js/book/getDataBook.js";
 import { vietnamMoneyFormat } from "../others.js";
 import { updateOrderData } from "./updateOrderData.js";
 import { printOrderTicket } from "./printOrderTicket.js";
 import { filterOrder } from "./filterOrderData.js";
 
-// Hàm tách các thông tin trong địa chỉ giao hàng (địa chỉ hợp lệ)
+// Hàm tách địa chỉ giao thành còn Quận huyện và Tỉnh thành
 function splitAddressToShip(address) {
-  if (!address) return "Không có địa chỉ";
-  const info = address.split(",");
-  return info.length === 4 ? info[2].trim() + ", " + info[3].trim() : address;
+  const addressArray = address.split(",");
+  const houseNumberAndStreetName = addressArray[0]
+    ? addressArray[0].trim()
+    : "";
+  const ward = addressArray[1] ? addressArray[1].trim() : "";
+  const district = addressArray[2] ? addressArray[2].trim() : "";
+  const province = addressArray[3] ? addressArray[3].trim() : "";
+
+  if (district && province) return district + ", " + province;
+  return "Địa chỉ không hợp lệ";
 }
 
-// Hàm lấy dữ liệu đơn hàng từ API
-// async function fetchOrders() {
-//   try {
-//     // Sử dụng đường dẫn tuyệt đối từ thư mục gốc
-//     const response = await fetch("/api/orders/get_orders.php");
-//     // Lấy địa chỉ
+// Hàm cập nhật lại dữ liệu cho chi tiết đơn hàng
+export async function renderOrderDetailTable(orderIdSelected) {
+  const orderDetails = await fetchData(
+    `api/order_details/list.php?orderId=${orderIdSelected}`
+  );
 
-//     // Kiểm tra response status
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! status: ${response.status}`);
-//     }
+  // Biến chứa đối tượng bảng Chi tiết đơn hàng
+  const bodyInOrderTable = document.querySelector(
+    "table.order-details > tbody"
+  );
 
-//     // Kiểm tra content type
-//     const contentType = response.headers.get("content-type");
-//     if (!contentType || !contentType.includes("application/json")) {
-//       throw new TypeError("Response không phải là JSON!");
-//     }
+  // Chuyển đổi dữ liệu thành các thẻ html
+  let html = ``;
+  if (orderDetails.data) {
+    for (let i = 0; i < orderDetails.data.length; i++) {
+      html += `
+          <tr>
+              <td>${orderDetails.data[i].bookId}</td>
+              <td class="left">${orderDetails.data[i].bookName}</td>
+              <td>${vietnamMoneyFormat(orderDetails.data[i].price)}</td>
+              <td>${orderDetails.data[i].quantity}</td>
+              <td class="right">${vietnamMoneyFormat(
+                orderDetails.data[i].quantity * orderDetails.data[i].price
+              )}</td>
+          </tr>
+      `;
+    }
+  }
 
-//     const result = await response.json();
-
-//     console.log(result); // Kiểm tra kết quả trả về từ API
-//     if (result.status) {
-//       console.log("Danh sách đơn hàng:", result.data);
-//       return result.data;
-//     } else {
-//       console.error("Lỗi khi lấy dữ liệu:", result.message);
-//       return [];
-//     }
-//   } catch (error) {
-//     console.error("Lỗi khi gọi API:", error);
-//     return [];
-//   }
-// }
+  // Cập nhật lại giao diện
+  bodyInOrderTable.innerHTML = html;
+}
 
 // Hàm cập nhật lại dữ liệu cho bảng Đơn hàng
-export async function renderOrderTable(pageIsSelected = 1) {
-  try {
-    // Lấy dữ liệu từ API
-    const orders = await filterOrder(pageIsSelected);
-    console.log(orders); // Kiểm tra kết quả trả về từ API
-    // Biến chứa đối tượng bảng Đơn hàng
-    const bodyInOrderTable = document.querySelector(
-      ".main__data > .main__table.order > tbody"
-    );
+export async function renderOrderTable(currentPage) {
+  // Lấy dữ liệu từ API
+  const data = (await filterOrder(currentPage)) || [];
 
-    if (!bodyInOrderTable) {
-      console.error("Không tìm thấy bảng đơn hàng trong DOM");
-      return;
-    }
+  // Biến chứa đối tượng bảng Đơn hàng
+  const bodyInOrderTable = document.querySelector(
+    ".main__data > .main__table.order > tbody"
+  );
 
-    // Chuyển đổi dữ liệu thành các thẻ html
-    let html = ``;
-    if (!orders || orders.length === 0) {
-      html =
-        '<tr><td colspan="9" class="text-center">Không có đơn hàng nào</td></tr>';
-    } else {
-      orders.list.forEach((order) => {
-        html += `
-            <tr>
-              <td>${order.maDonHang}</td>
-              <td>${order.ngayTaoDon}</td>
-              <td>${splitAddressToShip(order.diaChiDayDu)}</td>
-              <td>${vietnamMoneyFormat(order.tongTienThu)}</td>
-              <td><span ${
-                order.trangThai === "Đã giao"
-                  ? 'class="purple"'
-                  : order.trangThai === "Đã xác nhận"
-                  ? 'class="green"'
-                  : order.trangThai === "Chờ xác nhận"
-                  ? 'class="gray"'
-                  : 'class="red"'
-              }>${order.trangThai}</span></td>
-              <td>
-                <i id="update-button-order" class="fa-solid fa-pen-to-square"></i>
-                <i id="print-button-order" class="fa-solid fa-print"></i>
-              </td>
-            </tr>
-          `;
-      });
-    }
+  // Chuyển đổi dữ liệu thành các thẻ html
+  let html = ``;
+  for (let i = 0; i < data.length; i++) {
+    html += `
+      <tr>
+        <td>${data[i].id}</td>
+        <td>${data[i].createAt}</td>
+        <td>${splitAddressToShip(data[i].addressToShip)}</td>
+        <td>${vietnamMoneyFormat(data[i].total)}</td>
+        <td><span ${
+          data[i].status === "Đã giao hàng"
+            ? 'class="purple"'
+            : data[i].status === "Đã xác nhận"
+            ? 'class="green"'
+            : data[i].status === "Đang chờ xác nhận"
+            ? 'class="gray"'
+            : 'class="red"'
+        }>${data[i].status}</span></td>
+        <td>
+          <i class="fa-solid fa-pen-to-square"></i>
+          <i class="fa-solid fa-print"></i>
+        </td>
+      </tr>
+    `;
+  }
 
+  if (data.length == 0) {
+    html = `
+          <tr>
+              <td></td>
+              <td>Danh sách trống</td>         
+              <td></td>
+          </tr>
+        `;
+    bodyInOrderTable.innerHTML = html;
+  } else {
     // Cập nhật lại giao diện
     bodyInOrderTable.innerHTML = html;
 
@@ -106,7 +112,7 @@ export async function renderOrderTable(pageIsSelected = 1) {
       const updateButton = buttons.children[0];
       const printButton = buttons.children[1];
       // Id của đối tượng đã được chọn để thao tác
-      const idOrderSelected = idColumnInTable.item(row);
+      const idOrderSelected = idColumnInTable.item(row).textContent;
 
       // Gán sự kiện hiện dialog sửa Đơn hàng
       updateButton.addEventListener("click", (e) => {
@@ -126,7 +132,5 @@ export async function renderOrderTable(pageIsSelected = 1) {
         printOrderTicket(idOrderSelected);
       });
     });
-  } catch (error) {
-    console.error("Lỗi khi render bảng đơn hàng:", error);
   }
 }

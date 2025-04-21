@@ -1,124 +1,27 @@
-import { isNotFirstItemSelected } from "../selectEvents.js";
+import { fetchData } from "../../../public/js/book/getDataBook.js";
+import { toast } from "../../../public/js/toast.js";
 import { vietnamMoneyFormat } from "../others.js";
-
-const data = [
-  {
-    bookId: "SP00001",
-    bookName: "Tên sách 1", // Thực tế phải truy vấn để lấy ra tiêu đề sách
-    quantity: 2,
-    price: 285000,
-  },
-  {
-    bookId: "SP00005",
-    bookName: "Tên sách 5",
-    quantity: 10,
-    price: 200000,
-  },
-  {
-    bookId: "SP00001",
-    bookName: "Tên sách 1", // Thực tế phải truy vấn để lấy ra tiêu đề sách
-    quantity: 2,
-    price: 285000,
-  },
-  {
-    bookId: "SP00005",
-    bookName: "Tên sách 5",
-    quantity: 10,
-    price: 200000,
-  },
-  {
-    bookId: "SP00001",
-    bookName: "Tên sách 1", // Thực tế phải truy vấn để lấy ra tiêu đề sách
-    quantity: 2,
-    price: 285000,
-  },
-  {
-    bookId: "SP00005",
-    bookName: "Tên sách 5",
-    quantity: 10,
-    price: 200000,
-  },
-  {
-    bookId: "SP00001",
-    bookName: "Tên sách 1", // Thực tế phải truy vấn để lấy ra tiêu đề sách
-    quantity: 2,
-    price: 285000,
-  },
-  {
-    bookId: "SP00005",
-    bookName: "Tên sách 5",
-    quantity: 10,
-    price: 200000,
-  },
-
-  {
-    bookId: "SP00001",
-    bookName: "Tên sách 1", // Thực tế phải truy vấn để lấy ra tiêu đề sách
-    quantity: 2,
-    price: 285000,
-  },
-  {
-    bookId: "SP00005",
-    bookName: "Tên sách 5",
-    quantity: 10,
-    price: 200000,
-  },
-  {
-    bookId: "SP00001",
-    bookName: "Tên sách 1", // Thực tế phải truy vấn để lấy ra tiêu đề sách
-    quantity: 2,
-    price: 285000,
-  },
-  {
-    bookId: "SP00005",
-    bookName: "Tên sách 5",
-    quantity: 10,
-    price: 200000,
-  },
-];
-
-// Hàm cập nhật lại dữ liệu cho bảng Chi tiết đơn hàng
-export function renderOrderDetailTable() {
-  // Biến chứa đối tượng bảng Chi tiết đơn hàng
-  const bodyInOrderDetailTable = document.querySelector(
-    ".dialog__form-group > table > tbody"
-  );
-
-  // Chuyển đổi dữ liệu thành các thẻ html
-  let html = ``;
-  for (let i = 0; i < data.length; i++) {
-    html += `
-          <tr>
-              <td>${data[i].bookId}</td>
-              <td>${data[i].bookName}</td>
-              <td>${data[i].quantity}</td>
-              <td>${vietnamMoneyFormat(data[i].price)}</td>
-              <td>${vietnamMoneyFormat(data[i].quantity * data[i].price)}</td>
-          </tr>
-      `;
-  }
-
-  // Cập nhật lại giao diện
-  bodyInOrderDetailTable.innerHTML = html;
-}
+import { renderOrderDetailTable } from "./renderOrderTable.js";
+import { showNotification } from "../dialogMessage.js";
+import { renderOrderTable } from "./renderOrderTable.js";
 
 // Hàm thiết lập sự kiện hiện sửa một đơn hàng
-export function updateOrderData(idOrderSelected) {
-  // Phải truy vấn từ CSDL thông qua idOrderSelected để lấy được dữ liệu của đối tượng hiện tại
-  // ...
+export async function updateOrderData(idOrderSelected) {
+  // Truy vấn csdl để lấy ra đơn hàng được chọn
+  const order = await fetchData(`api/orders/list.php?id=${idOrderSelected}`);
 
-  // Biến chứa đối tượng là nút "sửa"
-  const updateButton = document.getElementById("update-button-order");
+  // // Biến chứa đối tượng là nút "sửa"
+  // const updateButton = document.getElementById("update-button-order");
 
-  // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
-  updateButton.classList.add("active");
+  // // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
+  // updateButton.classList.add("active");
 
   // Tạo một dialog để sửa một đơn hàng
   const updateDialog = document.createElement("dialog");
   // - Định dạng dialog
   updateDialog.classList.add("dialog");
   updateDialog.classList.add("order");
-  updateDialog.style.width = "1146px";
+  updateDialog.style.width = "87%";
   // - Ghi nội dung dialog
   updateDialog.innerHTML = `
           <h1 class="dialog__title">Sửa đơn hàng</h1>
@@ -126,67 +29,91 @@ export function updateOrderData(idOrderSelected) {
             <i class="fa-solid fa-xmark"></i>
           </button>
           <div class="dialog__line"></div>
-          <form method="post" class="dialog__form">
+          <form class="dialog__form">
             <div class="dialog__row">
               <div class="dialog__form-group order half">
                 <label>Mã đơn hàng</label>
-                <input type="text" id="update-order-id" readonly />
+                <input type="text" id="update-order-id" class="text-center" readonly value="${
+                  order.data[0].id
+                }" />
               </div>
               <div class="dialog__form-group order half">
                 <label>Ngày tạo đơn</label>
-                <input type="text" id="update-order-date-create" readonly />
+                <input type="text" id="update-order-date-create" readonly value="${
+                  order.data[0].createAt
+                }" />
               </div>
               <div class="dialog__form-group order half">
                 <label>Mã nhân viên</label>
-                <input type="text" id="update-employee-id" readonly />
+                <input type="text" id="update-order-employee-id" readonly class="text-center" value="${
+                  order.data[0].employeeId
+                    ? order.data[0].employeeId
+                    : "Đang cập nhật"
+                }" />
               </div>
               <div class="dialog__form-group order half">
                 <label>Trạng thái</label>
-                <input type="text" id="update-order-status" readonly />
+                <input type="text" id="update-order-status" readonly value="${
+                  order.data[0].status
+                }" />
               </div>
               <div class="dialog__form-group order">
                 <label>Tổng thanh toán (VNĐ)</label>
-                <input type="text" id="update-order-cost" readonly />
+                <input type="text" id="update-order-cost" readonly value="${vietnamMoneyFormat(
+                  order.data[0].total
+                )}" />
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group order">
                 <label>Phương thức thanh toán</label>
-                <input type="text" id="update-order-method-pay" value="Thanh toán chuyển khoản" readonly />
+                <input type="text" id="update-order-method-pay" readonly value="${
+                  order.data[0].payName
+                }" />
               </div>
               <div class="dialog__form-group order full">
                 <label>Địa chỉ giao hàng</label>
-                <input type="text" id="update-order-address-to-ship" readonly />
+                <input type="text" id="update-order-address-to-ship" readonly value="${
+                  order.data[0].addressToShip
+                }" />
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group order half">
                 <label>Mã khách hàng</label>
-                <input type="text" id="update-order-customer-id" readonly />
+                <input type="text" id="update-order-customer-id" class="text-center" readonly value="${
+                  order.data[0].customerId
+                }" />
               </div>
               <div class="dialog__form-group order half">
                 <label>Số điện thoại</label>
-                <input type="text" id="update-order-customer-phone" readonly />
+                <input type="text" id="update-order-customer-phone" readonly value="${
+                  order.data[0].customerPhone
+                }" />
               </div>
               <div class="dialog__form-group order">
                 <label>Họ và tên</label>
-                <input type="text" id="update-order-customer-fullname" readonly />
+                <input type="text" id="update-order-customer-fullname" readonly value="${
+                  order.data[0].customerName
+                }" />
               </div>
               <div class="dialog__form-group order">
                 <label>Email</label>
-                <input type="text" id="update-order-customer-email" readonly />
+                <input type="text" id="update-order-customer-email" readonly value="${
+                  order.data[0].customerEmail
+                }" />
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group full">
                 <label style="color: #000;">Chi tiết đơn hàng</label>
-                <table>
+                <table class="dialog__table order-details">
                   <thead>
                     <tr>  
                       <th width="10%">Mã sách</th>
                       <th width="42%" class="name">Tên sách</th>
+                      <th width="14%">Giá bán (VNĐ)</th>
                       <th width="10%">Số lượng</th>
-                      <th width="14%">Đơn giá (VNĐ)</th>
                       <th width="24%" class="total">Thành tiền (VNĐ)</th>
                     </tr>
                   </thead>
@@ -196,9 +123,25 @@ export function updateOrderData(idOrderSelected) {
               </div>
             </div>
             <div class="dialog__buttons order">
-              <button class="ship-status">Giao hàng</button>
-              <button class="confirm-status">Xác nhận</button>
-              <button class="cancel-status">Huỷ đơn</button>
+              <p style="align-self: flex-end; margin-right: auto; color: var(--primary-color); font-size: 20px; font-weight: 700;">${
+                order.data[0].payStatus
+              }</p>
+              ${
+                order.data[0].status === "Đã giao hàng" &&
+                order.data[0].payStatus === "Chưa thanh toán"
+                  ? "<button type='button' id='cancel-button' class='cancel-status'>Huỷ đơn</button>"
+                  : ""
+              }
+              ${
+                order.data[0].status === "Đã xác nhận"
+                  ? "<button type='button' id='ship-button' class='ship-status'>Giao hàng</button>"
+                  : ""
+              }
+              ${
+                order.data[0].status === "Đang chờ xác nhận"
+                  ? "<button type='button' id='confirm-button' class='confirm-status'>Xác nhận</button><button type='button' id='cancel-button' class='cancel-status'>Huỷ đơn</button>"
+                  : ""
+              }
             </div>
           </form >
     `;
@@ -209,16 +152,119 @@ export function updateOrderData(idOrderSelected) {
   // Hiển thị updateDialog
   updateDialog.showModal();
 
-  // Sự kiện cho các thành phần trong dialog
-  // - Nếu các select đã được chọn giá trị khác mặc định thì đổi định dạng
-  const selectElement = document.querySelectorAll(
-    ".dialog__form-group > select"
-  );
-  selectElement.forEach((select) => {
-    isNotFirstItemSelected(select);
-  });
-  // -
-  renderOrderDetailTable();
+  // Cập nhật chi tiết đơn hàng
+  renderOrderDetailTable(order.data[0].id);
+
+  // Gán sự kiện cho các nút để "cập nhật" đơn hàng
+  // - Gọi api để cập nhật đơn hàng
+  async function callApiToUpdateOrder(status) {
+    // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
+    const id = document.getElementById("update-order-id").value;
+    const employeeId = document.getElementById("update-order-employee-id").value
+      ? document.getElementById("update-order-employee-id").value
+      : null;
+
+    // Tiến hành gọi api
+    try {
+      const response = await fetch("api/orders/update.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          id: id,
+          status: status,
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        toast({
+          title: "Thành công",
+          message: `Cập nhật thành công`,
+          type: "success",
+          duration: 3000,
+        });
+      } else {
+        toast({
+          title: "Cảnh báo",
+          message: `${result.message}`,
+          type: "warning",
+          duration: 3000,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Lỗi",
+        message: `Lỗi fetch API:${error}`,
+        type: "error",
+        duration: 3000,
+      });
+    }
+
+    updateDialog.remove();
+    renderOrderTable(1);
+  }
+  // - Nút 'Giao hàng'
+  const shipButton = document.getElementById("ship-button");
+  if (shipButton) {
+    shipButton.addEventListener("click", async (e) => {
+      // Ngăn ...
+      e.preventDefault();
+
+      // Thêm class 'active' thể hiện là nút được nhấn
+      e.target.classList.add("active");
+
+      // Hỏi lần nữa trước khi cập nhật
+      let yes = await showNotification("Bạn có đồng ý lưu chỉnh sửa không.");
+      if (yes) {
+        callApiToUpdateOrder("Đã giao hàng");
+      } else {
+        // Xoá class 'active' thể hiện là nút không còn ược nhấn
+        e.target.classList.remove("active");
+      }
+    });
+  }
+  // - Nút 'Xác nhận'
+  const confirmButton = document.getElementById("confirm-button");
+  if (confirmButton) {
+    confirmButton.addEventListener("click", async (e) => {
+      // Ngăn ...
+      e.preventDefault();
+
+      // Thêm class 'active' thể hiện là nút được nhấn
+      e.target.classList.add("active");
+
+      // Hỏi lần nữa trước khi cập nhật
+      let yes = await showNotification("Bạn có đồng ý lưu chỉnh sửa không.");
+      if (yes) {
+        callApiToUpdateOrder("Đã xác nhận");
+      } else {
+        // Xoá class 'active' thể hiện là nút không còn ược nhấn
+        e.target.classList.remove("active");
+      }
+    });
+  }
+  // - Nút 'Huỷ đơn'
+  const cancelButton = document.getElementById("cancel-button");
+  if (cancelButton) {
+    cancelButton.addEventListener("click", async (e) => {
+      // Ngăn ...
+      e.preventDefault();
+
+      // Thêm class 'active' thể hiện là nút được nhấn
+      e.target.classList.add("active");
+
+      // Hỏi lần nữa trước khi cập nhật
+      let yes = await showNotification("Bạn có đồng ý lưu chỉnh sửa không.");
+      if (yes) {
+        callApiToUpdateOrder("Đã huỷ đơn");
+      } else {
+        // Xoá class 'active' thể hiện là nút không còn ược nhấn
+        e.target.classList.remove("active");
+      }
+    });
+  }
 
   // Gán sự kiện cho nút "Đóng" dialog
   document
@@ -227,7 +273,7 @@ export function updateOrderData(idOrderSelected) {
       // Xoá dialog
       updateDialog.remove();
 
-      // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
-      updateButton.classList.remove("active");
+      // // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
+      // updateButton.classList.remove("active");
     });
 }

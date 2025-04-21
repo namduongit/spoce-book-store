@@ -278,7 +278,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .dialog__form-group:where(.book, .order, .input_ticket) {
   width: calc(100% / 3);
 }
-.dialog__form-group:where(.order, .input_ticket).half {
+.dialog__form-group:where(.book, .order, .input_ticket).half {
   width: calc(calc(100% / 3) / 2 - 12px);
 }
 .dialog__form-group.full {
@@ -506,14 +506,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .dialog__form-group.image {
   position: absolute;
-  width: calc(100% / 3 - 32px);
-  top: 90px;
-  left: 24px;
+  width: calc(100% / 3 - 20px);
+  top: 13px;
 }
 .dialog__form-group.image img {
   display: block;
   width: calc(calc(232px * 3) / 4);
-  height: 232px;
+  height: 234px;
   background: #dedede;
   margin: 7px auto;
 }
@@ -539,9 +538,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .dialog__form-group.description {
   position: absolute;
-  top: 418px;
-  left: 24px;
-  width: calc(100% / 3 - 32px);
+  top: 14px;
+  width: calc(100% / 3 - 20px);
 }
 .dialog__form-group.description textarea {
   height: 124px;
@@ -593,24 +591,24 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .dialog__form-group table td {
   border: 1px solid #000;
 }
-.dialog__form-group table td.name {
+.dialog__form-group table td.left {
   text-align: left;
 }
-.dialog__form-group table td.total {
+.dialog__form-group table td.right {
   text-align: right;
 }
 .dialog__buttons:is(.order, .input_ticket) {
   justify-content: flex-end;
 }
 .dialog__buttons:is(.order, .input_ticket) button {
-  width: 200px;
+  width: 20%;
   border: 2px solid #000;
 }
 .dialog__buttons button.ship-status {
   background: #5d3fd3;
   border-color: #5d3fd3;
 }
-.dialog__buttons button.ship-status:hover {
+.dialog__buttons button.ship-status:where(:hover, .active) {
   background: #fff;
   color: #5d3fd3;
 }
@@ -618,7 +616,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background: #3dc55d;
   border-color: #3dc55d;
 }
-.dialog__buttons button.confirm-status:hover {
+.dialog__buttons button.confirm-status:where(:hover, .active) {
   background: #fff;
   color: #3dc55d;
 }
@@ -626,7 +624,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background: #f44336;
   border-color: #f44336;
 }
-.dialog__buttons button.cancel-status:hover {
+.dialog__buttons button.cancel-status:where(:hover, .active) {
   background: #fff;
   color: #f44336;
 }
@@ -696,7 +694,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   height: 80px;
   object-fit: cover;
 }
-.ticket__contact {
+.ticket__contact > p {
   font-size: 16px;
   font-weight: bold;
 }
@@ -710,9 +708,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .ticket__date {
   color: #777;
-  font-size: 16px;
+  font-size: 18px;
   text-align: center;
-  font-style: italic;
 }
 .ticket__table {
   table-layout: fixed;
@@ -746,31 +743,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-size: var(--table-column-font-size);
   font-weight: 700;
 }
-.ticket__table:where(.profit_dashboard, .revenue_dashboard)
-  tbody
-  td:nth-of-type(4),
-.ticket__table:where(.profit_dashboard, .revenue_dashboard)
-  tfoot
-  td:nth-of-type(2),
-.ticket__table:where(.profit_dashboard, .revenue_dashboard)
-  tbody
-  td:nth-of-type(5),
-.ticket__table:where(.profit_dashboard, .revenue_dashboard)
-  tfoot
-  td:nth-of-type(3),
-.ticket__table:where(.profit_dashboard, .revenue_dashboard)
-  tbody
-  td:nth-of-type(6),
-.ticket__table:where(.profit_dashboard, .revenue_dashboard)
-  tfoot
-  td:nth-of-type(4) {
-  display: table-cell;
-  text-align: right;
-}
-.ticket__table:has(thead th.name) td:nth-of-type(2) {
+.ticket__table td.left {
   text-align: left;
 }
-.ticket__table:has(thead th.total) td:last-of-type {
+.ticket__table td.right {
+  display: table-cell !important;
   text-align: right;
 }
 .ticket__total-text {

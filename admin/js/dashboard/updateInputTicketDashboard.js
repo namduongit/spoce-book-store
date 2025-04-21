@@ -95,7 +95,7 @@ export async function renderInputTicketDashboardTable(
             <td colspan="3">TỔNG:</td>
             <td>0</td>
             <td>0</td>
-            <td>0</tde>
+            <td class='right'>0</tde>
         </tr>
       `;
   // Cập nhật lại các biến vì đã ấn "Xem" thành công
@@ -109,7 +109,7 @@ export async function renderInputTicketDashboardTable(
     ".main__data > .main__table.input_ticket_dashboard > tfoot > tr > td:nth-of-type(4)"
   );
 
-  // Cập nhật lại dữ liệu cho bảng 
+  // Cập nhật lại dữ liệu cho bảng
   let timeline =
     month !== 0 ? getWeeksInMonth(year, month) : getMonthsInYear(year);
   const promises = timeline.map(async (time) => {
@@ -167,7 +167,7 @@ export async function renderInputTicketDashboardTable(
                     <td>${row.end}</td>
                     <td>${row.ticketNumbers}</td>
                     <td>${row.bookNumbers}</td>
-                    <td>${vietnamMoneyFormat(row.totalPrice)}</td>
+                    <td class="right">${vietnamMoneyFormat(row.totalPrice)}</td>
                 </tr>
             `;
     })

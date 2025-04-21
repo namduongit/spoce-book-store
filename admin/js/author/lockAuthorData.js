@@ -98,6 +98,7 @@ export async function lockAuthorData(idAuthorSelected) {
           });
         }
       } catch (error) {
+        console.log(error);
         toast({
           title: "Lỗi",
           message: `Lỗi fetch API:${error}`,

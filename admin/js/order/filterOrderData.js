@@ -1,82 +1,118 @@
-// import { renderOrderTable } from "./renderOrderTable.js";
-let curentpage = 1;
-export async function filterOrder(pageIsSelected = 1) {
-  let id = document.querySelector("#find-inp-order").value.trim();
-  let sort = document
-    .querySelector("#sort-slt-order")
-    .value.toLowerCase()
-    .trim();
-  let status = document.querySelector("#status-slt-order").value.trim();
-  let province = document.querySelector("#city-slt-order").value.trim();
-  let district = document.querySelector("#district-slt-order").value.trim();
+import { renderOrderTable } from "./renderOrderTable.js";
+import { renderPagination } from "../pagination.js";
 
+// Tiến hành lọc
+export async function filterOrder(currentPage) {
+  let findValue = document.getElementById("find-inp-order").value.trim();
+  let sortValue = document.getElementById("sort-slt-order").value.trim();
+  let dateStartValue = document
+    .getElementById("date-start-inp-order")
+    .value.trim();
+  let dateEndValue = document.getElementById("date-end-inp-order").value.trim();
+  let provinceValue = document
+    .getElementById("province-slt-order")
+    .value.trim();
+  let districtValue = document
+    .getElementById("district-slt-order")
+    .value.trim();
+  let statusValue = document.getElementById("status-slt-order").value.trim();
+  let limitValue = document.getElementById("show-inp-order").value.trim();
+
+  let find = findValue !== "" ? findValue : "";
   let orderBy = "maDonHang",
     orderType = "ASC";
-
-  switch (sort) {
-    case "id giảm dần":
+  switch (sortValue) {
+    case "ID giảm dần":
       orderType = "DESC";
       break;
-    case "ngày tạo đơn tăng dần":
-      orderBy = "ngayTao";
+    case "Ngày tạo đơn tăng dần":
+      orderBy = "ngayTaoDon";
       break;
-    case "ngày tạo đơn giảm dần":
-      orderBy = "ngayTao";
+    case "Ngày tạo đơn giảm dần":
+      orderBy = "ngayTaoDon";
       orderType = "DESC";
       break;
-    case "tổng thanh toán tăng dần":
-      orderBy = "tongTien";
+    case "Tổng thanh toán tăng dần":
+      orderBy = "tongTienThu";
       break;
-    case "tổng thanh toán giảm dần":
-      orderBy = "tongTien";
+    case "Tổng thanh toán giảm dần":
+      orderBy = "tongTienThu";
       orderType = "DESC";
       break;
   }
-
-  let limit = 5;
-  let page = Number(pageIsSelected) || 1;
+  let dateStart = dateStartValue !== "" ? dateStartValue : "";
+  let dateEnd = dateEndValue !== "" ? dateEndValue : "";
+  let province = provinceValue ? provinceValue : "";
+  let district = districtValue ? districtValue : "";
+  let status = statusValue ? statusValue : "";
+  let limit = limitValue ? Number(limitValue) : 10;
+  let page = currentPage ? Number(currentPage) : 1;
   let offset = (page - 1) * limit;
 
-  status = status !== "Tất cả" ? status : "";
-  province = province !== "Tất cả" ? province : "";
-  district = district !== "Tất cả" ? district : "";
-
   let params = new URLSearchParams();
-  if (id) params.append("id", id);
+  if (find) params.append("id", find);
+  if (orderBy) params.append("orderByColumn", orderBy);
+  if (orderType) params.append("orderType", orderType);
+  if (dateStart) params.append("createStart", dateStart);
+  if (dateEnd) params.append("createEnd", dateEnd);
+  if (province || district)
+    params.append(
+      "addressToShip",
+      district + (province ? ", " + province : "")
+    );
   if (status) params.append("status", status);
-  if (province) params.append("city", province);
-  if (district) params.append("district", district);
-  params.append("orderByColumn", orderBy);
-  params.append("orderType", orderType);
   params.append("limit", limit);
   params.append("offset", offset);
-  let url = `api/orders/filter_order.php?${params.toString()}`;
-  console.log("Request URL:", url);
 
   try {
-    let response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("HTTP status: " + response.status);
-    }
+    let response = await fetch(`api/orders/list.php?${params.toString()}`);
 
-    let data = await response.text();
-    console.log("Dữ liệu nhận được:", data);
-    // await paginationOrder(data.pageCount); // nếu có
-    return data.orderList;
+    if (!response.ok) {
+      throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
+    }
+    let responseJSON = await response.json();
+    await renderPagination(
+      "admin-pagination-order",
+      responseJSON.pageCount,
+      currentPage,
+      renderOrderTable
+    );
+
+    return responseJSON.data;
   } catch (error) {
-    console.error("Lỗi khi fetch dữ liệu:", error);
-    alert("Không thể tải dữ liệu đơn hàng. " + error.message);
+    alert("Lỗi khi lấy dữ liệu: " + error.message);
+    console.log(error);
     return [];
   }
 }
-export function filterOrderData() {
-  const filterButton = document.querySelector("#filter-button-order");
 
-  // if (filterButton) {
-  //   filterButton.addEventListener("click", async (e) => {
-  //     e.preventDefault();
-  //     curentpage = 1;
-  //     await renderOrderTable(1);
-  //   });
-  // }
+// Thêm sự kiện cho nút "Lọc" và nút "Đặt lại"
+export function filterOrderData() {
+  const filterButton = document.getElementById("filter-button-order");
+  if (filterButton) {
+    filterButton.addEventListener("click", async (e) => {
+      e.preventDefault();
+      await renderOrderTable(1);
+    });
+  }
+
+  const resetButton = document.getElementById("reset-button-order");
+  if (resetButton) {
+    resetButton.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      document.getElementById("find-inp-order").value = "";
+      document.getElementById("sort-slt-order").value = "";
+      document.getElementById("date-start-inp-order").value = "";
+      document.getElementById("date-end-inp-order").value = "";
+      document.getElementById("province-slt-order").value = "";
+      // document.querySelector(".main__select input#province-slt-order ~ ul").innerHTML = "";
+      document.getElementById("district-slt-order").value = "";
+      document.querySelector(".main__select input#district-slt-order ~ ul").innerHTML = "";
+      document.getElementById("status-slt-order").value = "";
+      document.getElementById("show-inp-order").value = "";
+
+      await renderOrderTable(1);
+    });
+  }
 }

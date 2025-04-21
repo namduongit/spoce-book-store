@@ -96,7 +96,7 @@ export async function renderProfitDashboardTable(
         <td colspan="3">TỔNG:</td>
         <td>0</td>
         <td>0</td>
-        <td>0</tde>
+        <td class='right'>0</tde>
     </tr>
   `;
   // Cập nhật lại các biến vì đã ấn "Xem" thành công
@@ -168,7 +168,7 @@ export async function renderProfitDashboardTable(
                 <td>${row.end}</td>
                 <td>${vietnamMoneyFormat(row.revenue)}</td>
                 <td>${vietnamMoneyFormat(row.cost)}</td>
-                <td>${vietnamMoneyFormat(row.revenue + row.cost)}</td>
+                <td class="right">${vietnamMoneyFormat(row.revenue + row.cost)}</td>
             </tr>
         `;
     })

@@ -50,46 +50,57 @@ export function numberToVietnamWords(n) {
     "chín trăm",
   ];
 
-  function docBaChuSo(so) {
+  const donViLon = ["", "nghìn", "triệu", "tỷ", "nghìn tỷ", "triệu tỷ"];
+
+  function docBaChuSo(so, docDayDu = true) {
     let tram = Math.floor(so / 100);
     let chuc = Math.floor((so % 100) / 10);
     let donvi = so % 10;
     let result = "";
 
-    if (tram > 0) result += hangTram[tram] + " ";
+    if (tram > 0 || docDayDu) result += hangTram[tram] + " ";
+
     if (chuc > 1) {
       result += hangChuc[chuc] + " ";
-      if (donvi > 0) result += donVi[donvi];
+      if (donvi === 1) result += "mốt";
+      else if (donvi === 5) result += "lăm";
+      else if (donvi > 0) result += donVi[donvi];
     } else if (chuc === 1) {
       result += "mười ";
-      if (donvi > 0 && donvi !== 5) result += donVi[donvi];
-      else if (donvi === 5) result += "lăm";
-    } else {
-      if (donvi > 0) result += (tram > 0 ? "lẻ " : "") + donVi[donvi];
+      if (donvi === 5) result += "lăm";
+      else if (donvi > 0) result += donVi[donvi];
+    } else if (chuc === 0 && donvi > 0) {
+      result += (tram > 0 ? "lẻ " : "") + donVi[donvi];
     }
-    return result.trim();
-  }
-
-  function docHangTrieu(so) {
-    let trieu = Math.floor(so / 1_000_000);
-    let nghin = Math.floor((so % 1_000_000) / 1_000);
-    let tram = so % 1_000;
-    let result = "";
-
-    if (trieu > 0) result += docBaChuSo(trieu) + " triệu ";
-    if (nghin > 0) result += docBaChuSo(nghin) + " nghìn ";
-    if (tram > 0) result += docBaChuSo(tram);
 
     return result.trim();
   }
 
-  return (
-    (laSoAm
-      ? "Âm " + docHangTrieu(n)
-      : " " +
-        docHangTrieu(n).charAt(0).toUpperCase() +
-        docHangTrieu(n).slice(1)) + " đồng"
-  );
+  function tachBaChuSo(n) {
+    const result = [];
+    while (n > 0) {
+      result.push(n % 1000);
+      n = Math.floor(n / 1000);
+    }
+    return result;
+  }
+
+  const cacNhom = tachBaChuSo(n); // mỗi phần tử là 3 chữ số
+  let ketQua = "";
+
+  for (let i = cacNhom.length - 1; i >= 0; i--) {
+    const so = cacNhom[i];
+    if (so > 0) {
+      ketQua +=
+        docBaChuSo(so, i !== cacNhom.length - 1) + " " + donViLon[i] + " ";
+    } else {
+      if (i === 0 && ketQua === "") ketQua = "không ";
+    }
+  }
+
+  ketQua = ketQua.trim();
+  if (laSoAm) return "Âm " + ketQua + " đồng";
+  return ketQua.charAt(0).toUpperCase() + ketQua.slice(1) + " đồng";
 }
 
 // Hàm hiện date picker khi nhấn vào (hỗ trợ cho việc hiệu ứng)

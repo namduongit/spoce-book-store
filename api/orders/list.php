@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 0);
+error_reporting(0);
+
 require_once __DIR__ . '../../../app/config.php';
 
 function returnJSONOrder($filters, $pageCount) {
@@ -17,7 +20,13 @@ function returnJSONOrder($filters, $pageCount) {
             "customerName" => $filter['tenKH'],
             "customerPhone" => $filter['sodtKH'],
             "customerEmail" => $filter['emailKH'],
+            "discountId" => $filter['maKhuyenMai'],
+            "discountName" => $filter['tenPGG'],
+            "payId" => $filter['maPhuongThuc'],
+            "payName" => $filter['tenPhuongThuc'],
+            "payStatus" => $filter['trangThaiThanhToan'],
             "total" => $filter['tongTienThu'],
+            "addressToShip" => $filter['diaChiGiao'],
             "status" => $filter['trangThai'],
             "updatedAt" => $filter['ngayCapNhat']
         ];
@@ -28,34 +37,50 @@ function returnJSONOrder($filters, $pageCount) {
         ["data" => $response, "pageCount" => $pageCount],
         JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
     );
-        exit();
+    exit();
 }
 
 $columns = [
     'donHang.maDonHang', 'donHang.ngayTaoDon', 'donHang.maNhanVien', 'donHang.maKhachHang', 
-    'donHang.tongTienThu', 'donHang.ngayCapNhat', 'donHang.trangThai', 
-    'khachHang.hoVaTen AS tenKH', 'khachHang.soDT AS sodtKH', 'khachHang.email AS emailKH'
+    'donHang.maKhuyenMai', 'donHang.maPhuongThuc', 'donHang.trangThaiThanhToan',
+    'donHang.tongTienThu', 'donHang.diaChiGiao',  'donHang.ngayCapNhat', 'donHang.trangThai', 
+    'khachHang.hoVaTen AS tenKH', 'khachHang.soDT AS sodtKH', 'khachHang.email AS emailKH',
+    'phieuGiamGia.tenPGG',
+    'phuongThucThanhToan.tenPhuongThuc'
 ];
-$tables = ['donHang', 'nguoiDung as khachHang'];
+$tables = ['donHang', 'nguoiDung as khachHang', 'phieuGiamGia', 'phuongThucThanhToan'];
 $joins = [
-    'donHang.maKhachHang = khachHang.maNguoiDung'
+    'donHang.maKhachHang = khachHang.maNguoiDung',
+    'donHang.maKhuyenMai = phieuGiamGia.maPGG',
+    'donHang.maPhuongThuc = phuongThucThanhToan.maPhuongThuc'
 ];
 $conditions = [];
 $params = [];
-$orderByColumn = isset($_GET['orderByColumn']) ? trim($_GET['orderByColumn']) : 'maDonHang';
-$orderType = isset($_GET['orderType']) ? trim($_GET['orderType']) : 'ASC';
 $limit = isset($_GET['limit']) ? trim($_GET['limit']) : PHP_INT_MAX;
 $offset = isset($_GET['offset']) ? trim($_GET['offset']) : '0';
 
 $id = isset($_GET['id']) ? trim($_GET['id']) : '';
-$employeeId = isset($_GET['employeeId']) ? trim($_GET['employeeId']) : '';
-$customerId = isset($_GET['customerId']) ? trim($_GET['customerId']) : '';
 $createStart = isset($_GET['createStart']) ? trim($_GET['createStart']) : '';
 $createEnd = isset($_GET['createEnd']) ? trim($_GET['createEnd']) : '';
+$employeeId = isset($_GET['employeeId']) ? trim($_GET['employeeId']) : '';
+$customerId = isset($_GET['customerId']) ? trim($_GET['customerId']) : '';
+$discountId = isset($_GET['discountId']) ? trim($_GET['discountId']) : '';
+$payId = isset($_GET['payId']) ? trim($_GET['payId']) : '';
+$addressToShip = isset($_GET['addressToShip']) ? trim($_GET['addressToShip']) : '';
 $status = isset($_GET['status']) ? trim($_GET['status']) : '';
+$orderByColumn = isset($_GET['orderByColumn']) ? trim($_GET['orderByColumn']) : 'maDonHang';
+$orderType = isset($_GET['orderType']) ? trim($_GET['orderType']) : 'ASC';
 if (!empty($id)) {
     $conditions[] = "(donHang.maDonHang = :id)";
     $params[':id'] = $id;  
+}
+if (!empty($createStart)) {
+    $conditions[] = "(donHang.ngayTaoDon >= :createStart)";
+    $params[':createStart'] = $createStart;  
+}
+if (!empty($createEnd)) {
+    $conditions[] = "(donHang.ngayTaoDon <= :createEnd)";
+    $params[':createEnd'] = $createEnd;  
 }
 if (!empty($employeeId)) {
     $conditions[] = "(donHang.maNhanVien = :employeeId)";
@@ -65,13 +90,17 @@ if (!empty($customerId)) {
     $conditions[] = "(donHang.maKhachHang = :customerId)";
     $params[':customerId'] = $customerId;  
 }
-if (!empty($createStart)) {
-    $conditions[] = "(donHang.ngayTaoDon >= :createStart)";
-    $params[':createStart'] = $createStart;  
+if (!empty($discountId)) {
+    $conditions[] = "(donHang.maKhuyenMai = :discountId)";
+    $params[':discountId'] = $discountId;  
 }
-if (!empty($createEnd)) {
-    $conditions[] = "(donHang.ngayTaoDon <= :createEnd)";
-    $params[':createEnd'] = $createEnd;  
+if (!empty($payId)) {
+    $conditions[] = "(donHang.maPhuongThuc = :payId)";
+    $params[':payId'] = $payId;  
+}
+if (!empty($addressToShip)) {
+    $conditions[] = "(donHang.diaChiGiao like :addressToShip)";
+    $params[':addressToShip'] = "%$addressToShip%";  
 }
 if (!empty($status)) {
     $conditions[] = "(donHang.trangThai = :status)";

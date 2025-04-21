@@ -30,7 +30,7 @@ try {
         $id, 
         [
             "trangThai" => $status,
-            "ngayCapNhat" => $$updateAt
+            "ngayCapNhat" => $updateAt
         ]
     );
 

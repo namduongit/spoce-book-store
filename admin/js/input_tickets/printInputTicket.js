@@ -94,7 +94,7 @@ export async function printInputTicket(idInputTicketSelected) {
                   }</p>
                   <p class="ticket__info"><b>Tổng tiền nhập (VNĐ):</b> ${vietnamMoneyFormat(
                     inputTicket.data[0].total
-                  )} (${numberToVietnamWords(inputTicket.data[0].total)})</p>
+                  )}<u>đ</u> (${numberToVietnamWords(inputTicket.data[0].total)})</p>
                   <p class="ticket__info"><b>Trạng thái phiếu:</b> ${
                     inputTicket.data[0].status
                   }</p>
@@ -142,7 +142,11 @@ export async function printInputTicket(idInputTicketSelected) {
   renderInputDetailTable(inputTicket.data[0].id);
 
   // Gán sự kiện in phiếu khi nhấn nút
-  printTicket("print-ticket-button", "content-print", "PHNHAPHANG");
+  printTicket(
+    "print-ticket-button",
+    "content-print",
+    `PHNHAPHANG_${inputTicket.data[0].id}`
+  );
 
   // Gán sự kiện cho nút "Đóng" dialog
   document
