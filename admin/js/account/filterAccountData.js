@@ -18,10 +18,7 @@ export async function filterAccount(pageIsSelected = 1) {
     .value.toLowerCase()
     .trim();
   // Biến chứa đối tượng thẻ select liên quan đến lọc trạng thái
-  const statusSelect = document
-    .getElementById("status-slt-account")
-    .value.toLowerCase()
-    .trim();
+  const statusSelect = document.getElementById("status-slt-account").value;
   let userId = idOrUsernameInput !== "" ? idOrUsernameInput : "";
   let sortBy = "maNguoiDung",
     sortType = "ASC";

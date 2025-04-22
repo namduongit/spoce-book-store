@@ -32,8 +32,6 @@ export  async function addBookData() {
     addDialog.style.width = "1178px";
     // - Ghi nội dung dialog
     addDialog.innerHTML = `
-    <div id="toast"></div>
-
         <h1 class="dialog__title">Thêm sách</h1>
         <button id="close-book-button" class="dialog__close">
             <i class="fa-solid fa-xmark"></i>
@@ -66,15 +64,15 @@ export  async function addBookData() {
                 <div class="dialog__form-group book">
                     <label>Tác giả</label>
                     <select id="add-book-author">
-                        <option selected value="1">Tiểu thuyếtNguyễn Nhật Ánh</option>
+                        <option selected value="">Tiểu thuyếtNguyễn Nhật Ánh</option>
                         <option value="2">J.K. Rowling</option>
                         <option value="3">Haruki Murakami</option>
                     </select>
                 </div>
                 <div class="dialog__form-group book">
                     <label>Thể loại</label>
-                    <select id="add-book-type"> 
-                        <option selected value="1">Tiểu thuyết</option>
+                    <select id="add-book-type" "> 
+                        <option selected value="">Tiểu thuyết</option>
                         <option  value="2">Trinh thám</option>
                         <option value="3">Khoa học viễn tưởng</option>
                     </select>
@@ -89,7 +87,7 @@ export  async function addBookData() {
                 <div class="dialog__form-group book">
                     <label>Loại bìa</label>
                     <select id="add-book-cover">
-                        <option selected value="1">Bìa cứng</option>
+                        <option selected value="">Bìa cứng</option>
                         <option  value="2">Bìa mềm</option>
                         <option value="3">Bìa gấp</option>
                     </select>
@@ -100,7 +98,7 @@ export  async function addBookData() {
                 <div class="dialog__form-group book">
                     <label>Nhà xuất bản</label>
                     <select id="add-book-publish-name">
-                        <option selected value="1">NXB Trẻ</option>
+                        <option selected value="">NXB Trẻ</option>
                         <option  value="2">NXB Kim Đồng</option>
                         <option value="3">NXB Văn Học</option>
                     </select>
@@ -121,8 +119,8 @@ export  async function addBookData() {
             <div class="dialog__row">
                 <div class="dialog__form-group book"></div>
                 <div class="dialog__form-group book">
-                    <label>Giá bìa</label>
-                    <input type="text" id="add-book-price-base" placeholder="Nhập Giá bìa" />
+                    <label>Giá gốc</label>
+                    <input type="text" id="add-book-price-base" placeholder="Nhập Giá Gốc" />
                 </div>
                 <div class="dialog__form-group book">
                     <label>Giá bán</label>
@@ -135,9 +133,8 @@ export  async function addBookData() {
                     <label>Trạng thái</label>
                     <select id="add-book-status" >
                         <option selected  value="">Chọn trạng thái</option>
-                        <option  value="ACTIVE">ACTIVE</option>
-                        <option  value="INACTIVE">INACTIVE</option>
-                        <option  value="SUSPENDED">SUSPENDED</option>
+                        <option  value="Đang bán">Đang bán</option>
+                        <option  value="Dừng bán">Dừng bán</option>
                         
                 
                     </select>
@@ -214,14 +211,14 @@ defaultDateSelected("add-book-publish-year");
     
 
     // THÊM option các  tác giả
-    let authorList = await fetchData(`api/authors/get.php`);
+    let authorList = await fetchData(`api/authors/list.php`);
     let authorSelect = document.querySelector("#add-book-author");
     authorSelect.innerHTML = '';
     let op = document.createElement("option");
         op.value = "";
         op.textContent = "Chọn tác giả";
         authorSelect.appendChild(op);
-    authorList.forEach(author => {
+    authorList.data.forEach(author => {
         let op = document.createElement("option");
         op.value = author.id;
         op.textContent = author.name;
@@ -230,14 +227,14 @@ defaultDateSelected("add-book-publish-year");
 
 
     // THÊM option các  thể loại
-    let categoryList =await fetchData(`api/categories/get.php`);
+    let categoryList =await fetchData(`api/categories/list.php`);
     let categorySelect = document.querySelector("#add-book-type");
     categorySelect.innerHTML = '';
      op = document.createElement("option");
         op.value = "";
         op.textContent = "Chọn thể loại";
         categorySelect.appendChild(op);
-    categoryList.forEach(author => {
+    categoryList.data.forEach(author => {
         let op = document.createElement("option");
         op.value = author.id;
         op.textContent = author.name;
@@ -246,14 +243,14 @@ defaultDateSelected("add-book-publish-year");
 
 
      // THÊM option các  thể loại
-     let coverList = await fetchData(`api/covers/get.php`);
+     let coverList = await fetchData(`api/covers/list.php`);
      let coverSelect = document.querySelector("#add-book-cover");
      coverSelect.innerHTML = '';
       op = document.createElement("option");
      op.value = "";
      op.textContent = "Chọn loại bìa";
      coverSelect.appendChild(op);
-     coverList.forEach(author => {
+     coverList.data.forEach(author => {
          let op = document.createElement("option");
          op.value = author.id;
          op.textContent = author.name;
@@ -262,14 +259,14 @@ defaultDateSelected("add-book-publish-year");
  
 
       // THÊM option các  thể loại
-      let publisherList = await fetchData(`api/publishers/get.php`);
+      let publisherList = await fetchData(`api/publishers/list.php`);
       let publisherLelect = document.querySelector("#add-book-publish-name");
       publisherLelect.innerHTML = '';
        op = document.createElement("option");
           op.value = "";
           op.textContent = "Chọn nhà xuất bản";
           publisherLelect.appendChild(op);
-      publisherList.forEach(author => {
+      publisherList.data.forEach(author => {
           let op = document.createElement("option");
           op.value = author.id;
           op.textContent = author.name;
@@ -394,9 +391,9 @@ defaultDateSelected("add-book-publish-year");
 
             }
         
+            await renderBookTable(1);
             addDialog.remove();
             addButton.classList.remove("active");
-            renderBookTable();
         }
 
     });

@@ -29,23 +29,21 @@ function returnJSONDiscount($filters, $pageCount)
     exit();
 }
 
-$find = $_GET['find'] ?? '';
-$type = $_GET['type'] ?? '';
-$dateStart = $_GET['dateStart'] ?? '';
-$dateEnd = $_GET['dateEnd'] ?? '';
-$status = $_GET['status'] ?? '';
-$orderByColumn = $_GET['orderByColumn'] ?? 'maPGG';
-$orderType = $_GET['orderType'] ?? 'ASC';
-$limit = isset($_GET['limit']) ? $_GET['limit'] : PHP_INT_MAX;
-$offset = isset($_GET['offset']) ? $_GET['offset'] : 0;
-
 $columns = ['*'];
 $tables = ['phieuGiamGia'];
 $joins = []; 
 $conditions = [];
 $params = [];
+$orderByColumn = $_GET['orderByColumn'] ?? 'maPGG';
+$orderType = $_GET['orderType'] ?? 'ASC';
+$limit = isset($_GET['limit']) ? $_GET['limit'] : PHP_INT_MAX;
+$offset = isset($_GET['offset']) ? $_GET['offset'] : 0;
 
-$db = new app_libs_DBConnection();
+$find = $_GET['find'] ?? '';
+$type = $_GET['type'] ?? '';
+$dateStart = $_GET['dateStart'] ?? '';
+$dateEnd = $_GET['dateEnd'] ?? '';
+$status = $_GET['status'] ?? '';
 if (!empty($find)) {
     $conditions[] = "maPGG = :id OR tenPGG LIKE :name";
     $params[':id'] = $find;
@@ -68,6 +66,7 @@ if (!empty($status)) {
     $params[':status'] = $status;
 }
 
+$db = new app_libs_DBConnection();
 $result = $db->joinTables($columns, $tables, $joins, $conditions, $orderByColumn, $orderType, $limit, $offset, $params);
 $result2 = $db->joinTables($columns, $tables, $joins, $conditions, $orderByColumn, $orderType, null, null, $params);
 $pageCount = ceil(count($result2) / $limit);

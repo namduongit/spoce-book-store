@@ -1,120 +1,23 @@
-import { vietnamMoneyFormat } from "../others.js";
-
-let data = {
-  orderId: 1,
-  customerId: 1,
-  dateCreate: "28/02/2025",
-  addressToShip: "123, Phường 10, Quận 05, Thành phố Hồ Chí Minh",
-  orderDetail: [
-    {
-      bookId: "SP00001",
-      bookName: "Tên sách 1",
-      quantity: 2,
-      price: 285000,
-    },
-    {
-      bookId: "SP00005",
-      bookName: "Tên sách 5",
-      quantity: 10,
-      price: 200000,
-    },
-    {
-      bookId: "SP00001",
-      bookName: "Tên sách 1",
-      quantity: 2,
-      price: 285000,
-    },
-    {
-      bookId: "SP00005",
-      bookName: "Tên sách 5",
-      quantity: 10,
-      price: 200000,
-    },
-
-    {
-      bookId: "SP00001",
-      bookName: "Tên sách 1",
-      quantity: 2,
-      price: 285000,
-    },
-    {
-      bookId: "SP00005",
-      bookName: "Tên sách 5",
-      quantity: 10,
-      price: 200000,
-    },
-    {
-      bookId: "SP00001",
-      bookName: "Tên sách 1",
-      quantity: 2,
-      price: 285000,
-    },
-    {
-      bookId: "SP00005",
-      bookName: "Tên sách 5",
-      quantity: 10,
-      price: 200000,
-    },
-    {
-      bookId: "SP00001",
-      bookName: "Tên sách 1",
-      quantity: 2,
-      price: 285000,
-    },
-    {
-      bookId: "SP00005",
-      bookName: "Tên sách 5",
-      quantity: 10,
-      price: 200000,
-    },
-  ],
-  totalPrice: 2570000,
-  methodPay: "Thanh toán khi giao hàng (COD)",
-  discountId: "",
-  status: "Đã hoàn thành",
-  dateUpdate: "",
-};
-
-function renderOrderDetailTable() {
-  // Biến chứa đối tượng bảng Chi tiết đơn hàng
-  const bodyInOrderDetailTable = document.querySelector(
-    ".ticket__table.order > tbody"
-  );
-
-  // Chuyển đổi dữ liệu thành các thẻ html
-  let html = ``;
-  for (let i = 0; i < data.orderDetail.length; i++) {
-    html += `
-          <tr>
-              <td>${data.orderDetail[i].bookId}</td>
-              <td>${data.orderDetail[i].bookName}</td>
-              <td>${data.orderDetail[i].quantity}</td>
-              <td>${vietnamMoneyFormat(data.orderDetail[i].price)}</td>
-              <td>${vietnamMoneyFormat(
-                data.orderDetail[i].quantity * data.orderDetail[i].price
-              )}</td>
-          </tr>
-      `;
-  }
-
-  // Cập nhật lại giao diện
-  bodyInOrderDetailTable.innerHTML = html;
-}
+import { fetchData } from "../../../public/js/book/getDataBook.js";
+import { vietnamMoneyFormat, numberToVietnamWords } from "../others.js";
+import { printTicket } from "../printTicket.js";
+import { renderOrderDetailTable } from "./renderOrderTable.js";
 
 //
-export function printOrderTicket(idOrderSelected) {
-  //
+export async function printOrderTicket(idOrderSelected) {
+  // Truy vấn csdl để lấy ra đơn hàng được chọn
+  const order = await fetchData(`api/orders/list.php?id=${idOrderSelected}`);
 
-  const printButton = document.getElementById("print-button-order");
+  // const printButton = document.getElementById("print-button-order");
+
+  // // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
+  // printButton.classList.add("active");
 
   // Lấy ra ngày hiện tại
   const today = new Date();
   const day = today.getDate();
   const month = today.getMonth() + 1;
   const year = today.getFullYear();
-
-  // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
-  printButton.classList.add("active");
 
   // Tạo một dialog để thêm một người dùng
   const printDialog = document.createElement("dialog");
@@ -139,32 +42,41 @@ export function printOrderTicket(idOrderSelected) {
               </header>
               <main class="ticket__body order">
                   <h1 class="ticket__title">PHIẾU ĐƠN HÀNG</h1>
-                  <p class="ticket__date">Ngày đặt hàng: <span class="date-start">${
-                    data.dateCreate
+                  <p class="ticket__date">Ngày tạo đơn: <span class="date-start">${
+                    order.data[0].createAt
                   }</span></p>
-                  <p class="ticket__info"><b>Khách hàng:</b> Tên khách hàng cần truy cấn</p>
-                  <p class="ticket__info"><b>Số điện thoại:</b> Số điện thoại cần truy vấn</p>
-                  <p class="ticket__info"><b>Email:</b> Email cần truy vấn</p>
+                  <p class="ticket__info"><b>Mã đơn hàng:</b> #${
+                    order.data[0].id
+                  }</p>
+                  <p class="ticket__info"><b>Khách hàng:</b> ${
+                    order.data[0].customerName
+                  }</p>
+                  <p class="ticket__info"><b>Số điện thoại:</b> ${
+                    order.data[0].customerPhone
+                  }</p>
+                  <p class="ticket__info"><b>Email:</b> ${
+                    order.data[0].customerEmail
+                  }</p>
                   <p class="ticket__info"><b>Địa chỉ giao hàng:</b> ${
-                    data.addressToShip
+                    order.data[0].addressToShip
                   }</p>
                   <p class="ticket__info"><b>Phương thức thanh toán:</b> ${
-                    data.methodPay
+                    order.data[0].payName
                   }</p>
                   <p class="ticket__info"><b>Tổng thanh toán (VNĐ):</b> ${vietnamMoneyFormat(
-                    data.totalPrice
-                  )} đ</p>
+                    order.data[0].total
+                  )}<u>đ</u> (${numberToVietnamWords(order.data[0].total)})</p>
                   <p class="ticket__info"><b>Trạng thái đơn hàng:</b> ${
-                    data.status
-                  }</p>
+                    order.data[0].status
+                  } (${order.data[0].payStatus})</p>
                   <p class="ticket__info"><b>Chi tiết đơn hàng:</b></p>
-                  <table class="ticket__table order">
+                  <table class="ticket__table order-details"">
                       <thead>
                         <tr>  
                           <th width="10%">Mã sách</th>
                           <th width="42%" class="name">Tên sách</th>
-                          <th width="10%">Số lượng</th>
-                          <th width="14%">Đơn giá (VNĐ)</th>
+                          <th width="12%">Giá bán (VNĐ)</th>
+                          <th width="12%">Số lượng</th>
                           <th width="24%" class="total">Thành tiền (VNĐ)</th>
                         </tr>
                       </thead>
@@ -197,8 +109,15 @@ export function printOrderTicket(idOrderSelected) {
   // Hiển thị printDialog
   printDialog.showModal();
 
-  //
-  renderOrderDetailTable();
+  // Cập nhật chi tiết đơn hàng
+  renderOrderDetailTable(order.data[0].id);
+
+  // Gán sự kiện in phiếu khi nhấn nút
+  printTicket(
+    "print-ticket-button",
+    "content-print",
+    `PHDONHANG_${order.data[0].id}`
+  );
 
   // Gán sự kiện cho nút "Đóng" dialog
   document
@@ -207,26 +126,7 @@ export function printOrderTicket(idOrderSelected) {
       // Xoá dialog
       printDialog.remove();
 
-      // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
-      printButton.classList.remove("active");
-    });
-
-  // Gán sự kiện in phiếu khi nhấn nút
-  document
-    .getElementById("print-ticket-button")
-    .addEventListener("click", () => {
-      // Định dạng chuỗi ngày
-      const formattedDate = `${day}${month <= 9 ? "0" + month : month}${year}`;
-
-      // In phiếu
-      const element = document.getElementById("content-print");
-      const options = {
-        margin: 5,
-        filename: `${formattedDate}_PHDONHANG.pdf`,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 }, // Tăng độ phân giải
-        jsPDF: { unit: "mm", format: "a3", orientation: "portrait" },
-      };
-      html2pdf().set(options).from(element).save();
+      // // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
+      // printButton.classList.remove("active");
     });
 }

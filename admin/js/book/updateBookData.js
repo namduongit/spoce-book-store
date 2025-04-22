@@ -13,18 +13,23 @@ import {
 // Hàm thiết lập sự kiện Sửa một sách cho bảng
 export async function updateBookData(idBookSelected) {
   // Phải truy vấn từ CSDL thông qua idBookSelected để lấy được dữ liệu của đối tượng hiện tại
-    const res = await fetchData(`api/books/get.php?bookID=${idBookSelected}`);
-      const book = res.books[0];
-      const author = await fetchData(`api/authors/get.php?authorId=${book.authorId}`);
-      const category = await fetchData(`api/categories/get.php?cateId=${book.genreId}`);
-      const corver = await fetchData(`api/covers/get.php?coverId=${book.coverTypeId}`);
-      const publisher = await fetchData(`api/publishers/get.php?publisherId=${book.publisherId}`);
+    const res = await fetchData(`api/books/detail.php?id=${idBookSelected}`);
+      const book = res.data;
+      const resultAuthor = await fetchData(`api/authors/detail.php?id=${book.authorId}`);
+      const author = resultAuthor.data;
+      const resultCategory = await fetchData(`api/categories/detail.php?id=${book.categoryId}`);
+      const category = resultCategory.data;
+      const resultCorver = await fetchData(`api/covers/detail.php?id=${book.coverId}`);
+      const corver = resultCorver.data;
+      const resultPublisher = await fetchData(`api/publishers/detail.php?id=${book.publisherId}`);
+      const publisher = resultPublisher.data;
+
   
   // Biến chứa đối tượng là nút "Sửa"
-  const updateButton = document.querySelector(".update-button-book");
+//   const updateButton = document.querySelector(".update-button-book");
 
   // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
-  updateButton.classList.add("active");
+//   updateButton.classList.add("active");
 
   // Tạo một dialog để sửa một sách
   const updateDialog = document.createElement("dialog");
@@ -67,14 +72,14 @@ export async function updateBookData(idBookSelected) {
           <div class="dialog__form-group book">
               <label>Tác giả</label>
               <select id="update-book-author" class="changed">
-                  <option value="${author[0].id}" selected>${author[0].name}</option>
+                  <option value="${author.id}" selected>${author.name}</option>
 
               </select>
           </div>
           <div class="dialog__form-group book">
               <label>Thể loại</label>
               <select id="update-book-type"  class="changed">
-                  <option value="${category[0].id}" selected>${category[0].name}</option>
+                  <option value="${category.id}" selected>${category.name}</option>
 
               </select>
           </div>
@@ -83,12 +88,12 @@ export async function updateBookData(idBookSelected) {
           <div class="dialog__form-group book"></div>
           <div class="dialog__form-group book">
               <label>Số trang</label>
-              <input type="text" id="update-book-pages" placeholder="Nhập Số trang" value="${book.numberOfPages}" />
+              <input type="text" id="update-book-pages" placeholder="Nhập Số trang" value="${book.pages}" />
           </div>
           <div class="dialog__form-group book">
               <label>Loại bìa</label>
               <select id="update-book-cover"  class="changed">
-                  <option value="${corver[0].id}" selected>${corver[0].name}</option>
+                  <option value="${corver.id}" selected>${corver.name}</option>
               </select>
           </div>
       </div>
@@ -97,7 +102,7 @@ export async function updateBookData(idBookSelected) {
           <div class="dialog__form-group book">
               <label>Nhà xuất bản</label>
               <select id="update-book-publish-name"  class="changed">
-                  <option value="${publisher[0].id}" selected>${publisher[0].name}</option>
+                  <option value="${publisher.id}" selected>${publisher.name}</option>
                   
               </select>
           </div>
@@ -118,11 +123,11 @@ export async function updateBookData(idBookSelected) {
           <div class="dialog__form-group book"></div>
           <div class="dialog__form-group book">
               <label>Giá gốc</label>
-              <input type="text" id="update-book-price-base" placeholder="Nhập giá gốc" value="${book.originalPrice}"/>
+              <input type="text" id="update-book-price-base" placeholder="Nhập giá gốc" value="${book.basePrice}"/>
           </div>
           <div class="dialog__form-group book">
               <label>Giá bán</label>
-              <input type="text" id="update-book-price-order" placeholder="Nhập Giá bán" value="${book.sellingPrice}" />
+              <input type="text" id="update-book-price-order" placeholder="Nhập Giá bán" value="${book.sellPrice}" />
           </div>
       </div>
       <div class="dialog__row">
@@ -192,8 +197,8 @@ document.getElementById("update-book-image").addEventListener("change", function
 
 
  // THÊM option các  tác giả
- let authorList = await fetchData(`api/authors/get.php`);
- authorList = authorList.filter(tacGia => tacGia.id !== author[0].id);
+ let authorList = await fetchData(`api/authors/list.php`);
+ authorList = authorList.data.filter(tacGia => tacGia.id !== author.id);
  let authorSelect = document.querySelector("#update-book-author");
  authorList.forEach(author => {
      let op = document.createElement("option");
@@ -203,8 +208,8 @@ document.getElementById("update-book-image").addEventListener("change", function
  });
 
   // THÊM option các  thể loại
-  let categoryList =await fetchData(`api/categories/get.php`);
-    categoryList = categoryList.filter(theLoai => theLoai.id !== category[0].id);
+  let categoryList =await fetchData(`api/categories/list.php`);
+    categoryList = categoryList.data.filter(theLoai => theLoai.id !== category.id);
   let categorySelect = document.querySelector("#update-book-type");
   categoryList.forEach(category => {
       let op = document.createElement("option");
@@ -215,8 +220,8 @@ document.getElementById("update-book-image").addEventListener("change", function
 
 
    // THÊM option các  thể loại
-   let coverList = await fetchData(`api/covers/get.php`);
-   coverList = coverList.filter(loaiBia => loaiBia.id !== corver[0].id);
+   let coverList = await fetchData(`api/covers/list.php`);
+   coverList = coverList.data.filter(loaiBia => loaiBia.id !== corver.id);
    let coverSelect = document.querySelector("#update-book-cover");
    coverList.forEach(author => {
        let op = document.createElement("option");
@@ -226,8 +231,8 @@ document.getElementById("update-book-image").addEventListener("change", function
    });
 
     // THÊM option các  thể loại
-      let publisherList = await fetchData(`api/publishers/get.php`);
-        publisherList = publisherList.filter(nxb => nxb.id !== publisher[0].id);
+      let publisherList = await fetchData(`api/publishers/list.php`);
+        publisherList = publisherList.data.filter(nxb => nxb.id !== publisher.id);
 
       let publisherLelect = document.querySelector("#update-book-publish-name");
       publisherList.forEach(nxb => {
@@ -337,9 +342,9 @@ document.getElementById("update-book-button").addEventListener("click", async (e
                 toast({title :"Lỗi", message :`Lỗi fetch API:${error}`, type : "error" , duration : 3000});
     
             }
+            await renderBookTable(1);
             updateDialog.remove();
-            updateButton.classList.remove("active");
-            await renderBookTable();
+            // updateButton.classList.remove("active");
     
         }
     }
@@ -355,7 +360,7 @@ document.getElementById("close-book-button").addEventListener("click", async () 
     if(yes){
         // Xoá dialog
         updateDialog.remove();
-        updateButton.classList.remove("active");
+        // updateButton.classList.remove("active");
     }
 
 

@@ -1,12 +1,13 @@
 import {
   vietnamMoneyFormat,
   numberToVietnamWords,
+  formatDate2,
   getWeeksInMonth,
   getMonthsInYear,
 } from "../others.js";
+import { fetchData } from "../../../public/js/book/getDataBook.js";
 
 // Biến chứa các đối tượng bảng Thống kê doanh thu
-let data = [];
 let headInRevenueDashboardTable = null;
 let bodyInRevenueDashboardTable = null;
 let footInRevenueDashboardTable = null;
@@ -94,7 +95,7 @@ export async function renderRevenueDashboardTable(
           <td colspan="3">TỔNG:</td>
           <td>0</td>
           <td>0</td>
-          <td>0</tde>
+          <td class='right'>0</tde>
       </tr>
     `;
   // Cập nhật lại các biến vì đã ấn "Xem" thành công
@@ -108,42 +109,56 @@ export async function renderRevenueDashboardTable(
     ".main__data > .main__table.revenue_dashboard > tfoot > tr > td:nth-of-type(4)"
   );
 
-  //
-  // const orders = await fetch("/api/orders/get_orders.php", {
-  //   method: "GET",
-  // }).then((response) => {
-  //   if (!response.ok) {
-  //     throw new Error("Xem chi tiết thất bại!");
-  //   }
-  //   return response.json();
-  // });
-  // console.log(orders);
-
-  // Cập nhật lại dữ liệu cho bảng (Cần xử lý truy vấn dữ liệu chỗ này để tính toán)
-  data = [];
+  // Cập nhật lại dữ liệu cho bảng
   let timeline =
     month !== 0 ? getWeeksInMonth(year, month) : getMonthsInYear(year);
-  timeline.forEach((time) => {
-    console.log(time);
-    data.push({
+  const promises = timeline.map(async (time) => {
+    const order = await fetchData(
+      `api/orders/list.php?createStart=${formatDate2(
+        time.start
+      )}&createEnd=${formatDate2(time.end)}`
+    );
+
+    let bookNumbersValue = 0,
+      totalPriceValue = 0;
+    if (order.data) {
+      console.log(order);
+      for (let i = 0; i < order.data.length; i++) {
+        totalPriceValue += order.data[i].total;
+
+        const orderDetails = await fetchData(
+          `api/order_details/list.php?orderId=${order.data[i].id}`
+        );
+        if (orderDetails.data) {
+          console.log(orderDetails);
+          for (let i = 0; i < orderDetails.data.length; i++) {
+            bookNumbersValue += orderDetails.data[i].quantity;
+          }
+        }
+      }
+    }
+
+    return {
       time: time.week ? time.week : time.month,
       start: time.start,
       end: time.end,
-      orderNumbers: 0, // Vì chưa xủ lý truy vấn nên mặc định là 0
-      bookNumbers: 0, // Vì chưa xủ lý truy vấn nên mặc định là 0
-    });
+      orderNumbers: order.data ? order.data.length : 0,
+      bookNumbers: bookNumbersValue,
+      totalPrice: totalPriceValue,
+    };
   });
+  const data = await Promise.all(promises);
 
   // Biến tính tổng cho các ô dữ liệu cuối
-  let orderNumbers = 0,
-    bookNumbers = 0,
-    totalRevenue = 0;
+  let orderNumbersFinal = 0,
+    bookNumbersFinal = 0,
+    totalPriceFinal = 0;
   // Duyệt qua từng dữ liệu rồi gán (cập nhật lại các ô dữ liệu giữa bảng)
   bodyInRevenueDashboardTable.innerHTML = data
     .map((row) => {
-      orderNumbers += row.orderNumbers;
-      bookNumbers += row.bookNumbers;
-      totalRevenue += row.orderNumbers * row.bookNumbers;
+      orderNumbersFinal += row.orderNumbers;
+      bookNumbersFinal += row.bookNumbers;
+      totalPriceFinal += row.totalPrice;
 
       return `
               <tr>
@@ -152,21 +167,17 @@ export async function renderRevenueDashboardTable(
                   <td>${row.end}</td>
                   <td>${row.orderNumbers}</td>
                   <td>${row.bookNumbers}</td>
-                  <td>${vietnamMoneyFormat(
-                    row.orderNumbers * row.bookNumbers
-                  )}</td>
+                  <td class="right">${vietnamMoneyFormat(row.totalPrice)}</td>
               </tr>
           `;
     })
     .join("");
 
   // Tính lại dữ liệu các dòng cuối
-  footColumn2InRevenueDashboardTable.textContent =
-    vietnamMoneyFormat(orderNumbers);
-  footColumn3InRevenueDashboardTable.textContent =
-    vietnamMoneyFormat(bookNumbers);
+  footColumn2InRevenueDashboardTable.textContent = orderNumbersFinal;
+  footColumn3InRevenueDashboardTable.textContent = bookNumbersFinal;
   footColumn4InRevenueDashboardTable.textContent =
-    vietnamMoneyFormat(totalRevenue);
+    vietnamMoneyFormat(totalPriceFinal);
   totalTextInRevenueDashboardTable.textContent =
-    numberToVietnamWords(totalRevenue);
+    numberToVietnamWords(totalPriceFinal);
 }

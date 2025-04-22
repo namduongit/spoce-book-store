@@ -10,5 +10,5 @@ spl_autoload_register(function ($class_name) {
      */
     $path_class = str_replace('app', '', dirname(__FILE__));
     // echo $path_class . ''. $export_class . '.php';
-    include $path_class . ''. $export_class . '.php';
+    include $path_class . '' . $export_class . '.php';
 });

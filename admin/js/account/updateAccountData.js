@@ -1,24 +1,44 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
-
+import { toast } from "../../../public/js/toast.js";
+import { showNotification } from "../dialogMessage.js";
+import { renderAccountTable } from "./renderAccountTable.js";
 // Hàm thiết lập sự kiện Sửa một người dùng cho bảng
 export function updateAccountData(idAccountSelected) {
-  // Phải truy vấn từ CSDL thông qua idAccountSelected để lấy được dữ liệu của đối tượng hiện tại
-  // ...
+  const id = idAccountSelected.textContent;
 
   // Biến chứa đối tượng là nút "Sửa"
   const updateButton = document.getElementById("update-button-account");
-
-  // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
   updateButton.classList.add("active");
 
-  // Tạo một dialog để sửa một người dùng
+  // Tạo dialog
   const updateDialog = document.createElement("dialog");
-  // - Định dạng dialog
-  updateDialog.classList.add("dialog");
-  updateDialog.classList.add("account");
+  updateDialog.classList.add("dialog", "account");
   updateDialog.style.width = "772px";
-  // - Ghi nội dung dialog
-  updateDialog.innerHTML = `
+  document.body.appendChild(updateDialog);
+  updateDialog.showModal();
+
+  // Gọi API
+  Promise.all([
+    fetch(
+      `http://localhost:3000/api/address/getAddress.php?maNguoiDung=${id}`
+    ).then((res) => res.json()),
+    fetch(`http://localhost:3000/api/account/detail_account.php?id=${id}`).then(
+      (res) => res.json()
+    ),
+  ])
+    .then(([addressData, userData]) => {
+      if (userData.status !== "success") return;
+
+      const user = userData.data;
+      const address = addressData.data;
+
+      const fullAddress =
+        address && address.length > 0
+          ? `${address[0].street}, ${address[0].ward}, ${address[0].district}, ${address[0].province}`
+          : "Chưa có địa chỉ";
+
+      // Gán nội dung dialog
+      updateDialog.innerHTML = `
         <h1 class="dialog__title">Sửa người dùng</h1>
         <button id="close-account-button" class="dialog__close">
           <i class="fa-solid fa-xmark"></i>
@@ -28,55 +48,54 @@ export function updateAccountData(idAccountSelected) {
           <div class="dialog__row">
             <div class="dialog__form-group">
               <label>Mã người dùng</label>
-              <input type="text" id="add-account-id" readonly />
+              <input type="text" id="add-account-id" readonly value="${user.maNguoiDung}" />
             </div>
             <div class="dialog__form-group">
               <label>Họ và tên</label>
-              <input type="text" id="add-account-fullname" placeholder="Nhập Họ và tên" autofocus/>
+              <input type="text" id="add-account-fullname" value="${user.hoVaTen}" />
             </div>
           </div>
           <div class="dialog__row">
             <div class="dialog__form-group">
               <label>Số điện thoại</label>
-              <input type="text" id="add-account-phone" placeholder="Nhập Số điện thoại" />
+              <input type="text" id="add-account-phone" value="${user.soDT}" />
             </div>
             <div class="dialog__form-group">
               <label>Email</label>
-              <input type="text" id="add-account-email" placeholder="Nhập Email"/>
+              <input type="text" id="add-account-email" value="${user.email}" />
             </div>
           </div>
           <div class="dialog__row">
             <div class="dialog__form-group full">
               <label>Địa chỉ</label>
-              <input type="text" id="add-account-address" placeholder="Nhập Địa chỉ" />
-              <button>Chọn</button>
+              <input type="text" id="add-account-address" value="${fullAddress}" />
             </div>
           </div>
           <div class="dialog__row">
             <div class="dialog__form-group">
               <label>Tên tài khoản</label>
-              <input type="text" id="add-account-username" readonly />
+              <input type="text" id="add-account-username" readonly value="${user.tenTaiKhoan}" />
             </div>
             <div class="dialog__form-group">
               <label>Mật khẩu</label>
-              <input type="text" id="add-account-password" placeholder="Nhập Mật khẩu" />
+              <input type="text" id="add-account-password" value="${user.matKhau}" />
             </div>
           </div>
           <div class="dialog__row">
             <div class="dialog__form-group">
               <label>Nhóm quyền</label>
               <select id="add-account-privilege">
-                  <option value="" selected>Chọn Nhóm quyền</option>
-                  <option value="1">Quản lý</option>
-                  <option value="2">Nhân viên thủ kho</option>
-                  <option value="3">Nhân viên bán hàng</option>
-                  <option value="4">Khách hàng</option>
+                <option value="" disabled>Chọn Nhóm quyền</option>
+                <option value="1">Quản lý</option>
+                <option value="2">Nhân viên thủ kho</option>
+                <option value="3">Nhân viên bán hàng</option>
+                <option value="4">Khách hàng</option>
               </select>
             </div>
             <div class="dialog__form-group">
               <label>Trạng thái</label>
               <select id="add-account-status" disabled>
-                <option value="" selected>Chọn Trạng thái</option>
+                <option value="" disabled>Chọn Trạng thái</option>
                 <option value="1">Hoạt động</option>
                 <option value="0">Tạm dừng</option>
               </select>
@@ -88,53 +107,186 @@ export function updateAccountData(idAccountSelected) {
         </form>
       `;
 
-  // Thêm vào body
-  document.body.appendChild(updateDialog);
+      // ✅ Gán giá trị select sau khi DOM đã được render
+      document.getElementById("add-account-privilege").value =
+        user.maQuyen.toString();
+      document.getElementById("add-account-status").value =
+        user.trangThai === "Hoạt động" ? "1" : "0";
 
-  // Hiển thị updateDialog
-  updateDialog.showModal();
+      // Gán sự kiện đóng
+      document
+        .getElementById("close-account-button")
+        .addEventListener("click", () => {
+          updateDialog.remove();
+          updateButton.classList.remove("active");
+        });
 
-  // Sự kiện cho các thành phần trong dialog
-  // - Nếu các select đã được chọn giá trị khác mặc định thì đổi định dạng
-  const selectElement = document.querySelectorAll(
-    ".dialog__form-group > select"
-  );
-  selectElement.forEach((select) => {
-    isNotFirstItemSelected(select);
-  });
+      // Gán sự kiện sửa
+      document
+        .getElementById("update-account-button")
+        .addEventListener("click", async (e) => {
+          e.preventDefault();
+          // Lấy giá trị từ các ô input
+          const id = document.getElementById("add-account-id").value;
+          const fullname = document
+            .getElementById("add-account-fullname")
+            .value.trim();
+          const phone = document
+            .getElementById("add-account-phone")
+            .value.trim();
+          const email = document
+            .getElementById("add-account-email")
+            .value.trim();
+          const address = document
+            .getElementById("add-account-address")
+            .value.trim();
+          const password = document
+            .getElementById("add-account-password")
+            .value.trim();
+          const privilege = document
+            .getElementById("add-account-privilege")
+            .value.trim();
+          const username = document
+            .getElementById("add-account-username")
+            .value.trim();
 
-  // Gán sự kiện cho nút "Sửa" dialog
-  document
-    .getElementById("update-account-button")
-    .addEventListener("click", () => {
-      // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-      const fullname = document.getElementById("update-account-fullname");
-      const phone = document.getElementById("update-account-phone");
-      const email = document.getElementById("update-account-email");
-      const address = document.getElementById("update-account-address");
-      const password = document.getElementById("update-account-password");
-      const privilege = document.getElementById("update-account-privilege");
-      // - Chi tiết quyền
+          // Regex kiểm tra định dạng địa chỉ (có thể điều chỉnh)
+          const addressFormatRegex =
+            /^.+?,\s*(phường|Phường)\s+.+?,\s*(quận|Quận|huyện|Huyện)\s+.+?,\s*(tỉnh|Tỉnh|tp|TP|Thành Phố|Thành phố)\.?\s+.+$/;
+          const addressUser = address.split(",");
+          const numberHomeAndStreetName = addressUser[0];
+          const province = addressUser[3];
+          const district = addressUser[2];
+          const ward = addressUser[1];
+          // Validate dữ liệu
+          const validations = [
+            { condition: !fullname, message: "Vui lòng nhập họ và tên." },
+            { condition: !phone, message: "Vui lòng nhập số điện thoại." },
+            {
+              condition: !/^\d{10,11}$/.test(phone),
+              message: "Số điện thoại không hợp lệ.",
+            },
+            { condition: !email, message: "Vui lòng nhập email." },
+            {
+              condition: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+              message: "Email không hợp lệ.",
+            },
+            { condition: !address, message: "Vui lòng nhập địa chỉ." },
+            {
+              condition: address && !addressFormatRegex.test(address),
+              message:
+                "Địa chỉ không đúng định dạng. Ví dụ: '12 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP Hồ Chí Minh'",
+            },
+            { condition: !username, message: "Vui lòng nhập tên tài khoản." },
+            { condition: !password, message: "Vui lòng nhập mật khẩu." },
+            { condition: !privilege, message: "Vui lòng chọn nhóm quyền." },
+          ];
 
-      // ... (Xử lý tiếp ở đây)
-      console.log(fullname.value);
-      console.log(phone.value);
-      console.log(email.value);
-      console.log(address.value);
-      console.log(password.value);
-      console.log(phone.value);
-      console.log(email.value);
-      console.log(privilege.value);
-    });
+          for (const v of validations) {
+            if (v.condition) {
+              toast({
+                title: "Lỗi",
+                message: v.message,
+                type: "warning",
+                duration: 3000,
+              });
+              return;
+            }
+          }
 
-  // Gán sự kiện cho nút "Đóng" dialog
-  document
-    .getElementById("close-account-button")
-    .addEventListener("click", () => {
-      // Xoá dialog
-      updateDialog.remove();
+          // Confirm sửa
+          let yes = await showNotification(
+            "Bạn có đồng ý sửa người dùng này không?"
+          );
+          if (!yes) return;
 
-      // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
-      updateButton.classList.remove("active");
+          // Tạo dữ liệu để gửi đi
+          let data = new URLSearchParams();
+          data.append("maNguoiDung", id);
+          data.append("accountFullName", fullname);
+          data.append("accountPhone", phone);
+          data.append("accountEmail", email);
+          data.append("accountPassword", password);
+          data.append("accountRole", privilege);
+          data.append("accountName", username);
+          // Gọi API cập nhật
+          try {
+            const response = await fetch(
+              "http://localhost:3000/api/account/update_account.php",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: data.toString(),
+              }
+            );
+
+            const result = await response.json();
+
+            if (result.status === "success") {
+              const id = result.id;
+              console.log(id);
+
+              // Cập nhật địa chỉ
+              const addressData = new URLSearchParams();
+              addressData.append("idUser", id);
+              addressData.append("houseAddress", numberHomeAndStreetName);
+              addressData.append("provinceAddress", province);
+              addressData.append("cityAddress", district);
+              addressData.append("wardAddress", ward);
+
+              const addressRes = await fetch("api/address/updateAddress.php", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: addressData,
+              });
+              const addressResult = await addressRes.json();
+              console.log(addressResult);
+
+              if (!addressResult.success) {
+                toast({
+                  title: "Lỗi",
+                  message: "Không thể cập nhật địa chỉ.",
+                  type: "error",
+                  duration: 3000,
+                });
+              } else {
+                toast({
+                  title: "Thành công",
+                  message: "Sửa người dùng và địa chỉ thành công",
+                  type: "success",
+                  duration: 3000,
+                });
+              }
+              // Có thể reload lại dữ liệu ở đây
+              updateDialog.remove(); // Nếu muốn đóng dialog sau khi sửa
+            } else {
+              toast({
+                title: "Lỗi",
+                message: result.message || "Có lỗi xảy ra khi cập nhật.",
+                type: "error",
+                duration: 3000,
+              });
+            }
+          } catch (error) {
+            console.error("Lỗi khi gọi API cập nhật:", error);
+            toast({
+              title: "Lỗi",
+              message: "Không thể kết nối tới máy chủ.",
+              type: "error",
+              duration: 3000,
+            });
+          }
+        });
+
+      // Xử lý màu sắc nếu cần (selectEvents)
+      const selects = updateDialog.querySelectorAll("select");
+      selects.forEach((select) => isNotFirstItemSelected(select));
+    })
+    .catch((err) => {
+      console.error("Lỗi khi tải dữ liệu người dùng:", err);
     });
 }

@@ -59,13 +59,15 @@ export async function renderAccountTable(pageIsSelected = 1) {
             <td>${data[i].tenQuyen}</td>
             <td>${data[i].soDT}</td>
             <td><span ${
-              data[i].trangThai === "ACTIVE" ? 'class="green"' : 'class="red"'
+              data[i].trangThai === "Hoạt động"
+                ? 'class="green"'
+                : 'class="red"'
             }>${data[i].trangThai}</span></td>
             <td>
                 <i id="detail-button-account" class="fa-solid fa-circle-info"></i>
                 <i id="update-button-account" class="fa-solid fa-pen-to-square"></i>
                 <i id="lock-button-account" class="fa-solid fa-${
-                  data[i].trangThai === "ACTIVE" ? "" : "un"
+                  data[i].trangThai === "Hoạt động" ? "" : "un"
                 }lock"></i>
             </td>
         </tr>

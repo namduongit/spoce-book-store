@@ -1,24 +1,52 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 
-// Hàm thiết lập sự kiện Sửa một người dùng cho bảng
+// Hàm phân tách địa chỉ (Nếu có, tách thành các phần như Tỉnh/Thành phố, Quận/Huyện)
+function splitAddressToShip(address) {
+  if (!address) return "Không có địa chỉ";
+  const info = address.split(",");
+  return info.length === 4 ? info[2].trim() + ", " + info[3].trim() : address;
+}
+function getRoleName(maQuyen) {
+  switch (parseInt(maQuyen)) {
+    case 1:
+      return "Nhân viên bán hàng";
+    case 2:
+      return "Quản lí";
+    case 3:
+      return "Nhân viên thủ kho";
+    case 4:
+      return "Khách hàng";
+    default:
+      return "Không xác định";
+  }
+}
 export function detailAccountData(idAccountSelected) {
-  // Phải truy vấn từ CSDL thông qua idAccountSelected để lấy được dữ liệu của đối tượng hiện tại
-  // ...
+  const id = idAccountSelected.textContent.trim(); // Lấy ID người dùng
+  console.log("ID người dùng:", id);
 
-  // Biến chứa đối tượng là nút "Chi tiết"
-  const detailButton = document.getElementById("detail-button-account");
+  // Gọi song song hai API: một để lấy thông tin người dùng, một để lấy địa chỉ
+  Promise.all([
+    fetch(
+      `http://localhost:3000/api/address/getAddress.php?maNguoiDung=${id}`
+    ).then((response) => response.json()),
+    fetch(`http://localhost:3000/api/account/detail_account.php?id=${id}`).then(
+      (response) => response.json()
+    ),
+  ])
+    .then(([addressData, userData]) => {
+      if (userData.status === "success") {
+        // Lấy thông tin người dùng và địa chỉ
+        const user = userData.data;
+        const address = addressData.data;
+        console.log(address);
 
-  // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
-  detailButton.classList.add("active");
+        // Tạo dialog và điền dữ liệu vào các trường
+        const detailDialog = document.createElement("dialog");
+        detailDialog.classList.add("dialog", "account");
+        detailDialog.style.width = "772px";
 
-  // Tạo một dialog để sửa một người dùng
-  const detailDialog = document.createElement("dialog");
-  // - Định dạng dialog
-  detailDialog.classList.add("dialog");
-  detailDialog.classList.add("account");
-  detailDialog.style.width = "772px";
-  // - Ghi nội dung dialog
-  detailDialog.innerHTML = `
+        // Định dạng dialog
+        detailDialog.innerHTML = `
           <h1 class="dialog__title">Chi tiết người dùng</h1>
           <button id="close-account-button" class="dialog__close">
             <i class="fa-solid fa-xmark"></i>
@@ -28,85 +56,101 @@ export function detailAccountData(idAccountSelected) {
             <div class="dialog__row">
               <div class="dialog__form-group">
                 <label>Mã người dùng</label>
-                <input type="text" id="detail-account-id" readonly />
+                <input type="text" id="detail-account-id" readonly value="${
+                  user.maNguoiDung
+                }" />
               </div>
               <div class="dialog__form-group">
                 <label>Họ và tên</label>
-                <input type="text" id="detail-account-fullname" readonly />
+                <input type="text" id="detail-account-fullname" readonly value="${
+                  user.hoVaTen
+                }" />
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group">
                 <label>Số điện thoại</label>
-                <input type="text" id="detail-account-phone" readonly />
+                <input type="text" id="detail-account-phone" readonly value="${
+                  user.soDT == "" ? "Chưa có số điện thoại" : user.soDT
+                }" />
               </div>
               <div class="dialog__form-group">
                 <label>Email</label>
-                <input type="text" id="detail-account-email" readonly />
+                <input type="text" id="detail-account-email" readonly value="${
+                  user.email == "" ? "Chưa có email" : user.email
+                }" />
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group full">
                 <label>Địa chỉ</label>
-                <input type="text" id="detail-account-address" readonly />
+                <input type="text" id="detail-account-address" readonly value="${
+                  address && address.length > 0
+                    ? `${address[0].street}, ${address[0].ward}, ${address[0].district}, ${address[0].province}`
+                    : "Chưa có địa chỉ"
+                }" />
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group">
                 <label>Tên tài khoản</label>
-                <input type="text" id="detail-account-username" readonly />
+                <input type="text" id="detail-account-username" readonly value="${
+                  user.tenTaiKhoan
+                }" />
               </div>
               <div class="dialog__form-group">
                 <label>Mật khẩu</label>
-                <input type="text" id="detail-account-password" readonly />
+                <input type="text" id="detail-account-password" readonly value="${
+                  user.matKhau
+                }" />
               </div>
             </div>
             <div class="dialog__row">
               <div class="dialog__form-group">
-                <label>Nhóm quyền</label>
-                <select id="detail-account-privilege" disabled>
-                    <option value="" selected>Chọn Nhóm quyền</option>
-                    <option value="1">Quản lý</option>
-                    <option value="2">Nhân viên thủ kho</option>
-                    <option value="2">Nhân viên bán hàng</option>
-                    <option value="3">Khách hàng</option>
-                </select>
-              </div>
+  <label>Nhóm quyền</label>
+  <select id="detail-account-privilege" disabled>
+    <option value="${user.maQuyen}" selected>${getRoleName(
+          user.maQuyen
+        )}</option>
+    <option value="1">Quản lý</option>
+    <option value="2">Nhân viên thủ kho</option>
+    <option value="3">Nhân viên bán hàng</option>
+    <option value="4">Khách hàng</option>
+  </select>
+</div>
               <div class="dialog__form-group">
                 <label>Trạng thái</label>
                 <select id="detail-account-status" disabled>
-                  <option value="" selected>Chọn Trạng thái</option>
+                  <option value="${user.trangThai}" selected>${
+          user.trangThai === "1" ? "Hoạt động" : "Tạm dừng"
+        }</option>
                   <option value="1">Hoạt động</option>
                   <option value="0">Tạm dừng</option>
                 </select>
               </div>
             </div>
           </form>
-    `;
+        `;
 
-  // Thêm vào body
-  document.body.appendChild(detailDialog);
+        // Thêm vào body
+        document.body.appendChild(detailDialog);
 
-  // Hiển thị detailDialog
-  detailDialog.showModal();
+        // Hiển thị dialog
+        detailDialog.showModal();
 
-  // Sự kiện cho các thành phần trong dialog
-  // - Nếu các select đã được chọn giá trị khác mặc định thì đổi định dạng
-  const selectElement = document.querySelectorAll(
-    ".dialog__form-group > select"
-  );
-  selectElement.forEach((select) => {
-    isNotFirstItemSelected(select);
-  });
-
-  // Gán sự kiện cho nút "Đóng" dialog
-  document
-    .getElementById("close-account-button")
-    .addEventListener("click", () => {
-      // Xoá dialog
-      detailDialog.remove();
-
-      // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
-      detailButton.classList.remove("active");
+        // Sự kiện cho nút "Đóng" dialog
+        document
+          .getElementById("close-account-button")
+          .addEventListener("click", () => {
+            // Xoá dialog
+            detailDialog.remove();
+          });
+      } else {
+        // alert("Không tìm thấy thông tin người dùng hoặc địa chỉ");
+      }
+    })
+    .catch((error) => {
+      console.error("Lỗi khi gọi API:", error);
+      // alert("Có lỗi xảy ra khi tải dữ liệu");
     });
 }

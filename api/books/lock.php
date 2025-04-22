@@ -4,11 +4,13 @@ require_once __DIR__ . '../../../app/config.php';
 
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
-$id = isset($_POST['id']) ? $_POST['id'] : '';
-$status = isset($_POST['status']) ? $_POST['status'] : 'ACTIVE';
+// Nhận dữ liệu từ POST
+$id = isset($_POST['id']) ? $_POST['id'] : '1';
+$status = isset($_POST['status']) ? $_POST['status'] : 'Đang bán';
+$updateAt = date("Y-m-d H:i:s");
 
 // Kiểm tra id có hợp lệ không
 if (empty($id)) {
@@ -17,14 +19,20 @@ if (empty($id)) {
 }
 
 // Chuyển trạng thái sách
-$status = $status === 'Hoạt động' ? 'Tạm dừng' : 'Hoạt động';
+$status = ($status === 'Đang bán') ? 'Dừng bán' : 'Đang bán';
 
 try {
     // Khởi tạo model sách
-    $book_model = new app_models_Sach();
+    $model = new app_models_Sach();
 
-    // Cập nhật sách trong database
-    $result = $book_model->updateBook($id, ["trangThai" => $status]);
+    // Cập nhật trạng thái sách trong database
+    $result = $model->updateBook(
+        $id, 
+        [
+            "trangThai" => $status,
+            "ngayCapNhat" => $updateAt
+        ]
+    );
 
     // Kiểm tra số dòng bị ảnh hưởng
     if ($result && $result->rowCount() > 0) {

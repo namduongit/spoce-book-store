@@ -1,15 +1,11 @@
 import { detailBookData } from "./detailBookData.js";
 import { updateBookData } from "./updateBookData.js";
 import { lockBookData } from "./lockBookData.js";
-import { filterbook } from "./filterBookData.js";
-import { showNotification } from "../dialogMessage.js";
-
-// Dữ liệu tạm thời (sau phải xây dựng hàm truy xuất dữ liệu từ csdl)
-export let data = [];
+import { filterBook } from "./filterBookData.js";
 
 // Hàm cập nhật lại dữ liệu cho bảng Thể loại
-export async function renderBookTable(pageIsSelected = 1) {
-  data = await filterbook(pageIsSelected);
+export async function renderBookTable(currentPage) {
+  const data = await filterBook(currentPage);
 
   // Biến chứa đối tượng bảng Thể loại
   const bodyInBookTable = document.querySelector(
@@ -27,18 +23,18 @@ export async function renderBookTable(pageIsSelected = 1) {
               book.image
             }" alt="" width="90%" height="80%"/></td>
             <td>${book.name}</td>
-            <td>${book.genreName}</td>
-            <td>${book.quantity}</td>
+            <td>${book.categoryName}</td>
+            <td>${book.inventory}</td>
             <td>
-                <span class="${book.status === "ACTIVE" ? "green" : "red"}">
+                <span class="${book.status === "Đang bán" ? "green" : "red"}">
                     ${book.status}
                 </span>
             </td>
             <td>
-                <i class="fa-solid fa-circle-info detail-button-book"></i>  
-                <i class="fa-solid fa-pen-to-square update-button-book"></i>
+                <i class="fa-solid fa-circle-info"></i>  
+                <i class="fa-solid fa-pen-to-square"></i>
                 <i class="fa-solid fa-${
-                  book.status === "ACTIVE" ? "" : "un"
+                  book.status === "Đang bán" ? "" : "un"
                 }lock lock-button-book"></i>
             </td>
         </tr>`;

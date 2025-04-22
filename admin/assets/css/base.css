@@ -39,6 +39,13 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
+select,
+input,
+textarea {
+  font-family: inherit;
+  color: inherit;
+}
+
 /* <===== Side Bar =====> */
 .sidebar {
   position: fixed;
@@ -239,7 +246,7 @@ body {
 }
 .main__filter-btn,
 .main__see-btn {
-  width: 70px;
+  width: 10%;
   height: 30px;
   background: #007bff;
   border: 2px solid #007bff;
@@ -257,7 +264,7 @@ body {
 }
 .main__add-btn,
 .main__print-btn {
-  width: 100px;
+  width: 10%;
   height: 30px;
   background: #699f4c;
   border: 2px solid #699f4c;
@@ -313,7 +320,7 @@ body {
   min-height: 520px;
 }
 .main__data:has(.main__table.order) {
-  min-height: 450px;
+  min-height: 432px;
 }
 .main__table {
   table-layout: fixed;
@@ -356,32 +363,24 @@ body {
 .main__table tbody tr:nth-of-type(even) {
   background-color: #f3f3f3;
 }
-/* .main__table tbody tr:hover {
-  font-weight: bold;
-  color: #303234;
-  color: var(--primary-color);
-  border-bottom: 2px solid var(--primary-color);
-} */
 .main__table tbody td > span:is(.green, .red) {
-  /* color: #98fb98; */
   color: #3dc55d;
   padding: 4px 6px;
   border-radius: 4px;
 }
 .main__table tbody td > span.purple {
-  /* color: #ff8f8f; */
   color: #5d3fd3;
 }
+.main__table tbody td > span.orange {
+  color: #d3873f;
+}
 .main__table tbody td > span.yellow {
-  /* color: #ff8f8f; */
   color: #ffdf4e;
 }
 .main__table tbody td > span.gray {
-  /* color: #ff8f8f; */
   color: #777777;
 }
 .main__table tbody td > span.red {
-  /* color: #ff8f8f; */
   color: #f44336;
 }
 .main__table tbody td:last-of-type {
@@ -425,49 +424,16 @@ body {
 .main__table.dashboard td {
   border: 1px solid #000;
 }
+.main__table.dashboard th {
+  border-color: var(--primary-color);
+}
 .main__table:where(
     .profit_dashboard,
     .revenue_dashboard,
     .input_ticket_dashboard
   )
-  tbody
-  td:nth-of-type(4),
-.main__table:where(
-    .profit_dashboard,
-    .revenue_dashboard,
-    .input_ticket_dashboard
-  )
-  tfoot
-  td:nth-of-type(2),
-.main__table:where(
-    .profit_dashboard,
-    .revenue_dashboard,
-    .input_ticket_dashboard
-  )
-  tbody
-  td:nth-of-type(5),
-.main__table:where(
-    .profit_dashboard,
-    .revenue_dashboard,
-    .input_ticket_dashboard
-  )
-  tfoot
-  td:nth-of-type(3),
-.main__table:where(
-    .profit_dashboard,
-    .revenue_dashboard,
-    .input_ticket_dashboard
-  )
-  tbody
-  td:nth-of-type(6),
-.main__table:where(
-    .profit_dashboard,
-    .revenue_dashboard,
-    .input_ticket_dashboard
-  )
-  tfoot
-  td:nth-of-type(4) {
-  display: table-cell;
+  td:last-of-type {
+  display: table-cell !important;
   text-align: right;
 }
 /* <= Main Pagination => */

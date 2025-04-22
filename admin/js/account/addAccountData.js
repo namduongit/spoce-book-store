@@ -1,6 +1,8 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 import { updateAddressSelect } from "../../../api/address/updateAddressSelect.js";
-
+import { renderAccountTable } from "./renderAccountTable.js";
+import { toast } from "../../../public/js/toast.js";
+import { showNotification } from "../dialogMessage.js";
 // Hàm hiện dialog cho việc "chọn" địa chỉ
 function showAddressSelectDialog() {
   // Tạo một dialog để thêm một người dùng
@@ -76,7 +78,7 @@ function showAddressSelectDialog() {
 }
 
 // Hàm thiết lập sự kiện thêm một người dùng cho bảng
-export function addAccountData() {
+export async function addAccountData() {
   // Biến chứa đối tượng là nút "Thêm"
   const addButton = document.getElementById("add-button-account");
 
@@ -144,18 +146,18 @@ export function addAccountData() {
             <label>Nhóm quyền</label>
             <select id="add-account-privilege">
                 <option value="" selected>Chọn Nhóm quyền</option>
-                <option value="1">Quản lý</option>
-                <option value="2">Nhân viên thủ kho</option>
-                <option value="2">Nhân viên bán hàng</option>
-                <option value="3">Khách hàng</option>
+                <option value="2">Quản lý</option>
+                <option value="3">Nhân viên thủ kho</option>
+                <option value="1">Nhân viên bán hàng</option>
+                <option value="4">Khách hàng</option>
             </select>
           </div>
           <div class="dialog__form-group">
             <label>Trạng thái</label>
             <select id="add-account-status">
               <option value="" selected>Chọn Trạng thái</option>
-              <option value="1">Hoạt động</option>
-              <option value="0">Tạm dừng</option>
+              <option value="Hoạt động">Hoạt động</option>
+              <option value="Tạm dừng">Tạm dừng</option>
             </select>
           </div>
         </div>
@@ -180,43 +182,215 @@ export function addAccountData() {
       isNotFirstItemSelected(select);
     });
     // - Nút hiển thị dialog cho phép chọn được địa chỉ gần hợp lệ
+    let fullAddress = ""; // Biến chứa địa chỉ đầy đủ
     const addressButton = document.querySelector(
       ".dialog__form-group > button.address"
     );
+
     addressButton.addEventListener("click", (e) => {
       // - Loại bỏ giá trị mặc định
       e.preventDefault();
 
-      // -
       showAddressSelectDialog();
+      document
+        .getElementById("address-select-button")
+        .addEventListener("click", (e) => {
+          e.preventDefault();
+          console.log("ok");
+
+          const numberHomeAndStreetName = document.getElementById(
+            "number-home-and-street-name-input"
+          ).value;
+          const province = document
+            .getElementById("province-select")
+            .selectedOptions[0].textContent.trim();
+          const district = document
+            .getElementById("district-select")
+            .selectedOptions[0].textContent.trim();
+          const ward = document
+            .getElementById("ward-select")
+            .selectedOptions[0].textContent.trim();
+
+          if (!numberHomeAndStreetName || !province || !district || !ward) {
+            toast({
+              title: "Lỗi",
+              message: "Vui lòng chọn đầy đủ thông tin.",
+              type: "warning",
+              duration: 3000,
+            });
+            return;
+          }
+
+          fullAddress = `${numberHomeAndStreetName}, ${ward}, ${district}, ${province}`;
+          document.getElementById("add-account-address").value = fullAddress;
+
+          // Tự đóng dialog địa chỉ
+          const addressDialog = document.querySelector("dialog.address-select");
+          if (addressDialog) addressDialog.remove();
+        });
     });
 
     // Gán sự kiện cho nút "Thêm" dialog
     document
-      .getElementById("add-account-button")
-      .addEventListener("click", () => {
+      .getElementsByClassName("add")[0]
+      .addEventListener("click", async (e) => {
+        e.preventDefault();
         // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-        const id = document.getElementById("add-account-id");
-        const fullname = document.getElementById("add-account-fullname");
-        const phone = document.getElementById("add-account-phone");
-        const email = document.getElementById("add-account-email");
-        const address = document.getElementById("add-account-address");
-        const username = document.getElementById("add-account-username");
-        const password = document.getElementById("add-account-password");
-        const privilege = document.getElementById("add-account-privilege");
+        const id = document.getElementById("add-account-id").value.trim();
+        const fullname = document
+          .getElementById("add-account-fullname")
+          .value.trim();
+        const phone = document.getElementById("add-account-phone").value.trim();
+        const email = document.getElementById("add-account-email").value.trim();
+        const address = document
+          .getElementById("add-account-address")
+          .value.trim();
+        const username = document
+          .getElementById("add-account-username")
+          .value.trim();
+        const password = document
+          .getElementById("add-account-password")
+          .value.trim();
+        const privilege = document
+          .getElementById("add-account-privilege")
+          .value.trim();
         // - Chi tiết quyền
-        const status = document.getElementById("add-account-status");
+        const status = document
+          .getElementById("add-account-status")
+          .value.trim();
+        // Regex kiểm tra địa chỉ hợp lệ: "Số nhà Tên đường, Phường ..., Quận/Huyện ..., Tỉnh/TP ..."
+        const addressFormatRegex =
+          /^.+?,\s*(phường|Phường)\s+.+?,\s*(quận|Quận|huyện|Huyện)\s+.+?,\s*(tỉnh|Tỉnh|tp|TP|Thành Phố|Thành phố)\.?\s+.+$/;
 
-        // ... (Xử lý tiếp ở đây)
-        console.log(id.value);
-        console.log(fullname.value);
-        console.log(phone.value);
-        console.log(email.value);
-        console.log(address.value);
-        console.log(username.value);
-        console.log(password.value);
-        console.log(privilege.value);
-        console.log(status.value);
+        const addressUser = address.split(",");
+        const numberHomeAndStreetName = addressUser[0];
+        const province = addressUser[3];
+        const district = addressUser[2];
+        const ward = addressUser[1];
+        // Kiểm tra tính hợp lệ của các biến
+        const validations = [
+          { condition: !fullname, message: "Vui lòng nhập họ và tên." },
+          { condition: !phone, message: "Vui lòng nhập số điện thoại." },
+          {
+            condition: !/^\d{10,11}$/.test(phone),
+            message: "Số điện thoại không hợp lệ.",
+          },
+          { condition: !email, message: "Vui lòng nhập email." },
+          {
+            condition: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+            message: "Email không hợp lệ.",
+          },
+          { condition: !address, message: "Vui lòng nhập địa chỉ." },
+          {
+            condition: address && !addressFormatRegex.test(address),
+            message:
+              "Địa chỉ không đúng định dạng. Ví dụ: '12 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP Hồ Chí Minh'",
+          },
+          { condition: !username, message: "Vui lòng nhập tên tài khoản." },
+          { condition: !password, message: "Vui lòng nhập mật khẩu." },
+          { condition: !privilege, message: "Vui lòng chọn nhóm quyền." },
+          { condition: !status, message: "Vui lòng chọn trạng thái." },
+        ];
+
+        // Duyệt qua từng điều kiện và hiển thị toast nếu có lỗi
+        for (const v of validations) {
+          if (v.condition) {
+            toast({
+              title: "Lỗi",
+              message: v.message,
+              type: "warning",
+              duration: 3000,
+            });
+            return;
+          }
+        }
+
+        let yes = await showNotification("Bạn có đồng ý thêm sách này không?");
+        if (!yes) return;
+
+        const formData = new URLSearchParams();
+        formData.append("accountEmail", email);
+        formData.append("accountPhone", phone);
+        formData.append("accountFullName", fullname);
+        formData.append("accountName", username);
+        formData.append("accountPassword", password);
+        formData.append("accountRole", parseInt(privilege));
+        formData.append("accountStatus", status);
+        for (let [key, value] of formData.entries()) {
+          console.log(`${key}: ${value}`);
+        }
+
+        try {
+          // Gửi form tạo người dùng
+          const response = await fetch("api/account/add_account.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: formData,
+          });
+
+          const result = await response.json();
+          console.log(result);
+
+          if (result.status.trim() === "success") {
+            const id = result.id; // Lấy ID người dùng vừa tạo từ phản hồi
+            console.log("ok", id);
+
+            // Gửi form tạo địa chỉ
+            const addressData = new URLSearchParams();
+            addressData.append("idUser", id);
+            addressData.append("numberHouse", numberHomeAndStreetName.trim());
+            addressData.append("province", province.trim());
+            addressData.append("city", district.trim());
+            addressData.append("ward", ward.trim());
+
+            const addressRes = await fetch("api/address/insertAddress.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: addressData,
+            });
+
+            const addressResult = await addressRes.json();
+
+            if (addressResult.success) {
+              toast({
+                title: "Thành công",
+                message: "Thêm người dùng và địa chỉ thành công",
+                type: "success",
+                duration: 3000,
+              });
+            } else {
+              toast({
+                title: "Lỗi địa chỉ",
+                message: addressResult.message,
+                type: "warning",
+                duration: 3000,
+              });
+            }
+          } else {
+            toast({
+              title: "Cảnh báo",
+              message: result.message,
+              type: "warning",
+              duration: 3000,
+            });
+          }
+        } catch (error) {
+          console.error("Lỗi fetch API:", error);
+          toast({
+            title: "Lỗi",
+            message: `Lỗi fetch API: ${error}`,
+            type: "error",
+            duration: 3000,
+          });
+        }
+
+        addDialog.remove();
+        addButton.classList.remove("active");
+        renderAccountTable();
       });
 
     // Gán sự kiện cho nút "Đóng" dialog

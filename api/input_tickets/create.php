@@ -9,7 +9,6 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 // Nhận dữ liệu từ POST
 $dateCreate = isset($_POST['dateCreate']) ? $_POST['dateCreate'] : '';
-// $inputTicketId = isset($_POST['inputTicketId']) ? $_POST['inputTicketId'] : '';
 $employeeName = isset($_POST['employeeName']) ? $_POST['employeeName'] : '';
 $totalPrice = isset($_POST['totalPrice']) ? $_POST['totalPrice'] : '';
 $suplierId = isset($_POST['suplierId']) ? $_POST['suplierId'] : '';

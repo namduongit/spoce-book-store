@@ -1,12 +1,12 @@
 export function showNotification(Question = "") {
-    return new Promise((resolve) => {
-        const oldDialog = document.getElementById("notification-dialog");
-        if (oldDialog) oldDialog.remove();
+  return new Promise((resolve) => {
+    const oldDialog = document.getElementById("notification-dialog");
+    if (oldDialog) oldDialog.remove();
 
-        const html = document.createElement("dialog");
-        html.id = "notification-dialog";
-        html.classList.add("dialog");
-        html.innerHTML = `
+    const html = document.createElement("dialog");
+    html.id = "notification-dialog";
+    html.classList.add("dialog");
+    html.innerHTML = `
             <h2 id="notification-title">Thông báo</h2>
             <div class="dialog-content">
                 <p id="notification-message">${Question}</p>
@@ -16,18 +16,18 @@ export function showNotification(Question = "") {
                 </div>
             </div>
         `;
-        document.body.appendChild(html);
+    document.body.appendChild(html);
 
-        html.querySelector("#cancel-button").addEventListener("click", () => {
-            resolve(false);
-            html.close();
-        });
-
-        html.querySelector("#confirm-button").addEventListener("click", () => {
-            resolve(true);
-            html.close();
-        });
-
-        html.showModal();
+    html.querySelector("#cancel-button").addEventListener("click", () => {
+      resolve(false);
+      html.remove();
     });
+
+    html.querySelector("#confirm-button").addEventListener("click", () => {
+      resolve(true);
+      html.remove();
+    });
+
+    html.showModal();
+  });
 }

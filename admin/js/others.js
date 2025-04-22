@@ -50,46 +50,57 @@ export function numberToVietnamWords(n) {
     "chín trăm",
   ];
 
-  function docBaChuSo(so) {
+  const donViLon = ["", "nghìn", "triệu", "tỷ", "nghìn tỷ", "triệu tỷ"];
+
+  function docBaChuSo(so, docDayDu = true) {
     let tram = Math.floor(so / 100);
     let chuc = Math.floor((so % 100) / 10);
     let donvi = so % 10;
     let result = "";
 
-    if (tram > 0) result += hangTram[tram] + " ";
+    if (tram > 0 || docDayDu) result += hangTram[tram] + " ";
+
     if (chuc > 1) {
       result += hangChuc[chuc] + " ";
-      if (donvi > 0) result += donVi[donvi];
+      if (donvi === 1) result += "mốt";
+      else if (donvi === 5) result += "lăm";
+      else if (donvi > 0) result += donVi[donvi];
     } else if (chuc === 1) {
       result += "mười ";
-      if (donvi > 0 && donvi !== 5) result += donVi[donvi];
-      else if (donvi === 5) result += "lăm";
-    } else {
-      if (donvi > 0) result += (tram > 0 ? "lẻ " : "") + donVi[donvi];
+      if (donvi === 5) result += "lăm";
+      else if (donvi > 0) result += donVi[donvi];
+    } else if (chuc === 0 && donvi > 0) {
+      result += (tram > 0 ? "lẻ " : "") + donVi[donvi];
     }
-    return result.trim();
-  }
-
-  function docHangTrieu(so) {
-    let trieu = Math.floor(so / 1_000_000);
-    let nghin = Math.floor((so % 1_000_000) / 1_000);
-    let tram = so % 1_000;
-    let result = "";
-
-    if (trieu > 0) result += docBaChuSo(trieu) + " triệu ";
-    if (nghin > 0) result += docBaChuSo(nghin) + " nghìn ";
-    if (tram > 0) result += docBaChuSo(tram);
 
     return result.trim();
   }
 
-  return (
-    (laSoAm
-      ? "Âm " + docHangTrieu(n)
-      : " " +
-        docHangTrieu(n).charAt(0).toUpperCase() +
-        docHangTrieu(n).slice(1)) + " đồng"
-  );
+  function tachBaChuSo(n) {
+    const result = [];
+    while (n > 0) {
+      result.push(n % 1000);
+      n = Math.floor(n / 1000);
+    }
+    return result;
+  }
+
+  const cacNhom = tachBaChuSo(n); // mỗi phần tử là 3 chữ số
+  let ketQua = "";
+
+  for (let i = cacNhom.length - 1; i >= 0; i--) {
+    const so = cacNhom[i];
+    if (so > 0) {
+      ketQua +=
+        docBaChuSo(so, i !== cacNhom.length - 1) + " " + donViLon[i] + " ";
+    } else {
+      if (i === 0 && ketQua === "") ketQua = "không ";
+    }
+  }
+
+  ketQua = ketQua.trim();
+  if (laSoAm) return "Âm " + ketQua + " đồng";
+  return ketQua.charAt(0).toUpperCase() + ketQua.slice(1) + " đồng";
 }
 
 // Hàm hiện date picker khi nhấn vào (hỗ trợ cho việc hiệu ứng)
@@ -121,11 +132,19 @@ export function defaultDateSelected(id) {
 }
 
 // Hàm chuyển từ định dạng yyyy-mm-dd sang dd-mm-yyyy
-function formatDate(date) {
+function formatDate1(date) {
   let day = date.getDate().toString().padStart(2, "0");
   let month = (date.getMonth() + 1).toString().padStart(2, "0");
   let year = date.getFullYear().toString().padStart(4, "0");
   return `${day}/${month}/${year}`;
+}
+
+// Hàm chuyển từ định dạng dd-mm-yyyy sang yyyy-mm-dd
+export function formatDate2(date) {
+  let day = date.slice(0, 2);
+  let month = date.slice(3, 5);
+  let year = date.slice(6);
+  return `${year}-${month}-${day}`;
 }
 
 // Hàm lấy ra danh sách các tuần
@@ -156,8 +175,8 @@ export function getWeeksInMonth(year, month) {
     // Thêm vào danh sách
     weeks.push({
       week: weeks.length + 1,
-      start: formatDate(startOfWeek),
-      end: formatDate(endOfWeek),
+      start: formatDate1(startOfWeek),
+      end: formatDate1(endOfWeek),
     });
 
     // Chuyển sang ngày đầu tiên của tuần tiếp theo
@@ -180,8 +199,8 @@ export function getMonthsInYear(year) {
     // Thêm vào danh sách
     months.push({
       month: month + 1,
-      start: formatDate(start),
-      end: formatDate(end),
+      start: formatDate1(start),
+      end: formatDate1(end),
     });
   }
 

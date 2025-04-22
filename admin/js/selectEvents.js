@@ -12,6 +12,9 @@ export function selectFormEvents() {
     // Đối tượng thẻ ul trong select
     const ulInSelect = select.children[2];
 
+    // Không lưu chuỗi đã nhập
+    inputInSelect.setAttribute("autocomplete", "off");
+
     // Sự kiện kiểm tra đã có mục nào đã chọn trước đó hay chưa khi focus vào input
     inputInSelect.addEventListener("focus", (e) => {
       // Loại bỏ giá trị mặc định
@@ -85,7 +88,7 @@ export function updateTimelineSelects() {
   );
 
   // Tuỳ chỉnh thời gian khi "lọc theo năm" hoặc "lọc theo tháng"
-  const yearStart = 2020,
+  const yearStart = 2010,
     yearEnd = 2030;
   let timelineDetailYearFormat = ``;
   for (let year = yearStart; year <= yearEnd; year++) {

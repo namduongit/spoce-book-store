@@ -1,141 +1,140 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
 import { fetchData } from "../../../public/js/book/getDataBook.js";
 
-
 // Hàm thiết lập sự kiện hiện chi tiết Sách cho bảng
 export async function detailBookData(idBookSelected) {
-  // Phải truy vấn từ CSDL thông qua idBookSelected để lấy được dữ liệu của đối tượng hiện tại
-    const res = await fetchData(`api/books/get.php?bookID=${idBookSelected}`);
-    const book = res.books[0];
-    const author = await fetchData(`api/authors/get.php?authorId=${book.authorId}`);
-    const category = await fetchData(`api/categories/get.php?cateId=${book.genreId}`);
-    const corver = await fetchData(`api/covers/get.php?coverId=${book.coverTypeId}`);
-    const publisher = await fetchData(`api/publishers/get.php?publisherId=${book.publisherId}`);
+  // Truy vấn từ csdl thông tin các đối tượng cần thiết
+  const book = await fetchData(`api/books/detail.php?id=${idBookSelected}`);
+  const author = await fetchData(
+    `api/authors/detail.php?id=${book.data.authorId}`
+  );
+  const category = await fetchData(
+    `api/categories/detail.php?id=${book.data.coverId}`
+  );
+  const cover = await fetchData(
+    `api/covers/detail.php?id=${book.data.coverId}`
+  );
+  const publisher = await fetchData(
+    `api/publishers/detail.php?id=${book.data.publisherId}`
+  );
 
-  // Biến chứa đối tượng là nút "Chi tiết"
-  const detailButton = document.querySelector(".detail-button-book");
+  //   // Biến chứa đối tượng là nút "Chi tiết"
+  //   const detailButton = document.querySelector(".detail-button-book");
 
-  // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
-  detailButton.classList.add("active");
+  //   // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
+  //   detailButton.classList.add("active");
 
   // Tạo một dialog để hiện một nhà cung cấp
   const detailDialog = document.createElement("dialog");
   // - Định dạng dialog
   detailDialog.classList.add("dialog");
   detailDialog.classList.add("book");
-  detailDialog.style.width = "1178px";
+  detailDialog.style.width = "87%";
   // - Ghi nội dung dialog
   detailDialog.innerHTML = `
-  <h1 class="dialog__title">Chi tiết sách</h1>
-  <button id="close-book-button" class="dialog__close">
-      <i class="fa-solid fa-xmark"></i>
-  </button>
-  <div class="dialog__line"></div>
-  <form method="get" class="dialog__form">
-      <div class="dialog__row">
-          <div class="dialog__form-group book image">
-              <label>Hình ảnh</label>
-              <img src="public/uploads/books/${book.image}" alt"book-image"></img>
-          </div>
-          <div class="dialog__form-group book"></div>
-          <div class="dialog__form-group book"></div>
-      </div>
-      <div class="dialog__row">
-          <div class="dialog__form-group book"></div>
-          <div class="dialog__form-group book">
-              <label>Mã sách</label>
-              <input type="text" id="detail-book-id" readonly value="${book.id}" />
-          </div>
-          <div class="dialog__form-group book">
-              <label>Tiêu đề</label>
-              <input type="text" id="detail-book-title" readonly value="${book.name}" />
-          </div>
-      </div>
-      <div class="dialog__row">
-          <div class="dialog__form-group book"></div>
-          <div class="dialog__form-group book">
-              <label>Tác giả</label>
-              <select id="detail-book-author" class="changed" disabled>
-                  <option value="" selected>${author[0].name}</option>
-                  <option value="" >Chọn Tác giả</option>
-                  <option value="1">Nguyễn Nhật Ánh</option>
-                  <option value="0">Nguyễn </option>
-              </select>
-          </div>
-          <div class="dialog__form-group book">
-              <label>Thể loại</label>
-              <select id="detail-book-type" disabled>
-                  <option value="" selected>${category[0].name}</option>
-                  <option value="" >Chọn Thể loại</option>
-                  <option value="1">Trinh thám</option>
-                  <option value="0">Tình cảm</option>
-              </select>
-          </div>
-      </div>
-      <div class="dialog__row">
-          <div class="dialog__form-group book"></div>
-           <div class="dialog__form-group book">
-              <label>Số trang</label>
-              <input type="text" id="detail-book-pages" readonly value="${book.numberOfPages}"/>
-          </div>
-          <div class="dialog__form-group book">
-              <label>Loại bìa</label>
-              <select id="detail-book-cover" disabled>
-                  <option value="" selected>${corver[0].name}</option>
-                  <option value="" >Chọn Loại bìa</option>
-                  <option value="1">Bìa cứng</option>
-                  <option value="0">Bìa mềm</option>
-              </select>
-          </div>
-      </div>
-      <div class="dialog__row">
-          <div class="dialog__form-group book"></div>
-          <div class="dialog__form-group book">
-              <label>Nhà xuất bản</label>
-              <select id="detail-book-publish-name" disabled>
-                  <option value="" selected>${publisher[0].name}</option>
-                  <option value="1">Nhà xuất bản 1</option>
-                  <option value="0">Nhà xuất bản 2</option>
-              </select>
-          </div>
-          <div class="dialog__form-group book">
-              <label>Năm xuất bản</label>
-              <input type="text" id="detail-book-publish-year" readonly value="${book.publishYear}" />
-          </div>
-      </div>
-      <div class="dialog__row">
-          <div class="dialog__form-group book description">
-              <label>Mô tả</label>
-              <textarea id="detail-book-description" readonly>${book.description}</textarea>
-          </div>
-          <div class="dialog__form-group book"></div>
-          <div class="dialog__form-group book"></div>
-      </div>
-      <div class="dialog__row">
-          <div class="dialog__form-group book"></div>
-          <div class="dialog__form-group book">
-              <label>Giá gốc</label>
-              <input type="text" id="detail-book-price-base" readonly value="${book.originalPrice}" />
-          </div>
-          <div class="dialog__form-group book">
-              <label>Giá bán</label>
-              <input type="text" id="detail-book-price-order" readonly value="${book.sellingPrice}" />
-          </div>
-      </div>
-      <div class="dialog__row">
-          <div class="dialog__form-group book"></div>
-          <div class="dialog__form-group book">
-              <label>Trạng thái</label>
-              <select id="detail-book-status" disabled>
-                  <option value="" selected>${book.status}</option>
-                  <option value="1">Hoạt động</option>
-                  <option value="0">Tạm dừng</option>
-              </select>
-          </div>
-          <div class="dialog__form-group book"></div>
-      </div>
-  </form >
-`;
+    <h1 class="dialog__title">Chi tiết sách</h1>
+    <button id="close-book-button" class="dialog__close">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="dialog__line"></div>
+    <form method="get" class="dialog__form">
+        <div class="dialog__row">
+            <div class="dialog__form-group book image">
+                <label style="color: #000">Hình ảnh</label>
+                <img src="public/uploads/books/${book.data.image}" alt"book-image"></img>
+            </div>
+            <div class="dialog__form-group book"></div>
+            <div class="dialog__form-group book"></div>
+        </div>
+        <div class="dialog__row">
+            <div class="dialog__form-group book"></div>
+            <div class="dialog__form-group book">
+                <label>Mã sách</label>
+                <input type="text" id="detail-book-id" class="text-center" readonly value="${book.data.id}" />
+            </div>
+            <div class="dialog__form-group book">
+                <label>Tiêu đề</label>
+                <input type="text" id="detail-book-title" readonly value="${book.data.name}" />
+            </div>
+        </div>
+        <div class="dialog__row">
+            <div class="dialog__form-group book"></div>
+            <div class="dialog__form-group book half">
+                <label>Số trang</label>
+                <input type="text" id="detail-book-pages" readonly value="${book.data.pages}"/>
+            </div>
+            <div class="dialog__form-group book half">
+                <label>Kích thước</label>
+                <input type="text" id="detail-book-size" readonly value="${book.data.size}"/>
+            </div>
+            <div class="dialog__form-group book">
+                <label>Năm xuất bản</label>
+                <input type="text" id="detail-book-publish-year" readonly value="${book.data.publishYear}" />
+            </div>
+        </div>
+        <div class="dialog__row">
+            <div class="dialog__form-group book"></div>
+            <div class="dialog__form-group book">
+                <label>Tác giả</label>
+                <select id="detail-book-author" class="changed" disabled>
+                    <option value="" selected>${author.data.name}</option>
+                </select>
+            </div>
+            <div class="dialog__form-group book">
+                <label>Thể loại</label>
+                <select id="detail-book-type" disabled>
+                    <option value="" selected>${category.data.name}</option>
+                </select>
+            </div>
+        </div>
+        <div class="dialog__row">
+            <div class="dialog__form-group book"></div>
+            <div class="dialog__form-group book">
+                <label>Nhà xuất bản</label>
+                <select id="detail-book-publish-name" disabled>
+                    <option value="" selected>${publisher.data.name}</option>
+                </select>
+            </div>
+            <div class="dialog__form-group book">
+                <label>Loại bìa</label>
+                <select id="detail-book-cover" disabled>
+                    <option value="" selected>${cover.data.name}</option>
+                </select>
+            </div>
+        </div>
+        <div class="dialog__row">
+            <div class="dialog__form-group book description">
+                <label>Mô tả</label>
+                <textarea id="detail-book-description" readonly>${book.data.description}</textarea>
+            </div>
+            <div class="dialog__form-group book"></div>
+            <div class="dialog__form-group book"></div>
+        </div>
+        <div class="dialog__row">
+            <div class="dialog__form-group book"></div>
+            <div class="dialog__form-group book">
+                <label>Giá gốc</label>
+                <input type="text" id="detail-book-price-base" readonly value="${book.data.basePrice}" />
+            </div>
+            <div class="dialog__form-group book">
+                <label>Giá bán</label>
+                <input type="text" id="detail-book-price-order" readonly value="${book.data.sellPrice}" />
+            </div>
+        </div>
+        <div class="dialog__row">
+            <div class="dialog__form-group book"></div>
+            <div class="dialog__form-group book">
+                <label>Trạng thái</label>
+                <select id="detail-book-status" disabled>
+                    <option value="" selected>${book.data.status}</option>
+                    <option value="1">Hoạt động</option>
+                    <option value="0">Tạm dừng</option>
+                </select>
+            </div>
+            <div class="dialog__form-group book"></div>
+        </div>
+    </form >
+  `;
 
   // Thêm vào body
   document.body.appendChild(detailDialog);
@@ -158,6 +157,6 @@ export async function detailBookData(idBookSelected) {
     detailDialog.remove();
 
     // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
-    detailButton.classList.remove("active");
+    // detailButton.classList.remove("active");
   });
 }
