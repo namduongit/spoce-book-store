@@ -23,23 +23,23 @@ if (empty($bookId)) {
     exit;
 }
 
-
 try {
-    // Khởi tạo model tác giả
-    $model = new app_models_ChiTietPhieuNhap();
+   
+    $model = new app_models_ChitietPhieuNhap();
 
-    // Cập nhật trạng thái tác giả trong database
-    $result = $model->insertInputTicketDetail(
-        [
-            "maPhieuNhap" => $inputTicketId,
-            "maSach" => $bookId,
-            "giaNhap" => $price,
+    // Cập nhật dữ liệu chi tiết phiếu nhật trong database
+    $result = $model->updateInputDetail(
+        $inputTicketId,
+        $bookId,
+        [  
+            "giaNhap" => $input,
             "soLuong" => $quantity,
-        ]);
+        ]
+    );
 
-    
-    if ($result) {
-        echo json_encode(["success" => true, "message" => "Thêm chi tiết phiếu nhập thành công."]);
+    // Kiểm tra số dòng bị ảnh hưởng
+    if ($result && $result->rowCount() > 0) {
+        echo json_encode(["success" => true, "message" => "Cập nhật dữ liệu thành công."]);
     } else {
         echo json_encode(["success" => false, "message" => "Không có thay đổi hoặc ID không tồn tại."]);
     }

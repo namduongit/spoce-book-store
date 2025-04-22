@@ -8,7 +8,7 @@ let page = parseInt(localStorage.getItem("currentOrderPage")) || 1;
 localStorage.setItem("currentOrderPage", page);
 
 // Trạng thái đơn hàng được chọn khởi tạo là chờ xác nhận
-let selectedStatus = "CHO_XAC_NHAN";
+let selectedStatus = "Đang chờ xác nhận";
 
 export async function showOrderHistory() {
     showLoading();
@@ -51,28 +51,28 @@ export async function showOrderHistory() {
     // console.log(numberOfPages);
 
     let statusString = "";
-    if (selectedStatus == "CHO_XAC_NHAN") {
+    if (selectedStatus == "Đang chờ xác nhận") {
         statusString += '<div class="order-history__status-selection status-selection-active">Chờ xác nhận</div>';
     } else {
-        statusString += '<div class="order-history__status-selection" data-status="CHO_XAC_NHAN">Chờ xác nhận</div>';
+        statusString += '<div class="order-history__status-selection" data-status="Đang chờ xác nhận">Chờ xác nhận</div>';
     }
 
-    if (selectedStatus == "DANG_GIAO") {
-        statusString += '<div class="order-history__status-selection status-selection-active">Đang giao</div>';
+    if (selectedStatus == "Đã xác nhận") {
+        statusString += '<div class="order-history__status-selection status-selection-active">Đã xác nhận</div>';
     } else {
-        statusString += '<div class="order-history__status-selection" data-status="DANG_GIAO">Đang giao</div>';
+        statusString += '<div class="order-history__status-selection" data-status="Đã xác nhận">Đã xác nhận</div>';
     }
 
-    if (selectedStatus == "DA_GIAO") {
-        statusString += '<div class="order-history__status-selection status-selection-active">Đã giao</div>';
+    if (selectedStatus == "Đã giao hàng") {
+        statusString += '<div class="order-history__status-selection status-selection-active">Đã giao hàng</div>';
     } else {
-        statusString += '<div class="order-history__status-selection" data-status="DA_GIAO">Đã giao</div>';
+        statusString += '<div class="order-history__status-selection" data-status="Đã giao hàng">Đã giao hàng</div>';
     }
 
-    if (selectedStatus == "DA_HUY") {
-        statusString += '<div class="order-history__status-selection status-selection-active">Đã hủy</div>';
+    if (selectedStatus == "Đã hủy đơn") {
+        statusString += '<div class="order-history__status-selection status-selection-active">Đã hủy đơn</div>';
     } else {
-        statusString += '<div class="order-history__status-selection" data-status="DA_HUY">Đã hủy</div>';
+        statusString += '<div class="order-history__status-selection" data-status="Đã hủy đơn">Đã hủy đơn</div>';
     }
     statusString = '<div class="order-history__status-select-container">' + statusString + '</div>';
 
@@ -128,7 +128,7 @@ export async function showOrderHistory() {
             let cancelButtonString;
 
             // Trạng thái là chờ xác nhận sẽ có nút hủy đơn hàng
-            if (orderList[i].trangThai === 'CHO_XAC_NHAN') {
+            if (orderList[i].trangThai === 'Đang chờ xác nhận') {
                cancelButtonString = `<button class="order-history__cancel-btn" data-id="${orderList[i].maDonHang}">Hủy đơn</button>`;
             } else {
                 cancelButtonString = '';
@@ -141,7 +141,7 @@ export async function showOrderHistory() {
                 <td>${formatDate(orderList[i].ngayTaoDon)}</td>
                 <td>${formatMoney(orderList[i].tongTienThu)}</td>
                 <td>${orderList[i].trangThaiThanhToan}</td>
-                <td>${formatStatus(orderList[i].trangThai)}</td>
+                <td>${orderList[i].trangThai}</td>
                 <td>
                     <button class="order-history__detail-btn" data-id="${orderList[i].maDonHang}">Chi tiết</button>
                     ${cancelButtonString}
@@ -230,8 +230,8 @@ export async function showOrderHistory() {
 
                     // Tạo query string với dữ liệu thay đổi
                     let data = new URLSearchParams();
-                    data.append("orderId", orderId);
-                    data.append("status", "DA_HUY");
+                    data.append("id", orderId);
+                    data.append("status", "Đã hủy đơn");
             
                     // Tạo request đến file update.php để cập nhật dữ liệu
                     fetch("api/orders/update.php", {
@@ -404,10 +404,10 @@ async function showOrderDetail(orderId) {
     // Fetch dữ liệu đơn hàng cần hiển thị chi tiết thông qua ID đơn hàng
     let orderResponse = await fetch(`api/orders/get_orders.php?maDonHang=${orderId}`);
     let orderResult = await orderResponse.json();
-    let order = orderResult.data.list;
+    let order = orderResult.data.list[0];
 
     // Fetch dữ liệu chi tiết đơn hàng thông qua ID đơn hàng
-    let orderDetailResponse = await fetch(`api/orderDetail/get.php?orderId=${orderId}`);
+    let orderDetailResponse = await fetch(`api/order_details/get.php?orderId=${orderId}`);
     let orderDetailResult = await orderDetailResponse.json();
 
     // Ẩn đi các trang khác nếu có
@@ -425,20 +425,25 @@ async function showOrderDetail(orderId) {
 
         // Với mỗi chi tiết đơn hàng, tiến hành fetch dữ liệu sách của chi tiết đó để hiện thị lên chi tiết đơn hàng
         for (let i=0; i<orderDetailResult.length; i++) {
-            let bookResponse = await fetch(`api/books/getbook.php?bookId=${orderDetailResult[i].bookId}`);
-            let book = await bookResponse.json();
+            let bookResponse = await fetch(`api/books/get.php?bookID=${orderDetailResult[i].bookId}`);
+            let bookResult = await bookResponse.json();
+            let book = bookResult.books[0];
             // console.log(book);
+
+            let genreResponse = await fetch(`api/categories/detail.php?id=${book.genreId}`);
+            let genreResult = await genreResponse.json();
+            let genre = genreResult.data;
             productString += `
             <tr>
                 <td>
-                    <img src="public/uploads/books/${book[0].image}" alt="book">
+                    <img src="public/uploads/books/${book.image}" alt="book">
                 </td>
                 <td class="order-detail__product-name">
-                    <p class="order-detail__product-title">${book[0].name}</p>
-                    <span class="order-detail__product-description">${book[0].id} / ${book[0].genreName} / ${book[0].numberOfPages}</span>
+                    <p class="order-detail__product-title">${book.name}</p>
+                    <span class="order-detail__product-description">${book.id} / ${genre.name} / ${book.numberOfPages}</span>
                 </td>
                 <td>${orderDetailResult[i].bookId}</td>
-                <td>${formatMoney(book[0].sellPrice)}</td>
+                <td>${formatMoney(book.sellingPrice)}</td>
                 <td>${orderDetailResult[i].amount}</td>
                 <td class="right-align">${formatMoney(orderDetailResult[i].price)}</td>
             </tr>
@@ -457,7 +462,7 @@ async function showOrderDetail(orderId) {
                 <div class="order-detail__order-info-container">
                     <p class="order-detail__title">ĐƠN HÀNG: #${orderId}, <span class="order-detail__date">Đặt lúc — ${formatDate(order['ngayTaoDon'])}</span></p>
                     <p class="order-detail__status"><span>Tình trạng thanh toán: </span>${order['trangThaiThanhToan']}</p>
-                    <p class="order-detail__status"><span>Trạng thái đơn hàng: </span>${formatStatus(order['trangThai'])}</p>
+                    <p class="order-detail__status"><span>Trạng thái đơn hàng: </span>${order['trangThai']}</p>
                     <p class="order-detail__status"><span>Địa chỉ giao hàng: </span>${order['diaChiGiao']}</p>
                 </div>
                 <div class="order-detail__product-detail-container">

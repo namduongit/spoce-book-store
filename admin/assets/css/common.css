@@ -612,6 +612,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background: #fff;
   color: #5d3fd3;
 }
+.dialog__buttons button.pay-status {
+  background: #d3873f;
+  border-color: #d3873f;
+}
+.dialog__buttons button.pay-status:where(:hover, .active) {
+  background: #fff;
+  color: #d3873f;
+}
 .dialog__buttons button.confirm-status {
   background: #3dc55d;
   border-color: #3dc55d;

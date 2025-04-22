@@ -129,31 +129,33 @@ const mainContentMap = {
     <h1 class="main__title">Thống kê đơn hàng</h1>
     <div class="main__row">
       <div class="main__find-inp inp-text-form-1">
-        <input required="" type="text" id="find-inp-customer" />
+        <input required="" type="text" id="find-inp-order_dashboard" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;Khách hàng</span>
       </div>
       <div class="main__sort-slt main__select slt-form-1">
         <input required="" type="text" id="sort-slt-order_dashboard" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Chọn Sắp xếp</span>
         <ul>
-          <li>Khách hàng tăng dần</li>
-          <li>Khách hàng giảm dần</li>
-          <li>Ngày thống kê tăng dần</li>
-          <li>Ngày thống kê giảm dần</li>
-          <li>Tổng đơn hàng tăng dần</li>
-          <li>Tổng đơn hàng giảm dần</li>
-          <li>Tổng thanh toán tăng dần</li>
-          <li>Tổng thanh toán giảm dần</li>
+          <li>ID khách hàng tăng dần</li>
+          <li>ID khách hàng giảm dần</li>
+          <li>Tổng đơn mua tăng dần</li>
+          <li>Tổng đơn mua giảm dần</li>
+          <li>Tổng tiền mua tăng dần</li>
+          <li>Tổng tiền mua giảm dần</li>
+          <li>Tổng đơn huỷ tăng dần</li>
+          <li>Tổng đơn huỷ giảm dần</li>
+          <li>Tổng tiền huỷ tăng dần</li>
+          <li>Tổng tiền huỷ giảm dần</li>
         </ul>
       </div>
       <div class="main__find-inp inp-text-form-1 date">
-        <input required="" type="date" id="find-date-dashboard-before-inp-order_dashboard" />
+        <input required="" type="date" id="date-start-inp-order_dashboard" />
         <i class="fa-solid fa-minus"></i>
-        <input required="" type="date" id="find-date-dashboard-after-inp-order_dashboard" />
-        <span><i class="fa-solid fa-calendar"></i>&nbsp;&nbsp;Ngày thống kê</span>
+        <input required="" type="date" id="date-end-inp-order_dashboard" />
+        <span><i class="fa-solid fa-calendar"></i>&nbsp;&nbsp;Thời gian thống kê</span>
       </div>
       <div class="main__find-inp inp-text-form-1">
-        <input required="" type="text" id="find-inp-row" />
+        <input required="" type="text" id="show-inp-order_dashboard" />
         <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Nhập số dòng</span>
       </div>
       <div class="main__buttons">
@@ -161,7 +163,7 @@ const mainContentMap = {
           <i class="fa-solid fa-filter"></i>
           <span>Lọc</span>
         </button>
-        <button class="main__refresh-btn" id="filter-button-order_dashboard">
+        <button class="main__refresh-btn" id="reset-button-order_dashboard">
           <i class="fa-solid fa-refresh"></i>
           <span>Đặt lại</span>
         </button>
@@ -171,32 +173,19 @@ const mainContentMap = {
       <table class="main__table order_dashboard">
         <thead>
           <tr>
-              <th width="14%">Khách hàng</th>
-              <th width="19%">Ngày thống kê</th>
-              <th width="19%">Tổng đơn hàng</th>
-              <th width="38%">Tổng thanh toán (VNĐ)</th>
-              <th width="10%"></th>
+              <th width="12%">ID khách hàng</th>
+              <th width="16%">Tổng đơn mua</th>
+              <th width="22%">Tổng tiền mua (VNĐ)</th>
+              <th width="16%">Tổng đơn huỷ</th>
+              <th width="22%">Tổng tiền huỷ (VNĐ)</th>
+              <th width="12%"></th>
           </tr>
         </thead>
         <tbody>
         </tbody>
       </table>
     </div>
-    <div class="main__pagination">
-      <button class="main-pagination__button previous">
-        <i class="icon fa-solid fa-chevron-left"></i>
-      </button>
-      <button class="main-pagination__button">1</button>
-      <button class="main-pagination__button active">2</button>
-      <button class="main-pagination__button">3</button>
-      <button class="main-pagination__button">...</button>
-      <button class="main-pagination__button">997</button>
-      <button class="main-pagination__button">998</button>
-      <button class="main-pagination__button">999</button>
-      <button class="main-pagination__button next">
-        <i class="icon fa-solid fa-chevron-right"></i>
-      </button>
-    </div>
+    <div class="main__pagination" id="admin-pagination-order_dashboard"></div>
   `,
   order: `
     <h1 class="main__title">Đơn hàng</h1>
@@ -239,7 +228,7 @@ const mainContentMap = {
         <input required="" type="text" id="status-slt-order" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
-          <li>Đã giao</li>
+          <li>Đã giao hàng</li>
           <li>Đã huỷ đơn</li>
           <li>Đã xác nhận</li>
           <li>Đang chờ xác nhận</li>  
@@ -527,10 +516,10 @@ const mainContentMap = {
         <input required="" type="text" id="sort-slt-input_ticket" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
         <ul>
-          <li>ID tăng dần</li>
-          <li>ID giảm dần</li>
-          <li>Nhà cung cấp tăng dần</li>
-          <li>Nhà cung cấp giảm dần</li>
+          <li>ID phiếu nhập tăng dần</li>
+          <li>ID phiếu nhập giảm dần</li>
+          <li>ID nhà cung cấp tăng dần</li>
+          <li>ID nhà cung cấp giảm dần</li>
           <li>Ngày tạo phiếu tăng dần</li>
           <li>Ngày tạo phiếu giảm dần</li>
           <li>Tổng tiền nhập tăng dần</li>
@@ -566,8 +555,8 @@ const mainContentMap = {
       <table class="main__table input_ticket">
         <thead>
           <tr>
-              <th width="10%">ID</th>
-              <th width="16%">Nhà cung cấp</th>
+              <th width="13%">ID phiếu nhập</th>
+              <th width="13%">ID nhà cung cấp</th>
               <th width="16%">Ngày lập phiếu</th>
               <th width="26%">Tổng tiền nhập (VNĐ)</th>
               <th width="16%">Trạng thái</th>
@@ -963,17 +952,6 @@ window.addEventListener("load", function () {
 //     return;
 //   }
 
-<<<<<<< HEAD
-  const ulElement = document.querySelector('.main__category-slt ul');
-  let li = document.createElement('li');
-  listCategory.forEach(category => {
-    let li = document.createElement('li');
-    li.textContent = category.name;
-    ulElement.appendChild(li);
-
-  });
-}
-=======
 //   const ulElement = document.querySelector(".main__category-slt ul");
 //   let li = document.createElement("li");
 //   listCategory.forEach((category) => {
@@ -982,4 +960,3 @@ window.addEventListener("load", function () {
 //     ulElement.appendChild(li);
 //   });
 // }
->>>>>>> 9f91f476e8d32989051dad3408d87fcb1af2d279

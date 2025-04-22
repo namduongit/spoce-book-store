@@ -95,7 +95,7 @@ class app_models_DonHang extends app_libs_DBConnection
             return $this->building_queryParam([
                 'where' => 'maDonHang = ?',
                 'params' => [$maDonHang]
-            ])->select_one();
+            ])->select_one_by_id();
         }
 
         if (!empty($maKhachHang)) {
