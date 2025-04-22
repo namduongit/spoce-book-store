@@ -1136,7 +1136,7 @@ async function checkOutBill() {
                     console.log(`Đơn hàng vừa tạo ${dataOrder['data']}`);
 
                     if (dataOrder['data'] && Array.isArray(currentCart)) {
-                        const response = await fetch('api/orderDetail/create.php', {
+                        const response = await fetch('api/order_details/create.php', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
