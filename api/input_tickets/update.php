@@ -8,40 +8,37 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Nhận dữ liệu từ POST
-$dateCreate = isset($_POST['dateCreate']) ? $_POST['dateCreate'] : '';
-$inputTicketId = isset($_POST['inputTicketId']) ? $_POST['inputTicketId'] : '';
-$employeeName = isset($_POST['employeeName']) ? $_POST['employeeName'] : '';
-$totalPrice = isset($_POST['totalPrice']) ? $_POST['totalPrice'] : '';
-$suplierId = isset($_POST['suplierId']) ? $_POST['suplierId'] : '';
-$status = isset($_POST['status']) ? $_POST['status'] : '';
-$updateDateTime = date("Y-m-d H:i:s");
+$id = isset($_POST['id']) ? $_POST['id'] : '1';
+$employeeId = isset($_POST['employeeId']) ? $_POST['employeeId'] : '1';
+$supplierId = isset($_POST['supplierId']) ? $_POST['supplierId'] : '1';
+$total = isset($_POST['total']) ? $_POST['total'] : '1';
+$status = isset($_POST['status']) ? $_POST['status'] : 'Đang chờ xác nhận';
+$updateAt = date("Y-m-d H:i:s");
 
-// Kiểm tra id
-if (empty($inputTicketId)) {
-    echo json_encode(["success" => false, "message" => "Thiếu ID phiếu nhap."]);
+// Kiểm tra id có hợp lệ không
+if (empty($id)) {
+    echo json_encode(["success" => false, "message" => "Thiếu ID phiếu nhập."]);
     exit;
 }
 
-
 try {
-   
-    $cover_model = new app_models_PhieuNhap();
+    $model = new app_models_PhieuNhap();
 
-    // Cập nhật trạng thái tác giả trong database
-    $result = $cover_model->updateInputTicket(
-        $inputTicketId,
-        [  "maPhieuNhap" => $inputTicketId,
-            "ngayTaoPhieu" => $dateCreate,
-            "taiKhoanNhanVien" => $employeeName,
-            "maNCC" => $suplierId,
-            "tongTienNhap" => $totalPrice,
+    // Cập nhật trạng thái phiếu nhập trong database
+    $result = $model->updateInputTicket(
+        $id,
+        [  
+            "maNhanVien" => $employeeId,
+            "maNCC" => $supplierId,
+            "tongTienNhap" => $total,
             "trangThai" => $status,
-            "ngayCapNhat" => $updateDateTime
-        ]);
+            "ngayCapNhat" => $updateAt
+        ]
+    );
 
     // Kiểm tra số dòng bị ảnh hưởng
-    if ($result ) {
-        echo json_encode(["success" => true, "message" => "Cập nhật phiếu nhập thành công."]);
+    if ($result && $result->rowCount() > 0) {
+        echo json_encode(["success" => true, "message" => "Cập nhật trạng thái thành công."]);
     } else {
         echo json_encode(["success" => false, "message" => "Không có thay đổi hoặc ID không tồn tại."]);
     }

@@ -103,6 +103,13 @@ export function numberToVietnamWords(n) {
   return ketQua.charAt(0).toUpperCase() + ketQua.slice(1) + " đồng";
 }
 
+// Hàm chỉ cho phép thẻ input chỉ được nhập ký tự là số
+export function onlyInputNumberChar(input) {
+  input.addEventListener("input", (e) => {
+    e.target.value = e.target.value.replace(/[^0-9]/g, "");
+  });
+}
+
 // Hàm hiện date picker khi nhấn vào (hỗ trợ cho việc hiệu ứng)
 export function clickToShowDatePicker(id) {
   document.getElementById(id).addEventListener("click", function (e) {

@@ -34,7 +34,7 @@ $sortBy = $_GET['sortBy'] ?? 'maNguoiDung';
 $sortType = $_GET['sortType'] ?? 'ASC';
 $status = $_GET['status'] ?? '';
 $category = $_GET['category'] ?? '';
-$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 5;
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : PHP_INT_MAX;
 $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
 
 
@@ -48,8 +48,9 @@ $conditions = [];
 $params = [];
 
 if (!empty($id_or_name)) {
-    $conditions[] = "(maNguoiDung LIKE :id_or_name OR hoVaTen LIKE :id_or_name)";
-    $params[':id_or_name'] = "%$id_or_name%";
+    $conditions[] = "(maNguoiDung = :id OR hoVaTen LIKE :name)";
+    $params[':id'] = $id_or_name;
+    $params[':name'] = "%$id_or_name%";
 }
 if (!empty($category)) {
     $conditions[] = "quyen.tenQuyen = :category";
@@ -62,7 +63,7 @@ if (!empty($status)) {
 
 $result = $db->joinTables($columns, $tables, $joins, $conditions, $sortBy, $sortType, $limit, $offset, $params);
 $result2 = $db->joinTables($columns, $tables, $joins, $conditions, $sortBy, $sortType, null, null, $params);
-$pageCount = ceil(count($result2) / ($limit == null ? PHP_INT_MAX : $limit));
+$pageCount = ceil(count($result2) / $limit);
 
 // print_r($result);
 if (empty($result)) {

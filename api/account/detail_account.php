@@ -7,15 +7,16 @@ header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Allow-Headers: Content-Type');
 
 try {
-    // Kiểm tra nhà người dùng
+    // Kiểm tra người dùng
     if (!isset($_GET['id']) || empty($_GET['id'])) {
-        throw new Exception('Ma nguoi dung không được để trống');
+        throw new Exception('Mã người dùng không được để trống');
     }
     $id = $_GET['id'];
 
     // Tạo đối tượng
     $model = new app_models_NguoiDung();
 
+    // Lấy thông tin chi tiết người dùng, kiểm tra
     $data = $model->getUserById($id);
     if (!$data) {
         throw new Exception('Không tìm thấy');
