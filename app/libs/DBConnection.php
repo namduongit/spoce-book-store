@@ -109,6 +109,16 @@
             return $data ? $data[0] : [];
         }
 
+        public function select_one_by_id()
+        {
+            if (self::$connection == null) self::$connection = $this->open_connect();
+
+            $this->queryParam['other'] = 'LIMIT 1';
+            $data = $this->select();
+
+            return $data;
+        }
+
         public function insert()
         {
             if (self::$connection == null) self::$connection = $this->open_connect();
