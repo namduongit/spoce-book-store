@@ -37,6 +37,10 @@
             self::$connection = null;
         }
 
+        public function set_tableName($tableName) {
+            $this->table_name = $tableName;
+        }
+
         // Hàm xây dựng các param
         public function building_queryParam($params = [])
         {

@@ -746,7 +746,7 @@ async function checkOutBill() {
                             <tr class="checkout__shipping-fee-holder">
                                 <td>Phí vận chuyển</td>
                                 <td>
-                                    <span>—</span>
+                                    <span id='total-cost-ship'>—</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -755,7 +755,7 @@ async function checkOutBill() {
                                 <td>Tổng cộng</td>
                                 <td>
                                     <span>VND</span>
-                                    <span>${formatMoney(totalPrice)}</span>
+                                    <span id='total-cost-bill'>${formatMoney(totalPrice)}</span>
                                 </td>
                             </tr>
                         </tfoot>
@@ -852,6 +852,7 @@ async function checkOutBill() {
                             </div>
                             <span>20.000đ</span>
                         </label>
+                        
 
                         <label class="checkout__ship-method" for="nhanh">
                             <div class="checkout__ship-method-radiobtn-holder">
@@ -900,25 +901,6 @@ async function checkOutBill() {
         </div>
     `;
     hideLoading();
-
-    const paymentMethodOptions = document.querySelectorAll('.checkout__payment-method-option');
-    paymentMethodOptions.forEach(option => {
-        const buttonRadio = option.querySelector('.checkout__payment-radiobtn-holder input');
-        buttonRadio.addEventListener('click', function () {
-            paymentMethodOptions.forEach(opt => {
-                const childElement = opt.querySelector('.checkout__payment-method-child');
-                if (childElement) {
-                    childElement.style.display = 'none';
-                }
-            });
-
-            const childElement = option.querySelector('.checkout__payment-method-child');
-            if (childElement) {
-                childElement.style.display = 'block';
-            }
-        });
-    });
-
 
 
     cartMain.classList.add('hide-item');
@@ -999,6 +981,43 @@ async function checkOutBill() {
 
 
 
+
+    
+    // Hiển thị lần lượt các phương thức thanh toán
+    const paymentMethodOptions = document.querySelectorAll('.checkout__payment-method-option');
+    paymentMethodOptions.forEach(option => {
+        const buttonRadio = option.querySelector('.checkout__payment-radiobtn-holder input');
+        buttonRadio.addEventListener('click', function () {
+            paymentMethodOptions.forEach(opt => {
+                const childElement = opt.querySelector('.checkout__payment-method-child');
+                if (childElement) {
+                    childElement.style.display = 'none';
+                }
+            });
+
+            const childElement = option.querySelector('.checkout__payment-method-child');
+            if (childElement) {
+                childElement.style.display = 'block';
+            }
+        });
+    });
+
+
+    // Phần chọn phương thức vận chuyển
+    let totalCostShip = 0;
+    document.querySelectorAll('.checkout__ship-method .checkout__ship-method-radiobtn input').forEach(item => {
+        item.addEventListener('click', function() {
+            if (item.value == 'tietkiem') totalCostShip = 20000;
+            else if (item.value == 'nhanh') totalCostShip = 30000;
+            else if (item.value == 'hoatoc') totalCostShip = 50000;
+
+            document.getElementById('total-cost-ship').innerText = formatMoney(totalCostShip);
+            document.getElementById('total-cost-bill').innerText = formatMoney(totalPrice + totalCostShip);
+
+        })
+    })
+
+
     // Submit gửi đơn hàng lên Server
     document.querySelector('.checkout__submit-btn-final').addEventListener('click', async function () {
         let pickUpAddress = null;
@@ -1033,7 +1052,7 @@ async function checkOutBill() {
         // Xử lí phương thức vận chuyển
         const selectedShipping = document.querySelector('input[name="shipping-method"]:checked');
         if (selectedShipping) {
-            shipMethod = selectedShipping.value;
+            shipMethod = selectedShipping.value;      
         }
 
         // Xử lí phương thức thanh toán
@@ -1183,63 +1202,113 @@ async function checkOutBill() {
                 hideLoading();
                 window.location.href = '/';
             }
+            else {
+                showLoading();
+
+                const formOrder = new URLSearchParams();
+                formOrder.append('maKhachHang', currentUser['user'].id);
+                formOrder.append('diaChiGiao', pickUpAddress);
+                formOrder.append('tongTienThu', totalPrice);
+                formOrder.append('maPhuongThuc', paymentMethod);
+
+                const responseOrder = await fetch('api/orders/create.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: formOrder.toString()
+                });
+
+                const dataOrder = await responseOrder.json();
+
+                const responseDetail = await fetch('api/order_details/create.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        data: {
+                            maDonHang: parseInt(dataOrder['data']),
+                            danhSachSanPham: JSON.stringify(currentCart)
+                        }
+                    })
+                });
+
+                const dataDetail = await responseDetail.json();
+    
+                const formData = new URLSearchParams();
+                formData.append('order_type', 'billpayment');
+                formData.append('cbo_inv_type', 'I');
+                formData.append('order_id', parseInt(dataOrder['data']));
+                formData.append('amount', totalPrice);
+                formData.append('language', 'vn');
+                formData.append('txtexpire', generateTimeIdPlusMinutes(30));
+                formData.append('order_desc', `Đơn hàng ${generateTimeId()} giá trị ${totalPrice}`);
+                formData.append('bank_code', ``);
+                // Thông tin hóa đơn khách hàng
+                formData.append('txt_billing_mobile', customerNumberphone);
+                formData.append('txt_billing_email', currentUser['user'].email || 'NonAccountSpoceCustomer@gmail.com');
+                formData.append('txt_billing_fullname', customerName);
+                // Thông tin hóa đơn điện tử
+                formData.append('txt_inv_addr1', 'billpayment');
+                formData.append('txt_bill_city', 'Đồng Nai');
+                formData.append('txt_bill_country', 'VN');
+                // Thông tin bổ sung
+                formData.append('txt_bill_state', '');
+                formData.append('txt_inv_mobile', '0388853835');
+                formData.append('txt_inv_email', 'nguyennamduong205@gmail.com');
+                formData.append('txt_inv_customer', customerName);
+                formData.append('txt_inv_addr1', pickUpAddress);
+                formData.append('txt_inv_company', 'Tổ 12 Khu phố Phú Mỹ, Phường Xuân Lập, Thành phố Long Khánh, Tỉnh Đồng Nai');
+                formData.append('txt_inv_company', 'Công ty cổ phần Công Nghệ SpoceTech');
+                formData.append('txt_inv_taxcode', '0102182292');
+    
+    
+                const response = await fetch('../../../vnpay_php/vnpay_create_payment.php', {
+                    method: 'POST',
+                    body: formData.toString(),
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                });
+    
+                const data = await response.json();
+
+
+                fetch('api/carts/delete.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        maNguoiDung: currentUser.user.id
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                })
+                .catch(error => {
+                    console.log('Lỗi khi loại bỏ sản phẩm trong giỏ hàng sau khi thanh toán');
+                });
+
+                toast({
+                    title: 'Thông báo',
+                    message: `Tạo hóa đơn trị giá ${totalPrice} thành công`,
+                    type: 'success',
+                    duration: 3000
+                });
+
+    
+                hideLoading();
+
+                console.log(data['data']);
+                window.location.href = data['data'];
+            }
 
         }
-        else {
-            showLoading();
-
-            const formData = new URLSearchParams();
-            formData.append('order_type', 'billpayment');
-            formData.append('cbo_inv_type', 'I');
-            formData.append('order_id', generateTimeId());
-            formData.append('amount', totalPrice);
-            formData.append('language', 'vn');
-            formData.append('txtexpire', generateTimeIdPlusMinutes(30));
-            formData.append('order_desc', `Đơn hàng ${generateTimeId()} giá trị ${totalPrice}`);
-            formData.append('bank_code', ``);
-            // Thông tin hóa đơn khách hàng
-            formData.append('txt_billing_mobile', customerNumberphone);
-            formData.append('txt_billing_email', currentUser['user'].email || 'NonAccountSpoceCustomer@gmail.com');
-            formData.append('txt_billing_fullname', customerName);
-            // Thông tin hóa đơn điện tử
-            formData.append('txt_inv_addr1', 'billpayment');
-            formData.append('txt_bill_city', 'Đồng Nai');
-            formData.append('txt_bill_country', 'VN');
-            // Thông tin bổ sung
-            formData.append('txt_bill_state', '');
-            formData.append('txt_inv_mobile', '0388853835');
-            formData.append('txt_inv_email', 'nguyennamduong205@gmail.com');
-            formData.append('txt_inv_customer', customerName);
-            formData.append('txt_inv_addr1', pickUpAddress);
-            formData.append('txt_inv_company', 'Tổ 12 Khu phố Phú Mỹ, Phường Xuân Lập, Thành phố Long Khánh, Tỉnh Đồng Nai');
-            formData.append('txt_inv_company', 'Công ty cổ phần Công Nghệ SpoceTech');
-            formData.append('txt_inv_taxcode', '0102182292');
-
-
-            const response = await fetch('../../../vnpay_php/vnpay_create_payment.php', {
-                method: 'POST',
-                body: formData.toString(),
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-            });
-
-            const data = await response.json();
-
-            console.log(data['data']);
-            window.location.href = data['data'];
-
-            hideLoading();
-        }
-
-        console.log('Địa chỉ nhận hàng: ', pickUpAddress);
-        console.log('Người nhận hàng: ', customerName);
-        console.log('Điện thoại nhận hàng: ', customerNumberphone);
-        console.log('Phương thức thanh toán: ', paymentMethod);
-        console.log('Phương thức vận chuyển: ', shipMethod);
-        console.log('Mã giảm giá: ', couponsCode);
-
     });
+
+
 }
 
 
