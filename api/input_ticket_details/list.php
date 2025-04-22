@@ -13,6 +13,7 @@ function returnJSONInputTicket($filters, $pageCount) {
             "inputTicketId" => $filter['maPhieuNhap'],
             "bookId" => $filter['maSach'],
             "bookName" => $filter['tenSach'],
+            "base" => $filter['giaTran'],
             "price" => $filter['giaNhap'],
             "quantity" => $filter['soLuong']
         ];
@@ -28,7 +29,7 @@ function returnJSONInputTicket($filters, $pageCount) {
 
 $columns = [
     'chiTietPhieuNhap.maPhieuNhap', 'chiTietPhieuNhap.maSach', 'chiTietPhieuNhap.giaNhap', 
-    'chiTietPhieuNhap.soLuong', 'sach.tenSach'
+    'chiTietPhieuNhap.soLuong', 'sach.tenSach', 'sach.giaTran'
 ];
 $tables = ['chiTietPhieuNhap', 'sach'];
 $joins = [

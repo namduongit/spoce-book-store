@@ -19,10 +19,10 @@ async function renderInputDetailTable(inputTicketIdSelected) {
     html += `
           <tr>
               <td>${inputTicketDetails.data[i].bookId}</td>
-              <td>${inputTicketDetails.data[i].bookName}</td>
+              <td class="left">${inputTicketDetails.data[i].bookName}</td>
               <td>${vietnamMoneyFormat(inputTicketDetails.data[i].price)}</td>
               <td>${inputTicketDetails.data[i].quantity}</td>
-              <td>${vietnamMoneyFormat(
+              <td class="right">${vietnamMoneyFormat(
                 inputTicketDetails.data[i].quantity *
                   inputTicketDetails.data[i].price
               )}</td>
@@ -36,6 +36,7 @@ async function renderInputDetailTable(inputTicketIdSelected) {
 
 //
 export async function printInputTicket(idInputTicketSelected) {
+  //
   const inputTicket = await fetchData(
     `api/input_tickets/list.php?id=${idInputTicketSelected}`
   );
@@ -94,7 +95,9 @@ export async function printInputTicket(idInputTicketSelected) {
                   }</p>
                   <p class="ticket__info"><b>Tổng tiền nhập (VNĐ):</b> ${vietnamMoneyFormat(
                     inputTicket.data[0].total
-                  )}<u>đ</u> (${numberToVietnamWords(inputTicket.data[0].total)})</p>
+                  )}<u>đ</u> (${numberToVietnamWords(
+    inputTicket.data[0].total
+  )})</p>
                   <p class="ticket__info"><b>Trạng thái phiếu:</b> ${
                     inputTicket.data[0].status
                   }</p>

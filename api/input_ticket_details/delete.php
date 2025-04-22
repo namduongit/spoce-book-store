@@ -21,7 +21,7 @@ try {
     // Khởi tạo model ctpn
     $inputTicket_model = new app_models_ChitietPhieuNhap();
 
-    // Cập nhật trạng thái tác giả trong database
+    // Xoá tất cả chi tiết phiếu nhập có mã phiếu được chọn trong database
     $result = $inputTicket_model->deleteAllInputTicketDetail($inputTicketId);
 
     if ($result ) {

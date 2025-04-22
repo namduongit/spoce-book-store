@@ -41,7 +41,8 @@ body {
 
 select,
 input,
-textarea {
+textarea,
+button {
   font-family: inherit;
   color: inherit;
 }

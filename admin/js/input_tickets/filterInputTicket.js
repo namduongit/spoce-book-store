@@ -54,8 +54,8 @@ export async function filterInputTicket(currentPage) {
 
   let params = new URLSearchParams();
   if (find) params.append("id", find);
-  if (dateStart) params.append("dateStart", dateStart);
-  if (dateEnd) params.append("dateEnd", dateEnd);
+  if (dateStart) params.append("createStart", dateStart);
+  if (dateEnd) params.append("createEnd", dateEnd);
   if (status) params.append("status", status);
   params.append("orderByColumn", orderBy);
   params.append("orderType", orderType);
