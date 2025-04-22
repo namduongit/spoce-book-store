@@ -14,35 +14,37 @@ export async function fetchData(URL) {
 }
 
 export async function getNameCategoryByID(categoryId) {
-    const URL = `api/categories/get.php?cateId=${categoryId}`;
+    const URL = `api/categories/detail.php?id=${categoryId}`;
 
     let response = await fetchData(URL);
-    let result = response[0].name;
+
+    let result = response['data'].name;
+
     return result;
 }
 
 export async function getNameAuthorByID(authorId) {
-    const URL = `api/authors/get.php?authorId=${authorId}`;
+    const URL = `api/authors/detail.php?id=${authorId}`;
 
     let response = await fetchData(URL);
-    let result = response[0].name;
+    let result = response['data'].name;
     return result;
 }
 
 
 export async function getNameCoverByID(coverId) {
-    const URL = `api/covers/get.php?coverId=${coverId}`;
+    const URL = `api/covers/detail.php?id=${coverId}`;
 
     let response = await fetchData(URL);
-    let result = response[0].name;
+    let result = response['data'].name;
     return result;
 }
 
 export async function getNamePublisherByID(publisherId) {
-    const URL = `api/publishers/get.php?publisherId=${publisherId}`;
+    const URL = `api/publishers/detail.php?id=${publisherId}`;
 
     let response = await fetchData(URL);
-    let result = response[0].name;
+    let result = response['data'].name;
     return result;
 }
 

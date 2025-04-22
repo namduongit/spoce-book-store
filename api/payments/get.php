@@ -36,7 +36,7 @@ $payment_method_model = new app_models_PhuongThucThanhToan();
 
 $id = isset($_GET['paymentMethodId']) ? $_GET['paymentMethodId'] : '';
 $name = isset($_GET['paymentMethodName']) ? $_GET['paymentMethodName'] : '';
-$status = isset($_GET['paymentMethodStatus']) ? $_GET['paymentMethodStatus'] : 'active';
+$status = isset($_GET['paymentMethodStatus']) ? $_GET['paymentMethodStatus'] : 'Hoạt động';
 
 $paymentMethods = $payment_method_model->getPaymentsByFilter($id, $name, $status);
 

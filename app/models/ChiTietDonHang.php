@@ -14,5 +14,11 @@ class app_models_ChiTietDonHang extends app_libs_DBConnection {
             ]
         )->select();
     }
+
+    public function insertDetailOrder($data) {; 
+        return $this->building_queryParam([
+            'field' => $data
+        ])->insert();
+    }
 }
 ?>

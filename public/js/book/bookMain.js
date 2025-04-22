@@ -205,7 +205,7 @@ async function showDetailProduct(product_id) {
     }
 
     let productDetail = await fetchData(URL);
-    console.log('Đang hiển thị sản phẩm', productDetail);
+    // console.log('Đang hiển thị sản phẩm', productDetail);
 
     if (!productDetail || productDetail.length === 0) {
         document.querySelector('.show-detail-product').innerHTML = `<p>Không tìm thấy sản phẩm.</p>`;
@@ -348,7 +348,7 @@ async function showDetailProduct(product_id) {
             let cart = JSON.parse(localStorage.getItem("cart")) || [];
             let valueQuantity = parseInt(document.querySelector('.quantity__button-number').value);
             let product = {
-                id: `${product_id}`,
+                id: parseInt(product_id),
                 quantity: valueQuantity
             }
             let existingProduct = cart.find(item => item.id === product.id);

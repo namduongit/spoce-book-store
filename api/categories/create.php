@@ -8,21 +8,22 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Nhận dữ liệu từ POST
-$categoryStatus = isset($_POST['categoryStatus']) ? $_POST['categoryStatus'] : '';
-$categoryName = isset($_POST['categoryName']) ? $_POST['categoryName'] : '';
-$updateDateTime = date("Y-m-d H:i:s");
+$name = isset($_POST['name']) ? $_POST['name'] : '';
+$status = isset($_POST['status']) ? $_POST['status'] : '';
+$updateAt = date("Y-m-d H:i:s");
 
 try {
    
-    $category_model = new app_models_TheLoai();
+    $model = new app_models_TheLoai();
 
     // Cập nhật trạng thái tác giả trong database
-    $result = $category_model->insertCategory(
-        [  "tenTheLoai" => $categoryName,
-            "ngayCapNhat" => $updateDateTime,
-            "trangThai" => $categoryStatus
-        ]);
-
+    $result = $model->insertCategory(
+        [  
+            "tenTheLoai" => $name,
+            "trangThai" => $status,
+            "ngayCapNhat" => $updateAt
+        ]
+    );
     
     if ($result  > 0) {
         echo json_encode(["success" => true, "message" => "Cập nhật trạng thái thành công."]);

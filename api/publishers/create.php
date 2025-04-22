@@ -8,20 +8,21 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Nhận dữ liệu từ POST
-$publisherStatus = isset($_POST['publisherStatus']) ? $_POST['publisherStatus'] : '';
-$publisherName = isset($_POST['publisherName']) ? $_POST['publisherName'] : '';
-$updateDateTime = date("Y-m-d H:i:s");
+$name = isset($_POST['name']) ? $_POST['name'] : '';
+$status = isset($_POST['status']) ? $_POST['status'] : '';
+$updateAt = date("Y-m-d H:i:s");
 
-try {
-   
-    $publisher_model = new app_models_NhaXuatBan();
+try { 
+    $model = new app_models_NhaXuatBan();
 
     // Cập nhật trạng thái tác giả trong database
-    $result = $publisher_model->insertPublisher(
-        [  "tenNXB" => $publisherName,
-            "ngayCapNhat" => $updateDateTime,
-            "trangThai" => $publisherStatus
-        ]);
+    $result = $model->insertPublisher(
+        [   
+            "tenNXB" => $name,
+            "trangThai" => $status,
+            "ngayCapNhat" => $updateAt
+        ]
+    );
 
     
     if ($result  > 0) {

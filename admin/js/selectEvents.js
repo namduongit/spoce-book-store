@@ -28,7 +28,7 @@ export function selectFormEvents() {
           inputInSelect.value = item.textContent;
         });
       }
-      
+
       // Duyệt qua từng mục có cùng giá trị với giá trị của thẻ input hiện tại
       for (let i = 0; i < ulInSelect.childElementCount; i++) {
         const item = ulInSelect.children[i];
@@ -41,16 +41,22 @@ export function selectFormEvents() {
         }
       }
     });
-    if (ulInSelect.querySelectorAll("li").length > 0) {
-      inputInSelect.value = ulInSelect.children[0].textContent;
-      ulInSelect.children[0].classList.add("select");
-  }
-  
+    // if (ulInSelect.querySelectorAll("li").length > 0) {
+    //   inputInSelect.value = ulInSelect.children[0].textContent;
+    //   ulInSelect.children[0].classList.add("select");
+    // }
   });
 }
 
 // Nếu không chọn mục ban đầu thì thay đổi định dạng
 export function isNotFirstItemSelected(select) {
+  // - Thay đổi khi chọn mục
+  if (select.value !== "") {
+    select.classList.add("changed");
+  } else {
+    select.classList.remove("changed");
+  }
+
   select.addEventListener("change", function (e) {
     // - Loại bỏ giá trị mặc định
     e.preventDefault();

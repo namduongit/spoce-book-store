@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
     allproduct.forEach((product) => {
       let statusProduct = product["status"];
       let className =
-        statusProduct === "ACTIVE"
+        statusProduct === "Hoạt động"
           ? "book-category__item-status--true"
           : "book-category__item-status--false";
 

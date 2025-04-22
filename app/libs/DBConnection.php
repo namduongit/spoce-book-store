@@ -141,26 +141,27 @@ class app_libs_DBConnection
     public function delete()
     {
         if (self::$connection == null) self::$connection = $this->open_connect();
-    
+
         $sql = 'DELETE FROM ' . $this->table_name . ' ' .
             $this->building_condition($this->queryParam['where']);
-    
+
         return $this->query($sql, $this->queryParam['params']);
     }
-    
 
-    
+
+
     // ===============================================================
-    public function joinTables($columns = ['*'], $tables = [], $joins = [], $conditions = [], $orderBy = '', $orderType = 'ASC', $limit = null, $offset = null, $params = []) {
+    public function joinTables($columns = ['*'], $tables = [], $joins = [], $conditions = [], $orderBy = '', $orderType = 'ASC', $limit = null, $offset = null, $params = [])
+    {
         if (self::$connection == null) self::$connection = $this->open_connect();
-    
+
         if (empty($tables)) {
             return ["error" => "Thiếu thông tin bảng!"];
         }
-    
+
         $columnList = is_array($columns) ? implode(", ", $columns) : '*';
         $sql = "SELECT $columnList FROM " . array_shift($tables); // Lấy bảng đầu tiên làm bảng chính
-    
+
         // Nếu có thêm bảng và JOIN tương ứng
         foreach ($tables as $index => $table) {
             if (!isset($joins[$index])) {
@@ -168,17 +169,17 @@ class app_libs_DBConnection
             }
             $sql .= " INNER JOIN $table ON " . $joins[$index];
         }
-    
+
         // Thêm điều kiện WHERE nếu có
         if (!empty($conditions)) {
             $sql .= " WHERE " . implode(" AND ", $conditions);
         }
-    
+
         // Thêm ORDER BY nếu có
         if (!empty($orderBy)) {
             $sql .= " ORDER BY $orderBy $orderType";
         }
-    
+
         // Thêm LIMIT và OFFSET nếu có
         if (!is_null($limit)) {
             $sql .= " LIMIT :limit";
@@ -186,15 +187,15 @@ class app_libs_DBConnection
                 $sql .= " OFFSET :offset";
             }
         }
-    
+
         try {
             $stmt = self::$connection->prepare($sql);
-    
+
             // Bind các tham số truy vấn
             foreach ($params as $key => $value) {
                 $stmt->bindValue($key, $value, is_numeric($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
             }
-    
+
             // Bind limit/offset nếu có
             if (!is_null($limit)) {
                 $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
@@ -202,11 +203,11 @@ class app_libs_DBConnection
             if (!is_null($offset)) {
                 $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
             }
-    
+
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return ["error" => "Lỗi SQL: " . $e->getMessage()];
         }
     }
-}    
+}

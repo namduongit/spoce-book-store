@@ -153,6 +153,7 @@ try {
         "id" => $user["maNguoiDung"],
         "username" => $user["tenTaiKhoan"],
         "name" => $user["hoVaTen"],
+        "email" => $user["email"],
         "login_time" => time()
     ];
 

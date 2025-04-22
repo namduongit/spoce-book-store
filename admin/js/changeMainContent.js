@@ -9,7 +9,7 @@ import { updateOrderDashboardTable } from "./order_dashboard/updateOrderDashboar
 import { updateOrderTable } from "./order/updateOrderTable.js";
 import { updateAccountTable } from "./account/updateAccountTable.js";
 import { updateDiscountTable } from "./discount/updateDiscountTable.js";
-import { updateSuppliesTable } from "./supplies/updateSuppliesTable.js";
+import { updateSupplierTable } from "./supplier/updateSupplierTable.js";
 import { updateInputTicketTable } from "./input_ticket/updateInputTicketTable.js";
 import { updateBookTable } from "./book/updateBookTable.js";
 import { updateAuthorTable } from "./author/updateAuthorTable.js";
@@ -37,8 +37,7 @@ const mainContentMap = {
       <div class="main__timeline-detail-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-profit_dashboard" />
         <span><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;Chọn Thời gian cụ thể</span>
-        <ul>
-        </ul>
+        <ul></ul>
       </div>
       <button class="main__see-btn" id="filter-button-profit_dashboard">
         <i class="fa-solid fa-eye"></i>
@@ -72,8 +71,7 @@ const mainContentMap = {
       <div class="main__timeline-detail-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-revenue_dashboard" />
         <span><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;Chọn Thời gian cụ thể</span>
-        <ul>
-        </ul>
+        <ul></ul>
       </div>
       <button class="main__see-btn" id="filter-button-revenue_dashboard">
         <i class="fa-solid fa-eye"></i>
@@ -107,8 +105,7 @@ const mainContentMap = {
       <div class="main__timeline-detail-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-input_ticket_dashboard" />
         <span><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;Chọn Thời gian cụ thể</span>
-        <ul>
-        </ul>
+        <ul></ul>
       </div>
       <button class="main__see-btn" id="filter-button-input_ticket_dashboard">
         <i class="fa-solid fa-eye"></i>
@@ -228,9 +225,9 @@ const mainContentMap = {
       </div>
       <div class="main__city-slt main__select slt-form-1">
         <label>Tỉnh / thành</label>
-                            <select name="city" id="city">
-                                <option value="default" selected>Chọn tỉnh / thành</option>
-                            </select>
+        <select name="city" id="city">
+          <option value="default" selected>Chọn tỉnh / thành</option>
+        </select>
       </div>
       <div class="main__district-slt main__select slt-form-1">
         <input required="" type="text" id="district-slt-order" />
@@ -248,7 +245,7 @@ const mainContentMap = {
         <ul>
           <li>Đã giao</li>
           <li>Đã xác nhận</li>
-          <li>Chưa xác nhận</li>
+          <li>Đang chờ xác nhận</li>  
           <li>Đã huỷ đơn</li>
         </ul>
       </div>
@@ -365,7 +362,6 @@ const mainContentMap = {
         <input required="" type="text" id="privilege-slt-account" />
         <span><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Chọn Nhóm quyền</span>
         <ul>
-        <li>Tất cả</li>
           <li>Quản lý</li>
           <li>Nhân viên</li>
           <li>Quản kho</li>
@@ -376,10 +372,8 @@ const mainContentMap = {
         <input required="" type="text" id="status-slt-account" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
-          <li>Tất cả</li>
-          <li>ACTIVE</li>
-          <li>DISABLED</li>
-          <li>LOCKED</li>
+          <li>Hoạt động</li>
+          <li>Tạm dừng</li>
         </ul>
       </div>
       <button class="main__filter-btn" id="filter-button-account">
@@ -424,32 +418,30 @@ const mainContentMap = {
     </div>
   `,
   discount: `
-    <h1 class="main__title">Khuyến mãi</h1>
+    <h1 class="main__title">Phiếu giảm giá</h1>
     <div class="main__row">
       <div class="main__find-inp inp-text-form-1">
-        <input required="" type="text" id="find-id-or-name-inp-discount" />
-        <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên khuyến mãi</span>
+        <input required="" type="text" id="find-inp-discount" />
+        <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên phiếu giảm giá</span>
       </div>
       <div class="main__find-inp main__select slt-form-1">
         <input required="" type="text" id="type-slt-discount" />
-        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Loại khuyến mãi</span>
+        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Loại phiếu giảm giá</span>
         <ul>
-          <li>Tất cả</li>
           <li>Phần trăm</li>
-          <li>Tiền mặt</li>
+          <li>Tiền</li>
         </ul>
       </div>
       <div class="main__find-inp inp-text-form-1 date">
-        <input required="" type="date" id="find-date-start-inp-discount" />
+        <input required="" type="date" id="date-start-inp-discount" />
         <i class="fa-solid fa-minus"></i>
-        <input required="" type="date" id="find-date-end-inp-discount" />
+        <input required="" type="date" id="date-end-inp-discount" />
         <span><i class="fa-solid fa-calendar"></i>&nbsp;&nbsp;Ngày áp dụng</span>
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-discount" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
-          <li>Tất cả</li>
           <li>Hoạt động</li>
           <li>Tạm dừng</li>
         </ul>
@@ -468,8 +460,8 @@ const mainContentMap = {
         <thead>
           <tr>
               <th width="10%">ID</th>
-              <th width="24%">Tên khuyến mãi</th>
-              <th width="14%">Loại khuyến mãi</th>
+              <th width="24%">Tên phiếu giảm giá</th>
+              <th width="14%">Loại phiếu giảm giá</th>
               <th width="14%">Ngày bắt đầu</th>
               <th width="14%">Ngày kết thúc</th>
               <th width="14%">Trạng thái</th>
@@ -480,31 +472,17 @@ const mainContentMap = {
         </tbody>
       </table>
     </div>
-    <div class="main__pagination" id="main__pagination_discount">
-      <button class="main-pagination__button previous">
-        <i class="icon fa-solid fa-chevron-left"></i>
-      </button>
-      <button class="main-pagination__button">1</button>
-      <button class="main-pagination__button active">2</button>
-      <button class="main-pagination__button">3</button>
-      <button class="main-pagination__button">...</button>
-      <button class="main-pagination__button">997</button>
-      <button class="main-pagination__button">998</button>
-      <button class="main-pagination__button">999</button>
-      <button class="main-pagination__button next">
-        <i class="icon fa-solid fa-chevron-right"></i>
-      </button>
-    </div>
+    <div class="main__pagination" id="admin-pagination-discount"></div>
   `,
-  supplies: `
+  supplier: `
   <h1 class="main__title">Nhà cung cấp</h1>
   <div class="main__row">
     <div class="main__find-inp inp-text-form-1">
-      <input required="" type="text" id="find-inp-supplies" />
+      <input required="" type="text" id="find-inp-supplier" />
       <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên nhà cung cấp</span>
     </div>
     <div class="main__sort-slt main__select slt-form-1">
-      <input required="" type="text" id="sort-slt-supplies" />
+      <input required="" type="text" id="sort-slt-supplier" />
       <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
       <ul>
         <li>ID tăng dần</li>
@@ -514,39 +492,28 @@ const mainContentMap = {
       </ul>
     </div>
     <div class="main__status-slt main__select slt-form-1">
-      <input required="" type="text" id="status-slt-supplies" />
+      <input required="" type="text" id="status-slt-supplier" />
       <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
      <ul>
-          <li>Tất cả</li>
-          <li>ACTIVE</li>
-          <li>INACTIVE</li>
-          <li>SUSPENDED</li>
+          <li>Hoạt động</li>
+          <li>Tạm dừng</li>
         </ul>
     </div>
-
-      <div class="main__sort-slt main__select slt-form-1">
-      <input required="" type="text" id="show-slt-supplies" />
-      <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Hiển thị</span>
-      <ul>
-          <li>Mặc định</li>
-          <li>15</li>
-          <li>20</li>
-          <li>25</li>
-        </ul>
+    <div class="main__find-inp inp-text-form-1">
+      <input required="" type="text" id="show-inp-supplier" />
+      <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
     </div>
-
-
-    <button class="main__filter-btn" id="filter-button-supplies">
+    <button class="main__filter-btn" id="filter-button-supplier">
       <i class="fa-solid fa-filter"></i>
       <span>Lọc</span>
     </button>
-    <button class="main__add-btn" id="add-button-supplies">
+    <button class="main__add-btn" id="add-button-supplier">
       <i class="fa-solid fa-plus"></i>
       <span>Thêm</span>
     </button>
   </div>
   <div class="main__data">
-    <table class="main__table supplies">
+    <table class="main__table supplier">
       <thead>
         <tr>
             <th width="10%">ID</th>
@@ -561,21 +528,7 @@ const mainContentMap = {
       </tbody>
     </table>
   </div>
-  <div class="main__pagination"  id="main__pagination_supplies">
-    <button class="main-pagination__button previous">
-      <i class="icon fa-solid fa-chevron-left"></i>
-    </button>
-    <button class="main-pagination__button">1</button>
-    <button class="main-pagination__button active">2</button>
-    <button class="main-pagination__button">3</button>
-    <button class="main-pagination__button">...</button>
-    <button class="main-pagination__button">997</button>
-    <button class="main-pagination__button">998</button>
-    <button class="main-pagination__button">999</button>
-    <button class="main-pagination__button next">
-      <i class="icon fa-solid fa-chevron-right"></i>
-    </button>
-  </div>
+  <div class="main__pagination" id="admin-pagination-supplier"></div>
 `,
   input_ticket: `
     <h1 class="main__title">Phiếu nhập</h1>
@@ -588,14 +541,14 @@ const mainContentMap = {
         <input required="" type="text" id="sort-slt-input_ticket" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
         <ul>
-        <li>ID giảm dần</li>
-        <li>ID tăng dần</li>
-        <li>Nhà cung cấp tăng dần</li>
-        <li>Nhà cung cấp giảm dần</li>
-        <li>Ngày lập phiếu tăng dần</li>
-        <li>Ngày lập phiếu giảm dần</li>
-        <li>Tổng tiền nhập tăng dần</li>
-        <li>Tổng tiền nhập giảm dần</li>
+          <li>ID giảm dần</li>
+          <li>ID tăng dần</li>
+          <li>Nhà cung cấp tăng dần</li>
+          <li>Nhà cung cấp giảm dần</li>
+          <li>Ngày lập phiếu tăng dần</li>
+          <li>Ngày lập phiếu giảm dần</li>
+          <li>Tổng tiền nhập tăng dần</li>
+          <li>Tổng tiền nhập giảm dần</li>
         </ul>
       </div>
       <div class="main__find-inp inp-text-form-1 date">
@@ -608,23 +561,15 @@ const mainContentMap = {
         <input required="" type="text" id="status-slt-input_ticket" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
         <ul>
-          <li>Tất cả</li>
-          <li>DA_NHAP</li>
-          <li>CHO_XAC_NHAN</li>
+          <li>Đã xác nhận</li>
+          <li>Đang chờ xác nhận</li>
+          <li>Đã huỷ phiếu</li>
         </ul>
       </div>
-
-      <div class="main__status-slt main__select slt-form-1">
-        <input required="" type="text" id="show-slt-input_ticket" />
-        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Hiển Thị</span>
-        <ul>
-          <li>Mặc định</li>
-          <li>15</li>
-          <li>20</li>
-          <li>25</li>
-        </ul>
+      <div class="main__find-inp inp-text-form-1">
+        <input required="" type="text" id="show-inp-input_ticket" />
+        <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>
-
       <button class="main__filter-btn" id="filter-button-input_ticket">
         <i class="fa-solid fa-filter"></i>
         <span>Lọc</span>
@@ -664,7 +609,7 @@ const mainContentMap = {
     <h1 class="main__title">Sách</h1>
     <div class="main__row">
       <div class="main__find-inp inp-text-form-1">
-        <input required="" type="text" id="find-inp-book" />
+        <input required="" type="text" id="find-inp-book" autocomplete="off" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tiêu đề</span>
       </div>
       <div class="main__sort-slt main__select slt-form-1">
@@ -684,34 +629,20 @@ const mainContentMap = {
       <div class="main__category-slt main__select slt-form-1">
         <input required="" type="text" id="type-slt-book" />
         <span><i class="fa-solid fa-font-awesome"></i>&nbsp;&nbsp;Thể loại</span>
-        <ul>
-          <li>Tất cả</li>
-        </ul>
+        <ul></ul>
       </div>
       <div class="main__status-slt main__select slt-form-1">
         <input required="" type="text" id="status-slt-book" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
         <ul>
-          <li>Tất cả</li>
-          <li>ACTIVE</li>
-          <li>INACTIVE</li>
-          <li>SUSPENDED</li>
+          <li>Hoạt động</li>
+          <li>Tạm dừng</li>
         </ul>
       </div>
-
-      <div class="main__sort-slt main__select slt-form-1">
-        <input required="" type="text" id="show-slt-book" />
-        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Hiển thị</span>
-        <ul>
-          <li>Mặc định</li>
-          <li>10</li>
-          <li>15</li>
-          <li>20</li>
-          <li>25</li>
-        </ul>
+      <div class="main__find-inp inp-text-form-1">
+        <input required="" type="text" id="show-inp-book" />
+        <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>
-
-
       <button class="main__filter-btn" id="filter-button-book">
         <i class="fa-solid fa-filter"></i>
         <span>Lọc</span>
@@ -755,7 +686,7 @@ const mainContentMap = {
     </div>
   `,
   author: `
-        <h1 class="main__title">Tác giả</h1>
+    <h1 class="main__title">Tác giả</h1>
     <div class="main__row">
       <div class="main__find-inp inp-text-form-1">
         <input required="" type="text" id="find-inp-author" />
@@ -775,26 +706,14 @@ const mainContentMap = {
         <input required="" type="text" id="status-slt-author" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
         <ul>
-          <li>Tất cả</li>
-          <li>ACTIVE</li>
-          <li>INACTIVE</li>
-          <li>SUSPENDED</li>
+          <li>Hoạt động</li>
+          <li>Tạm dừng</li>
         </ul>
       </div>
-
-
-      <div class="main__sort-slt main__select slt-form-1">
-        <input required="" type="text" id="show-slt-author" />
-        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Hiển thị</span>
-        <ul>
-          <li>Mặc định</li>
-          <li>10</li>
-          <li>15</li>
-          <li>20</li>
-        </ul>
+      <div class="main__find-inp inp-text-form-1">
+        <input required="" type="text" id="show-inp-author" />
+        <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>
-
-
       <button class="main__filter-btn" id="filter-button-author">
         <i class="fa-solid fa-filter"></i>
         <span>Lọc</span>
@@ -808,270 +727,180 @@ const mainContentMap = {
       <table class="main__table author">
         <thead>
           <tr>
-              <th width="18%">ID</th>
-              <th width="38%">Tên tác giả</th>
-              <th width="22%">Trạng thái</th>
-              <th width="22%"></th>
+            <th width="18%">ID</th>
+            <th width="38%">Tên tác giả</th>
+            <th width="22%">Trạng thái</th>
+            <th width="22%"></th>
           </tr>
         </thead>
         <tbody>
         </tbody>
       </table>
     </div>
-    <div class="main__pagination" id="main__pagination_author">
-      <button class="main-pagination__button previous">
-        <i class="icon fa-solid fa-chevron-left"></i>
-      </button>
-      <button class="main-pagination__button">1</button>
-      <button class="main-pagination__button active">2</button>
-      <button class="main-pagination__button">3</button>
-      <button class="main-pagination__button">...</button>
-      <button class="main-pagination__button">997</button>
-      <button class="main-pagination__button">998</button>
-      <button class="main-pagination__button">999</button>
-      <button class="main-pagination__button next">
-        <i class="icon fa-solid fa-chevron-right"></i>
-      </button>
-    </div>
+    <div class="main__pagination" id="admin-pagination-author"></div>
   `,
   category: `
-  <h1 class="main__title">Thể loại</h1>
-  <div class="main__row">
-    <div class="main__find-inp inp-text-form-1">
-      <input required="" type="text" id="find-inp-category" />
-      <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên thể loại</span>
-    </div>
-    <div class="main__sort-slt main__select slt-form-1">
-      <input required="" type="text" id="sort-slt-category" />
-      <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
-      <ul>
-        <li>ID tăng dần</li>
-        <li>ID giảm dần</li>
-        <li>Tên thể loại tăng dần</li>
-        <li>Tên thể loại giảm dần</li>
-      </ul>
-    </div>
-    <div class="main__status-slt main__select slt-form-1">
-      <input required="" type="text" id="status-slt-category" />
-      <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
-       <ul>
-          <li>Tất cả</li>
-          <li>ACTIVE</li>
-          <li>INACTIVE</li>
-          <li>SUSPENDED</li>
-        </ul>
-    </div>
-
-
-    <div class="main__sort-slt main__select slt-form-1">
-        <input required="" type="text" id="show-slt-category" />
-        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Hiển thị</span>
+    <h1 class="main__title">Thể loại</h1>
+    <div class="main__row">
+      <div class="main__find-inp inp-text-form-1">
+        <input required="" type="text" id="find-inp-category" />
+        <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên thể loại</span>
+      </div>
+      <div class="main__sort-slt main__select slt-form-1">
+        <input required="" type="text" id="sort-slt-category" />
+        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
         <ul>
-          <li>Mặc định</li>
-          <li>10</li>
-          <li>15</li>
-          <li>20</li>
+          <li>ID tăng dần</li>
+          <li>ID giảm dần</li>
+          <li>Tên thể loại tăng dần</li>
+          <li>Tên thể loại giảm dần</li>
         </ul>
       </div>
-
-    <button class="main__filter-btn" id="filter-button-category">
-      <i class="fa-solid fa-filter"></i>
-      <span>Lọc</span>
-    </button>
-    <button class="main__add-btn" id="add-button-category">
-      <i class="fa-solid fa-plus"></i>
-      <span>Thêm</span>
-    </button>
-  </div>
-  <div class="main__data">
-    <table class="main__table category">
-      <thead>
-        <tr>
+      <div class="main__status-slt main__select slt-form-1">
+        <input required="" type="text" id="status-slt-category" />
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
+        <ul>
+            <li>Hoạt động</li>
+            <li>Tạm dừng</li>
+          </ul>
+      </div>
+      <div class="main__find-inp inp-text-form-1">
+        <input required="" type="text" id="show-inp-category" />
+        <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
+      </div>
+      <button class="main__filter-btn" id="filter-button-category">
+        <i class="fa-solid fa-filter"></i>
+        <span>Lọc</span>
+      </button>
+      <button class="main__add-btn" id="add-button-category">
+        <i class="fa-solid fa-plus"></i>
+        <span>Thêm</span>
+      </button>
+    </div>
+    <div class="main__data">
+      <table class="main__table category">
+        <thead>
+          <tr>
             <th width="18%">ID</th>
             <th width="38%">Tên thể loại</th>
             <th width="22%">Trạng thái</th>
             <th width="22%"></th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-  </div>
-  <div class="main__pagination" id="main__pagination_category">
-    <button class="main-pagination__button previous">
-      <i class="icon fa-solid fa-chevron-left"></i>
-    </button>
-    <button class="main-pagination__button">1</button>
-    <button class="main-pagination__button active">2</button>
-    <button class="main-pagination__button">3</button>
-    <button class="main-pagination__button">...</button>
-    <button class="main-pagination__button">997</button>
-    <button class="main-pagination__button">998</button>
-    <button class="main-pagination__button">999</button>
-    <button class="main-pagination__button next">
-      <i class="icon fa-solid fa-chevron-right"></i>
-    </button>
-  </div>
-`,
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div class="main__pagination" id="admin-pagination-category"></div>
+  `,
   cover: `
-<h1 class="main__title">Loại bìa</h1>
-<div class="main__row">
-  <div class="main__find-inp inp-text-form-1">
-    <input required="" type="text" id="find-inp-cover" />
-    <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên loại bìa</span>
-  </div>
-  <div class="main__sort-slt main__select slt-form-1">
-    <input required="" type="text" id="sort-slt-cover" />
-    <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
-    <ul>
-      <li>ID tăng dần</li>
-      <li>ID giảm dần</li>
-      <li>Tên loại bìa tăng dần</li>
-      <li>Tên loại bìa giảm dần</li>
-    </ul>
-  </div>
-  <div class="main__status-slt main__select slt-form-1">
-    <input required="" type="text" id="status-slt-cover" />
-    <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
-      <ul>
-        <li>Tất cả</li>
-        <li>ACTIVE</li>
-        <li>INACTIVE</li>
-        <li>SUSPENDED</li>
-      </ul>
-  </div>
-
-
-  <div class="main__sort-slt main__select slt-form-1">
-    <input required="" type="text" id="show-slt-cover" />
-    <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Hiển thị</span>
-    <ul>
-      <li>Mặc định</li>
-      <li>10</li>
-      <li>15</li>
-      <li>20</li>
-    </ul>
-  </div>
-
-
-  <button class="main__filter-btn" id="filter-button-cover">
-    <i class="fa-solid fa-filter"></i>
-    <span>Lọc</span>
-  </button>
-  <button class="main__add-btn" id="add-button-cover">
-    <i class="fa-solid fa-plus"></i>
-    <span>Thêm</span>
-  </button>
-</div>
-<div class="main__data">
-  <table class="main__table cover">
-    <thead>
-      <tr>
-          <th width="18%">ID</th>
-          <th width="38%">Tên loại bìa</th>
-          <th width="22%">Trạng thái</th>
-          <th width="22%"></th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-</div>
-<div class="main__pagination" id="main__pagination_cover">
-  <button class="main-pagination__button previous">
-    <i class="icon fa-solid fa-chevron-left"></i>
-  </button>
-  <button class="main-pagination__button">1</button>
-  <button class="main-pagination__button active">2</button>
-  <button class="main-pagination__button">3</button>
-  <button class="main-pagination__button">...</button>
-  <button class="main-pagination__button">997</button>
-  <button class="main-pagination__button">998</button>
-  <button class="main-pagination__button">999</button>
-  <button class="main-pagination__button next">
-    <i class="icon fa-solid fa-chevron-right"></i>
-  </button>
-</div>
-`,
+    <h1 class="main__title">Loại bìa</h1>
+    <div class="main__row">
+      <div class="main__find-inp inp-text-form-1">
+        <input required="" type="text" id="find-inp-cover" />
+        <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên loại bìa</span>
+      </div>
+      <div class="main__sort-slt main__select slt-form-1">
+        <input required="" type="text" id="sort-slt-cover" />
+        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
+        <ul>
+          <li>ID tăng dần</li>
+          <li>ID giảm dần</li>
+          <li>Tên loại bìa tăng dần</li>
+          <li>Tên loại bìa giảm dần</li>
+        </ul>
+      </div>
+      <div class="main__status-slt main__select slt-form-1">
+        <input required="" type="text" id="status-slt-cover" />
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
+          <ul>
+            <li>Hoạt động</li>
+            <li>Tạm dừng</li>
+          </ul>
+      </div>
+      <div class="main__find-inp inp-text-form-1">
+        <input required="" type="text" id="show-inp-cover" />
+        <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
+      </div>
+      <button class="main__filter-btn" id="filter-button-cover">
+        <i class="fa-solid fa-filter"></i>
+        <span>Lọc</span>
+      </button>
+      <button class="main__add-btn" id="add-button-cover">
+        <i class="fa-solid fa-plus"></i>
+        <span>Thêm</span>
+      </button>
+    </div>
+    <div class="main__data">
+      <table class="main__table cover">
+        <thead>
+          <tr>
+            <th width="18%">ID</th>
+            <th width="38%">Tên loại bìa</th>
+            <th width="22%">Trạng thái</th>
+            <th width="22%"></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div class="main__pagination" id="admin-pagination-cover"></div>
+  `,
   publisher: `
-<h1 class="main__title">Nhà xuất bản</h1>
-<div class="main__row">
-  <div class="main__find-inp inp-text-form-1">
-    <input required="" type="text" id="find-inp-publisher" />
-    <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên nhà xuất bản</span>
-  </div>
-  <div class="main__sort-slt main__select slt-form-1">
-    <input required="" type="text" id="sort-slt-publisher" />
-    <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
-    <ul>
-      <li>ID tăng dần</li>
-      <li>ID giảm dần</li>
-      <li>Tên nhà xuất bản tăng dần</li>
-      <li>Tên nhà xuất bản giảm dần</li>
-    </ul>
-  </div>
-  <div class="main__status-slt main__select slt-form-1">
-    <input required="" type="text" id="status-slt-publisher" />
-    <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
-    <ul>
-        <li>Tất cả</li>
-        <li>ACTIVE</li>
-        <li>INACTIVE</li>
-        <li>SUSPENDED</li>
-      </ul>
-  </div>
-
-  <div class="main__sort-slt main__select slt-form-1">
-    <input required="" type="text" id="show-slt-publisher" />
-    <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Hiển thị</span>
-    <ul>
-      <li>Mặc định</li>
-      <li>10</li>
-      <li>15</li>
-      <li>20</li>
-    </ul>
-  </div>
-
-
-  <button class="main__filter-btn" id="filter-button-publisher">
-    <i class="fa-solid fa-filter"></i>
-    <span>Lọc</span>
-  </button>
-  <button class="main__add-btn" id="add-button-publisher">
-    <i class="fa-solid fa-plus"></i>
-    <span>Thêm</span>
-  </button>
-</div>
-<div class="main__data">
-  <table class="main__table publisher">
-    <thead>
-      <tr>
-          <th width="18%">ID</th>
-          <th width="38%">Tên nhà xuất bản</th>
-          <th width="22%">Trạng thái</th>
-          <th width="22%"></th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-</div>
-<div class="main__pagination" id="main__pagination_publisher">
-  <button class="main-pagination__button previous">
-    <i class="icon fa-solid fa-chevron-left"></i>
-  </button>
-  <button class="main-pagination__button">1</button>
-  <button class="main-pagination__button active">2</button>
-  <button class="main-pagination__button">3</button>
-  <button class="main-pagination__button">...</button>
-  <button class="main-pagination__button">997</button>
-  <button class="main-pagination__button">998</button>
-  <button class="main-pagination__button">999</button>
-  <button class="main-pagination__button next">
-    <i class="icon fa-solid fa-chevron-right"></i>
-  </button>
-</div>
-`,
+    <h1 class="main__title">Nhà xuất bản</h1>
+    <div class="main__row">
+      <div class="main__find-inp inp-text-form-1">
+        <input required="" type="text" id="find-inp-publisher" autocomplete="off" />
+        <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên nhà xuất bản</span>
+      </div>
+      <div class="main__sort-slt main__select slt-form-1">
+        <input required="" type="text" id="sort-slt-publisher" />
+        <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
+        <ul>
+          <li>ID tăng dần</li>
+          <li>ID giảm dần</li>
+          <li>Tên nhà xuất bản tăng dần</li>
+          <li>Tên nhà xuất bản giảm dần</li>
+        </ul>
+      </div>
+      <div class="main__status-slt main__select slt-form-1">
+        <input required="" type="text" id="status-slt-publisher" />
+        <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
+        <ul>
+          <li>Hoạt động</li>
+          <li>Tạm dừng</li>
+        </ul>
+      </div>
+      <div class="main__find-inp inp-text-form-1">
+        <input required="" type="text" id="show-inp-publisher" />
+        <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
+      </div>
+      <button class="main__filter-btn" id="filter-button-publisher">
+        <i class="fa-solid fa-filter"></i>
+        <span>Lọc</span>
+      </button>
+      <button class="main__add-btn" id="add-button-publisher">
+        <i class="fa-solid fa-plus"></i>
+        <span>Thêm</span>
+      </button>
+    </div>
+    <div class="main__data">
+      <table class="main__table publisher">
+        <thead>
+          <tr>
+            <th width="18%">ID</th>
+            <th width="38%">Tên nhà xuất bản</th>
+            <th width="22%">Trạng thái</th>
+            <th width="22%"></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div class="main__pagination" id="admin-pagination-publisher"></div>
+  `,
 };
 
 // Biến dùng để chuyển nội dung chính tương ứng với từng trang
@@ -1135,8 +964,8 @@ menuInSideBar.forEach((item, i) => {
         updatePrivilegeTable();
       } else if (mainContentKey === "account") {
         updateAccountTable();
-      } else if (mainContentKey === "supplies") {
-        updateSuppliesTable();
+      } else if (mainContentKey === "supplier") {
+        updateSupplierTable();
       } else if (mainContentKey === "discount") {
         updateDiscountTable();
       } else if (mainContentKey === "input_ticket") {

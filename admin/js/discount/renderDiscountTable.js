@@ -3,42 +3,6 @@ import { updateDiscountData } from "./updateDiscountData.js";
 import { lockDiscountData } from "./lockDiscountData.js";
 import { filterDiscount } from "./filterDiscountData.js";
 
-// Hàm lấy dữ liệu mã giảm giá từ API
-// async function fetchDiscounts() {
-//   try {
-//     const response = await fetch("/api/discount/get_discount.php");
-
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! status: ${response.status}`);
-//     }
-
-//     const result = await response.json();
-//     console.log("Kết quả API:", result);
-
-//     if (result.status === "success") {
-//       return result.data;
-//     } else {
-//       console.error("Lỗi khi lấy dữ liệu:", result.message);
-//       return {
-//         list: [],
-//         total: 0,
-//         page: 1,
-//         limit: 10,
-//         total_pages: 0,
-//       };
-//     }
-//   } catch (error) {
-//     console.error("Lỗi khi gọi API:", error);
-//     return {
-//       list: [],
-//       total: 0,
-//       page: 1,
-//       limit: 10,
-//       total_pages: 0,
-//     };
-//   }
-// }
-// export let data = [];
 // Hàm cập nhật lại dữ liệu cho bảng khuyến mãi
 export async function renderDiscountTable(pageIsSelected = 1) {
   try {
@@ -54,42 +18,40 @@ export async function renderDiscountTable(pageIsSelected = 1) {
       ".main__data > .main__table.discount > tbody"
     );
 
-    if (!bodyInDiscountTable) {
-      console.error("Không tìm thấy bảng khuyến mãi trong DOM");
-      return;
-    }
-
-    // Chuyển đổi dữ liệu thành các thẻ html
-    let html = ``;
-    if (!data.discountList || data.discountList.length === 0) {
-      html =
-        '<tr><td colspan="7" class="text-center">Không có mã giảm giá nào</td></tr>';
-    } else {
-      data.discountList.forEach((discount) => {
-        html += `
-          <tr>
-            <td>${discount.maPGG}</td>
-            <td>${discount.tenPGG}</td>
-            <td>${discount.type}</td>
-            <td>${discount.ngayBatDau}</td>
-            <td>${discount.ngayKetThuc}</td>
+  // Chuyển đổi dữ liệu thành các thẻ html
+  let html = ``;
+  for (let i = 0; i < data.length; i++) {
+    html += `
+        <tr>
+          <td>${data[i].id}</td>
+            <td>${data[i].name}</td>
+            <td>${data[i].type}</td>
+            <td>${data[i].dateStart}</td>
+            <td>${data[i].dateEnd}</td>
             <td><span ${
-              discount.trangThai === "Hoạt động"
-                ? 'class="green"'
-                : 'class="red"'
-            }>${discount.trangThai}</span></td>
+              data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
+            }>${data[i].status}</span></td>
             <td>
-              <i id="detail-button-discount" class="fa-solid fa-circle-info"></i>
-              <i id="update-button-discount" class="fa-solid fa-pen-to-square"></i>
-              <i id="lock-button-discount" class="fa-solid fa-${
-                discount.trangThai === "Hoạt động" ? "lock" : "unlock"
+              <i class="fa-solid fa-circle-info"></i>
+              <i class="fa-solid fa-pen-to-square"></i>
+              <i class="fa-solid fa-${
+                data[i].status === "Hoạt động" ? "lock" : "unlock"
               }"></i>
             </td>
-          </tr>
-        `;
-      });
-    }
+        </tr>
+      `;
+  }
 
+  if (data.length == 0) {
+    html = `
+        <tr>
+            <td></td>
+            <td>Danh sách trống</td>         
+            <td></td>
+        </tr>
+      `;
+    bodyInDiscountTable.innerHTML = html;
+  } else {
     // Cập nhật lại giao diện
     bodyInDiscountTable.innerHTML = html;
 
@@ -97,17 +59,16 @@ export async function renderDiscountTable(pageIsSelected = 1) {
     const idColumnInTable = document.querySelectorAll(
       ".main__data > .main__table.discount > tbody > tr > td:first-of-type"
     );
-    console.log(idColumnInTable);
 
     const listButtonInTable = document.querySelectorAll(
       ".main__data > .main__table.discount > tbody > tr > td:last-of-type"
     );
 
-    listButtonInTable.forEach((buttons, row) => {
-      const detailButton = buttons.children[0];
-      const updateButton = buttons.children[1];
-      const lockButton = buttons.children[2];
-      const idDiscountSelected = idColumnInTable.item(row);
+    listButtonInTable.forEach((button, row) => {
+      const detailButton = button.children[0];
+      const updateButton = button.children[1];
+      const lockButton = button.children[2];
+      const idDiscountSelected = idColumnInTable.item(row).textContent;
 
       detailButton.addEventListener("click", (e) => {
         e.preventDefault();
@@ -124,7 +85,8 @@ export async function renderDiscountTable(pageIsSelected = 1) {
         lockDiscountData(idDiscountSelected);
       });
     });
+  }
   } catch (error) {
-    console.error("Lỗi khi render bảng khuyến mãi:", error);
+    console.error("An error occurred while rendering the discount table:", error);
   }
 }

@@ -7,24 +7,24 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
-$statusInput = isset($_POST['statusInput']) ? $_POST['statusInput'] : 'ACTIVE';
-$idInput = isset($_POST['idInput']) ? $_POST['idInput'] : '';
+$id = isset($_POST['id']) ? $_POST['id'] : '';
+$status = isset($_POST['status']) ? $_POST['status'] : 'ACTIVE';
 
-// Kiểm tra idInput có hợp lệ không
-if (empty($idInput)) {
+// Kiểm tra id có hợp lệ không
+if (empty($id)) {
     echo json_encode(["success" => false, "message" => "Thiếu ID sách."]);
     exit;
 }
 
 // Chuyển trạng thái sách
-$statusInput = ($statusInput === 'ACTIVE') ? 'INACTIVE' : 'ACTIVE';
+$status = $status === 'Hoạt động' ? 'Tạm dừng' : 'Hoạt động';
 
 try {
     // Khởi tạo model sách
     $book_model = new app_models_Sach();
 
     // Cập nhật sách trong database
-    $result = $book_model->updateBook($idInput, ["trangThai" => $statusInput]);
+    $result = $book_model->updateBook($id, ["trangThai" => $status]);
 
     // Kiểm tra số dòng bị ảnh hưởng
     if ($result && $result->rowCount() > 0) {

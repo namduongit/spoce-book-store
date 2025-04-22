@@ -2,6 +2,7 @@ import { isNotFirstItemSelected } from "../selectEvents.js";
 import { toast } from "../../../public/js/toast.js";
 import { showNotification } from "../dialogMessage.js";
 import { renderAuthorTable } from "./renderAuthorTable.js";
+
 // Hàm thiết lập sự kiện Thêm một tác giả cho bảng
 export function addAuthorData() {
   // Biến chứa đối tượng là nút "Thêm"
@@ -20,43 +21,42 @@ export function addAuthorData() {
     // - Định dạng dialog
     addDialog.classList.add("dialog");
     addDialog.classList.add("author");
-    addDialog.style.width = "398px";
+    addDialog.style.width = "30%";
     // - Ghi nội dung dialog
     addDialog.innerHTML = `
-            <h1 class="dialog__title">Thêm tác giả</h1>
-            <button id="close-type-button" class="dialog__close">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div class="dialog__line"></div>
-            <form method="post" class="dialog__form">
-              <div class="dialog__row">
-                <div class="dialog__form-group full">
-                  <label>Mã tác giả</label>
-                  <input type="text" id="add-author-id" readonly />
-                </div>
-              </div>
-              <div class="dialog__row">
-                <div class="dialog__form-group full">
-                  <label>Tên tác giả</label>
-                  <input type="text" id="add-author-name" placeholder="Nhập Tên tác giả" autofocus/>
-                </div>
-              </div>
-              <div class="dialog__row">
-                <div class="dialog__form-group full">
-                  <label>Trạng thái</label>
-                  <select id="add-author-status">
-                    <option selected value="">Chọn trạng thái</option>
-                    <option  value="ACTIVE">ACTIVE</option>
-                    <option value="INACTIVE">INACTIVE</option>
-                    <option value="SUSPENDED">SUSPENDED</option>
-                  </select>
-                </div>
-              </div>
-              <div class="dialog__buttons">
-                <button id="add-author-button" class="add">Thêm</button>
-              </div>
-            </form>
-          `;
+      <h1 class="dialog__title">Thêm tác giả</h1>
+      <button id="close-author-button" class="dialog__close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="dialog__line"></div>
+      <form class="dialog__form" autocomplete="off">
+        <div class="dialog__row">
+          <div class="dialog__form-group full">
+            <label>Mã tác giả<span>*<span></label>
+            <input type="text" id="add-author-id" class="text-center" value="Được xác định sau khi xác nhận thêm !" readonly />
+          </div>
+        </div>
+        <div class="dialog__row">
+          <div class="dialog__form-group full">
+            <label>Tên tác giả<span>*<span></label>
+            <input type="text" id="add-author-name" placeholder="Nhập Tên tác giả" autofocus/>
+          </div>
+        </div>
+        <div class="dialog__row">
+          <div class="dialog__form-group full">
+            <label>Trạng thái<span>*<span></label>
+            <select id="add-author-status">
+              <option value="" selected>Chọn Trạng thái</option>
+              <option value="Hoạt động">Hoạt động</option>
+              <option value="Tạm dừng">Tạm dừng</option>
+            </select>
+          </div>
+        </div>
+        <div class="dialog__buttons">
+          <button id="add-author-button" class="add">Thêm</button>
+        </div>
+      </form >
+    `;
 
     // Thêm vào body
     document.body.appendChild(addDialog);
@@ -73,71 +73,94 @@ export function addAuthorData() {
       isNotFirstItemSelected(select);
     });
 
-    // Gán sự kiện cho nút "thêm" dialog
+    // Gán sự kiện cho nút "Thêm" dialog
     document
       .getElementById("add-author-button")
       .addEventListener("click", async (e) => {
+        //
         e.preventDefault();
-        // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
-        const authorName = document.getElementById("add-author-name").value;
-        const authorStatus = document.getElementById("add-author-status").value;
-          console.log(authorName, authorStatus);
-          let checkName = true;
-          if(authorName === ''){
-            // alert("Hãy nhập tên đầy đủ");
-            toast({title :"Cảnh báo", message :`Vui lòng nhập tên tác giả.`, type : "warning" , duration : 3000});
-            checkName = false;
-          }
-          let checkStatus = true;
-          if(authorStatus === ''){
-            // alert("Hãy nhập tên đầy đủ");
-            toast({title :"Cảnh báo", message :`Vui lòng chọn trạng thái.`, type : "warning" , duration : 3000});
-            checkStatus = false;
-          }
-          if(checkName && checkStatus){
-          let yes = await showNotification("Bạn có đồng ý thêm tác giả này không?");
-          if(yes){
-              try {
-                const response = await fetch("api/authors/create.php", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                  },
-                  body: new URLSearchParams({
-                    authorName: authorName,
-                    authorStatus: authorStatus,
-                  }),
-                });
-        
-                const result = await response.json();
-                console.log("Server Response:", result);
-        
-                if (result.success) {
-                  // alert("thêm tác giả thành công!");
-                  toast({title :"Thành công", message :`Thêm nhà xuất bản thành công.`, type : "success" , duration : 3000});
-    
-                } else {
-                  // alert("Lỗi khi cập nhật trạng thái: " + (result.message || "Không rõ nguyên nhân"));
-                  toast({title :"Cảnh báo", message :`${result.message}`, type : "warning" , duration : 3000});
-    
-                }
-              } catch (error) {
-                console.error("Lỗi fetch API:", error);
-                // alert("Không thể kết nối đến server!");
-                toast({title :"Lỗi", message :`Lỗi fetch API:${error}`, type : "error" , duration : 3000});
-    
-              }
-              addDialog.remove();
-            addButton.classList.remove("active");
-            renderAuthorTable();
-            }
 
+        // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
+        const name = document.getElementById("add-author-name").value
+          ? document.getElementById("add-author-name").value
+          : null;
+        const status = document.getElementById("add-author-status").value
+          ? document.getElementById("add-author-status").value
+          : null;
+
+        //
+        let checkName = true,
+          checkStatus = true;
+        if (!name) {
+          // alert("Hãy nhập tên đầy đủ");
+          toast({
+            title: "Cảnh báo",
+            message: `Vui lòng nhập tên tác giả.`,
+            type: "warning",
+            duration: 3000,
+          });
+          checkName = false;
+        }
+        if (!status) {
+          toast({
+            title: "Cảnh báo",
+            message: `Vui lòng chọn trạng thái.`,
+            type: "warning",
+            duration: 3000,
+          });
+          checkStatus = false;
+        }
+        if (checkName && checkStatus) {
+          let yes = await showNotification(
+            "Bạn có đồng ý thêm tác giả này không?"
+          );
+          if (yes) {
+            try {
+              const response = await fetch("api/authors/create.php", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({
+                  name: name,
+                  status: status,
+                }),
+              });
+
+              const result = await response.json();
+              if (result.success) {
+                toast({
+                  title: "Thành công",
+                  message: `Thêm tác giả thành công.`,
+                  type: "success",
+                  duration: 3000,
+                });
+              } else {
+                toast({
+                  title: "Cảnh báo",
+                  message: `${result.message}`,
+                  type: "warning",
+                  duration: 3000,
+                });
+              }
+            } catch (error) {
+              toast({
+                title: "Lỗi",
+                message: `Lỗi fetch API:${error}`,
+                type: "error",
+                duration: 3000,
+              });
+            }
+            addButton.classList.remove("active");
+            addDialog.remove();
+            renderAuthorTable(1);
           }
+        }
       });
 
     // Gán sự kiện cho nút "Đóng" dialog
     document
-      .getElementById("close-type-button")
+      .getElementById("close-author-button")
       .addEventListener("click", () => {
         // Xoá dialog
         addDialog.remove();

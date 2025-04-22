@@ -75,7 +75,7 @@
             <li class="sidebar__item">
                 <a href="#" class="sidebar__action" data-main-content="discount">
                     <i class="icon fa-solid fa-percent"></i>
-                    <span class="text">Khuyến mãi</span>
+                    <span class="text">Phiếu giảm giá</span>
                 </a>
             </li>
             <li class="sidebar__item">
@@ -91,7 +91,7 @@
                 </a>
             </li>
             <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="supplies">
+                <a href="#" class="sidebar__action" data-main-content="supplier">
                     <i class="icon fa-solid fa-user-shield"></i>
                     <span class="text">Nhà cung cấp</span>
                 </a>

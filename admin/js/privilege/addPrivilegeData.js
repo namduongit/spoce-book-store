@@ -1,7 +1,12 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
+import { toast } from '../../../public/js/toast.js'
 
 // Hàm thiết lập sự kiện Thêm một nhóm quyền cho bảng
-export function addPrivilegeData() {
+export async function addPrivilegeData() {
+  const response = await fetch('api/privileges/list.php');
+  const dataPrivileges = await response.json();
+
+
   // Biến chứa đối tượng là nút "Thêm"
   const addButton = document.getElementById("add-button-privilege");
 
@@ -12,6 +17,23 @@ export function addPrivilegeData() {
 
     // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
     addButton.classList.add("active");
+
+    let privilegeHTML = ``;
+
+    if (dataPrivileges['data'] && Array.isArray(dataPrivileges['data'])) {
+      dataPrivileges['data'].forEach(dataItem => {
+        privilegeHTML += `
+        <tr data-privilege=${dataItem.id}>
+            <td>${dataItem.name}</td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+        </tr>
+        `;
+      })
+    }
 
     // Tạo một dialog để thêm một nhóm quyền
     const addDialog = document.createElement("dialog");
@@ -38,7 +60,7 @@ export function addPrivilegeData() {
                     </div>
                     <div class="dialog__form-group">
                       <label>Trạng thái</label>
-                      <select id="add-book-status">
+                      <select id="add-privilege-status">
                           <option value="" selected>Chọn Trạng thái</option>
                           <option value="1">Hoạt động</option>
                           <option value="0">Tạm dừng</option>
@@ -58,62 +80,7 @@ export function addPrivilegeData() {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                            <td>Thống kê lợi nhuận</td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox" disabled></td>
-                            <td><input type="checkbox" disabled></td>
-                            <td><input type="checkbox" disabled></td>
-                            <td><input type="checkbox" disabled></td>
-                        </tr>
-                        <tr>
-                            <td>Thống kê doanh thu</td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox" disabled></td>
-                            <td><input type="checkbox" disabled></td>
-                            <td><input type="checkbox" disabled></td>
-                            <td><input type="checkbox" disabled></td>
-                        </tr>
-                        <tr>
-                            <td>Thống kê phiếu nhập</td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox" disabled></td>
-                            <td><input type="checkbox" disabled></td>
-                            <td><input type="checkbox" disabled></td>
-                            <td><input type="checkbox" disabled></td>
-                        </tr>
-                        <tr>
-                            <td>Thống kê đơn hàng</td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox" disabled></td>
-                            <td><input type="checkbox" disabled></td>
-                            <td><input type="checkbox" disabled></td>
-                            <td><input type="checkbox" disabled></td>
-                        </tr>
-                        <tr>
-                            <td>Đơn hàng</td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox" disabled></td>
-                            <td><input type="checkbox" disabled></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox" disabled></td>
-                        </tr>
-                        <tr>
-                            <td>Khuyến mãi</td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                        </tr>
-                        <tr>
-                            <td>Nhóm quyền</td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                        </tr>
+                        ${privilegeHTML}
                       </tbody>
                     </table>
                   </div>
@@ -141,16 +108,81 @@ export function addPrivilegeData() {
     // Gán sự kiện cho nút "Thêm" dialog
     document
       .getElementById("add-privilege-button")
-      .addEventListener("click", () => {
+      .addEventListener("click", async (event) => {
+        event.preventDefault();
+
         // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
         const id = document.getElementById("add-privilege-id");
         const name = document.getElementById("add-privilege-name");
         const status = document.getElementById("add-privilege-status");
 
         // ... (Xử lý tiếp ở đây)
-        console.log(id.value);
-        console.log(name.value);
-        console.log(status.value);
+        console.log(id.value)
+        console.log(name.value)
+        console.log(status.value)
+
+        
+        return;
+
+        if (String(name.value).length == 0 || name.value == null || !name.value) {
+          toast({
+            type: 'Cảnh báo',
+            message: 'Vui lòng đặt tên cho quyền này',
+            type: 'warning',
+            duration: 3000
+          });
+          return;
+        }
+
+        if (String(name.value).trim().length < 4) {
+          toast({
+            type: 'Cảnh báo',
+            message: 'Tên của quyền phải có ít nhất 4 chữ cái, không tính dấu khoảng cách thừa',
+            type: 'warning',
+            duration: 3000
+          });
+          return;
+        }
+
+        if (String(status.value).length == 0 || status.value == null || !status.value) {
+          toast({
+            type: 'Cảnh báo',
+            message: 'Vui lòng chọn trạng thái cho loại quyền này',
+            type: 'warning',
+            duration: 3000
+          });
+          return;
+        }
+
+        let formData = new URLSearchParams();
+        formData.append('name', name.value);
+        formData.append('status', status.value == '1' ? 'Hoạt động' : 'Tạm dừng');
+        
+
+        const response = await fetch('api/roles/create.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }, 
+          body: formData.toString()
+        });
+
+        const data = await response.json();
+        if (data) {
+          toast({
+            type: data.success ? 'success' : 'waring',
+            message: data.message,
+            title: 'Thông báo',
+            duration: 3000
+          });
+
+          addDialog.remove();
+
+          // Xoá class active thể hiện là nút không được nhấn (vì dialog không còn hiện)
+          addButton.classList.remove("active");
+        }
+
+
       });
 
     // Gán sự kiện cho nút "Đóng" dialog

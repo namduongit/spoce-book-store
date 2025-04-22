@@ -5,12 +5,10 @@ import { filterAuthor } from "./filterAuthorData.js";
 // Dữ liệu tạm thời (sau phải xây dựng hàm truy xuất dữ liệu từ csdl)
 let data = [];
 
-// Hàm cập nhật lại dữ liệu cho bảng Thể loại
-export async function renderAuthorTable() {
-
-  data = await filterAuthor();
-
-  // Biến chứa đối tượng bảng Thể loại
+// Hàm cập nhật lại dữ liệu cho bảng Tác giả
+export async function renderAuthorTable(currentPage) {
+  data = await filterAuthor(currentPage);
+  // Biến chứa đối tượng bảng Tác giả
   const bodyInAuthorTable = document.querySelector(
     ".main__data > .main__table.author > tbody"
   );
@@ -23,31 +21,31 @@ export async function renderAuthorTable() {
               <td>${data[i].id}</td>
               <td>${data[i].name}</td>
               <td><span ${
-                data[i].status === "ACTIVE" ? 'class="green"' : 'class="red"'
+                data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
               }>${data[i].status}</span></td>
               <td>
-                  <i id="update-button-author" class="fa-solid fa-pen-to-square"></i>
-                  <i id="lock-button-author" class="fa-solid fa-${
-                    data[i].status === "ACTIVE" ? "" : "un"
+                  <i class="fa-solid fa-pen-to-square"></i>
+                  <i class="fa-solid fa-${
+                    data[i].status === "Hoạt động" ? "" : "un"
                   }lock"></i>
               </td>
           </tr>
       `;
   }
 
-  if(data.length == 0){
-    html =  `
+  if (data.length == 0) {
+    html = `
           <tr>
               <td></td>
               <td>Danh sách trống</td>             
               <td></td>
           </tr>
       `;
-      bodyInAuthorTable.innerHTML = html;
-  }else{
+    bodyInAuthorTable.innerHTML = html;
+  } else {
     // Cập nhật lại giao diện
     bodyInAuthorTable.innerHTML = html;
-  
+
     // Gán sự kiện cho các nút sau khi thay đổi giao diện
     const idColumnInTable = document.querySelectorAll(
       ".main__data > .main__table.author > tbody > tr > td:first-of-type"
@@ -61,25 +59,24 @@ export async function renderAuthorTable() {
       const lockButton = buttons.children[1];
       // Id của đối tượng đã được chọn để thao tác
       const idAuthorSelected = idColumnInTable.item(row).textContent;
-  
-      // Gán sự kiện hiện dialog sửa thể loại
+
+      // Gán sự kiện hiện dialog sửa Tác giả
       updateButton.addEventListener("click", (e) => {
         // Loại bỏ giá trị mặc định
         e.preventDefault();
-  
+
         // Gọi hàm sự kiện
         updateAuthorData(idAuthorSelected);
       });
-  
-      // Gán sự kiện hiện dialog khoá / mở khoá thể loại
+
+      // Gán sự kiện hiện dialog khoá / mở khoá Tác giả
       lockButton.addEventListener("click", (e) => {
         // Loại bỏ giá trị mặc định
         e.preventDefault();
-  
+
         // Gọi hàm sự kiện
         lockAuthorData(idAuthorSelected);
       });
     });
   }
-
 }

@@ -63,3 +63,32 @@ export async function getRoleById(roleId) {
     let response = await fetchData(URL);
     return response;
 }
+
+
+export function generateTimeId() {
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hour = String(now.getHours()).padStart(2, '0');
+    const minute = String(now.getMinutes()).padStart(2, '0');
+    const second = String(now.getSeconds()).padStart(2, '0');
+
+    return `${year}${month}${day}${hour}${minute}${second}`;
+}
+
+
+export function generateTimeIdPlusMinutes(minutesToAdd) {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + minutesToAdd);
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hour = String(now.getHours()).padStart(2, '0');
+    const minute = String(now.getMinutes()).padStart(2, '0');
+    const second = String(now.getSeconds()).padStart(2, '0');
+
+    return `${year}${month}${day}${hour}${minute}${second}`;
+}

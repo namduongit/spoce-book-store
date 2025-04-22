@@ -11,6 +11,7 @@ require_once("./config.php");
 
 //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
 $vnp_TxnRef = $_POST['order_id'];
+
 // Nhớ lưu mã đơn vào database nha mấy ông =)) Kiếm không ra mà để check là ói cơm
 $vnp_OrderInfo = $_POST['order_desc'];
 $vnp_OrderType = $_POST['order_type'];
