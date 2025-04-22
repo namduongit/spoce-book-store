@@ -57,7 +57,7 @@ if (!empty($category)) {
     $params[':category'] = $category;
 }
 if (!empty($status)) {
-    $conditions[] = "trangThai = :status";
+    $conditions[] = "nguoiDung.trangThai LIKE :status";
     $params[':status'] = $status;
 }
 

@@ -138,6 +138,12 @@
                     <span class="text">Đăng xuất</span>
                 </a>
             </li> -->
+            <li class="sidebar__item">
+                <a href="#" class="sidebar__action" data-main-content="payment">
+                    <i class="icon fa-solid fa-money-check-dollar"></i>
+                    <span class="text">Thẻ thanh toán</span>
+                </a>
+            </li>
         </ul>
     </sidebar>
 

@@ -337,7 +337,7 @@ const mainContentMap = {
         <input required="" type="text" id="privilege-slt-account" />
         <span><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Chọn Nhóm quyền</span>
         <ul>
-          <li>Quản lý</li>
+          <li>Quản lí</li>
           <li>Nhân viên</li>
           <li>Quản kho</li>
           <li>Khách hàng</li> 
@@ -920,7 +920,7 @@ menuInSideBar.forEach((item, i) => {
         updateInputTicketTable();
       } else if (mainContentKey === "book") {
         updateBookTable();
-        showCategory();
+        // showCategory();
       } else if (mainContentKey === "author") {
         updateAuthorTable();
       } else if (mainContentKey === "category") {
@@ -942,21 +942,21 @@ window.addEventListener("load", function () {
   updateProfitDashboardTable();
 });
 
-// dùng để hiển thị vào input để chọn để tìm kiếm
-async function showCategory() {
-  let listCategory = await fetchData(`api/categories/get.php`); // Chờ dữ liệu từ API
-  console.log("Dữ liệu nhận được từ API:", listCategory);
+// // dùng để hiển thị vào input để chọn để tìm kiếm
+// async function showCategory() {
+//   let listCategory = await fetchData(`api/categories/get.php`); // Chờ dữ liệu từ API
+//   console.log("Dữ liệu nhận được từ API:", listCategory);
 
-  if (!Array.isArray(listCategory)) {
-    console.error(" Lỗi: Dữ liệu không đúng định dạng (phải là mảng).");
-    return;
-  }
+//   if (!Array.isArray(listCategory)) {
+//     console.error(" Lỗi: Dữ liệu không đúng định dạng (phải là mảng).");
+//     return;
+//   }
 
-  const ulElement = document.querySelector(".main__category-slt ul");
-  let li = document.createElement("li");
-  listCategory.forEach((category) => {
-    let li = document.createElement("li");
-    li.textContent = category.name;
-    ulElement.appendChild(li);
-  });
-}
+//   const ulElement = document.querySelector(".main__category-slt ul");
+//   let li = document.createElement("li");
+//   listCategory.forEach((category) => {
+//     let li = document.createElement("li");
+//     li.textContent = category.name;
+//     ulElement.appendChild(li);
+//   });
+// }

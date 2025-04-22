@@ -8,8 +8,10 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
  */
 require_once("./config.php");
 
+
 //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
 $vnp_TxnRef = $_POST['order_id'];
+
 // Nhớ lưu mã đơn vào database nha mấy ông =)) Kiếm không ra mà để check là ói cơm
 $vnp_OrderInfo = $_POST['order_desc'];
 $vnp_OrderType = $_POST['order_type'];
@@ -94,6 +96,9 @@ if (isset($vnp_HashSecret)) {
     $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);
     $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
 }
+
+
+
 $returnData = array('code' => '00'
     , 'message' => 'success'
     , 'data' => $vnp_Url);

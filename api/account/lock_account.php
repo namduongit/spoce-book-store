@@ -17,33 +17,16 @@ if (empty($maNguoiDung)) {
     echo json_encode(['status' => 'error', 'message' => 'Mã người dùng không hợp lệ.']);
     exit;
 }
-$accountEmail = isset($data['accountEmail']) ? $data['accountEmail'] : '';
-$accountFullName = isset($data['accountFullName']) ? $data['accountFullName'] : '';
-$accountPassword = isset($data['accountPassword']) ? $data['accountPassword'] : '';
-$accountRole = isset($data['accountRole']) ? $data['accountRole'] : 4;
-$accountPhone = isset($data['accountPhone']) ? $data['accountPhone'] : '';
 $accountStatus = isset($data['accountStatus']) ? $data['accountStatus'] : 'Hoạt động';
-$accountName = isset($data['accountName']) ? $data['accountName'] : '';
 $ngayCapNhat = isset($data['ngayCapNhat']) ? $data['ngayCapNhat'] : date('Y-m-d H:i:s');
 
-// Kết nối DB
-$dbConnection = new app_libs_DBConnection();
-$pdo = $dbConnection->open_connect();
-if (empty($accountName)) {
-    echo json_encode(['status' => 'error', 'message' => 'Tên tài khoản không được để trống.']);
-    exit;
-}
+
 
 
 // Cập nhật người dùng
 $account_model = new app_models_NguoiDung();
 $updateSuccess = $account_model->updateUser($maNguoiDung, [
-    "email" => $accountEmail,
-    "hoVaTen" => $accountFullName,
-    "matKhau" => $accountPassword,
-    "maQuyen" => $accountRole,
-    "soDT" => $accountPhone,
-    "tenTaiKhoan" => $accountName,
+    "trangThai" => $accountStatus,
     "ngayCapNhat" => $ngayCapNhat
 ]);
 

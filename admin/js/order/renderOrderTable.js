@@ -4,7 +4,13 @@ import { updateOrderData } from "./updateOrderData.js";
 import { printOrderTicket } from "./printOrderTicket.js";
 import { filterOrder } from "./filterOrderData.js";
 
+<<<<<<< HEAD
+
+
+// Hàm tách các thông tin trong địa chỉ giao hàng (địa chỉ hợp lệ)
+=======
 // Hàm tách địa chỉ giao thành còn Quận huyện và Tỉnh thành
+>>>>>>> 9f91f476e8d32989051dad3408d87fcb1af2d279
 function splitAddressToShip(address) {
   const addressArray = address.split(",");
   const houseNumberAndStreetName = addressArray[0]

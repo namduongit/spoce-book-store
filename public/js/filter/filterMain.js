@@ -73,7 +73,10 @@ function searchProduct(query) {
     })
     .catch(error => console.log("Lỗi tìm kiếm: "+ error));
 }
+
 async function displayProduct(data) {
+
+    console.log(data)
     const searchResult = document.querySelector('.result-search .result-search__wrapper');
 
     if (!data || !Array.isArray(data) || data.length === 0) {
@@ -89,12 +92,12 @@ async function displayProduct(data) {
         `Kết quả tìm kiếm: <strong>${data.length} sản phẩm</strong>`;
 
     // Tạo danh sách Promise để gọi API song song
-    let authorPromises = data.map(item =>
-        fetch(`api/authors/get.php?authorId=${item['authorId']}`)
-            .then(response => response.json())
-            .then(authorData => authorData[0] || { name: "Không xác định" })
-            .catch(() => ({ name: "Không xác định" })) // Trả về giá trị mặc định nếu lỗi
+    let authorPromises = data.map(item => fetch(`api/authors/detail.php?id=${item['authorId']}`)
+        .then(response => response.json())
+        .then(authorData => authorData['data'].name || { name: "Không xác định" })
+        .catch(() => ({ name: "Không xác định" })) // Trả về giá trị mặc định nếu lỗi
     );
+
 
     let authors = await Promise.all(authorPromises); // Đợi tất cả API hoàn thành cùng lúc
 
@@ -112,7 +115,7 @@ async function displayProduct(data) {
 
                 <div class="result-search__item-info">
                     <h3 class="result-search__item-name"><strong>${element.name}</strong></h3>
-                    <h3 class="result-search__item-author">Tác giả: <strong>${author.name}</strong></h3>
+                    <h3 class="result-search__item-author">Tác giả: <strong>${author}</strong></h3>
                     <p class="result-search__item-desc">Mô tả: ${element['description']}</p>
                     <p class="result-search__item-price">Giá: ${formatMoney(element['sellingPrice'])}</p>
                     <span class="result-search__item-status ${className}">Trạng thái: ${statusProduct}</span>

@@ -13,7 +13,7 @@
 .topbar__auth
 .topbar__auth-list {
   position: absolute;
-  z-index: 12;
+  z-index: 10;
   background-color: white;
   border-radius: 0.5rem;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -63,7 +63,7 @@
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   padding: 1.5rem 0;
   position: sticky;
-  z-index: 4;
+  z-index: 5;
   top: 0;
   background-color: white;
 }
@@ -1096,9 +1096,9 @@
   display: inline-block;
   position: absolute;
   top: 0;
-  z-index: 10;
+  z-index: 12;
   height: 65px;
-  width: 47px;
+  width: 50px;
   background-color: #3498db;
   border-radius: 0 0 30px 30px;
 }
@@ -1138,10 +1138,10 @@
   top: 0;
   right: 0;
   width: 500px;
-
-box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   border-radius: 3px;
   display: none;
+  z-index: 12;
 }
 
 .topbar__cart-detail-holder.show {
@@ -2196,13 +2196,6 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 
 .confirmation-dialog
 .confirmation-dialog__container {
-  width: 80%;
-  height: 80%;
-  max-width: 450px;
-  min-width: 200px;
-  max-height: 200px;
-  min-height: 100px;
-  height: 500px;
   background-color: white;
   top: 50%;
   left: 50%;
@@ -2212,6 +2205,8 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   padding: 2rem 4rem;
   animation: scaleUp 0.3s ease-out forwards;
+  width: fit-content;
+  height: fit-content;
 }
 .confirmation-dialog
 .confirmation-dialog__title {
@@ -2219,11 +2214,12 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   font-size: 2rem;
   font-weight: bold;
   color: var(--topbar-color);
+  margin-top: 1rem;
 }
 .confirmation-dialog
 .confirmation-dialog__desc {
   color: gray;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
   margin-top: 1rem;
   text-align: center;
 }
@@ -2231,6 +2227,7 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   display: flex;
   justify-content: space-around;
   margin-top: 1rem;
+  flex-direction: column;
 }
 .confirmation-dialog__content
 .confirmation-dialog__button {
@@ -2240,10 +2237,8 @@ box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   border-radius: 1rem;
   font-weight: bold;
   cursor: pointer;
-}
-.confirmation-dialog__content
-.confirmation-dialog__button:hover {
-
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 .confirmation-dialog

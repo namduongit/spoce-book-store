@@ -5,29 +5,30 @@ import { getBookByID } from "../book/getDataBook.js";
 import { showAddressInCurrentUser } from "../auth/displayInfoUser.js";
 import { getCurrentUser } from "../auth/displayInfoUser.js";
 import { updateAddressSelect } from "../../../api/address/updateAddressSelect.js";
+import { showConfirmationDialog } from "../question.js";
+import { generateTimeId, generateTimeIdPlusMinutes } from "../common.js";
 
 
-window.onload = async function() {
+window.onload = async function () {
     const currentParams = new URLSearchParams(window.location.search);
-    updateQuantityCardHolder();
-    showLoading();
-    // Điều hướng xem giỏ hàng hoặc trang thanh toán
+    await updateQuantityCardHolder();
     if (currentParams.has('page-action')) {
+        showLoading();
         if (currentParams.get('page-action') === 'check-out') {
-            checkOutBill();
+            await checkOutBill();
         }
         else if (currentParams.get('page-action') === 'show-all-cart') {
             await showAllCart('Recursive');
         }
-
+        hideLoading();
+        return;
     }
-    hideLoading();
 
-    //  Hiển thị lại cái card holder (Xem giỏ hàng Mini)
-    if (currentParams.has('cart-holder') && currentParams.get('cart-holder') === 'true') {
+    if (currentParams.has('cart-holder') && currentParams.get('cart-holder') == 'true') {
         showLoading();
         await viewCart('Recursive');
         hideLoading();
+        return;
     }
 }
 
@@ -53,14 +54,14 @@ async function viewCart(type) {
                     },
                     body: formData.toString()
                 });
-        
+
                 let data = await response.json();
                 return data;
             } catch (error) {
                 console.error("Lỗi khi lấy giỏ hàng:", error);
-                return null; 
+                return null;
             }
-        }        
+        }
         currentCartUser = await getAllProductFromCart();
         currentCartUser = currentCartUser['data'] || [];
     }
@@ -122,6 +123,33 @@ async function viewCart(type) {
     let totalPrice = 0;
 
     for (const productItem of currentCartUser) {
+        if (productItem.quantity == 0 && currentUser != null) {
+            fetch('api/carts/remove.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    maNguoiDung: currentUser.user.id,
+                    maSach: productItem['bookId']
+                }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+
+                })
+                .catch(error => {
+                    console.error("Error occurred:", error);
+                });
+
+            continue;
+        }
+
         let product = await getBookByID(currentUser != null ? productItem['bookId'] : productItem['id']);
         product = product['books'][0];
         let nameGenre = await getNameCategoryByID(product.genreId);
@@ -197,18 +225,18 @@ async function removeFromCart(bookId) {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: formData.toString()
         })
-        .then(response => response.json())
-        .then(data => {
-            toast({
-                title: 'Thông báo',
-                message: data.message,
-                type: data.success ? 'success' : 'warning',
-                duration: 3000
-            });
-        })
-        .catch(error => {
-            console.error('Lỗi khi xóa sản phẩm: ', error);
-        })
+            .then(response => response.json())
+            .then(data => {
+                toast({
+                    title: 'Thông báo',
+                    message: data.message,
+                    type: data.success ? 'success' : 'warning',
+                    duration: 3000
+                });
+            })
+            .catch(error => {
+                console.error('Lỗi khi xóa sản phẩm: ', error);
+            })
     }
     viewCart('Recursive');
     updateQuantityCardHolder();
@@ -247,14 +275,14 @@ async function showAllCart(type) {
                     },
                     body: formData.toString()
                 });
-        
+
                 let data = await response.json();
                 return data;
             } catch (error) {
                 console.error("Lỗi khi lấy giỏ hàng:", error);
-                return null; 
+                return null;
             }
-        }        
+        }
         currentCartUser = await getAllProductFromCart();
         currentCartUser = currentCartUser['data'] || [];
     }
@@ -285,6 +313,34 @@ async function showAllCart(type) {
     showLoading();
 
     for (const item of currentCartUser) {
+        if (item.quantity == 0 && currentUser != null) {
+            fetch('api/carts/remove.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    maNguoiDung: currentUser.user.id,
+                    maSach: item['bookId']
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+
+                })
+                .catch(error => {
+                    console.error("Error occurred:", error);
+                });
+
+            continue;
+        }
+
+
         let productItem = await getBookByID(currentUser != null ? item['bookId'] : item['id']);
         productItem = productItem['books'][0];
         let nameGenre = await getNameCategoryByID(productItem.genreId);
@@ -297,12 +353,12 @@ async function showAllCart(type) {
                     <div class="show-cart__price">${productItem.id} / ${nameGenre} / ${formatMoney(productItem.sellingPrice)}</div>
                 </div>
                 <div class="show-cart__amountbox">
-                    <button class="show-cart__btn show-cart__btn--left" onclick="minsQuantity(${item.bookId})">-</button>
+                    <button class="show-cart__btn show-cart__btn--left" onclick='minsQuantity(${productItem.id}, ${JSON.stringify(currentUser)})'>-</button>
                     <input type="text" name="product-amount" value="${item.quantity}" disabled>
-                    <button class="show-cart__btn show-cart__btn--right" onclick="plusQuantity(${item.bookId})">+</button>
+                    <button class="show-cart__btn show-cart__btn--right" onclick='plusQuantity(${productItem.id}, ${JSON.stringify(currentUser)})'>+</button>
                 </div>
                 <div class="show-cart__priceamount">${formatMoney(item.quantity * productItem.sellingPrice)}</div>
-                <a href="#" class="show-cart__remove" onclick="deleteFromCart(${productItem.id})">
+                <a href="#" class="show-cart__remove" onclick='deleteFromCart(${productItem.id}, ${JSON.stringify(currentUser).replace(/'/g, "\\'")})'>
                     <i class="fa-solid fa-trash-can"></i>
                 </a>
             </div>
@@ -331,7 +387,7 @@ async function showAllCart(type) {
                     <button onclick="checkOutBill()" class="show-cart__to-checkout-btn">
                         <i class="fa-regular fa-circle-check"></i> Thanh toán
                     </button>
-                    <button onclick="deleteAllCart()"><i class="fa-solid fa-circle-xmark"></i> Xóa tất cả</button>
+                    <button onclick='deleteAllCart(${JSON.stringify(currentUser)})'><i class="fa-solid fa-circle-xmark"></i> Xóa tất cả</button>
                 </div>
             </div>
         </div>
@@ -347,21 +403,134 @@ async function showAllCart(type) {
     orderInfo.classList.add('hide-item');
     document.querySelector(".topbar__cart-detail-holder").classList.remove('show');
 
-    document.querySelector('.show-cart__continue-buy-btn').addEventListener('click', function() {
+    document.querySelector('.show-cart__continue-buy-btn').addEventListener('click', function () {
         window.location.href = '/';
     });
 }
 
-function minsQuantity(bookId) {
+function minsQuantity(bookId, currentUser) {
+    if (currentUser != null && currentUser.logged_in == true && currentUser.success == true) {
+        fetch('api/carts/add.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                maNguoiDung: currentUser.user.id,
+                maSach: bookId,
+                soLuong: -1
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                toast({
+                    title: 'Thông báo',
+                    message: `Đã giảm số lượng sản phẩm trong giỏ hàng`,
+                    type: 'success',
+                    duration: 3000
+                });
+            })
+            .catch(error => {
+                toast({
+                    title: 'Thông báo',
+                    message: `Có lỗi khi giảm số lượng sản phẩm`,
+                    type: 'warning',
+                    duration: 3000
+                });
+            });
 
+    } else {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        if (cart && Array.isArray(cart)) {
+            const minQuantityItem = cart.find(item => item.id == bookId);
+
+            if (minQuantityItem) {
+                if (minQuantityItem.quantity > 1) {
+                    minQuantityItem.quantity -= 1;
+                } else {
+                    cart = cart.filter(item => item.id != bookId);
+                }
+
+                localStorage.setItem('cart', JSON.stringify(cart));
+                toast({
+                    title: 'Thông báo',
+                    message: `Đã giảm số lượng sản phẩm trong giỏ hàng`,
+                    type: 'success',
+                    duration: 3000
+                });
+
+                updateQuantityCardHolder();
+                showAllCart('Recursive');
+            } else {
+                toast({
+                    title: 'Thông báo',
+                    message: 'Không tìm thấy sản phẩm trong giỏ hàng.',
+                    type: 'error',
+                    duration: 3000
+                });
+            }
+        }
+    }
+    updateQuantityCardHolder();
+    showAllCart('Recursive');
 }
 
-function plusQuantity(bookId) {
 
+function plusQuantity(bookId, currentUser) {
+    if (currentUser != null && currentUser.logged_in == true && currentUser.success == true) {
+        fetch('api/carts/add.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                maNguoiDung: currentUser.user.id,
+                maSach: bookId,
+                soLuong: 1
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                toast({
+                    title: 'Thông báo',
+                    message: `Đã tăng số lượng sản phẩm trong giỏ hàng`,
+                    type: 'success',
+                    duration: 3000
+                });
+            })
+            .catch(error => {
+                toast({
+                    title: 'Thông báo',
+                    message: `Có lỗi khi tăng số lượng sản phẩm`,
+                    type: 'success',
+                    duration: 3000
+                });
+            });
+
+    } else {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let book = cart.find(item => item.id == bookId);
+
+        if (book) {
+            book.quantity += 1;
+            localStorage.setItem('cart', JSON.stringify(cart));
+            toast({
+                title: 'Thông báo',
+                message: `Đã tăng số lượng sản phẩm trong giỏ hàng`,
+                type: 'success',
+                duration: 3000
+            });
+        }
+    }
+    updateQuantityCardHolder();
+    showAllCart('Recursive');
 }
+
+
+
 
 async function checkOutBill() {
-    // Kiểm tra đã đăng nhập chưa nếu chưa thì không cho mua hàng
     const currentUser = await getCurrentUser();
 
     if (currentUser == null) {
@@ -384,12 +553,12 @@ async function checkOutBill() {
                 },
                 body: formData.toString()
             });
-    
+
             let data = await response.json();
             return data;
         } catch (error) {
             console.error("Lỗi khi lấy giỏ hàng:", error);
-            return null; 
+            return null;
         }
     }
 
@@ -477,11 +646,13 @@ async function checkOutBill() {
         } catch (error) {
             console.error('Error:', error);
         }
-    }    
+    }
 
     let dataPayment = await getDataPayment();
     console.log(dataPayment);
     let HTMLPayment = ``;
+
+    console.log(dataPayment)
 
     if (Array.isArray(dataPayment) && dataPayment) {
         dataPayment.forEach(data => {
@@ -537,7 +708,7 @@ async function checkOutBill() {
     </label>
     `;
 
-    
+
 
     let rightHTMLCheckOut = `
             <div class="checkout__cart-info-holder">
@@ -733,21 +904,21 @@ async function checkOutBill() {
     const paymentMethodOptions = document.querySelectorAll('.checkout__payment-method-option');
     paymentMethodOptions.forEach(option => {
         const buttonRadio = option.querySelector('.checkout__payment-radiobtn-holder input');
-        buttonRadio.addEventListener('click', function() {
+        buttonRadio.addEventListener('click', function () {
             paymentMethodOptions.forEach(opt => {
                 const childElement = opt.querySelector('.checkout__payment-method-child');
                 if (childElement) {
                     childElement.style.display = 'none';
                 }
             });
-    
+
             const childElement = option.querySelector('.checkout__payment-method-child');
             if (childElement) {
                 childElement.style.display = 'block';
             }
         });
     });
-    
+
 
 
     cartMain.classList.add('hide-item');
@@ -787,7 +958,7 @@ async function checkOutBill() {
     renderBaseAddress();
     updateAddressSelect('city', 'district', 'ward');
 
-    if (currentAddress ==  null) {
+    if (currentAddress == null) {
         document.querySelector('.checkout__input-field .checkout__address-btn-child-select').classList.remove('active');
         document.querySelector('.checkout__input-field .checkout__address-btn-child-inoput').classList.add('active');
         document.querySelector('.checkout__input-field-input-address').classList.remove('hide-item');
@@ -797,7 +968,7 @@ async function checkOutBill() {
 
     // Xử lí render dữ liệu ở đây
     document.querySelectorAll('.checkout__address-btn-child').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             if (currentAddress != null) {
                 let isSelectSaved = this.classList.contains('checkout__address-btn-child-select');
 
@@ -826,10 +997,10 @@ async function checkOutBill() {
         });
     });
 
-    
+
+
     // Submit gửi đơn hàng lên Server
-    document.querySelector('.checkout__submit-btn-final').addEventListener('click', function() {
-        console.log('Đã ấn hoàn tất đơn hàng');
+    document.querySelector('.checkout__submit-btn-final').addEventListener('click', async function () {
         let pickUpAddress = null;
         let customerName = null;
         let customerNumberphone = null;
@@ -862,7 +1033,7 @@ async function checkOutBill() {
         // Xử lí phương thức vận chuyển
         const selectedShipping = document.querySelector('input[name="shipping-method"]:checked');
         if (selectedShipping) {
-            shipMethod = selectedShipping.value; 
+            shipMethod = selectedShipping.value;
         }
 
         // Xử lí phương thức thanh toán
@@ -871,9 +1042,195 @@ async function checkOutBill() {
             paymentMethod = selectedPayment.value;
         }
 
+        if (pickUpAddress == null || pickUpAddress.replace(/\s|\/+/g, '').length === 0) {
+            toast({
+                type: 'warning',
+                message: 'Bạn chưa điền địa chỉ',
+                title: 'Thông báo',
+                duration: 3000
+            });
+            return;
+        }
+
+        if (customerName == null || customerName.length == 0) {
+            toast({
+                type: 'warning',
+                message: 'Bạn chưa điền tên người nhận hàng',
+                title: 'Thông báo',
+                duration: 3000
+            });
+            return;
+        }
+
+        if (customerNumberphone == null || customerNumberphone.length == 0) {
+            toast({
+                type: 'warning',
+                message: 'Bạn chưa nhập số điện thoại người nhận hàng',
+                title: 'Thông báo',
+                duration: 3000
+            });
+            return;
+        }
+
+        if (customerNumberphone.length != 10) {
+            toast({
+                type: 'warning',
+                message: 'Vui lòng nhập đúng định dạng số điện thoại đầu số Việt Nam',
+                title: 'Thông báo',
+                duration: 3000
+            });
+            return;
+        }
+
+        if (shipMethod == null || shipMethod.length == 0) {
+            toast({
+                type: 'warning',
+                message: 'Bạn chưa chọn phương thức vận chuyển',
+                title: 'Thông báo',
+                duration: 3000
+            });
+            return;
+        }
+
+        if (paymentMethod == null || paymentMethod.length == 0) {
+            toast({
+                type: 'warning',
+                message: 'Bạn chưa chọn phương thức thanh toán',
+                title: 'Thông báo',
+                duration: 3000
+            });
+            return;
+        }
 
 
-        
+
+        const resultOrder = await showConfirmationDialog('Xác nhận đặt hàng ?');
+        if (resultOrder == true) {
+            console.log('Đồng ý thanh toán');
+
+            if (paymentMethod != -1) {
+                showLoading();
+                const formOrder = new URLSearchParams();
+                formOrder.append('maKhachHang', currentUser['user'].id);
+                formOrder.append('diaChiGiao', pickUpAddress);
+                formOrder.append('tongTienThu', totalPrice);
+                formOrder.append('maPhuongThuc', paymentMethod);
+
+                const responseOrder = await fetch('api/orders/create.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: formOrder.toString()
+                });
+
+                const dataOrder = await responseOrder.json();
+
+                if (dataOrder['success'] == true) {
+                    console.log('Tạo đơn hàng thành công');
+                    console.log(dataOrder);
+
+
+                    console.log('Giỏ hàng trước khi thanh toán');
+                    console.log(currentCart);
+                    console.log(`Đơn hàng vừa tạo ${dataOrder['data']}`);
+
+                    if (dataOrder['data'] && Array.isArray(currentCart)) {
+                        const response = await fetch('api/order_details/create.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                data: {
+                                    maDonHang: parseInt(dataOrder['data']),
+                                    danhSachSanPham: JSON.stringify(currentCart)
+                                }
+                            })
+                        });
+
+                        const data = await response.json();
+                        console.log(data);
+
+
+                        if (data['success'] == true) {
+                            fetch('api/carts/delete.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                },
+                                body: new URLSearchParams({
+                                    maNguoiDung: currentUser.user.id
+                                })
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+
+                                })
+                                .catch(error => {
+                                    console.log('Lỗi khi loại bỏ sản phẩm trong giỏ hàng sau khi thanh toán');
+                                });
+                        }
+
+                        toast({
+                            title: 'Thông báo',
+                            message: `Tạo hóa đơn trị giá ${totalPrice} thành công`,
+                            type: 'success',
+                            duration: 3000
+                        });
+                    }
+                }
+                hideLoading();
+                window.location.href = '/';
+            }
+
+        }
+        else {
+            showLoading();
+
+            const formData = new URLSearchParams();
+            formData.append('order_type', 'billpayment');
+            formData.append('cbo_inv_type', 'I');
+            formData.append('order_id', generateTimeId());
+            formData.append('amount', totalPrice);
+            formData.append('language', 'vn');
+            formData.append('txtexpire', generateTimeIdPlusMinutes(30));
+            formData.append('order_desc', `Đơn hàng ${generateTimeId()} giá trị ${totalPrice}`);
+            formData.append('bank_code', ``);
+            // Thông tin hóa đơn khách hàng
+            formData.append('txt_billing_mobile', customerNumberphone);
+            formData.append('txt_billing_email', currentUser['user'].email || 'NonAccountSpoceCustomer@gmail.com');
+            formData.append('txt_billing_fullname', customerName);
+            // Thông tin hóa đơn điện tử
+            formData.append('txt_inv_addr1', 'billpayment');
+            formData.append('txt_bill_city', 'Đồng Nai');
+            formData.append('txt_bill_country', 'VN');
+            // Thông tin bổ sung
+            formData.append('txt_bill_state', '');
+            formData.append('txt_inv_mobile', '0388853835');
+            formData.append('txt_inv_email', 'nguyennamduong205@gmail.com');
+            formData.append('txt_inv_customer', customerName);
+            formData.append('txt_inv_addr1', pickUpAddress);
+            formData.append('txt_inv_company', 'Tổ 12 Khu phố Phú Mỹ, Phường Xuân Lập, Thành phố Long Khánh, Tỉnh Đồng Nai');
+            formData.append('txt_inv_company', 'Công ty cổ phần Công Nghệ SpoceTech');
+            formData.append('txt_inv_taxcode', '0102182292');
+
+
+            const response = await fetch('../../../vnpay_php/vnpay_create_payment.php', {
+                method: 'POST',
+                body: formData.toString(),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+            });
+
+            const data = await response.json();
+
+            console.log(data['data']);
+            window.location.href = data['data'];
+
+            hideLoading();
+        }
 
         console.log('Địa chỉ nhận hàng: ', pickUpAddress);
         console.log('Người nhận hàng: ', customerName);
@@ -881,20 +1238,63 @@ async function checkOutBill() {
         console.log('Phương thức thanh toán: ', paymentMethod);
         console.log('Phương thức vận chuyển: ', shipMethod);
         console.log('Mã giảm giá: ', couponsCode);
+
     });
 }
 
 
-function deleteFromCart(bookId) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart = cart.filter(item => item.id != bookId);
-    localStorage.setItem("cart", JSON.stringify(cart));
+function deleteFromCart(bookId, currentUser) {
+    if (currentUser != null && currentUser.logged_in == true && currentUser.success == true) {
+        fetch('api/carts/remove.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                maNguoiDung: currentUser.user.id,
+                maSach: bookId
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                toast({
+                    title: 'Thông báo',
+                    message: data.message || 'Đã sản phẩm khỏi giỏ hàng',
+                    type: data.success ? 'success' : 'error',
+                    duration: 3000
+                });
+            })
+            .catch(error => {
+                console.error('Lỗi khi gọi API xóa giỏ hàng:', error);
+                toast({
+                    title: 'Lỗi',
+                    message: 'Không thể xóa sản phẩm từ giỏ hàng giỏ hàng. Vui lòng thử lại!',
+                    type: 'error',
+                    duration: 3000
+                });
+            });
+    }
+    else {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart = cart.filter(item => item.id != bookId);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateQuantityCardHolder();
+        showAllCart('Recursive');
+
+    }
     updateQuantityCardHolder();
     showAllCart('Recursive');
+
 }
 
 
 async function updateQuantityCardHolder() {
+    showLoading();
     const currentUser = await getCurrentUser();
     let cartButton = document.querySelector(".topbar__cart-holder");
     let totalQuantity = 0;
@@ -922,22 +1322,66 @@ async function updateQuantityCardHolder() {
             <span class="topbar__count">${totalQuantity}</span>
         </span>
     `;
+    hideLoading();
 }
 
 
 
-function deleteAllCart() {
-    if (localStorage.getItem('cart')) {
-        localStorage.removeItem('cart');
-        toast({
-            title: 'Thông báo',
-            message: `Đã xóa toàn bộ sản phẩm trong cửa hàng !`,
-            type: 'succes',
-            duration: 3000
-        });
-        updateQuantityCardHolder();
-        showAllCart('Recursive');
+async function deleteAllCart(currentUser) {
+
+    const resultAcp = await showConfirmationDialog('Bạn đồng ý xóa giỏ hàng không ?');
+    if (resultAcp != true) return;
+
+    if (currentUser != null && currentUser.logged_in == true && currentUser.success == true) {
+        fetch('api/carts/delete.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                maNguoiDung: currentUser.user.id
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                toast({
+                    title: 'Thông báo',
+                    message: data.message || 'Đã xóa giỏ hàng',
+                    type: data.success ? 'success' : 'error',
+                    duration: 3000
+                });
+            })
+            .catch(error => {
+                console.error('Lỗi khi gọi API xóa giỏ hàng:', error);
+                toast({
+                    title: 'Lỗi',
+                    message: 'Không thể xóa giỏ hàng. Vui lòng thử lại!',
+                    type: 'error',
+                    duration: 3000
+                });
+            });
+
     }
+    else {
+        if (localStorage.getItem('cart')) {
+            localStorage.removeItem('cart');
+            toast({
+                title: 'Thông báo',
+                message: `Đã xóa toàn bộ sản phẩm trong cửa hàng !`,
+                type: 'succes',
+                duration: 3000
+            });
+            updateQuantityCardHolder();
+            showAllCart('Recursive');
+        }
+    }
+    updateQuantityCardHolder();
+    showAllCart('Recursive');
 }
 
 
@@ -951,3 +1395,6 @@ window.removeFromCart = removeFromCart;
 window.updateQuantityCardHolder = updateQuantityCardHolder;
 window.minsQuantity = minsQuantity;
 window.plusQuantity = plusQuantity;
+
+
+
