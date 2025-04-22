@@ -348,7 +348,7 @@ const mainContentMap = {
         <input required="" type="text" id="privilege-slt-account" />
         <span><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Chọn Nhóm quyền</span>
         <ul>
-          <li>Quản lý</li>
+          <li>Quản lí</li>
           <li>Nhân viên</li>
           <li>Quản kho</li>
           <li>Khách hàng</li> 
