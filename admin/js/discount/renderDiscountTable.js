@@ -4,7 +4,6 @@ import { lockDiscountData } from "./lockDiscountData.js";
 import { filterDiscount } from "./filterDiscountData.js";
 
 // Hàm cập nhật lại dữ liệu cho bảng khuyến mãi
-<<<<<<< HEAD
 export async function renderDiscountTable(pageIsSelected = 1) {
   try {
     // Lấy dữ liệu từ API
@@ -18,15 +17,6 @@ export async function renderDiscountTable(pageIsSelected = 1) {
     const bodyInDiscountTable = document.querySelector(
       ".main__data > .main__table.discount > tbody"
     );
-=======
-export async function renderDiscountTable(currentPage) {
-  // Lấy dữ liệu từ API
-  const data = (await filterDiscount(currentPage)) || [];
-  // Biến chứa đối tượng bảng khuyến mãi
-  const bodyInDiscountTable = document.querySelector(
-    ".main__data > .main__table.discount > tbody"
-  );
->>>>>>> 9f91f476e8d32989051dad3408d87fcb1af2d279
 
   // Chuyển đổi dữ liệu thành các thẻ html
   let html = ``;
