@@ -67,10 +67,18 @@ export async function filterOrder(currentPage) {
   try {
     let response = await fetch(`api/orders/list.php?${params.toString()}`);
 
-    let data = await response.text();
-    // console.log("Dữ liệu nhận được:", data);
-    // await paginationOrder(data.pageCount); // nếu có
-    return data.orderList;
+    if (!response.ok) {
+      throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
+    }
+    let responseJSON = await response.json();
+    await renderPagination(
+      "admin-pagination-order",
+      responseJSON.pageCount,
+      currentPage,
+      renderOrderTable
+    );
+
+    return responseJSON.data;
   } catch (error) {
     alert("Lỗi khi lấy dữ liệu: " + error.message);
     console.log(error);

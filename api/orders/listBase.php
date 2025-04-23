@@ -4,6 +4,12 @@ error_reporting(0);
 
 require_once __DIR__ . '../../../app/config.php';
 
+
+$raw = file_get_contents("php://input");
+$data = json_decode($raw, true); 
+
+
+
 function returnJSONOrder($filters, $pageCount) {
     if (!is_array($filters) || empty($filters)) {
         http_response_code(404);
@@ -58,6 +64,9 @@ $addressToShip = isset($_GET['addressToShip']) ? trim($_GET['addressToShip']) : 
 $status = isset($_GET['status']) ? trim($_GET['status']) : '';
 $orderByColumn = isset($_GET['orderByColumn']) ? trim($_GET['orderByColumn']) : 'maDonHang';
 $orderType = isset($_GET['orderType']) ? trim($_GET['orderType']) : 'ASC';
+
+
+
 if (!empty($id)) {
     $conditions[] = "(donHang.maDonHang = :id)";
     $params[':id'] = $id;  
