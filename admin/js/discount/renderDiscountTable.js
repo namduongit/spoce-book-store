@@ -4,21 +4,6 @@ import { lockDiscountData } from "./lockDiscountData.js";
 import { filterDiscount } from "./filterDiscountData.js";
 
 // Hàm cập nhật lại dữ liệu cho bảng khuyến mãi
-<<<<<<< HEAD
-export async function renderDiscountTable(pageIsSelected = 1) {
-  try {
-    // Lấy dữ liệu từ API
-    const data = await filterDiscount(pageIsSelected);
-    // console.log("Dữ liệu khuyến mãi:", data.discountList);
-    if (!data || !data.discountList || data.discountList.length === 0) {
-      console.log("Không có dữ liệu");
-      return;
-    }
-    // Biến chứa đối tượng bảng khuyến mãi
-    const bodyInDiscountTable = document.querySelector(
-      ".main__data > .main__table.discount > tbody"
-    );
-=======
 export async function renderDiscountTable(currentPage) {
   // Lấy dữ liệu từ API
   const data = (await filterDiscount(currentPage)) || [];
@@ -26,7 +11,6 @@ export async function renderDiscountTable(currentPage) {
   const bodyInDiscountTable = document.querySelector(
     ".main__data > .main__table.discount > tbody"
   );
->>>>>>> 9f91f476e8d32989051dad3408d87fcb1af2d279
 
   // Chuyển đổi dữ liệu thành các thẻ html
   let html = ``;
@@ -38,15 +22,13 @@ export async function renderDiscountTable(currentPage) {
             <td>${data[i].type}</td>
             <td>${data[i].dateStart}</td>
             <td>${data[i].dateEnd}</td>
-            <td><span ${
-              data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
-            }>${data[i].status}</span></td>
+            <td><span ${data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
+      }>${data[i].status}</span></td>
             <td>
               <i class="fa-solid fa-circle-info"></i>
               <i class="fa-solid fa-pen-to-square"></i>
-              <i class="fa-solid fa-${
-                data[i].status === "Hoạt động" ? "lock" : "unlock"
-              }"></i>
+              <i class="fa-solid fa-${data[i].status === "Hoạt động" ? "lock" : "unlock"
+      }"></i>
             </td>
         </tr>
       `;
@@ -96,7 +78,5 @@ export async function renderDiscountTable(currentPage) {
       });
     });
   }
-  } catch (error) {
-    console.error("An error occurred while rendering the discount table:", error);
-  }
-}
+} 
+

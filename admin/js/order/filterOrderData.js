@@ -67,12 +67,6 @@ export async function filterOrder(currentPage) {
   try {
     let response = await fetch(`api/orders/list.php?${params.toString()}`);
 
-<<<<<<< HEAD
-    let data = await response.text();
-    // console.log("Dữ liệu nhận được:", data);
-    // await paginationOrder(data.pageCount); // nếu có
-    return data.orderList;
-=======
     if (!response.ok) {
       throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
     }
@@ -85,7 +79,6 @@ export async function filterOrder(currentPage) {
     );
 
     return responseJSON.data;
->>>>>>> 9f91f476e8d32989051dad3408d87fcb1af2d279
   } catch (error) {
     alert("Lỗi khi lấy dữ liệu: " + error.message);
     console.log(error);

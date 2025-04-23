@@ -70,6 +70,10 @@ $addressToShip = isset($_GET['addressToShip']) ? trim($_GET['addressToShip']) : 
 $status = isset($_GET['status']) ? trim($_GET['status']) : '';
 $orderByColumn = isset($_GET['orderByColumn']) ? trim($_GET['orderByColumn']) : 'maDonHang';
 $orderType = isset($_GET['orderType']) ? trim($_GET['orderType']) : 'ASC';
+
+
+$month = isset($_GET['month']) ? trim($_GET['month']) : 1;
+$year = isset($_GET['year']) ? trim($_GET['year']) : 1;
 if (!empty($id)) {
     $conditions[] = "(donHang.maDonHang = :id)";
     $params[':id'] = $id;  

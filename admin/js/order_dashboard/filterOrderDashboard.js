@@ -20,9 +20,11 @@ export async function filterOrderDashboard(currentPage) {
     .value.trim();
 
   let find = findValue !== "" ? findValue : "";
+
   let orderBy = "maNguoiDung",
     orderType = "ASC",
     sortFor = "nguoiDung";
+
   switch (sortValue) {
     case "ID khách hàng giảm dần":
       orderType = "DESC";
@@ -38,6 +40,7 @@ export async function filterOrderDashboard(currentPage) {
       sortFor = "donHang";
       break;
   }
+
   let dateStart = dateStartValue !== "" ? dateStartValue : "";
   let dateEnd = dateEndValue !== "" ? dateEndValue : "";
   let limit = limitValue ? Number(limitValue) : 12;
@@ -46,6 +49,7 @@ export async function filterOrderDashboard(currentPage) {
 
   let userParams = new URLSearchParams();
   let orderParams = new URLSearchParams();
+
   // Dành cho api người dùng
   if (find) userParams.append("id", find);
   if (sortFor === "nguoiDung") {
@@ -54,6 +58,8 @@ export async function filterOrderDashboard(currentPage) {
   }
   userParams.append("limit", limit);
   userParams.append("offset", offset);
+
+
   // Dành cho api đơn hàng
   if (dateStart) orderParams.append("createStart", dateStart);
   if (dateEnd) orderParams.append("createEnd", dateEnd);
@@ -68,49 +74,77 @@ export async function filterOrderDashboard(currentPage) {
         "Lỗi khi lấy dữ liệu! HTTP Status: " + responseUser.status
       );
     }
+    // Dữ liệu tất cả người dùng
     let responseUserJSON = await responseUser.json();
 
-    // ...
-    const usersWithOrders = await Promise.all(
-      responseUserJSON.data.map(async (user) => {
-        const res = await fetch(
-          `api/orders/listBase.php?customerId=${
-            user.id
-          }&${orderParams.toString()}`
-        );
 
-        const orderData = await res.json();
-        let ordersBuyValue = 0,
-          pricesBuyValue = 0,
-          ordersCancelValue = 0,
-          pricesCancelValue = 0;
-        if (orderData.data) {
-          for (let i = 0; i < orderData.data.length; i++) {
-            if (
-              orderData.data[i].status === "Đã giao hàng" &&
-              orderData.data[i].payStatus === "Đã thanh toán"
-            ) {
-              ordersBuyValue += 1;
-              pricesBuyValue += orderData.data[i].total;
-            } else if (
-              orderData.data[i].status === "Đã hủy đơn" &&
-              orderData.data[i].payStatus === "Chưa thanh toán"
-            ) {
-              ordersCancelValue += 1;
-              pricesCancelValue += orderData.data[i].total;
-            }
+    const responseOrder = await fetch('api/orders/listBaseFilter.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        data: responseUserJSON['data'],
+        createStart: dateStart,
+        createEnd: dateEnd
+      })
+    });
+
+    const dataResOrder = await responseOrder.json();
+    console.log(dataResOrder);
+
+    const usersWithOrders = [];
+    responseUserJSON['data'].map((user) => {
+      let dataOrder = [];
+      let ordersBuyValue = 0,
+        pricesBuyValue = 0,
+        ordersCancelValue = 0,
+        pricesCancelValue = 0;
+
+      // usersWithOrders.push(user);
+      dataResOrder['data'].map((order) => {
+        if (user['id'] === order['customerId']) {
+          dataOrder.push(user);
+          console.log(order)
+
+
+          if (
+            order.status === "Đã giao hàng" &&
+            order.payStatus === "Đã thanh toán"
+          ) {
+            ordersBuyValue += 1;
+            pricesBuyValue += order.total;
+          } else if (
+            order.status === "Đã hủy đơn" &&
+            order.payStatus === "Chưa thanh toán"
+          ) {
+            ordersCancelValue += 1;
+            pricesCancelValue += order.total;
           }
         }
+      });
 
-        return {
-          ...user,
+      if (dataOrder.length > 0) {
+        usersWithOrders.push({
+          userId: user['id'],
+          // orders: dataOrder,
           ordersBuy: ordersBuyValue,
           pricesBuy: pricesBuyValue,
           ordersCancel: ordersCancelValue,
-          pricesCancel: pricesCancelValue,
-        };
-      })
-    );
+          pricesCancel: pricesCancelValue
+        });
+      }
+
+    });
+
+    let ordersBuyValue = 0,
+      pricesBuyValue = 0,
+      ordersCancelValue = 0,
+      pricesCancelValue = 0;
+
+
+    console.log(usersWithOrders);
+
     // Sắp xếp lại dữ liệu
     if (sortFor === "donHang") {
       if (sortValue === "Tổng đơn mua tăng dần") {

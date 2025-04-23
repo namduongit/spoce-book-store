@@ -178,4 +178,28 @@ class app_models_DonHang extends app_libs_DBConnection
             'params' => $params
         ])->select_one()['total'];
     }
+
+    public function filterOrderUser($userId, $createStart, $createEnd) {
+        $where = 'maKhachHang = ?';
+        $params = [$userId];
+    
+        if (!empty($createStart) && !empty($createEnd)) {
+            $where .= ' AND ngayTaoDon >= ? AND ngayTaoDon <= ?';
+            $params[] = $createStart;
+            $params[] = $createEnd;
+        } elseif (!empty($createStart)) {
+            $where .= ' AND ngayTaoDon >= ?';
+            $params[] = $createStart;
+        } elseif (!empty($createEnd)) {
+            $where .= ' AND ngayTaoDon <= ?';
+            $params[] = $createEnd;
+        }
+    
+        return $this->building_queryParam([
+            'where' => $where,
+            'params' => $params
+        ])->select();
+    }
+    
+    
 }

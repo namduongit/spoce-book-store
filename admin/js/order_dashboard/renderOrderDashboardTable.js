@@ -19,7 +19,7 @@ export async function renderOrderDashboardTable(currentPage) {
   for (let i = 0; i < data.length; i++) {
     html += `
         <tr>
-            <td>${data[i].id}</td>
+            <td>${data[i].userId}</td>
             <td>${data[i].ordersBuy}</td>
             <td>${vietnamMoneyFormat(data[i].pricesBuy)}</td>
             <td>${data[i].ordersCancel}</td>
