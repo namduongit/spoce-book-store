@@ -34,9 +34,9 @@
     <link rel="stylesheet" href="public/css/toast.css">
     <link rel="stylesheet" href="public/css/spinner.css">
     <link rel="stylesheet" href="public/css/base.css">
-    <link rel="stylesheet" href="public/css/responsive.css">
-    <link rel="stylesheet" href="public/css/style.css">
 
+    <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="public/css/responsive.css">
     <!-- Nhúng các thư viện Js -->
     <script type="module" src="public/js/auth/authMain.js" defer></script>
     <script type="module" src="public/js/book/bookMain.js" defer></script>
@@ -157,7 +157,14 @@
 
     <main class="body">
         <div class="body__container container d-flex just-content-spbt">
+            <!--  -->
+            <button class="filter-toggle" onclick="toggleFilter()">
+                <i class="fa fa-bars"></i> Lọc
+            </button>
 
+            <!-- Overlay nền mờ -->
+            <div class="overlay-filter" onclick="toggleFilter()"></div>
+            <!--  -->
             <section class="book-filter">
                 <div class="book-filter__title pd-filter">Lọc sản phẩm</div>
                 <div class="book-filter__list">
@@ -356,7 +363,7 @@
                             ?>
                         </select>
                     </div>
-                    
+
                     <div class="book-category__sort-item">
                         <label for="book-status">Trạng thái: </label>
                         <select name="" id="book-status">
@@ -452,7 +459,7 @@
 
     <!-- Lịch sử mua hàng của khách hàng -->
     <div class="order-history hide-item">
-        
+
     </div>
 
     <div class="checkout"></div>
@@ -462,7 +469,7 @@
 
     <div class="footer-info hide-item">
         <div class="footer-info__container">
-            
+
         </div>
     </div>
 
@@ -490,24 +497,24 @@
                     <div class="footer__top-item">
                         <h3>CHẤP NHẬN THANH TOÁN</h3>
                         <div class="footer__payment-image-container">
-                            <img src="public/images/footer_logo_payment_1.png" alt="payment1"> 
-                            <img src="public/images/footer_logo_payment_2.png" alt="payment2"> 
-                            <img src="public/images/footer_logo_payment_3.png" alt="payment3"> 
+                            <img src="public/images/footer_logo_payment_1.png" alt="payment1">
+                            <img src="public/images/footer_logo_payment_2.png" alt="payment2">
+                            <img src="public/images/footer_logo_payment_3.png" alt="payment3">
                         </div>
                     </div>
                     <div class="footer__top-item">
                         <h3>ĐỐI TÁC VẬN CHUYỂN</h3>
                         <div class="footer__payment-image-container-two">
-                            <img src="public/images/footer_logo_shipment_2.png" alt="shipment2"> 
-                            <img src="public/images/footer_logo_shipment_3.png" alt="shipment3"> 
+                            <img src="public/images/footer_logo_shipment_2.png" alt="shipment2">
+                            <img src="public/images/footer_logo_shipment_3.png" alt="shipment3">
                         </div>
                     </div>
                     <div class="footer__top-item">
                         <h3>ĐỐI TÁC BÁN HÀNG</h3>
                         <div class="footer__payment-image-container-three">
-                            <img src="public/images/footer_logo_seller_1.png" alt="seller1"> 
-                            <img src="public/images/footer_logo_seller_2.png" alt="seller2"> 
-                            <img src="public/images/footer_logo_seller_3.png" alt="seller3"> 
+                            <img src="public/images/footer_logo_seller_1.png" alt="seller1">
+                            <img src="public/images/footer_logo_seller_2.png" alt="seller2">
+                            <img src="public/images/footer_logo_seller_3.png" alt="seller3">
                         </div>
                     </div>
                 </div>
@@ -547,5 +554,13 @@
 
 </body>
 <script src="public/js/spinner.js"></script>
+<script>
+    function toggleFilter() {
+        const filter = document.querySelector('.book-filter');
+        const overlay = document.querySelector('.overlay-filter');
+        filter.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+</script>
 
 </html>
