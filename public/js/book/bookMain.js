@@ -127,21 +127,6 @@ document.addEventListener("DOMContentLoaded", async function() {
         });
     }
 
-    /* Lọc theo trạng thái */
-    let typeStatus = "";
-    const statusByCombox = document.querySelector("#book-status");
-
-    if (statusByCombox) {
-        const savedStatus = localStorage.getItem("statusProduct");
-        if (savedStatus) {
-            statusByCombox.value = savedStatus;
-        }
-
-        statusByCombox.addEventListener("change", function () {
-            typeStatus = statusByCombox.value;
-            localStorage.setItem("statusProduct", typeStatus);
-        });
-    }
     
     const currentUser = await getCurrentUser();
     //  Kiểm tra có giỏ hàng tồn dư không
@@ -191,7 +176,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
 
 async function showDetailProduct(product_id) {
-    const URL = `api/books/get.php?bookID=${product_id}`;
+    const URL = `api/books/getBookDetail.php?find=${product_id}`;
     showLoading();
     async function fetchData(URL) {
         try {
@@ -204,20 +189,9 @@ async function showDetailProduct(product_id) {
         }
     }
 
-    let productDetail = await fetchData(URL);
-    // console.log('Đang hiển thị sản phẩm', productDetail);
+    let productDetails = await fetchData(URL);
+    let productDetail = productDetails['data'][0];
 
-    if (!productDetail || productDetail.length === 0) {
-        document.querySelector('.show-detail-product').innerHTML = `<p>Không tìm thấy sản phẩm.</p>`;
-        return;
-    }
-
-    productDetail = productDetail.books[0];
-
-    let nameCategory = await getNameCategoryByID(productDetail['genreId']);
-    let nameAuthor = await getNameAuthorByID(productDetail['authorId']);
-    let nameCover = await getNameCoverByID(productDetail['coverTypeId']);
-    let namePublisher = await getNamePublisherByID(productDetail['publisherId']);
     hideLoading();
 
     let detail_html = `
@@ -235,15 +209,14 @@ async function showDetailProduct(product_id) {
                             <b class="font-weight-bold">${productDetail['id']}</b>
                         </p>
                         <p class="show-detail-product__genre">Tác giả:
-                            <b class="font-weight-bold">${nameAuthor}</b>
+                            <b class="font-weight-bold">${productDetail['authorName']}</b>
                         </p>
                         <p class="show-detail-product__genre">Thể loại:
-                            <b class="font-weight-bold">${nameCategory}</b>
+                            <b class="font-weight-bold">${productDetail['categoryName']}</b>
                         </p>
                         <p class="show-detail-product__genre">
                             Giá bán:&nbsp;
-                            <b class="show-detail-product__price--old">${formatMoney(productDetail['originalPrice'])}</b>
-                            <b class="show-detail-product__price--new">${formatMoney(productDetail['sellingPrice'])}</b>
+                            <b class="show-detail-product__price--new">${formatMoney(productDetail['sellPrice'])}</b>
                         </p>
                     </div>
 
@@ -272,11 +245,11 @@ async function showDetailProduct(product_id) {
                         <p>${productDetail['description']}</p>
                 </div>
                     <ul class="show-detail-product__details hide-item">
-                        <li><strong>Số trang:</strong> ${productDetail['numberOfPages']} trang</li>
+                        <li><strong>Số trang:</strong> ${productDetail['pages']} trang</li>
                         <li><strong>Năm xuất bản:</strong> ${productDetail['publishYear']}</li>
                         <li><strong>Kích thước:</strong> ${productDetail['size']}</li>
-                        <li><strong>Loại bìa:</strong>  ${nameCover}</li>
-                        <li><strong>Nhà xuất bản:</strong> ${namePublisher}</li>
+                        <li><strong>Loại bìa:</strong>  ${productDetail['coverName']}</li>
+                        <li><strong>Nhà xuất bản:</strong> ${productDetail['publisherName']}</li>
                     </ul>
             </div>
             <div class="show-detail-product__close" onclick="closeDetailProduct()">X</div>

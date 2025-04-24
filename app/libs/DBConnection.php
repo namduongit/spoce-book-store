@@ -9,10 +9,10 @@
 
     class app_libs_DBConnection
     {
-        protected $dsn = "mysql:host=152.42.173.216;port=3306;dbname=bookStore;charset=utf8";
-        // protected $dsn = "mysql:host=localhost;port=3306;dbname=bookStore;charset=utf8";
-        protected $username = "bookStore";
-        protected $password = "bookStore";
+        // protected $dsn = "mysql:host=152.42.173.216;port=3306;dbname=bookStore;charset=utf8";
+        protected $dsn = "mysql:host=localhost;port=3306;dbname=bookStore;charset=utf8";
+        protected $username = "root";
+        protected $password = "NDuong205";
 
         protected $table_name = 'default_table';
         // Mảng lưu trữ các param được dùng để truy vấn
@@ -73,12 +73,6 @@
         public function query($sql, $param = [])
         {
             if (self::$connection == null) self::$connection = $this->open_connect();
-            // echo '<pre>';
-            // print_r($param);
-            // echo '</pre>';
-            // die();
-            // params là array
-
 
             $query = self::$connection->prepare($sql);
             $query->execute(is_array($param) ? $param : []);

@@ -356,16 +356,6 @@
                             ?>
                         </select>
                     </div>
-                    
-                    <div class="book-category__sort-item">
-                        <label for="book-status">Trạng thái: </label>
-                        <select name="" id="book-status">
-                            <option value="base" selected>Tất cả</option>
-                            <option value="has">Còn hàng</option>
-                            <option value="nohas">Tạm ngưng</option>
-                        </select>
-                    </div>
-
 
                     <div class="book-category__sort-item">
                         <label for="sort-combobox">Sắp xếp theo: </label>

@@ -380,7 +380,7 @@ function showFormUser(type) {
                     });
     
                     if (data.success === true) {
-                        setCookie('isLogin', 'd48c6bc91a28e768df710085e917db05', 1);
+                        setCookie('isLogin', data.session_id, 1);
                         setTimeout(() => {
                             resetToOriginParam();
                             window.location.href = '/';

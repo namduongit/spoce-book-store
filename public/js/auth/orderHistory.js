@@ -123,17 +123,17 @@ export async function showOrderHistory() {
         });
     } else {
         let orderString = '';
-        
-        for (let i=0; i<orderList.length; i++) {
+
+        for (let i = 0; i < orderList.length; i++) {
             let cancelButtonString;
 
             // Trạng thái là chờ xác nhận sẽ có nút hủy đơn hàng
             if (orderList[i].trangThai === 'Đang chờ xác nhận') {
-               cancelButtonString = `<button class="order-history__cancel-btn" data-id="${orderList[i].maDonHang}">Hủy đơn</button>`;
+                cancelButtonString = `<button class="order-history__cancel-btn" data-id="${orderList[i].maDonHang}">Hủy đơn</button>`;
             } else {
                 cancelButtonString = '';
             }
-             
+
 
             orderString += `
             <tr class="order-history__order">
@@ -148,7 +148,7 @@ export async function showOrderHistory() {
                 </td>
             </tr>
             `;
-            
+
         }
 
         let orderPageString = `
@@ -232,7 +232,7 @@ export async function showOrderHistory() {
                     let data = new URLSearchParams();
                     data.append("id", orderId);
                     data.append("status", "Đã hủy đơn");
-            
+
                     // Tạo request đến file update.php để cập nhật dữ liệu
                     fetch("api/orders/update.php", {
                         method: "POST",
@@ -241,39 +241,39 @@ export async function showOrderHistory() {
                         },
                         body: data.toString(),
                     })
-                    .then(response => {
-                        if (!response.ok) {
-                            console.log("Error");
-                        }
-                        return response.json();
-                    })
-                    .then (data => {
-                        hideLoading();
+                        .then(response => {
+                            if (!response.ok) {
+                                console.log("Error");
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            hideLoading();
 
-                        // Hiển thị toast thông báo thành công
-                        toast({
-                            title: "Thông báo",
-                            message: data.message,
-                            type: data.success === true ? 'success' : 'warning',
-                            duration: 3000
-                        });
+                            // Hiển thị toast thông báo thành công
+                            toast({
+                                title: "Thông báo",
+                                message: data.message,
+                                type: data.success === true ? 'success' : 'warning',
+                                duration: 3000
+                            });
 
-                        // Hiển thị trang đơn hàng lại
-                        showOrderHistory();
-                    })
-                    .catch(error => {
-                        hideLoading();
-                    })
+                            // Hiển thị trang đơn hàng lại
+                            showOrderHistory();
+                        })
+                        .catch(error => {
+                            hideLoading();
+                        })
                 }
             });
         });
-    }   
+    }
 }
 
 function makePagination(numberOfPages) {
     let paginationContainer = document.querySelector(".order-pagination");
     paginationContainer.innerHTML = "";
-    
+
     // Nếu chỉ có một trang thì không tạo phân trang
     if (numberOfPages <= 1) {
         return;
@@ -310,7 +310,7 @@ function makePagination(numberOfPages) {
 
         paginationContainer.appendChild(firstPageButton);
     }
- 
+
 
     if (page > 3) {
         let dotText = document.createElement("span");
@@ -344,7 +344,7 @@ function makePagination(numberOfPages) {
         dotText.textContent = " ... ";
         dotText.classList.add("pagination-dots");
         paginationContainer.appendChild(dotText);
-    } 
+    }
 
 
     if (page < numberOfPages - 1) {
@@ -424,7 +424,7 @@ async function showOrderDetail(orderId) {
         let totalPrice = 0;
 
         // Với mỗi chi tiết đơn hàng, tiến hành fetch dữ liệu sách của chi tiết đó để hiện thị lên chi tiết đơn hàng
-        for (let i=0; i<orderDetailResult.length; i++) {
+        for (let i = 0; i < orderDetailResult.length; i++) {
             let bookResponse = await fetch(`api/books/get.php?bookID=${orderDetailResult[i].bookId}`);
             let bookResult = await bookResponse.json();
             let book = bookResult.books[0];
@@ -495,9 +495,9 @@ async function showOrderDetail(orderId) {
         document.querySelector('.order-detail__back-to-order-history').addEventListener('click', async () => {
             await showOrderHistory();
         });
-        
+
     }
-    
+
     // Cập nhật lại URL với ID của đơn hàng đang hiển thị chi tiết đơn hàng
     url.set("orderId", orderId)
     history.pushState(null, '', window.location.pathname + '?' + url.toString());

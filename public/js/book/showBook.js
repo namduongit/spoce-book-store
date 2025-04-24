@@ -17,7 +17,6 @@ function formatNumber(numberString) {
 
 document.addEventListener("DOMContentLoaded", function () {
   const categoryType = document.getElementById("type-category");
-  const statusType = document.getElementById("book-status");
   const sortType = document.getElementById("sort-combobox");
   const pageSizeSelect = document.getElementById("page-show-by");
   const minPrice = formatNumber(document.getElementById('min-price').innerText);
@@ -28,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       showLoading();
       const categoryValue = categoryType.value !== "all-category" ? categoryType.value : "";
-      const statusValue = statusType.value !== "base" ? statusType.value : "";
       const sortValue = sortType.value !== "base" ? sortType.value : "";
       const pageSizeValue = parseInt(pageSizeSelect.value);
 
@@ -48,7 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
       let queryParams = [];
 
       if (categoryValue) queryParams.push(`cateId=${categoryValue}`);
-      if (statusValue) queryParams.push(`bookStatus=${statusValue === "has" ? "Còn hàng" : "Tạm ngưng"}`);
       if (sortValue) queryParams.push(`orderBy=${sortValue}`);
       if (pageSizeValue) queryParams.push(`pageSize=${pageSizeValue}`);
       if (page) queryParams.push(`page=${page}`);
@@ -94,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
     allproduct.forEach((product) => {
       let statusProduct = product["status"];
       let className =
-        statusProduct === "Hoạt động"
+        statusProduct === "Đang bán"
           ? "book-category__item-status--true"
           : "book-category__item-status--false";
 
@@ -215,11 +212,6 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchBooks();
   });
 
-  statusType.addEventListener("change", () => {
-    page = 1;
-    localStorage.setItem("currentPage", page);
-    fetchBooks();
-  });
 
   sortType.addEventListener("change", () => {
     page = 1;

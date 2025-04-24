@@ -86,6 +86,7 @@ async function viewCart(type) {
         return;
     }
 
+
     if (currentCartUser.length === 0) {
         cartDetail.innerHTML = `
             <div class="topbar__cart-detail">
@@ -122,7 +123,23 @@ async function viewCart(type) {
     let cartHTML = '';
     let totalPrice = 0;
 
+    const responseCurrentCart = await fetch('api/books/listProductDetails.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            data: {
+                "cart": currentCartUser
+            }
+        })
+    });
+
+    let dataCurrentCart = await responseCurrentCart.json();
+    dataCurrentCart = dataCurrentCart['data'];
+
     for (const productItem of currentCartUser) {
+        // Xóa sản phẩm có số lượng là 0
         if (productItem.quantity == 0 && currentUser != null) {
             fetch('api/carts/remove.php', {
                 method: 'POST',
@@ -149,30 +166,31 @@ async function viewCart(type) {
 
             continue;
         }
+    }
 
-        let product = await getBookByID(currentUser != null ? productItem['bookId'] : productItem['id']);
-        product = product['books'][0];
-        let nameGenre = await getNameCategoryByID(product.genreId);
+    for (const productItem of dataCurrentCart) {
+        let details = productItem['details'][0];
+
         cartHTML += `
             <tr>
-                <td><img src="../public/uploads/books/${product.image}" alt="${product.name}"></td>
+                <td><img src="../public/uploads/books/${details.hinhAnh}" alt="${details.tenSach}"></td>
                 <td>
                     <p class="topbar__product-info">
-                        <a href="#">${product.name}</a>
+                        <a href="#">${details.tenSach}</a>
                         <br>
-                        <span>${product.id} / ${nameGenre} / ${formatMoney(product.sellingPrice)}</span>
+                        <span>${details.maSach} / ${details.tenTheLoai} / ${formatMoney(details.giaBan)}</span>
                     </p>
                     <div class="topbar__cart-view-amountprice-holder">
                         <span>${productItem.quantity}</span>
-                        <div>${formatMoney(product.sellingPrice * productItem.quantity)}</div>
+                        <div>${formatMoney(details.giaBan * productItem.quantity)}</div>
                     </div>
-                    <div class="topbar__product-cancel" onclick="removeFromCart(${product.id})">
+                    <div class="topbar__product-cancel" onclick="removeFromCart(${details.maSach})">
                         <i class="fa-solid fa-xmark"></i>
                     </div>
                 </td>
             </tr>
         `;
-        totalPrice += productItem.quantity * product.sellingPrice;
+        totalPrice += productItem.quantity * details.giaBan;
     }
 
     let HTML = `
@@ -603,6 +621,7 @@ async function checkOutBill() {
     let HTMLCheckOut = ``;
     let totalPrice = 0;
     showLoading();
+
     for (const item of currentCart) {
         let productItem = await getBookByID(item.bookId);
         productItem = productItem['books'][0];

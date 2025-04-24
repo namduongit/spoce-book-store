@@ -55,7 +55,6 @@ $joins = [
 ];
 $conditions = [];
 $params = [];
-
 $limit = isset($_GET['limit']) ? trim($_GET['limit']) : PHP_INT_MAX;
 $offset = isset($_GET['offset']) ? trim($_GET['offset']) : '0';
 
@@ -67,32 +66,11 @@ $cover = isset($_GET['cover']) ? trim($_GET['cover']) : '';
 $status = isset($_GET['status']) ? trim($_GET['status']) : '';
 $orderByColumn = isset($_GET['orderByColumn']) ? trim($_GET['orderByColumn']) : 'maSach';
 $orderType = isset($_GET['orderType']) ? trim($_GET['orderType']) : 'ASC';
-if (!empty($find)) {
-    $conditions[] = "(sach.maSach = :id or sach.tenSach like :name)";
-    $params[':id'] = $find;
-    $params[':name'] = "%$find%";
-}
-if (!empty($author)) {
-    $conditions[] = "tacGia.tenTacGia like :author";
-    $params[':author'] = "%$author%";
-}
-if (!empty($category)) {
-    $conditions[] = "theLoai.tenTheLoai like :category";
-    $params[':category'] = "%$category%";
-}
-if (!empty($publisher)) {
-    $conditions[] = "nhaXuatBan.tenNXB like :publisher";
-    $params[':publisher'] = "%$publisher%";
-}
-if (!empty($cover)) {
-    $conditions[] = "loaiBia.tenLoaiBia like :cover";
-    $params[':cover'] = "%$cover%";
-}
-if (!empty($status)) {
-    $conditions[] = "sach.trangThai = :status";
-    $params[':status'] = $status;
-}
 
+if (!empty($find)) {
+    $conditions[] = "(sach.maSach = :id)";
+    $params[':id'] = $find;
+}
 
 $db = new app_libs_DBConnection();
 $result = $db->joinTables($columns, $tables, $joins, $conditions, $orderByColumn, $orderType, $limit, $offset, $params);
