@@ -128,8 +128,8 @@ export async function showOrderHistory() {
             let cancelButtonString;
 
             // Trạng thái là chờ xác nhận sẽ có nút hủy đơn hàng
-            if (orderList[i].trangThai === 'Đang chờ xác nhận') {
-                cancelButtonString = `<button class="order-history__cancel-btn" data-id="${orderList[i].maDonHang}">Hủy đơn</button>`;
+            if (orderList[i].trangThai === 'Đang chờ xác nhận' && orderList[i].trangThaiThanhToan === 'Chưa thanh toán') {
+               cancelButtonString = `<button class="order-history__cancel-btn" data-id="${orderList[i].maDonHang}">Hủy đơn</button>`;
             } else {
                 cancelButtonString = '';
             }
