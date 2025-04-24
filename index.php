@@ -386,10 +386,10 @@
                     <div class="book-category__sort-item">
                         <label for="page-show-by">Hiển thị theo: </label>
                         <select name="" id="page-show-by">
-                            <option value="10" selected>Mặc định</option>
+                            <!-- <option value="10" selected>Mặc định</option>
                             <option value="15">15 sản phẩm</option>
                             <option value="20">20 sản phẩm</option>
-                            <option value="25">25 sản phẩm</option>
+                            <option value="25">25 sản phẩm</option> -->
                         </select>
                     </div>
 
@@ -561,6 +561,29 @@
         filter.classList.toggle('active');
         overlay.classList.toggle('active');
     }
+    // function hiển thị sách theo breakpoint
+    function updateSelectOptionsForBreakpoint() {
+        const select = document.getElementById('page-show-by');
+
+        if (window.innerWidth <= 768) {
+            select.innerHTML = `
+        <option value="9" selected>Mặc định</option>
+        <option value="12">12 sản phẩm</option>
+        <option value="18">18 sản phẩm</option>
+        <option value="24">24 sản phẩm</option>
+      `;
+        } else {
+            select.innerHTML = `
+        <option value="10" selected>Mặc định</option>
+        <option value="15">15 sản phẩm</option>
+        <option value="20">20 sản phẩm</option>
+        <option value="25">25 sản phẩm</option>
+      `;
+        }
+    }
+
+    window.addEventListener('resize', updateSelectOptionsForBreakpoint);
+    window.addEventListener('DOMContentLoaded', updateSelectOptionsForBreakpoint);
 </script>
 
 </html>

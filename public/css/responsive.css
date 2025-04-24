@@ -48,9 +48,9 @@ body {
     background-color: unset;
   }
   .topbar__cart-detail-holder {
-    top: 32px;
-    right: 40px;
-    width: 300px;
+    top: 47px;
+    right: 625px;
+    width: 280px;
   }
   .topbar__cart-content > p {
     display: none;
@@ -93,12 +93,6 @@ body {
   /* body */
   .body__container {
     position: relative;
-  }
-  .book-filter {
-    /* display: none; */
-    width: 30% !important;
-    position: absolute;
-    z-index: 10;
   }
   .body__container .book-category {
     width: 100%;
@@ -210,7 +204,7 @@ body {
     position: absolute;
     top: 105px;
     left: -91px;
-    z-index: 100;
+    z-index: 3;
     border-radius: 5px;
   }
 
@@ -219,10 +213,7 @@ body {
     position: fixed;
     top: 0;
     left: -100%;
-    width: 80%;
-    max-width: 350px;
-    height: 100vh;
-    background-color: #ffffff;
+    width: 35% !important;
     overflow-y: auto;
     transition: left 0.4s ease;
     z-index: 1001;
@@ -245,6 +236,18 @@ body {
 
   .overlay-filter.active {
     display: block;
+  }
+  /* trang thanh toán */
+  .show-cart__checkoutbox {
+    width: 50%;
+  }
+
+  .left-container__warpper .left-container__header {
+    display: block;
+  }
+  .left-container__warpper .left-container__header .left-container__button {
+    margin-top: 10px;
+    padding: 13px;
   }
 }
 /* ============================== ĐIỆN THOẠI (767px) ============================== */
