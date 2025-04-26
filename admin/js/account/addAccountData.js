@@ -3,6 +3,16 @@ import { updateAddressSelect } from "../../../api/address/updateAddressSelect.js
 import { renderAccountTable } from "./renderAccountTable.js";
 import { toast } from "../../../public/js/toast.js";
 import { showNotification } from "../dialogMessage.js";
+// import { getRolePrivilege } from "../changeMainContent.js";
+async function getRolePrivilege() {
+  try {
+    const response = await fetch("api/roles/list.php");
+    const data = await response.json(); // nếu server trả JSON
+    return data;
+  } catch (error) {
+    console.error("Fetch failed:", error);
+  }
+}
 // Hàm hiện dialog cho việc "chọn" địa chỉ
 function showAddressSelectDialog() {
   // Tạo một dialog để thêm một người dùng
@@ -169,7 +179,7 @@ export async function addAccountData() {
 
     // Thêm vào body
     document.body.appendChild(addDialog);
-
+    renderPrivilegesSelect();
     // Hiển thị addDialog
     addDialog.showModal();
 
@@ -260,7 +270,7 @@ export async function addAccountData() {
           .value.trim();
         // Regex kiểm tra địa chỉ hợp lệ: "Số nhà Tên đường, Phường ..., Quận/Huyện ..., Tỉnh/TP ..."
         const addressFormatRegex =
-          /^.+?,\s*(phường|Phường)\s+.+?,\s*(quận|Quận|huyện|Huyện)\s+.+?,\s*(tỉnh|Tỉnh|tp|TP|Thành Phố|Thành phố)\.?\s+.+$/;
+          /^.+?,\s*(phường|Phường)\s+.+?,\s*(quận|Quận|huyện|Huyện|tp|TP|Thành Phố|Thành phố)\s+.+?,\s*(tỉnh|Tỉnh|tp|TP|Thành Phố|Thành phố)\.?\s+.+$/;
 
         const addressUser = address.split(",");
         const numberHomeAndStreetName = addressUser[0];
@@ -305,7 +315,9 @@ export async function addAccountData() {
           }
         }
 
-        let yes = await showNotification("Bạn có đồng ý thêm sách này không?");
+        let yes = await showNotification(
+          "Bạn có đồng ý thêm người dùng này không?"
+        );
         if (!yes) return;
 
         const formData = new URLSearchParams();
@@ -404,4 +416,27 @@ export async function addAccountData() {
         addButton.classList.remove("active");
       });
   });
+}
+async function renderPrivilegesSelect() {
+  try {
+    const privileges = await getRolePrivilege();
+    if (!privileges) return; // Kiểm tra dữ liệu trả về
+
+    const privilegeSelect = document.getElementById("add-account-privilege");
+
+    if (!privilegeSelect) return; // Nếu không tìm thấy phần tử <select>
+
+    // Xóa hết các <option> cũ
+    privilegeSelect.innerHTML =
+      '<option value="" selected>Chọn Nhóm quyền</option>';
+
+    privileges.data.forEach((privilege) => {
+      const option = document.createElement("option");
+      option.value = privilege.id || ""; // Giá trị tùy chỉnh (có thể là `id` của quyền)
+      option.textContent = privilege.name || "Không có tên"; // Tên của quyền (hoặc giá trị mặc định nếu không có tên)
+      privilegeSelect.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Lỗi khi tải dữ liệu quyền:", error);
+  }
 }

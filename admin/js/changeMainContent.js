@@ -20,7 +20,15 @@ import { fetchData } from "../../public/js/book/getDataBook.js";
 // import { updateAddressSelect } from "../../../api/address/updateAddressSelect.js";
 // import { renderPrivilegeTable } from "./privilege/renderPrivilegeTable.js";
 import { updatePrivilegeTable } from "./privilege/updatePrivilegeTable.js";
-
+async function getRolePrivilege() {
+  try {
+    const response = await fetch("api/roles/list.php");
+    const data = await response.json(); // nếu server trả JSON
+    return data;
+  } catch (error) {
+    console.error("Fetch failed:", error);
+  }
+}
 // Biến chứa nội dung sẽ thay đổi của menu tương ứng
 const mainContentMap = {
   profit_dashboard: `
@@ -337,10 +345,7 @@ const mainContentMap = {
         <input required="" type="text" id="privilege-slt-account" />
         <span><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Chọn Nhóm quyền</span>
         <ul>
-          <li>Quản lí</li>
-          <li>Nhân viên</li>
-          <li>Quản kho</li>
-          <li>Khách hàng</li> 
+          
         </ul>
       </div>
       <div class="main__status-slt main__select slt-form-1">
@@ -863,7 +868,7 @@ menuInSideBar.item(0).click();
 
 // Gán sự kiện cho từng mục ở sidebar
 menuInSideBar.forEach((item, i) => {
-  item.addEventListener("click", (e) => {
+  item.addEventListener("click", async (e) => {
     // Loại bỏ đi giá trị mặc định
     e.preventDefault();
 
@@ -887,7 +892,6 @@ menuInSideBar.forEach((item, i) => {
 
       // Thay đổi nội dung ở trang tương ứng
       mainContentDiv.innerHTML = mainContentMap[mainContentKey];
-
       // Đa phần thì trang nào cũng cần gọi hàm này
       selectFormEvents();
 
@@ -911,6 +915,7 @@ menuInSideBar.forEach((item, i) => {
       } else if (mainContentKey === "privilege") {
         updatePrivilegeTable();
       } else if (mainContentKey === "account") {
+        await renderPrivilegesAccount();
         updateAccountTable();
       } else if (mainContentKey === "supplier") {
         updateSupplierTable();
@@ -960,3 +965,32 @@ window.addEventListener("load", function () {
 //     ulElement.appendChild(li);
 //   });
 // }
+
+// render nhóm quyền người dùng
+async function renderPrivilegesAccount() {
+  console.log("hi");
+
+  const privileges = await getRolePrivilege();
+  console.log("privileges", privileges);
+
+  if (!privileges) return; // Nếu lỗi thì không làm gì
+
+  const privilegeUl = document.querySelector(
+    "#privilege-slt-account + span + ul"
+  );
+  console.log("privilegeUl", privilegeUl);
+  const privilegeInput = document.getElementById("privilege-slt-account");
+  console.log("privilegeInput", privilegeInput);
+
+  if (!privilegeUl || !privilegeInput) return;
+  privilegeUl.innerHTML = "";
+
+  privileges.data.forEach((privilege) => {
+    const li = document.createElement("li");
+    li.textContent = privilege.name;
+    li.addEventListener("click", () => {
+      privilegeInput.value = privilege.name;
+    });
+    privilegeUl.appendChild(li);
+  });
+}
