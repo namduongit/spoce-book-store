@@ -1,3 +1,21 @@
+<?php
+session_start();
+
+if (!isset($_SESSION["user"]) || !isset($_SESSION["role"])) {
+    include '../404-Page/index.php';
+    die();
+}
+
+$user = $_SESSION["user"];
+$role = $_SESSION["role"]["data"] ?? [];
+if (count($role) <= 0) {
+    include '../404-Page/index.php';
+    die();
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -42,108 +60,186 @@
         </a>
         <!-- Menu -->
         <ul class="sidebar__menu">
-            <li class="sidebar__item active">
-                <a href="/profit_dashboard" class="sidebar__action" data-main-content="profit_dashboard">
-                    <i class="icon fa-solid fa-dollar-sign"></i>
-                    <span class="text">Thống kê lợi nhuận</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="revenue_dashboard">
-                    <i class="icon fa-solid fa-money-bill-trend-up"></i>
-                    <span class="text">Thống kê doanh thu</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="input_ticket_dashboard">
-                    <i class="icon fa-solid fa-file-invoice-dollar"></i>
-                    <span class="text">Thống kê phiếu nhập</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="order_dashboard">
-                    <i class="icon fa-solid fa-hand-holding-dollar"></i>
-                    <span class="text">Thống kê đơn hàng</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="order">
-                    <i class="icon fa-solid fa-receipt"></i>
-                    <span class="text">Đơn hàng</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="discount">
-                    <i class="icon fa-solid fa-percent"></i>
-                    <span class="text">Phiếu giảm giá</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="privilege">
-                    <i class="icon fa-solid fa-users-line"></i>
-                    <span class="text">Nhóm quyền</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="account">
-                    <i class="icon fa-solid fa-user"></i>
-                    <span class="text">Người dùng</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="supplier">
-                    <i class="icon fa-solid fa-user-shield"></i>
-                    <span class="text">Nhà cung cấp</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="input_ticket">
-                    <i class="icon fa-solid fa-file-pen"></i>
-                    <span class="text">Phiếu nhập</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="book">
-                    <i class="icon fa-solid fa-book"></i>
-                    <span class="text">Sách</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="author">
-                    <i class="icon fa-solid fa-user-pen"></i>
-                    <span class="text">Tác giả</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="category">
-                    <i class="icon fa-solid fa-font-awesome"></i>
-                    <span class="text">Thể loại</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="cover">
-                    <i class="icon fa-solid fa-book-open"></i>
-                    <span class="text">Loại bìa</span>
-                </a>
-            </li>
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="publisher">
-                    <i class="icon fa-solid fa-user-tag"></i>
-                    <span class="text">Nhà xuất bản</span>
-                </a>
-            </li>
+            <?php
+
+            if (!isset($_SESSION["user"]) || !isset($_SESSION["role"])) {
+                include '../404-Page/index.php';
+                die();
+            }
+
+            $user = $_SESSION["user"];
+            $role = $_SESSION["role"]["data"] ?? [];
+            if (count($role) <= 0) {
+                include '../404-Page/index.php';
+                die();
+            }
+
+            $role = $_SESSION["role"]["data"] ?? [];
+            $printedPrivilegeIds = []; // Mảng lưu các privilegeId đã in
+
+            foreach ($role as $item) {
+                $privilegeId = $item["privilegeId"];
+
+                // Kiểm tra nếu privilegeId chưa được in
+                if (!in_array($privilegeId, $printedPrivilegeIds)) {
+
+                    if ($privilegeId == 1) {
+                        echo '
+                        <li class="sidebar__item active">
+                            <a href="/profit_dashboard" class="sidebar__action" data-main-content="profit_dashboard">
+                                <i class="icon fa-solid fa-dollar-sign"></i>
+                                <span class="text">Thống kê lợi nhuận</span>
+                            </a>
+                        </li>
+                        ';
+                    } else if ($privilegeId == 2) {
+                        echo '
+                        <li class="sidebar__item">
+                            <a href="#" class="sidebar__action" data-main-content="revenue_dashboard">
+                                <i class="icon fa-solid fa-money-bill-trend-up"></i>
+                                <span class="text">Thống kê doanh thu</span>
+                            </a>
+                        </li>
+                        ';
+                    } else if ($privilegeId == 3) {
+                        echo '
+                        <li class="sidebar__item">
+                            <a href="#" class="sidebar__action" data-main-content="input_ticket_dashboard">
+                                <i class="icon fa-solid fa-file-invoice-dollar"></i>
+                                <span class="text">Thống kê phiếu nhập</span>
+                            </a>
+                        </li>
+                        ';
+                    } else if ($privilegeId == 4) {
+                        echo '
+                        <li class="sidebar__item">
+                            <a href="#" class="sidebar__action" data-main-content="order_dashboard">
+                                <i class="icon fa-solid fa-hand-holding-dollar"></i>
+                                <span class="text">Thống kê đơn hàng</span>
+                            </a>
+                        </li>
+                        ';
+                    } else if ($privilegeId == 5) {
+                        echo '
+                        <li class="sidebar__item">
+                            <a href="#" class="sidebar__action" data-main-content="order">
+                                <i class="icon fa-solid fa-receipt"></i>
+                                <span class="text">Đơn hàng</span>
+                            </a>
+                        </li>
+                        ';
+                    } else if ($privilegeId == 6) {
+                        echo '
+                        <li class="sidebar__item">
+                            <a href="#" class="sidebar__action" data-main-content="discount">
+                                <i class="icon fa-solid fa-percent"></i>
+                                <span class="text">Phiếu giảm giá</span>
+                            </a>
+                        </li>
+                        ';
+                    } else if ($privilegeId == 7) {
+                        echo '
+                        <li class="sidebar__item">
+                            <a href="#" class="sidebar__action" data-main-content="privilege">
+                                <i class="icon fa-solid fa-users-line"></i>
+                                <span class="text">Nhóm quyền</span>
+                            </a>
+                        </li>
+                        ';
+                    } else if ($privilegeId == 8) {
+                        echo '
+                        <li class="sidebar__item">
+                            <a href="#" class="sidebar__action" data-main-content="account">
+                                <i class="icon fa-solid fa-user"></i>
+                                <span class="text">Người dùng</span>
+                            </a>
+                        </li>
+                        ';
+                    } else if ($privilegeId == 9) {
+                        echo '
+                        <li class="sidebar__item">
+                            <a href="#" class="sidebar__action" data-main-content="supplier">
+                                <i class="icon fa-solid fa-user-shield"></i>
+                                <span class="text">Nhà cung cấp</span>
+                            </a>
+                        </li>
+                        ';
+                    } else if ($privilegeId == 10) {
+                        echo '
+                        <li class="sidebar__item">
+                            <a href="#" class="sidebar__action" data-main-content="input_ticket">
+                                <i class="icon fa-solid fa-file-pen"></i>
+                                <span class="text">Phiếu nhập</span>
+                            </a>
+                        </li>
+                        ';
+                    } else if ($privilegeId == 11) {
+                        echo '
+                        <li class="sidebar__item">
+                            <a href="#" class="sidebar__action" data-main-content="book">
+                                <i class="icon fa-solid fa-book"></i>
+                                <span class="text">Sách</span>
+                            </a>
+                        </li>
+                        ';
+                    } else if ($privilegeId == 12) {
+                        echo '
+                        <li class="sidebar__item">
+                            <a href="#" class="sidebar__action" data-main-content="author">
+                                <i class="icon fa-solid fa-user-pen"></i>
+                                <span class="text">Tác giả</span>
+                            </a>
+                        </li>
+                        ';
+                    } else if ($privilegeId == 13) {
+                        echo '
+                        <li class="sidebar__item">
+                            <a href="#" class="sidebar__action" data-main-content="category">
+                                <i class="icon fa-solid fa-font-awesome"></i>
+                                <span class="text">Thể loại</span>
+                            </a>
+                        </li>
+                        ';
+                    } else if ($privilegeId == 14) {
+                        echo '
+                        <li class="sidebar__item">
+                            <a href="#" class="sidebar__action" data-main-content="cover">
+                                <i class="icon fa-solid fa-book-open"></i>
+                                <span class="text">Loại bìa</span>
+                            </a>
+                        </li>
+                        ';
+                    } else if ($privilegeId == 15) {
+                        echo '
+                        <li class="sidebar__item">
+                            <a href="#" class="sidebar__action" data-main-content="publisher">
+                                <i class="icon fa-solid fa-user-tag"></i>
+                                <span class="text">Nhà xuất bản</span>
+                            </a>
+                        </li>
+                        ';
+                    } else if ($privilegeId == 16) {
+                        echo '
+                       <li class="sidebar__item">
+                            <a href="#" class="sidebar__action" data-main-content="payment">
+                                <i class="icon fa-solid fa-money-check-dollar"></i>
+                                <span class="text">Thẻ thanh toán</span>
+                            </a>
+                        </li>
+                        ';
+                    }
+
+                    $printedPrivilegeIds[] = $privilegeId;
+                }
+            }
+            ?>
+
             <!-- <li class="sidebar__item">
                 <a href="#" class="sidebar__action">
                     <i class="icon fa-solid fa-right-from-bracket"></i>
                     <span class="text">Đăng xuất</span>
                 </a>
             </li> -->
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__action" data-main-content="payment">
-                    <i class="icon fa-solid fa-money-check-dollar"></i>
-                    <span class="text">Thẻ thanh toán</span>
-                </a>
-            </li>
         </ul>
     </sidebar>
 

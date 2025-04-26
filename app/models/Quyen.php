@@ -33,7 +33,6 @@ class app_models_Quyen extends app_libs_DBConnection {
         }
         // Câu SQL cập nhật
         $sql = "UPDATE " . $this->table_name . " SET " . implode(", ", $fieldValues) . " WHERE maQuyen = :maQuyen";
-
         // Thực thi câu lệnh SQL
         return $this->query($sql, $params);
     }

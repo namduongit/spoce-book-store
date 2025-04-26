@@ -6,7 +6,7 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 $id = isset($_POST['id']) ? $_POST['id'] : '';
-$status = isset($_POST['status']) ? $_POST['status'] : 'Hoạt động';
+// $status = isset($_POST['status']) ? $_POST['status'] : '';
 $updateAt = date("Y-m-d H:i:s");
 
 if (empty($id)) {
@@ -14,10 +14,15 @@ if (empty($id)) {
     exit;
 }
 
-$status = ($status === 'Hoạt động') ? 'Tạm dừng' : 'Hoạt động';
+// $status = $status == 'Tạm dừng' ? 'Hoạt động' : 'Tạm dừng';
+
+
 try {
     // Khởi tạo model sách
     $model = new app_models_Quyen();
+
+    $detail = $model->getRoleById($id);
+    $status = $detail['trangThai'] == 'Hoạt động' ? 'Tạm dừng' : 'Hoạt động';
 
     // Cập nhật trạng thái sách trong database
     $result = $model->updateRole(

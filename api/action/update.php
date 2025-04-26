@@ -18,6 +18,7 @@ $name = $payload['data']['name'];
 $status = $payload['data']['status'];
 $actionDetail = $payload['data']['action'];
 
+
 if (empty($name) || empty($status) || empty($roleId)) {
     echo json_encode([
         "success" => false,
@@ -36,6 +37,7 @@ if (!empty($name) || !empty($status)) {
     if (!empty($status)) $data['trangThai'] = $status;
     $update = $role_model->updateRole($roleId, $data);
 }
+
 
 // Bước 1: Xóa hết quyền cũ
 $resultDelete = $roleDetail_model->deleteRole($roleId);

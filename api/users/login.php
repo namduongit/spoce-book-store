@@ -157,12 +157,32 @@ try {
         "login_time" => time()
     ];
 
+    $responseDetailRole = [];
+    if ($user["maQuyen"] != null) {
+        $roleDetail_model = new app_models_ChiTietQuyen();
+        $result = $roleDetail_model->detailsRole($user["maQuyen"]);
+        if ($result) {
+            foreach($result as $item) {
+                $responseDetailRole[] = [
+                    "roleId" => $item['maQuyen'],
+                    "privilegeId" => $item['maChucNang'],
+                    "actionId" => $item['maHanhDong']
+                ];
+            }
+        }
+    }
+
+    $_SESSION["role"] = [
+        "data" => $responseDetailRole
+    ];
+
     http_response_code(200);
     echo json_encode([
         "success" => true,
         "message" => "Đăng nhập thành công!",
-        "session_id" => session_id(), // Debug session ID
-        "user" => $_SESSION["user"]
+        "session_id" => session_id(),
+        "user" => $_SESSION["user"],
+        "role" => $_SESSION['role']
     ]);
 } catch (Exception $e) {
     http_response_code(500);

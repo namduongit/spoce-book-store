@@ -15,8 +15,8 @@ export async function renderPrivilegeTable() {
     })
   });
   const data = await response.json();
-
   const role = data['data']['role'];
+  console.log(role)
 
   // Biến chứa đối tượng bảng Người dùng
   const bodyInPrivilegeTable = document.querySelector(

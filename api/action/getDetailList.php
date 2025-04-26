@@ -82,7 +82,6 @@ foreach ($privileges as $item) {
 }
 
 // Thông tin ứng với mã quyền
-
 $result = $role_model->getRoleById($maQuyen); 
 
 if ($result) {

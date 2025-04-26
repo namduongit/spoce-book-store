@@ -4,12 +4,10 @@ import { showNotification } from "../dialogMessage.js";
 import { toast } from "../../../public/js/toast.js";
 
 export function lockPrivilegeData(idPrivilegeSelected, statusPrivilegeSelected) {
-
-
   // Phải truy vấn từ CSDL thông qua idPrivilegeSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
-
   // Biến chứa đối tượng là nút "Khoá"
+  console.log(statusPrivilegeSelected)
   const lockButton = document.getElementById("lock-button-privilege");
 
   // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
@@ -79,7 +77,7 @@ export function lockPrivilegeData(idPrivilegeSelected, statusPrivilegeSelected) 
       );
 
       if (yes) {
-        const response = await lockPrivilege(parseInt(idPrivilegeSelected.innerText), statusPrivilegeSelected)
+        const response = await lockRole(parseInt(idPrivilegeSelected.innerText), statusPrivilegeSelected);
         toast({
           type: response['success'] ? 'success' : 'warning',
           title: 'Thông báo',

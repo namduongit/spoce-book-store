@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 }
 
 
-if (isset($_SESSION["user"])) {
+if (isset($_SESSION["user"]) && isset($_SESSION["role"])) {
     session_unset(); 
     session_destroy(); 
 
