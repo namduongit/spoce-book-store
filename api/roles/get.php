@@ -23,7 +23,7 @@ $power = $power_model->getRoleById($roleId); // Truyền $roleId vào để lấ
 if ($power) {
     echo json_encode([
         'response' => true,
-        'role' => [
+        'data' => [
             'id' => $power['maQuyen'],
             'name' => $power['tenQuyen'],
             'status' => $power['trangThai'],

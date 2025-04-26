@@ -1,16 +1,58 @@
 import { isNotFirstItemSelected } from "../selectEvents.js";
-import { clickToShowDatePicker, defaultDateSelected } from "../others.js";
 
 // Hàm thiết lập sự kiện Sửa một nhóm quyền cho bảng
-export function detailPrivilegeData(idPrivilegeSelected) {
+export async function detailPrivilegeData(idPrivilegeSelected) {
   // Phải truy vấn từ CSDL thông qua idPrivilegeSelected để lấy được dữ liệu của đối tượng hiện tại
   // ...
+  const idPrivilege = parseInt(idPrivilegeSelected.innerText);
+  const response = await fetch('api/action/getDetailList.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: new URLSearchParams({
+      'maQuyen': idPrivilege
+    })
+  });
+  const data = await response.json();
+
+  const action = data['data']['action'];
+  const feature = data['data']['feature'];
+  const dataRole = data['data']['dataRole'];
+  const detailRole = data['data']['detailRole'];
+
 
   // Biến chứa đối tượng là nút "Sửa"
   const detailButton = document.getElementById("detail-button-privilege");
 
   // Thêm class active thể hiện là nút được nhấn (vì dialog còn hiện)
   detailButton.classList.add("active");
+
+  let privilegeHTML = ``;
+  if (feature && Array.isArray(feature)) {
+    feature.forEach(dataItem => {
+      privilegeHTML += `
+      <tr data-privilege=${dataItem.id}>
+          <td>${dataItem.name}</td>
+          <td><input type="checkbox" data-action=${1} disabled></td>
+          <td><input type="checkbox" data-action=${2} disabled></td>
+          <td><input type="checkbox" data-action=${3} disabled></td>
+          <td><input type="checkbox" data-action=${4} disabled></td>
+          <td><input type="checkbox" data-action=${5} disabled></td>
+      </tr>
+      `;
+    })
+  }
+
+  let actionHTML = ``;
+
+  if (action && Array.isArray(action)) {
+    action.forEach(dataItem => {
+      actionHTML += `
+        <th width="15%">${dataItem.name}</th>
+      `;
+    });
+  }
 
   // Tạo một dialog để sửa một nhóm quyền
   const detailDialog = document.createElement("dialog");
@@ -29,18 +71,16 @@ export function detailPrivilegeData(idPrivilegeSelected) {
                   <div class="dialog__row">
                     <div class="dialog__form-group">
                         <label>Mã nhóm quyền</label>
-                        <input type="text" id="detail-privilege-id" readonly />
+                        <input type="text" id="detail-privilege-id" readonly value="${dataRole['id']}"/>
                     </div>
                     <div class="dialog__form-group full">
                       <label>Tên nhóm quyền</label>
-                      <input type="text" id="detail-privilege-name" placeholder="Nhập Tên nhóm quyền" autofocus/>
+                      <input type="text" id="detail-privilege-name" readonly autofocus value="${dataRole['name']}"/>
                     </div>
                     <div class="dialog__form-group">
                       <label>Trạng thái</label>
-                      <select id="detail-book-status">
-                          <option value="" selected>Chọn Trạng thái</option>
-                          <option value="1">Hoạt động</option>
-                          <option value="0">Tạm dừng</option>
+                      <select id="detail-privilege-status" disabled>
+                          <option value="" selected>${dataRole['status']}</option>
                       </select>
                     </div>
                   </div>
@@ -49,41 +89,11 @@ export function detailPrivilegeData(idPrivilegeSelected) {
                       <thead>
                         <tr>
                           <th width="34%">Danh mục chức năng</th>
-                          <th width="19%">Chi tiết</th>
-                          <th width="19%">Thêm</th>
-                          <th width="19%">Sửa</th>
-                          <th width="19%">Xóa / Khoá</th>
+                           ${actionHTML}
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                            <td>Khuyến mãi</td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                        </tr>
-                        <tr>
-                            <td>Nhóm quyền</td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                        </tr>
-                        <tr>
-                            <td>Nhà cung cấp</td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                        </tr>
-                        <tr>
-                            <td>Sách</td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                        </tr>
+                          ${privilegeHTML}
                       </tbody>
                     </table>
                   </div>
@@ -95,6 +105,36 @@ export function detailPrivilegeData(idPrivilegeSelected) {
 
   // Hiển thị detailDialog
   detailDialog.showModal();
+
+  /**
+   * 1 là Lọc
+   * 2 là Chi tiết
+   * 3 là Thêm
+   * 4 là Sửa
+   * 5 là Xóa/Khóa
+   */
+
+  detailRole.forEach(roleItem => {
+    const privilegeId = roleItem['privilegeId'];
+    const actionId = roleItem['actionId'];
+
+    // console.log(privilegeId);
+    // console.log(actionId);
+
+    document.querySelectorAll('.dialog__privilege-detail table tbody tr').forEach(trItem => {
+      const dataPrivilege = trItem.getAttribute('data-privilege');
+      if (dataPrivilege == privilegeId) {
+        trItem.querySelectorAll('tr td input').forEach(inputItem => {
+          const dataAction = inputItem.getAttribute('data-action');
+          if (dataAction == actionId) {
+            // console.log('Trùng nè');
+            inputItem.checked = true;
+          }
+        });
+      }
+    });
+  });
+
 
   // Sự kiện cho các thành phần trong dialog
   // - Nếu các select đã được chọn giá trị khác mặc định thì đổi định dạng

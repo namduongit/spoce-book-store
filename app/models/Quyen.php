@@ -24,12 +24,23 @@ class app_models_Quyen extends app_libs_DBConnection {
 
     // Cập nhật quyền
     public function updateRole($maQuyen, $data) {
-        return $this->building_queryParam([
-            'value' => $data,
-            'where' => 'maQuyen = ?',
-            'params' => [$maQuyen]
-        ])->update();
+        $fieldValues = [];
+        $params = [':maQuyen' => $maQuyen];
+
+        foreach ($data as $field => $value) {
+            $fieldValues[] = "$field = :$field";
+            $params[":$field"] = $value;
+        }
+        // Câu SQL cập nhật
+        $sql = "UPDATE " . $this->table_name . " SET " . implode(", ", $fieldValues) . " WHERE maQuyen = :maQuyen";
+
+        // Thực thi câu lệnh SQL
+        return $this->query($sql, $params);
     }
+
+    
+
+    
 
     // Xóa quyền
     public function deleteRole($maQuyen) {

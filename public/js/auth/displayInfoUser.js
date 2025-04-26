@@ -87,6 +87,17 @@ export async function getAddressByID(addressID) {
 export async function updateInfoTopBar(promiseResponse) {
     showLoading();
     const currentUser = await getUserByID(promiseResponse.user['id']);
+    let responseRole = await getRoleById(currentUser['role_id']);
+    let nameRole = responseRole['response'] ? responseRole['data'].name : 'Khách hàng';
+
+    let adminPage = nameRole != 'Khách hàng' ? `
+    <li class="topbar__history-order-btn">
+       <a href='http://localhost:3000/admin'>
+            <i class="fa-solid fa-toolbox"></i>
+            Trang quản lý
+       </a>
+    </li>
+    ` : '';
     hideLoading();
     const authTopBarContent = document.querySelector('.topbar .topbar__auth');
     authTopBarContent.innerHTML = `
@@ -105,6 +116,7 @@ export async function updateInfoTopBar(promiseResponse) {
                         <i class="fa-solid fa-cart-shopping"></i>
                         Đơn hàng
                     </li>
+                    ${adminPage}
                     <li class="logout-current-account">
                         <i class="fa-solid fa-right-from-bracket"></i>
                         Đăng xuất
@@ -250,7 +262,7 @@ async function updateInfoAccountSection(user) {
     let phone = user['phone'] != null ? user['phone'] : '';
     let email = user['email'] != null ? user['email'] : '';
     let responseRole = await getRoleById(user['role_id']);
-    let nameRole = responseRole['role'].name;
+    let nameRole = responseRole['response'] ? responseRole['data'].name : 'Khách hàng';
 
     container.innerHTML = `
     <div class="left-container__warpper">

@@ -2,36 +2,22 @@ import { updatePrivilegeData } from "./updatePrivilegeData.js";
 import { detailPrivilegeData } from "./detailPrivilegeData.js";
 import { lockPrivilegeData } from "./lockPrivilegeData.js";
 
-// Dữ liệu tạm thời (sau phải xây dựng hàm truy xuất dữ liệu từ csdl)
-let data = [
-  {
-    id: "NQ01",
-    name: "Quản lý",
-    status: "Hoạt động",
-    dateUpdate: "",
-  },
-  {
-    id: "NQ02",
-    name: "Nhân viên bán hàng",
-    status: "Tạm dừng",
-    dateUpdate: "",
-  },
-  {
-    id: "NQ03",
-    name: "Nhân viên thủ kho",
-    status: "Tạm dừng",
-    dateUpdate: "",
-  },
-  {
-    id: "NQ04",
-    name: "Khách hàng",
-    status: "Tạm dừng",
-    dateUpdate: "",
-  },
-];
 
 // Hàm cập nhật lại dữ liệu cho bảng Người dùng
-export function renderPrivilegeTable() {
+export async function renderPrivilegeTable() {
+  const response = await fetch('api/action/getDetailList.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: new URLSearchParams({
+      'maQuyen': 1
+    })
+  });
+  const data = await response.json();
+
+  const role = data['data']['role'];
+
   // Biến chứa đối tượng bảng Người dùng
   const bodyInPrivilegeTable = document.querySelector(
     ".main__data > .main__table.privilege > tbody"
@@ -39,19 +25,19 @@ export function renderPrivilegeTable() {
 
   // Chuyển đổi dữ liệu thành các thẻ html
   let html = ``;
-  for (let i = 0; i < data.length; i++) {
+  for (const dataItem of role) {
     html += `
         <tr>
-            <td>${data[i].id}</td>
-            <td>${data[i].name}</td>
-            <td><span ${
-              data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
-            }>${data[i].status}</span></td>
+            <td>${dataItem.id}</td>
+            <td>${dataItem.name}</td>
+            <td id="data-status-privilege"><span ${
+              dataItem.status === "Hoạt động" ? 'class="green"' : 'class="red"'
+            }>${dataItem.status}</span></td>
             <td>
                 <i id="detail-button-privilege" class="fa-solid fa-circle-info"></i>
                 <i id="update-button-privilege" class="fa-solid fa-pen-to-square"></i>
                 <i id="lock-button-privilege" class="fa-solid fa-${
-                  data[i].status === "Hoạt động" ? "" : "un"
+                  dataItem.status === "Hoạt động" ? "" : "un"
                 }lock"></i>
             </td>
         </tr>
@@ -65,6 +51,9 @@ export function renderPrivilegeTable() {
   const idColumnInTable = document.querySelectorAll(
     ".main__data > .main__table.privilege > tbody > tr > td:first-of-type"
   );
+
+  const statusColumnInTable = document.getElementById('data-status-privilege');
+
   const listButtonInTable = document.querySelectorAll(
     ".main__data > .main__table.privilege > tbody > tr > td:last-of-type"
   );
@@ -75,6 +64,7 @@ export function renderPrivilegeTable() {
     const lockButton = buttons.children[2];
     // Id của đối tượng đã được chọn để thao tác
     const idPrivilegeSelected = idColumnInTable.item(row);
+    const statusPrivilegeSelected = statusColumnInTable.querySelector('span').innerText;
 
     // Gán sự kiện hiện dialog chi tiết người dùng
     detailButton.addEventListener("click", (e) => {
@@ -100,7 +90,7 @@ export function renderPrivilegeTable() {
       e.preventDefault();
 
       // Gọi hàm sự kiện
-      lockPrivilegeData(idPrivilegeSelected);
+      lockPrivilegeData(idPrivilegeSelected, statusPrivilegeSelected);
     });
   });
 }
