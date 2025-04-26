@@ -357,34 +357,50 @@ async function showAllCart(type) {
 
             continue;
         }
+    }
 
 
-        let productItem = await getBookByID(currentUser != null ? item['bookId'] : item['id']);
-        productItem = productItem['books'][0];
-        let nameGenre = await getNameCategoryByID(productItem.genreId);
+    const responseCurrentCart = await fetch('api/books/listProductDetails.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            data: {
+                "cart": currentCartUser
+            }
+        })
+    });
 
+    let dataCurrentCart = await responseCurrentCart.json();
+    dataCurrentCart = dataCurrentCart['data'];
+
+    for (const productItem of dataCurrentCart) {
+        let details = productItem['details'][0];
         cartMainHTML += `
             <div class="show-cart__item d-flex">
-                <img class="show-cart__img" src="../public/uploads/books/${productItem.image}" alt="product">
+                <img class="show-cart__img" src="../public/uploads/books/${details.hinhAnh}" alt="product">
                 <div class="show-cart__detail d-flex">
-                    <div class="show-cart__bookname">${productItem.name}</div>
-                    <div class="show-cart__price">${productItem.id} / ${nameGenre} / ${formatMoney(productItem.sellingPrice)}</div>
+                    <div class="show-cart__bookname">${details.tenSach}</div>
+                    <div class="show-cart__price">${details.maSach} / ${details.tenTheLoai} / ${formatMoney(details.giaBan)}</div>
                 </div>
                 <div class="show-cart__amountbox">
-                    <button class="show-cart__btn show-cart__btn--left" onclick='minsQuantity(${productItem.id}, ${JSON.stringify(currentUser)})'>-</button>
-                    <input type="text" name="product-amount" value="${item.quantity}" disabled>
-                    <button class="show-cart__btn show-cart__btn--right" onclick='plusQuantity(${productItem.id}, ${JSON.stringify(currentUser)})'>+</button>
+                    <button class="show-cart__btn show-cart__btn--left" onclick='minsQuantity(${details.maSach}, ${JSON.stringify(currentUser)})'>-</button>
+                    <input type="text" name="product-amount" value="${productItem.quantity}" disabled>
+                    <button class="show-cart__btn show-cart__btn--right" onclick='plusQuantity(${details.maSach}, ${JSON.stringify(currentUser)})'>+</button>
                 </div>
-                <div class="show-cart__priceamount">${formatMoney(item.quantity * productItem.sellingPrice)}</div>
-                <a href="#" class="show-cart__remove" onclick='deleteFromCart(${productItem.id}, ${JSON.stringify(currentUser).replace(/'/g, "\\'")})'>
+                <div class="show-cart__priceamount">${formatMoney(productItem.quantity * details.giaBan)}</div>
+                <a href="#" class="show-cart__remove" onclick='deleteFromCart(${details.maSach}, ${JSON.stringify(currentUser).replace(/'/g, "\\'")})'>
                     <i class="fa-solid fa-trash-can"></i>
                 </a>
             </div>
         `;
-        totalPrice += item.quantity * productItem.sellingPrice;
+
+        totalPrice += productItem.quantity * details.giaBan;
     }
 
     hideLoading();
+
 
     cartMain.innerHTML = `
         <div class="show-cart__container">
@@ -580,13 +596,13 @@ async function checkOutBill() {
         }
     }
 
-    let currentCart = await getAllProductFromCart();
-    currentCart = currentCart['data'];
+    let currentCartUser = await getAllProductFromCart();
+    currentCartUser = currentCartUser['data'];
 
     let cartDetail = document.querySelector(".topbar__cart-detail-holder");
 
     cartDetail.classList.remove('show');
-    if (currentCart.length === 0) {
+    if (currentCartUser.length === 0) {
         toast({
             title: 'Thông báo',
             message: `Giỏ hàng đang trống !`,
@@ -620,36 +636,49 @@ async function checkOutBill() {
 
     let HTMLCheckOut = ``;
     let totalPrice = 0;
+
     showLoading();
 
-    for (const item of currentCart) {
-        let productItem = await getBookByID(item.bookId);
-        productItem = productItem['books'][0];
-        let nameGenre = await getNameCategoryByID(productItem.genreId);
+    const responseCurrentCart = await fetch('api/books/listProductDetails.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            data: {
+                "cart": currentCartUser
+            }
+        })
+    });
 
+    let dataCurrentCart = await responseCurrentCart.json();
+    dataCurrentCart = dataCurrentCart['data'];
+
+    for (const productItem of dataCurrentCart) {
+        let details = productItem['details'][0];
         HTMLCheckOut += `
             <tr>
                 <td class="checkout__product-thumbnail">
                     <div class="checkout__product-image">
                         <div class="checkout__product-image-holder">
-                            <img src="../public/uploads/books/${productItem.image}" alt="product-image">
+                            <img src="../public/uploads/books/${details.hinhAnh}" alt="product-image">
                         </div>
-                        <span class="checkout__product-quantity">${item.quantity}</span>
+                        <span class="checkout__product-quantity">${productItem.quantity}</span>
                     </div>
 
                 </td>
                 <td class="checkout__product-name">
                     <div class="checkout__product-name-holder">
-                        <span>${productItem.name}</span>
-                        <span>${productItem.id} / ${nameGenre} / ${formatMoney(productItem.sellingPrice)}</span>
+                        <span>${details.tenSach}</span>
+                        <span>${details.maSach} / ${details.tenTheLoai} / ${formatMoney(details.giaBan)}</span>
                     </div>
                 </td>
                 <td class="checkout__product-price">
-                    <span>${formatMoney(item.quantity * productItem.sellingPrice)}</span>
+                    <span>${formatMoney(productItem.quantity * details.giaBan)}</span>
                 </td>
             </tr>
         `;
-        totalPrice += item.quantity * productItem.sellingPrice;
+        totalPrice += productItem.quantity * details.giaBan;
     }
 
     async function getDataPayment() {
@@ -1001,7 +1030,7 @@ async function checkOutBill() {
 
 
 
-    
+
     // Hiển thị lần lượt các phương thức thanh toán
     const paymentMethodOptions = document.querySelectorAll('.checkout__payment-method-option');
     paymentMethodOptions.forEach(option => {
@@ -1025,7 +1054,7 @@ async function checkOutBill() {
     // Phần chọn phương thức vận chuyển
     let totalCostShip = 0;
     document.querySelectorAll('.checkout__ship-method .checkout__ship-method-radiobtn input').forEach(item => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function () {
             if (item.value == 'tietkiem') totalCostShip = 20000;
             else if (item.value == 'nhanh') totalCostShip = 30000;
             else if (item.value == 'hoatoc') totalCostShip = 50000;
@@ -1071,7 +1100,7 @@ async function checkOutBill() {
         // Xử lí phương thức vận chuyển
         const selectedShipping = document.querySelector('input[name="shipping-method"]:checked');
         if (selectedShipping) {
-            shipMethod = selectedShipping.value;      
+            shipMethod = selectedShipping.value;
         }
 
         // Xử lí phương thức thanh toán
@@ -1254,7 +1283,7 @@ async function checkOutBill() {
                 });
 
                 const dataDetail = await responseDetail.json();
-    
+
                 const formData = new URLSearchParams();
                 formData.append('order_type', 'billpayment');
                 formData.append('cbo_inv_type', 'I');
@@ -1281,8 +1310,8 @@ async function checkOutBill() {
                 formData.append('txt_inv_company', 'Tổ 12 Khu phố Phú Mỹ, Phường Xuân Lập, Thành phố Long Khánh, Tỉnh Đồng Nai');
                 formData.append('txt_inv_company', 'Công ty cổ phần Công Nghệ SpoceTech');
                 formData.append('txt_inv_taxcode', '0102182292');
-    
-    
+
+
                 const response = await fetch('../../../vnpay_php/vnpay_create_payment.php', {
                     method: 'POST',
                     body: formData.toString(),
@@ -1290,7 +1319,7 @@ async function checkOutBill() {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                 });
-    
+
                 const data = await response.json();
 
 
@@ -1303,12 +1332,12 @@ async function checkOutBill() {
                         maNguoiDung: currentUser.user.id
                     })
                 })
-                .then(response => response.json())
-                .then(data => {
-                })
-                .catch(error => {
-                    console.log('Lỗi khi loại bỏ sản phẩm trong giỏ hàng sau khi thanh toán');
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                    })
+                    .catch(error => {
+                        console.log('Lỗi khi loại bỏ sản phẩm trong giỏ hàng sau khi thanh toán');
+                    });
 
                 toast({
                     title: 'Thông báo',
@@ -1317,7 +1346,7 @@ async function checkOutBill() {
                     duration: 3000
                 });
 
-    
+
                 hideLoading();
 
                 console.log(data['data']);

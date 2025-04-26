@@ -2218,8 +2218,8 @@
   font-weight: bold;
   cursor: pointer;
 }
-.confirmation-dialog__content .confirmation-dialog__button:hover {
-}
+/* .confirmation-dialog__content .confirmation-dialog__button:hover {
+} */
 
 .confirmation-dialog .confirmation-dialog__container i {
   position: absolute;

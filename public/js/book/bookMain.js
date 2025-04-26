@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             productList.forEach(product => {
                 let formData = new URLSearchParams();
                 formData.append('maNguoiDung', currentUser['user'].id);
-                formData.append('maSach', product.id);
+                formData.append('maSach', product.bookId);
                 formData.append('soLuong', product.quantity);
                 fetch('api/carts/add.php', {
                     method: 'POST',
@@ -321,10 +321,10 @@ async function showDetailProduct(product_id) {
             let cart = JSON.parse(localStorage.getItem("cart")) || [];
             let valueQuantity = parseInt(document.querySelector('.quantity__button-number').value);
             let product = {
-                id: parseInt(product_id),
+                bookId: parseInt(product_id),
                 quantity: valueQuantity
             }
-            let existingProduct = cart.find(item => item.id === product.id);
+            let existingProduct = cart.find(item => item.bookId === product.bookId);
 
             if (existingProduct) {
                 existingProduct.quantity += valueQuantity;
