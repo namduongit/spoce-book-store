@@ -100,11 +100,24 @@
             </a>
 
             <div class="header__search">
-                <div class="header__search-wrapper">
+                <!-- Icon mở search mobile -->
+                <div class="header__search-icon" onclick="toggleSearch()">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <!-- Lớp phủ trắng toàn màn hình -->
+
+                <div class="header__search-wrapper mobile" id="searchWrapper">
+                    <input class="header__search-input" type="text" placeholder="Tìm kiếm sản phẩm">
+                    <button class="header__search-btn">Tìm kiếm</button>
+                </div>
+
+                <!-- Khung ô tìm kiếm -->
+                <div class="header__search-wrapper desktop">
                     <input class="header__search-input" type="text" placeholder="Tìm kiếm sản phẩm">
                     <button class="header__search-btn">Tìm kiếm</button>
                 </div>
             </div>
+
 
             <div class="header__support d-flex just-content-spbt align-items-center">
                 <i class="header__support-icon fa-solid fa-blender-phone"></i>
@@ -553,24 +566,48 @@
         filter.classList.toggle('active');
         overlay.classList.toggle('active');
     }
+    // search sách mobile
+    function toggleSearch() {
+        const wrapper = document.getElementById('searchWrapper');
+        wrapper.classList.toggle('active');
+        document.addEventListener('click', function(e) {
+            const wrapper = document.getElementById('searchWrapper');
+            const icon = document.querySelector('.header__search-icon');
+
+            if (!wrapper.contains(e.target) && !icon.contains(e.target)) {
+                wrapper.classList.remove('active');
+            }
+        });
+    }
     // function hiển thị sách theo breakpoint
     function updateSelectOptionsForBreakpoint() {
+        console.log("Current width:", window.innerWidth);
         const select = document.getElementById('page-show-by');
 
         if (window.innerWidth <= 768) {
+            // Mobile
             select.innerHTML = `
-        <option value="9" selected>Mặc định</option>
-        <option value="12">12 sản phẩm</option>
-        <option value="18">18 sản phẩm</option>
-        <option value="24">24 sản phẩm</option>
-      `;
+            <option value="12" selected>Mặc định</option>
+            <option value="16">16 sản phẩm</option>
+            <option value="20">20 sản phẩm</option>
+            <option value="24">24 sản phẩm</option>
+        `;
+        } else if (window.innerWidth <= 1024) {
+            // Tablet
+            select.innerHTML = `
+            <option value="12" selected>Mặc định</option>
+            <option value="15">15 sản phẩm</option>
+            <option value="18">18 sản phẩm</option>
+            <option value="24">24 sản phẩm</option>
+        `;
         } else {
+            // Desktop
             select.innerHTML = `
-        <option value="10" selected>Mặc định</option>
-        <option value="15">15 sản phẩm</option>
-        <option value="20">20 sản phẩm</option>
-        <option value="25">25 sản phẩm</option>
-      `;
+            <option value="10" selected>Mặc định</option>
+            <option value="15">15 sản phẩm</option>
+            <option value="20">20 sản phẩm</option>
+            <option value="25">25 sản phẩm</option>
+        `;
         }
     }
 

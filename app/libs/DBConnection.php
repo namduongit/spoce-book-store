@@ -38,7 +38,8 @@
             self::$connection = null;
         }
 
-        public function set_tableName($tableName) {
+        public function set_tableName($tableName)
+        {
             $this->table_name = $tableName;
         }
 
