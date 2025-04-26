@@ -229,7 +229,8 @@
 
                         <div class="filter-group__content list-author-content">
                             <?php
-                            include_once 'app/config.php';
+                            // include_once 'app/config.php';
+                            require_once __DIR__ . './app/config.php';
 
                             $author_model = new app_models_TacGia();
                             $authors = $author_model->getAllAuthors();
@@ -314,7 +315,8 @@
 
                         <div class="filter-group__content list-cover-content">
                             <?php
-                            include_once 'app/config.php';
+                            // include_once 'app/config.php';
+                            require_once __DIR__ . './app/config.php';
 
                             $cover_model = new app_models_LoaiBia();
                             $covers = $cover_model->getAllCovers();
@@ -358,8 +360,10 @@
                         <select name="" id="type-category">
                             <option value="all-category" selected>Tất cả</option>
                             <?php
-                            include_once 'app/config.php';
-                            $category_model = new app_models_TheLoai;
+                            // include_once 'app/config.php';
+                            require_once __DIR__ . './app/config.php';
+
+                            $category_model = new app_models_TheLoai();
 
                             $categories = $category_model->getAllCategories();
 
