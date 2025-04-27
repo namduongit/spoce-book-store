@@ -1,16 +1,12 @@
 <?php
-// include_once './api/authors/get.php';
-// include_once './api/users/checkLogin.php';
-// die();
 
-// include_once './app/models/DiaChiNguoiDung.php';
-// include_once './app/config.php';
-// $address_model = new app_models_DiaChiNguoiDung();
-// echo $address_model->open_connect() != null ? "Thành công" : "Thất bại";
-// die();
+if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET['page']) && !isset($_GET['minPrice']) && !isset($_GET['maxPrice']) && !isset($_GET['cart-holder']) && !isset($_GET['page-action']) && !isset($_GET['account']) && !isset($_GET['info'])) {
+    include './404-Page/index.php';
+    die();
+}
 
-// include 'api/users/insertAddress.php';
-// die();
+
+
 ?>
 
 

@@ -424,7 +424,7 @@ async function showAllCart(type) {
     <div class="show-cart__detail d-flex">
         <div class="show-cart__bookname">${details.tenSach}</div>
         <div class="show-cart__price">
-            ${details.maSach} / ${tenTheLoai} / ${formatMoney(details.giaBan)}
+            ${details.maSach} / ${details.tenTheLoai} / ${formatMoney(details.giaBan)}
         </div>
     </div>
     <div class="show-cart__amountbox">
