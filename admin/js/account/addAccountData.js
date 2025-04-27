@@ -420,20 +420,18 @@ export async function addAccountData() {
 async function renderPrivilegesSelect() {
   try {
     const privileges = await getRolePrivilege();
-    if (!privileges) return; // Kiểm tra dữ liệu trả về
+    if (!privileges) return;
 
     const privilegeSelect = document.getElementById("add-account-privilege");
 
-    if (!privilegeSelect) return; // Nếu không tìm thấy phần tử <select>
-
-    // Xóa hết các <option> cũ
+    if (!privilegeSelect) return;
     privilegeSelect.innerHTML =
       '<option value="" selected>Chọn Nhóm quyền</option>';
 
     privileges.data.forEach((privilege) => {
       const option = document.createElement("option");
-      option.value = privilege.id || ""; // Giá trị tùy chỉnh (có thể là `id` của quyền)
-      option.textContent = privilege.name || "Không có tên"; // Tên của quyền (hoặc giá trị mặc định nếu không có tên)
+      option.value = privilege.id || "";
+      option.textContent = privilege.name || "Không có tên";
       privilegeSelect.appendChild(option);
     });
   } catch (error) {
