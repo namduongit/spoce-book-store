@@ -1,6 +1,6 @@
 <?php
 
-if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET['page']) && !isset($_GET['minPrice']) && !isset($_GET['maxPrice']) && !isset($_GET['cart-holder']) && !isset($_GET['page-action']) && !isset($_GET['account']) && !isset($_GET['info'])) {
+if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET['page']) && !isset($_GET['minPrice']) && !isset($_GET['maxPrice']) && !isset($_GET['cart-holder']) && !isset($_GET['page-action']) && !isset($_GET['account']) && !isset($_GET['info']) && !isset($_GET['order']) && !isset($_GET['orderId'])) {
     include './404-Page/index.php';
     die();
 }
