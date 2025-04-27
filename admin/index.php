@@ -3,14 +3,15 @@ session_start();
 
 
 if (!isset($_SESSION["user"]) || !isset($_SESSION["role"])) {
-    include 'index.php';
+    // include 'index.php';
+    include '../404-Page/index.php';
     die();
 }
 
 $user = $_SESSION["user"];
 $role = $_SESSION["role"]["data"] ?? [];
 if (count($role) <= 0) {
-    include 'index.php';
+    include '../404-Page/index.php';
     die();
 }
 ?>

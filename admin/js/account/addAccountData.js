@@ -290,7 +290,6 @@ export async function addAccountData() {
             condition: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
             message: "Email không hợp lệ.",
           },
-          { condition: !address, message: "Vui lòng nhập địa chỉ." },
           {
             condition: address && !addressFormatRegex.test(address),
             message:
@@ -326,78 +325,82 @@ export async function addAccountData() {
         formData.append("accountFullName", fullname);
         formData.append("accountName", username);
         formData.append("accountPassword", password);
-        formData.append("accountRole", parseInt(privilege));
+        if (privilege !== null && privilege !== "null") {
+          formData.append("accountRole", parseInt(privilege));
+        }
         formData.append("accountStatus", status);
         for (let [key, value] of formData.entries()) {
           console.log(`${key}: ${value}`);
         }
 
-        try {
-          // Gửi form tạo người dùng
-          const response = await fetch("api/account/add_account.php", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: formData,
-          });
-
-          const result = await response.json();
-          console.log(result);
-
-          if (result.status.trim() === "success") {
-            const id = result.id; // Lấy ID người dùng vừa tạo từ phản hồi
-            console.log("ok", id);
-
-            // Gửi form tạo địa chỉ
-            const addressData = new URLSearchParams();
-            addressData.append("idUser", id);
-            addressData.append("numberHouse", numberHomeAndStreetName.trim());
-            addressData.append("province", province.trim());
-            addressData.append("city", district.trim());
-            addressData.append("ward", ward.trim());
-
-            const addressRes = await fetch("api/address/insertAddress.php", {
+        if (address) {
+          try {
+            // Gửi form tạo người dùng
+            const response = await fetch("api/account/add_account.php", {
               method: "POST",
               headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
               },
-              body: addressData,
+              body: formData,
             });
 
-            const addressResult = await addressRes.json();
+            const result = await response.json();
+            console.log(result);
 
-            if (addressResult.success) {
-              toast({
-                title: "Thành công",
-                message: "Thêm người dùng và địa chỉ thành công",
-                type: "success",
-                duration: 3000,
+            if (result.status.trim() === "success") {
+              const id = result.id; // Lấy ID người dùng vừa tạo từ phản hồi
+              console.log("ok", id);
+
+              // Gửi form tạo địa chỉ
+              const addressData = new URLSearchParams();
+              addressData.append("idUser", id);
+              addressData.append("numberHouse", numberHomeAndStreetName.trim());
+              addressData.append("province", province.trim());
+              addressData.append("city", district.trim());
+              addressData.append("ward", ward.trim());
+
+              const addressRes = await fetch("api/address/insertAddress.php", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: addressData,
               });
+
+              const addressResult = await addressRes.json();
+
+              if (addressResult.success) {
+                toast({
+                  title: "Thành công",
+                  message: "Thêm người dùng và địa chỉ thành công",
+                  type: "success",
+                  duration: 3000,
+                });
+              } else {
+                toast({
+                  title: "Lỗi địa chỉ",
+                  message: addressResult.message,
+                  type: "warning",
+                  duration: 3000,
+                });
+              }
             } else {
               toast({
-                title: "Lỗi địa chỉ",
-                message: addressResult.message,
+                title: "Cảnh báo",
+                message: result.message,
                 type: "warning",
                 duration: 3000,
               });
             }
-          } else {
+          } catch (error) {
+            console.error("Lỗi fetch API:", error);
             toast({
-              title: "Cảnh báo",
-              message: result.message,
-              type: "warning",
+              title: "Lỗi",
+              message: `Lỗi fetch API: ${error}`,
+              type: "error",
               duration: 3000,
             });
           }
-        } catch (error) {
-          console.error("Lỗi fetch API:", error);
-          toast({
-            title: "Lỗi",
-            message: `Lỗi fetch API: ${error}`,
-            type: "error",
-            duration: 3000,
-          });
         }
 
         addDialog.remove();
@@ -434,6 +437,10 @@ async function renderPrivilegesSelect() {
       option.textContent = privilege.name || "Không có tên";
       privilegeSelect.appendChild(option);
     });
+    const nullOption = document.createElement("option");
+    nullOption.value = "null";
+    nullOption.textContent = "Chưa có quyền";
+    privilegeSelect.appendChild(nullOption);
   } catch (error) {
     console.error("Lỗi khi tải dữ liệu quyền:", error);
   }

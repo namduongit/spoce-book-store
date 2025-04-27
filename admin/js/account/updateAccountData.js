@@ -2,6 +2,67 @@ import { isNotFirstItemSelected } from "../selectEvents.js";
 import { toast } from "../../../public/js/toast.js";
 import { showNotification } from "../dialogMessage.js";
 import { renderAccountTable } from "./renderAccountTable.js";
+// import { getRolePrivilege } from "./changeMainContent.js";
+async function getRolePrivilege() {
+  try {
+    const response = await fetch("api/roles/list.php");
+    const data = await response.json(); // nếu server trả JSON
+    return data;
+  } catch (error) {
+    console.error("Fetch failed:", error);
+  }
+}
+async function renderPrivilegesAccount(id) {
+  console.log("hi");
+
+  const privileges = await getRolePrivilege();
+  console.log("privileges", privileges);
+
+  if (!privileges) return;
+
+  const privilegeSelect = document.getElementById("add-account-privilege");
+  console.log("privilegeSelect", privilegeSelect);
+
+  if (!privilegeSelect) return;
+
+  // Xóa hết option cũ đi
+  privilegeSelect.innerHTML = "";
+
+  // Thêm option mặc định "Chọn nhóm quyền"
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.disabled = true;
+  defaultOption.selected = true;
+  defaultOption.textContent = "Chọn Nhóm quyền";
+  privilegeSelect.appendChild(defaultOption);
+
+  // Thêm các quyền từ API
+  privileges.data.forEach((privilege) => {
+    const option = document.createElement("option");
+    option.value = privilege.id;
+    option.textContent = privilege.name;
+
+    // Kiểm tra nếu id trùng với value của option thì đánh dấu selected
+    if (privilege.id == id) {
+      option.selected = true;
+    }
+
+    privilegeSelect.appendChild(option);
+  });
+
+  // Thêm dòng "Chưa có quyền" nếu id là null hoặc rỗng
+  const nullOption = document.createElement("option");
+  nullOption.value = "null";
+  nullOption.textContent = "Chưa có quyền";
+
+  // Nếu id rỗng hoặc null, chọn dòng "Chưa có quyền"
+  if (!id) {
+    nullOption.selected = true;
+  }
+
+  privilegeSelect.appendChild(nullOption);
+}
+
 // Hàm thiết lập sự kiện Sửa một người dùng cho bảng
 export function updateAccountData(idAccountSelected) {
   const id = idAccountSelected.textContent;
@@ -106,7 +167,7 @@ export function updateAccountData(idAccountSelected) {
           </div>
         </form>
       `;
-
+      renderPrivilegesAccount(user.maQuyen);
       // ✅ Gán giá trị select sau khi DOM đã được render
       document.getElementById("add-account-privilege").value =
         user.maQuyen.toString();
@@ -171,9 +232,12 @@ export function updateAccountData(idAccountSelected) {
               condition: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
               message: "Email không hợp lệ.",
             },
-            { condition: !address, message: "Vui lòng nhập địa chỉ." },
+            // { condition: !address, message: "Vui lòng nhập địa chỉ." },
             {
-              condition: address && !addressFormatRegex.test(address),
+              condition:
+                address &&
+                address !== "Chưa có địa chỉ" &&
+                !addressFormatRegex.test(address),
               message:
                 "Địa chỉ không đúng định dạng. Ví dụ: '12 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP Hồ Chí Minh'",
             },
