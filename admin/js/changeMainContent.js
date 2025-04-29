@@ -988,9 +988,16 @@ async function renderPrivilegesAccount() {
   privileges.data.forEach((privilege) => {
     const li = document.createElement("li");
     li.textContent = privilege.name;
+    li.setAttribute("value", privilege.id); // Gán giá trị vào thẻ <li>
+
     li.addEventListener("click", () => {
-      privilegeInput.value = privilege.name;
+      privilegeInput.value = li.getAttribute("value"); // Cập nhật giá trị input bằng value của li
     });
     privilegeUl.appendChild(li);
   });
+  // --- Thêm li cuối "CHƯA CÓ QUYỀN" ---
+  const liNull = document.createElement("li");
+  liNull.textContent = "Chưa có quyền";
+  liNull.setAttribute("value", "null");
+  privilegeUl.appendChild(liNull);
 }

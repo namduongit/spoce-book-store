@@ -1,7 +1,9 @@
 <?php
 session_start();
 
+
 if (!isset($_SESSION["user"]) || !isset($_SESSION["role"])) {
+    // include 'index.php';
     include '../404-Page/index.php';
     die();
 }
@@ -62,10 +64,10 @@ if (count($role) <= 0) {
         <ul class="sidebar__menu">
             <?php
 
-            if (!isset($_SESSION["user"]) || !isset($_SESSION["role"])) {
-                include '../404-Page/index.php';
-                die();
-            }
+            // if (!isset($_SESSION["user"]) || !isset($_SESSION["role"])) {
+            //     include '../404-Page/index.php';
+            //     die();
+            // }
 
             $user = $_SESSION["user"];
             $role = $_SESSION["role"]["data"] ?? [];

@@ -1,5 +1,6 @@
 import { renderAccountTable } from "./renderAccountTable.js";
 let currentPage = 1;
+
 export async function filterAccount(pageIsSelected = 1) {
   // Lấy dữ liệu từ API
   // Biến chứa đối tượng thẻ input liên quan đến tìm kiếm thông tin
@@ -13,10 +14,28 @@ export async function filterAccount(pageIsSelected = 1) {
     .value.toLowerCase()
     .trim();
   // Biến chứa đối tượng thẻ select liên quan đến lọc quyền
-  const privilegeSelect = document
-    .getElementById("privilege-slt-account")
-    .value.toLowerCase()
-    .trim();
+  // const privilegeSelect = document
+  //   .getElementById("privilege-slt-account")
+  //   .value.trim();
+  // console.log(privilegeSelect);
+
+  // Lấy tất cả các phần tử <li>
+  const listItems = document.querySelectorAll(".main__privilege-slt ul li");
+  listItems.forEach((item) => {
+    item.addEventListener("click", function () {
+      listItems.forEach((li) => li.classList.remove("selected")); // bỏ selected ở tất cả li khác
+      this.classList.add("selected"); // thêm selected vào li được click
+    });
+  });
+  let params = new URLSearchParams();
+  // Thêm sự kiện click cho từng <li>
+  const selectedPrivilegeLi = document.querySelector(
+    ".main__privilege-slt ul li.selected"
+  ); // tìm li có class 'selected'
+  let selectedValue = selectedPrivilegeLi
+    ? selectedPrivilegeLi.getAttribute("value")
+    : "";
+
   // Biến chứa đối tượng thẻ select liên quan đến lọc trạng thái
   const statusSelect = document.getElementById("status-slt-account").value;
   let userId = idOrUsernameInput !== "" ? idOrUsernameInput : "";
@@ -39,19 +58,19 @@ export async function filterAccount(pageIsSelected = 1) {
   let status = statusSelect !== "tất cả" ? statusSelect : "";
   console.log(statusSelect);
 
-  let category = privilegeSelect !== "tất cả" ? privilegeSelect : "";
-  console.log(privilegeSelect);
+  // let category = privilegeSelect !== "tất cả" ? privilegeSelect : "";
+  // console.log(privilegeSelect);
 
   let limit = 5;
   let page = Number(pageIsSelected) || 1;
   let offset = (page - 1) * limit;
 
-  let params = new URLSearchParams();
+  // let params = new URLSearchParams();
   if (userId) params.append("id_or_name", userId);
   if (sortBy) params.append("sortBy", sortBy);
   if (sortType) params.append("sortType", sortType);
   if (status) params.append("status", status);
-  if (category) params.append("category", category);
+  if (selectedValue) params.append("category", selectedValue);
   params.append("limit", limit);
   params.append("offset", offset);
 

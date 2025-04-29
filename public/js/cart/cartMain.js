@@ -852,7 +852,7 @@ async function checkOutBill() {
                             </div>
                         </div>
                         <div class="checkout__promotion-btn-holder">
-                            <button class="checkout__promotion-btn">Sử dụng</button>
+                            <button class="checkout__promotion-btn" disabled>Sử dụng</button>
                         </div>
                     </form>
                 </div>
@@ -866,10 +866,16 @@ async function checkOutBill() {
                                     <span>${formatMoney(totalPrice)}</span>
                                 </td>
                             </tr>
-                            <tr class="checkout__shipping-fee-holder">
+                            <tr class="checkout__temp-total-holder">
                                 <td>Phí vận chuyển</td>
                                 <td>
                                     <span id='total-cost-ship'>—</span>
+                                </td>
+                            </tr>
+                            <tr class="checkout__shipping-fee-holder hide-item">
+                                <td>Mã giảm giá</td>
+                                <td>
+                                    <span id='total-cost-discount'></span>
                                 </td>
                             </tr>
                         </tbody>
@@ -1185,10 +1191,108 @@ async function checkOutBill() {
         document.getElementById("total-cost-ship").innerText =
           formatMoney(totalCostShip);
         document.getElementById("total-cost-bill").innerText = formatMoney(
-          totalPrice + totalCostShip
+          totalPrice + totalCostShip - totalDiscount
         );
       });
     });
+
+  // Nút nhập mã chuyển màu xanh khi người dùng nhập mã
+  let discountInput = document.querySelector(".checkout__promotion-input-holder .checkout__input-field #promotion-code");
+  let discountSubmit = document.querySelector('.checkout__promotion-btn');
+  let totalDiscount = 0;
+  let discount;
+
+  if (discountInput && discountSubmit) {
+    discountInput.addEventListener('input', function () {
+      discountSubmit.disabled = false;
+      discountSubmit.classList.toggle('active', discountInput.value.length > 0);
+    });
+
+    discountSubmit.addEventListener('click', async function (e) {
+      e.preventDefault();
+
+      if (discountInput.value.length == 0) {
+        toast({
+          type: "warning",
+          message: "Bạn chưa điền mã giảm giá",
+          title: "Thông báo",
+          duration: 3000,
+        });
+
+        return;
+      }
+
+      if (totalDiscount > 0) {
+        toast({
+          type: "warning",
+          message: "Đơn hàng này đã được áp dụng mã giảm giá",
+          title: "Thông báo",
+          duration: 3000
+        });
+
+        return;
+      }
+
+      let discountResponse = await fetch(`api/discounts/detail.php?id=${discountInput.value}`);
+      let discountResult = await discountResponse.json();
+
+      if (discountResult.status == 'success') {
+        discount = discountResult.data;
+        if (discount.status == 'Tạm dừng') {
+          toast({
+            type: "warning",
+            message: "Mã giảm giá không khả dụng",
+            title: "Thông báo",
+            duration: 3000
+          });
+
+          return;
+        }
+
+        if (!(totalPrice >= discount.min && totalPrice <= discount.max)) {
+          toast({
+            type: "warning",
+            message: "Đơn hàng không đủ điều kiện sử dụng mã giảm giá này",
+            title: "Thông báo",
+            duration: 3000
+          });
+
+          return;
+        }
+
+        let discountRow = document.querySelector('.checkout__shipping-fee-holder');
+        let discountSpan = document.querySelector('#total-cost-discount');
+        let total = document.querySelector('#total-cost-bill');
+
+        if (discountRow.classList.contains('hide-item')) discountRow.classList.remove('hide-item');
+        if (discount.type == 'Phần trăm') {
+          totalDiscount = totalPrice * discount.discountV / 100;
+          discountSpan.innerText = '-' + formatMoney(totalDiscount);
+          total.innerText = formatMoney(totalPrice + totalCostShip - totalDiscount);
+        } else {
+          totalDiscount = discount.discountV;
+          discountSpan.innerText = '-' + formatMoney(totalDiscount);
+          total.innerText = formatMoney(totalPrice + totalCostShip - totalDiscount);
+        }
+        toast({
+          type: "success",
+          message: "Áp mã giảm giá thành công",
+          title: "Thông báo",
+          duration: 3000
+        });
+      } else {
+        discount = null;
+        toast({
+          type: "warning",
+          message: "Mã giảm giá không tồn tại",
+          title: "Thông báo",
+          duration: 3000
+        });
+      }
+    });
+  }
+
+  
 
   // Submit gửi đơn hàng lên Server
   document
@@ -1327,6 +1431,12 @@ async function checkOutBill() {
         return;
       }
 
+      if (discount.status != null) {
+        couponsCode = discount.id;
+      }
+
+      totalPrice = totalPrice + totalCostShip - totalDiscount;
+      console.log(totalPrice);
       const resultOrder = await showConfirmationDialog("Xác nhận đặt hàng ?");
       if (resultOrder == true) {
         console.log("Đồng ý thanh toán");
@@ -1338,6 +1448,7 @@ async function checkOutBill() {
           formOrder.append("diaChiGiao", pickUpAddress);
           formOrder.append("tongTienThu", totalPrice);
           formOrder.append("maPhuongThuc", paymentMethod);
+          formOrder.append("maKhuyenMai", couponsCode);
 
           const responseOrder = await fetch("api/orders/create.php", {
             method: "POST",
@@ -1411,6 +1522,7 @@ async function checkOutBill() {
           formOrder.append("diaChiGiao", pickUpAddress);
           formOrder.append("tongTienThu", totalPrice);
           formOrder.append("maPhuongThuc", paymentMethod);
+          formOrder.append("maKhuyenMai", couponsCode);
 
           const responseOrder = await fetch("api/orders/create.php", {
             method: "POST",
