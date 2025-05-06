@@ -1,3 +1,4 @@
+import {showOrHideMainContent} from "../responsive/responsive.js";
 // Biến chứa đối tượng sidebar
 const sidebar = document.querySelector(".sidebar");
 
@@ -11,4 +12,5 @@ iconToShowSidebar.addEventListener("click", (e) => {
 
   // Ẩn hiện sidebar bằng việc thêm hoặc xoá class "hide"
   sidebar.classList.toggle("hide");
+  showOrHideMainContent();
 });

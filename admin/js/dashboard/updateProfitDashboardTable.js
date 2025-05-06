@@ -6,6 +6,7 @@ import {
   getMonthsInYear,
 } from "../others.js";
 import { fetchData } from "../../../public/js/book/getDataBook.js";
+import { updateTableLabelRevenue_dashboard } from "../../responsive/responsive.js";
 
 // Biến chứa các đối tượng bảng Thống kê lợi nhuận
 let data = [];
@@ -182,4 +183,5 @@ export async function renderProfitDashboardTable(
     vietnamMoneyFormat(totalProfit);
   totalTextInProfitDashboardTable.textContent =
     numberToVietnamWords(totalProfit);
+    updateTableLabelRevenue_dashboard();
 }
