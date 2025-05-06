@@ -77,13 +77,14 @@ export async function showOrderHistory() {
     statusString = '<div class="order-history__status-select-container">' + statusString + '</div>';
 
     if (!orderList || orderList.length == 0) {
+        console.log(user['phone']);
         orderPage.innerHTML = `
         <div class="order-history__container">
             <div class="info__title">ĐƠN HÀNG CỦA BẠN</div>
             <div class="order-history__content">
                 <p class="order-history__account-info">Thông tin tài khoản</p>
                 <p class="order-history__account-name">${user['full_name']}</p>
-                <p class="order-history__account-phone">${user['phone'] == '' ? 'Chưa cập nhật số điện thoại' : user['phone']}</p>
+                <p class="order-history__account-phone">${user['phone'] == null ? 'Chưa cập nhật số điện thoại' : user['phone']}</p>
                 ${statusString}
                 <table class="order-history__table">
                     <thead>
@@ -425,14 +426,10 @@ async function showOrderDetail(orderId) {
 
         // Với mỗi chi tiết đơn hàng, tiến hành fetch dữ liệu sách của chi tiết đó để hiện thị lên chi tiết đơn hàng
         for (let i = 0; i < orderDetailResult.length; i++) {
-            let bookResponse = await fetch(`api/books/get.php?bookID=${orderDetailResult[i].bookId}`);
+            let bookResponse = await fetch(`api/books/getBookDetail.php?find=${orderDetailResult[i].bookId}`);
             let bookResult = await bookResponse.json();
-            let book = bookResult.books[0];
-            // console.log(book);
+            let book = bookResult.data[0];
 
-            let genreResponse = await fetch(`api/categories/detail.php?id=${book.genreId}`);
-            let genreResult = await genreResponse.json();
-            let genre = genreResult.data;
             productString += `
             <tr>
                 <td>
@@ -440,10 +437,10 @@ async function showOrderDetail(orderId) {
                 </td>
                 <td class="order-detail__product-name">
                     <p class="order-detail__product-title">${book.name}</p>
-                    <span class="order-detail__product-description">${book.id} / ${genre.name} / ${book.numberOfPages}</span>
+                    <span class="order-detail__product-description">${book.id} / ${book.categoryName} / ${book.pages}</span>
                 </td>
                 <td>${orderDetailResult[i].bookId}</td>
-                <td>${formatMoney(book.sellingPrice)}</td>
+                <td>${formatMoney(book.sellPrice)}</td>
                 <td>${orderDetailResult[i].amount}</td>
                 <td class="right-align">${formatMoney(orderDetailResult[i].price)}</td>
             </tr>
