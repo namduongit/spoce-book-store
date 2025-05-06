@@ -19,7 +19,7 @@ export async function lockSupplierData(idSupplierSelected) {
   // - Định dạng dialog
   lockDialog.classList.add("dialog");
   lockDialog.classList.add("supplier");
-  lockDialog.style.width = "30%";
+  // lockDialog.style.width = "30%";
   // - Ghi nội dung dialog
   lockDialog.innerHTML = `
      <h1 class="dialog__title">${

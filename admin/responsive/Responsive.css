@@ -65,6 +65,13 @@
         display: block !important;
         text-align: center; 
     }
+    .dialog__row > div{
+        width: 100%;
+    }
+    
+    .dialog__row{
+        flex-direction: column;
+    }
     /* ============================================THỐNG KÊ LỢI NHUẬN ========================== */
     .main__table.dashboard.profit_dashboard td::before {
         content: attr(data-label);
@@ -200,6 +207,11 @@
     
 
 
+    .dialog.discount{
+        width: 100%;
+    }
+
+
     /* =============================== NHÓM QUYỀN======================== */
     .main__table.privilege td:nth-of-type(1)::before {
         content: attr(data-label) "ID";
@@ -210,6 +222,7 @@
     .main__table.privilege td:nth-of-type(3)::before {
         content: attr(data-label) "Trạng thái";
     }
+
 
     /* ================================NGƯỜI DÙNG============================= */
     .main__table.account td:nth-of-type(1)::before {
@@ -225,6 +238,10 @@
         content: attr(data-label) "Trạng thái";
     }
 
+
+    .dialog.supplier{
+        width: 100%;
+    }
     /* =================================NHÀ CUNG CẤP========================= */
     .main__table.supplier td:nth-of-type(1)::before {
         content: attr(data-label) "ID";
@@ -260,6 +277,11 @@
         content: attr(data-label) "Trạng thái";
     }
 
+
+    .ticket.input_ticket #content-print{
+        width: 100%;
+    }
+
     /* =====================================SÁCH =============================== */
     .main__table.book td:nth-of-type(1)::before {
         content: attr(data-label) "ID sách";
@@ -291,6 +313,29 @@
         height: 220px;
     }
 
+
+    .dialog__form-group.image {
+        position: absolute;
+        width: 100%;
+        top: 13px;
+    }
+
+    .dialog.book .dialog__form .dialog__row:nth-of-type(2){
+        margin-top: 300px;
+    }
+    .dialog.book .dialog__form .dialog__row:nth-of-type(7){
+        margin-top: 200px;
+
+    }
+    .dialog__form-group.book.description{
+        width: 100%;
+    }
+
+
+    .dialog__row .dialog__form-group.book.half{
+        width: 100%;
+    }
+    
     /* =======================================TÁC GIẢ ============================= */
     .main__table.author td:nth-of-type(1)::before {
         content: attr(data-label) "ID tác giả";

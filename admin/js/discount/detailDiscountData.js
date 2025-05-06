@@ -18,7 +18,7 @@ export async function detailDiscountData(idDiscountSelected) {
   // - Định dạng dialog
   detailDialog.classList.add("dialog");
   detailDialog.classList.add("discount");
-  detailDialog.style.width = "58%";
+  // detailDialog.style.width = "58%";
   // - Ghi nội dung dialog
   detailDialog.innerHTML = `
     <h1 class="dialog__title">Chi tiết khuyến mãi</h1>
