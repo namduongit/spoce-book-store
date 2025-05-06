@@ -1,0 +1,338 @@
+/* ====================MOBLE================== */
+@media screen and  (max-width: 750px) {
+
+   
+
+    .main__row{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .main__row + .main__row {
+        margin-top: 0px; 
+    }
+    .main__row > div, .main__row button {
+        width: 100%;
+    }
+    
+    .main__row > button,
+    .main__row > div {
+        margin-top: 25px;
+    }
+  
+    .main__table thead {
+        display: none;
+    }
+
+    .main__table tbody,
+    .main__table tr,
+    .main__table td {
+        display: block;
+        width: 100%;
+    }
+
+    .main__table tr {
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        padding: 1rem;
+        border-radius: 6px;
+        background-color: #f9f9f9;
+    }
+
+    .main__table td {
+        height: 40px;
+        text-align: left;
+        padding: 10px 0 10px 50%;
+        position: relative;
+        border-bottom: 1px solid #eee;
+    }
+
+    .main__table td::before {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        width: 45%;
+        font-weight: bold;
+        white-space: nowrap;
+        text-align: left;
+        color: #333;
+    }
+    .main__table td:last-child {
+        padding-left: 10px; 
+    }
+
+    .main__table:where( .profit_dashboard, .revenue_dashboard, .input_ticket_dashboard ) td:last-of-type {
+        display: block !important;
+        text-align: center; 
+    }
+    /* ============================================THỐNG KÊ LỢI NHUẬN ========================== */
+    .main__table.dashboard.profit_dashboard td::before {
+        content: attr(data-label);
+    }
+
+    .main__table.dashboard.profit_dashboard td:nth-of-type(2)::before {
+        content: attr(data-label) "Ngày bắt đầu";
+    }
+    .main__table.dashboard.profit_dashboard td:nth-of-type(3)::before {
+        content: attr(data-label) "Ngày kết thúc";
+    }
+    .main__table.dashboard.profit_dashboard td:nth-of-type(4)::before {
+        content: attr(data-label) "Doanh thu (VNĐ)" ;
+    }
+    .main__table.dashboard.profit_dashboard td:nth-of-type(5)::before {
+        content: attr(data-label) "Chi (VNĐ)";
+    }
+    .main__table.dashboard.profit_dashboard td:nth-of-type(6)::before {
+        content: attr(data-label) "Lợi nhuận (VNĐ)";
+    }
+
+
+    .main__table.dashboard.profit_dashboard tr:last-of-type td:nth-of-type(2)::before{
+        content: attr(data-label) "Doanh thu (VNĐ)";
+    }
+    .main__table.dashboard.profit_dashboard tr:last-of-type td:nth-of-type(3)::before{
+        content: attr(data-label) "Chi (VNĐ)";
+    }
+    
+    /*=============================================THỐNG KÊ DOANH THU==============================  */
+
+    .main__table.dashboard.revenue_dashboard td::before {
+        content: attr(data-label);
+    }
+
+    .main__table.dashboard.revenue_dashboard td:nth-of-type(2)::before {
+        content: attr(data-label) "Ngày bắt đầu";
+    }
+    .main__table.dashboard.revenue_dashboard td:nth-of-type(3)::before {
+        content: attr(data-label) "Ngày kết thúc";
+    }
+    .main__table.dashboard.revenue_dashboard td:nth-of-type(4)::before {
+        content: attr(data-label) "Số đơn hàng" ;
+    }
+    .main__table.dashboard.revenue_dashboard td:nth-of-type(5)::before {
+        content: attr(data-label) "Tổng só sách";
+    }
+    .main__table.dashboard.revenue_dashboard td:nth-of-type(6)::before {
+        content: attr(data-label) "Doanh thu (NVĐ)";
+    }
+
+    
+    .main__table.dashboard.revenue_dashboard tr:last-of-type td:nth-of-type(2)::before{
+        content: attr(data-label) "Số đơn hàng";
+    }
+    .main__table.dashboard.revenue_dashboard tr:last-of-type td:nth-of-type(3)::before{
+        content: attr(data-label) "Tổng số sách";
+    }
+    .main__table.dashboard.revenue_dashboard tr:last-of-type td:nth-of-type(4)::before{
+        content: attr(data-label) "Doanh thu (VNĐ)";
+    }
+
+    /* ==================================================THỐNG KÊ PHIẾU NHẬP ============================ */
+
+    
+    .main__table.dashboard.input_ticket_dashboard td:nth-of-type(2)::before {
+        content: attr(data-label) "Ngày bắt đầu";
+    }
+    .main__table.dashboard.input_ticket_dashboard td:nth-of-type(3)::before {
+        content: attr(data-label) "Ngày kết thúc";
+    }
+    .main__table.dashboard.input_ticket_dashboard td:nth-of-type(4)::before {
+        content: attr(data-label) "Số phiếu nhập" ;
+    }
+    .main__table.dashboard.input_ticket_dashboard td:nth-of-type(5)::before {
+        content: attr(data-label) "Tổng số phiếu nhập";
+    }
+    .main__table.dashboard.input_ticket_dashboard td:nth-of-type(6)::before {
+        content: attr(data-label) "Chi (NVĐ)";
+    }
+
+    
+    .main__table.dashboard.input_ticket_dashboard tr:last-of-type td:nth-of-type(2)::before{
+        content: attr(data-label) "Số phiếu nhập";
+    }
+    .main__table.dashboard.input_ticket_dashboard tr:last-of-type td:nth-of-type(3)::before{
+        content: attr(data-label) "Tổng số phiếu nhập";
+    }
+    .main__table.dashboard.input_ticket_dashboard tr:last-of-type td:nth-of-type(4)::before{
+        content: attr(data-label) "Chi (VNĐ)";
+    }
+    
+
+    /* ==================================================THỐNG KÊ DƠN HÀNG ============================ */
+
+    .main__table.order_dashboard td:nth-of-type(1)::before {
+        content: attr(data-label) "ID khách hàng";
+    }
+    .main__table.order_dashboard td:nth-of-type(2)::before {
+        content: attr(data-label) "Tổng đơn mua";
+    }
+    .main__table.order_dashboard td:nth-of-type(3)::before {
+        content: attr(data-label) "Tổng tiền mua";
+    }
+    .main__table.order_dashboard td:nth-of-type(4)::before {
+        content: attr(data-label) "Tổng đơn huỷ" ;
+    }
+    .main__table.order_dashboard td:nth-of-type(5)::before {
+        content: attr(data-label) "Tổng tiền huỷ";
+    }
+    
+
+
+    /* ==============================Phiếu giảm giá===================== */
+    .main__table.discount td:nth-of-type(1)::before {
+        content: attr(data-label) "ID";
+    }
+    .main__table.discount td:nth-of-type(2)::before {
+        content: attr(data-label) "Tên khuyến mãi";
+    }
+    .main__table.discount td:nth-of-type(3)::before {
+        content: attr(data-label) "Loại giảm giá";
+    }
+    .main__table.discount td:nth-of-type(4)::before {
+        content: attr(data-label) "Ngày bắt đầu";
+    }
+    .main__table.discount td:nth-of-type(5)::before {
+        content: attr(data-label) "Ngày kết thúc";
+    }
+    .main__table.discount td:nth-of-type(6)::before {
+        content: attr(data-label) "Ngày trạng thái";
+    }
+    
+
+
+    /* =============================== NHÓM QUYỀN======================== */
+    .main__table.privilege td:nth-of-type(1)::before {
+        content: attr(data-label) "ID";
+    }
+    .main__table.privilege td:nth-of-type(2)::before {
+        content: attr(data-label) "Tên nhóm quyền";
+    }
+    .main__table.privilege td:nth-of-type(3)::before {
+        content: attr(data-label) "Trạng thái";
+    }
+
+    /* ================================NGƯỜI DÙNG============================= */
+    .main__table.account td:nth-of-type(1)::before {
+        content: attr(data-label) "ID";
+    }
+    .main__table.account td:nth-of-type(2)::before {
+        content: attr(data-label) "Tên người dùng";
+    }
+    .main__table.account td:nth-of-type(3)::before {
+        content: attr(data-label) "Số điện thoại";
+    }
+    .main__table.account td:nth-of-type(4)::before {
+        content: attr(data-label) "Trạng thái";
+    }
+
+    /* =================================NHÀ CUNG CẤP========================= */
+    .main__table.supplier td:nth-of-type(1)::before {
+        content: attr(data-label) "ID";
+    }
+    .main__table.supplier td:nth-of-type(2)::before {
+        content: attr(data-label) "Tên NCC";
+    }
+    .main__table.supplier td:nth-of-type(3)::before {
+        content: attr(data-label) "Số điện thoại";
+    }
+    .main__table.supplier td:nth-of-type(4)::before {
+        content: attr(data-label) "Email";
+    }
+    .main__table.supplier td:nth-of-type(5)::before {
+        content: attr(data-label) "Trạng thái";
+    }
+
+    /* ===================================PHIẾU NHẬP=============================== */
+
+    .main__table.input_ticket td:nth-of-type(1)::before {
+        content: attr(data-label) "ID phiếu nhập";
+    }
+    .main__table.input_ticket td:nth-of-type(2)::before {
+        content: attr(data-label) "ID NCC";
+    }
+    .main__table.input_ticket td:nth-of-type(3)::before {
+        content: attr(data-label) "Ngày lập phiếu";
+    }
+    .main__table.input_ticket td:nth-of-type(4)::before {
+        content: attr(data-label) "Tổng tiền (VNĐ)";
+    }
+    .main__table.input_ticket td:nth-of-type(5)::before {
+        content: attr(data-label) "Trạng thái";
+    }
+
+    /* =====================================SÁCH =============================== */
+    .main__table.book td:nth-of-type(1)::before {
+        content: attr(data-label) "ID sách";
+    }
+    .main__table.book td:nth-of-type(2)::before {
+        content: attr(data-label) "Ảnh";
+    }
+    .main__table.book td:nth-of-type(3)::before {
+        content: attr(data-label) "Tên sách";
+    }
+    .main__table.book td:nth-of-type(4)::before {
+        content: attr(data-label) "Loại sách";
+    }
+    .main__table.book td:nth-of-type(5)::before {
+        content: attr(data-label) "Số lượng";
+    }
+    .main__table.book td:nth-of-type(6)::before {
+        content: attr(data-label) "Trạng thái";
+    }
+    .main__table.book td:nth-of-type(1),
+    .main__table.book td:nth-of-type(3),
+    .main__table.book td:nth-of-type(4),
+    .main__table.book td:nth-of-type(5),
+    .main__table.book td:nth-of-type(7),
+    .main__table.book td:nth-of-type(6) {
+            height: 40px;
+    }
+    .main__table.book td:nth-of-type(2) {
+        height: 220px;
+    }
+
+    /* =======================================TÁC GIẢ ============================= */
+    .main__table.author td:nth-of-type(1)::before {
+        content: attr(data-label) "ID tác giả";
+    }
+    .main__table.author td:nth-of-type(2)::before {
+        content: attr(data-label) "Tên tác giả";
+    }
+    .main__table.author td:nth-of-type(3)::before {
+        content: attr(data-label) "Trạng thái";
+    }
+
+    /* =========================================THỂ LOẠI ================================ */
+    .main__table.category td:nth-of-type(1)::before {
+        content: attr(data-label) "ID thể loại";
+    }
+    .main__table.category td:nth-of-type(2)::before {
+        content: attr(data-label) "Tên thể loại";
+    }
+    .main__table.category td:nth-of-type(3)::before {
+        content: attr(data-label) "Trạng thái";
+    }
+
+    /* ==========================================LOẠI BÌA ================================= */
+    .main__table.cover td:nth-of-type(1)::before {
+        content: attr(data-label) "ID bìa";
+    }
+    .main__table.cover td:nth-of-type(2)::before {
+        content: attr(data-label) "Tên bìa";
+    }
+    .main__table.cover td:nth-of-type(3)::before {
+        content: attr(data-label) "Trạng thái";
+    }
+
+    /* ==========================================NHÀ XUẤT BẢN ================================= */
+    .main__table.publisher td:nth-of-type(1)::before {
+        content: attr(data-label) "ID NXB";
+    }
+    .main__table.publisher td:nth-of-type(2)::before {
+        content: attr(data-label) "Tên NXB";
+    }
+    .main__table.publisher td:nth-of-type(3)::before {
+        content: attr(data-label) "Trạng thái";
+    }
+
+}
