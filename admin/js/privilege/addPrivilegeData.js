@@ -21,6 +21,7 @@ export async function addPrivilegeData() {
 
   // Biến chứa đối tượng là nút "Thêm"
   const addButton = document.getElementById("add-button-privilege");
+  if (!addButton) return;
 
   // Gán sự kiện khi nhấn nút "Thêm"
   addButton.addEventListener("click", (e) => {

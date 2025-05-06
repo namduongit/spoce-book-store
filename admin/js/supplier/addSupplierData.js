@@ -8,6 +8,8 @@ import { showAddressSelectDialog } from "../updateAddressSelect.js";
 export function addSupplierData() {
   // Biến chứa đối tượng là nút "Thêm"
   const addButton = document.getElementById("add-button-supplier");
+  
+  if (!addButton) return;
 
   // Gán sự kiện khi nhấn nút "Thêm"
   addButton.addEventListener("click", (e) => {

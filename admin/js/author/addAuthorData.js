@@ -7,6 +7,7 @@ import { renderAuthorTable } from "./renderAuthorTable.js";
 export function addAuthorData() {
   // Biến chứa đối tượng là nút "Thêm"
   const addButton = document.getElementById("add-button-author");
+  if (!addButton) return;
 
   // Gán sự kiện khi nhấn nút "Thêm"
   addButton.addEventListener("click", (e) => {

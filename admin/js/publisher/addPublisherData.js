@@ -7,6 +7,7 @@ export function addPublisherData() {
   // Biến chứa đối tượng là nút "Thêm"
   const addButton = document.getElementById("add-button-publisher");
 
+  if (!addButton) return;
   // Gán sự kiện khi nhấn nút "Thêm"
   addButton.addEventListener("click", (e) => {
     // Loại bỏ giá trị mặc định

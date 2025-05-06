@@ -14,6 +14,7 @@ let data = [],
 export function addInputTicketData() {
   // Biến chứa đối tượng là nút "thêm"
   const addButton = document.getElementById("add-button-input_ticket");
+  if (!addButton) return;
 
   //
   addButton.addEventListener("click", async (e) => {
