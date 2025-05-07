@@ -2,6 +2,13 @@ import { updatePrivilegeData } from "./updatePrivilegeData.js";
 import { detailPrivilegeData } from "./detailPrivilegeData.js";
 import { lockPrivilegeData } from "./lockPrivilegeData.js";
 
+import { getDetailRole } from "../getDetailRole.js";
+const roleDetail = await getDetailRole();
+const data = roleDetail['result']['data'];
+
+var infoPrivilege = data[7] && data[7].includes(2) ? '' : 'none__item';
+var editPrivilege = data[7] && data[7].includes(4) ? '' : 'none__item';
+var lockPrivilege = data[7] && data[7].includes(5) ? '' : 'none__item';
 
 // Hàm cập nhật lại dữ liệu cho bảng Người dùng
 export async function renderPrivilegeTable() {
@@ -34,11 +41,11 @@ export async function renderPrivilegeTable() {
               dataItem.status === "Hoạt động" ? 'class="green"' : 'class="red"'
             }>${dataItem.status}</span></td>
             <td>
-                <i id="detail-button-privilege" class="fa-solid fa-circle-info"></i>
-                <i id="update-button-privilege" class="fa-solid fa-pen-to-square"></i>
+                <i id="detail-button-privilege" class="fa-solid fa-circle-info ${infoPrivilege}"></i>
+                <i id="update-button-privilege" class="fa-solid fa-pen-to-square ${editPrivilege}"></i>
                 <i id="lock-button-privilege" class="fa-solid fa-${
                   dataItem.status === "Hoạt động" ? "" : "un"
-                }lock"></i>
+                }lock ${lockPrivilege}"></i>
             </td>
         </tr>
     `;

@@ -94,6 +94,7 @@ export async function filterAccount(pageIsSelected = 1) {
 export function filterAccountData() {
   // Biến chứa đối tượng là nút "Lọc"
   const filterButton = document.getElementById("filter-button-account");
+  if (!filterButton) return;
 
   // Gán sự kiện khi nhấn nút "Lọc"
   filterButton.addEventListener("click", async (e) => {

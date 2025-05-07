@@ -53,35 +53,66 @@ const data = roleDetail['result']['data'];
 */
  
 // Thống kê lợi nhuận ------------------------------------------------------------------------------------
-
+var filterProfitDashboardCSS = data[1] && data[1].includes(1) ? '' : 'none__item';
 
 
 // Thống kê doanh thu ------------------------------------------------------------------------------------
-
+var filterTotalDashboardCSS = data[2] && data[2].includes(1) ? '' : 'none__item';
 
 
 // Phần thống kê phiếu nhập ------------------------------------------------------------------------------------
-
+var filterInputTicketDashboardCSS = data[3] && data[3].includes(1) ? '' : 'none__item';
 
 
 // Phần thống kê đơn hàng ------------------------------------------------------------------------------------
-
+var filterOrderDashboardHTML = data[4] && data[4].includes(1) ? `
+        <button class="main__filter-btn" id="filter-button-order_dashboard">
+          <i class="fa-solid fa-filter"></i>
+          <span>Lọc</span>
+        </button>
+` : '';
+var filterOrderDashboardCSS = data[4] && data[4].includes(1) ? '' : 'none__item';
 
 
 // Phần đơn hàng ------------------------------------------------------------------------------------
-
+var filterOrderButtonHTML = data[5] && data[5].includes(1) ? `
+        <button class="main__filter-btn" id="filter-button-order">
+          <i class="fa-solid fa-filter"></i>
+          <span>Lọc</span>
+        </button>
+` : '';
+var filterOrderCSS = data[5] && data[5].includes(1) ? '' : 'none__item';
 
 
 // Phần phiếu giảm giá ------------------------------------------------------------------------------------
-
+var filterVoucherButtonHTML = data[6] && data[6].includes(1) ? `
+      <button class="main__filter-btn" id="filter-button-discount">
+        <i class="fa-solid fa-filter"></i>
+        <span>Lọc</span>
+      </button>
+` : '';
+var addVoucherButtonHTML = data[6] && data[6].includes(3) ? `
+      <button class="main__add-btn" id="add-button-discount">
+        <i class="fa-solid fa-plus"></i>
+        <span>Thêm</span>
+      </button>
+` : '';
+var filterVoucherCSS = data[6] && data[6].includes(1) ? '' : 'none__item';
 
 
 // Phần nhóm quyền ------------------------------------------------------------------------------------
-var filterRoleButtonHTML = data[7] && data[7].includes(1) ? `` : '';
-var detailRoleButtonHTML = data[7] && data[7].includes(2) ? `` : '';
-var addRoleButtonHTML = data[7] && data[7].includes(3) ? `` : '';
-var editRoleButtonHTML = data[7] && data[7].includes(4) ? `` : '';
-var lockRoleButtonHTML = data[7] && data[7].includes(5) ? `` : '';
+var filterRoleButtonHTML = data[7] && data[7].includes(1) ? `
+      <button class="main__filter-btn" id="filter-button-privilege">
+        <i class="fa-solid fa-filter"></i>
+        <span>Lọc</span>
+      </button>` : '';
+var addRoleButtonHTML = data[7] && data[7].includes(3) ? `
+      <button class="main__add-btn" id="add-button-privilege">
+        <i class="fa-solid fa-plus"></i>
+        <span>Thêm</span>
+      </button>
+` : '';
+var filterRoleCSS = data[7] && data[7].includes(1) ? '' : 'none__item';
 
 
 // Phần người dùng ------------------------------------------------------------------------------------
@@ -91,15 +122,13 @@ var filterMemButtonHTML = data[8] && data[8].includes(1) ? `
         <span>Lọc</span>
       </button>
 ` : '';
-var detailMemButtonHTML = data[8] && data[8].includes(2) ? `` : '';
 var addMemButtonHTML = data[8] && data[8].includes(3) ? `
       <button class="main__add-btn" id="add-button-account">
         <i class="fa-solid fa-plus"></i>
         <span>Thêm</span>
       </button>
 ` : '';
-var editMemButtonHTML = data[8] && data[8].includes(4) ? `` : '';
-var lockMemButtonHTML = data[8] && data[8].includes(5) ? `` : '';
+var filterMemCSS = data[8] && data[8].includes(1) ? '' : 'none__item';
 
 
 // Phần nhà cung cấp ------------------------------------------------------------------------------------
@@ -109,15 +138,13 @@ var filterSupplierButtonHTML = data[9] && data[9].includes(1) ? `
       <span>Lọc</span>
     </button>
 ` : '';
-var detailSupplierButtonHTML = data[9] && data[9].includes(2) ? `` : '';
 var addSupplierButtonHTML = data[9] && data[9].includes(3) ? `
     <button class="main__add-btn" id="add-button-supplier">
       <i class="fa-solid fa-plus"></i>
       <span>Thêm</span>
     </button>
 ` : '';
-var editSupplierButtonHTML = data[9] && data[9].includes(4) ? `` : '';
-var lockSupplierButtonHTML = data[9] && data[9].includes(5) ? `` : '';
+var filterSupplierCSS = data[9] && data[9].includes(1) ? '' : 'none__item';
 
 
 // Phần phiếu nhập ------------------------------------------------------------------------------------
@@ -127,15 +154,13 @@ var filterInputTicketButtonHTML = data[10] && data[10].includes(1) ? `
         <span>Lọc</span>
       </button>
 ` : '';
-var detailInputTicketButtonHTML = data[10] && data[10].includes(2) ? `` : '';
 var addInputTicketButtonHTML = data[10] && data[10].includes(3) ? `
       <button class="main__add-btn" id="add-button-input_ticket">
         <i class="fa-solid fa-plus"></i>
         <span>Thêm</span>
       </button>
 ` : '';
-var editInputTicketButtonHTML = data[10] && data[10].includes(4) ? `` : '';
-var lockInputTicketButtonHTML = data[10] && data[10].includes(5) ? `` : '';
+var filterInputTicketCSS = data[10] && data[10].includes(1) ? '' : 'none__item';
 
 
 // Phần sách ------------------------------------------------------------------------------------
@@ -145,15 +170,13 @@ var filterBookButtonHTML = data[11] && data[11].includes(1) ? `
         <span>Lọc</span>
       </button>
 ` : '';
-var detailBookButtonHTML = data[11] && data[11].includes(2) ? `` : '';
 var addBookButtonHTML = data[11] && data[11].includes(3) ? `
       <button class="main__add-btn" id="add-button-book">
         <i class="fa-solid fa-plus"></i>
         <span>Thêm</span>
       </button>
 ` : '';
-var editBookButtonHTML = data[11] && data[11].includes(4) ? `` : '';
-var lockBookButtonHTML = data[11] && data[11].includes(5) ? `` : '';
+var filterBookCSS = data[11] && data[11].includes(1) ? '' : 'none__item';
 
 
 // Phần tác giả ------------------------------------------------------------------------------------
@@ -163,16 +186,13 @@ var filterAuthorButtonHTML = data[12] && data[12].includes(1) ? `
         <span>Lọc</span>
       </button>
 ` : '';
-var detailAuthorButtonHTML = data[12] && data[12].includes(2) ? `` : '';
 var addAuthorButtonHTML = data[12] && data[12].includes(3) ? `
       <button class="main__add-btn" id="add-button-author">
         <i class="fa-solid fa-plus"></i>
         <span>Thêm</span>
       </button>
 ` : '';
-var editAuthorButtonHTML = data[12] && data[12].includes(4) ? `` : '';
-var lockAuthorButtonHTML = data[12] && data[12].includes(5) ? `` : '';
-
+var filterAuthorCSS = data[12] && data[12].includes(1) ? '' : 'none__item';
 
 // Phần thể loại ------------------------------------------------------------------------------------
 var filterCategoryButtonHTML = data[13] && data[13].includes(1) ? `
@@ -181,15 +201,13 @@ var filterCategoryButtonHTML = data[13] && data[13].includes(1) ? `
         <span>Lọc</span>
       </button>
 ` : '';
-var detailCategoryButtonHTML = data[13] && data[13].includes(2) ? `` : '';
 var addCategoryButtonHTML = data[13] && data[13].includes(3) ? `
       <button class="main__add-btn" id="add-button-category">
         <i class="fa-solid fa-plus"></i>
         <span>Thêm</span>
       </button>
 ` : '';
-var editCategoryButtonHTML = data[13] && data[13].includes(4) ? `` : '';
-var lockCategoryButtonHTML = data[13] && data[13].includes(5) ? `` : '';
+var filterCategoryCSS = data[13] && data[13].includes(1) ? '' : 'none__item';
 
 // Phần loại bìa ------------------------------------------------------------------------------------
 var filterCoverButtonHTML = data[14] && data[14].includes(1) ? `
@@ -198,16 +216,13 @@ var filterCoverButtonHTML = data[14] && data[14].includes(1) ? `
         <span>Lọc</span>
       </button>
 ` : '';
-var detailCoverButtonHTML = data[14] && data[14].includes(2) ? `` : '';
 var addCoverButtonHTML = data[14] && data[14].includes(3) ? `
       <button class="main__add-btn" id="add-button-cover">
         <i class="fa-solid fa-plus"></i>
         <span>Thêm</span>
       </button>
 ` : '';
-var editCoverButtonHTML = data[14] && data[14].includes(4) ? `` : '';
-var lockCoverButtonHTML = data[14] && data[14].includes(5) ? `` : '';
-
+var filterCoverCSS = data[14] && data[14].includes(1) ? '' : 'none__item';
 
 // Phần nhà xuất bản ------------------------------------------------------------------------------------
 var filterPublisherButtonHTML = data[15] && data[15].includes(1) ? `
@@ -222,10 +237,7 @@ var addPublisherButtonHTML = data[15] && data[15].includes(3) ? `
         <span>Thêm</span>
       </button>
 ` : '';
-var editPublisherButtonHTML = data[15] && data[15].includes(4) ? `
-` : '';
-var lockPublisherButtonHTML = data[15] && data[15].includes(5) ? `
-` : '';
+var filterPublisherCSS = data[15] && data[15].includes(1) ? '' : 'none__item';
 
 
 
@@ -244,7 +256,7 @@ const mainContentMap = {
   profit_dashboard: `
     <h1 class="main__title">Thống kê lợi nhuận</h1>
     <div class="main__row">
-      <div class="main__timeline-slt main__select slt-form-1">
+      <div class="main__timeline-slt main__select slt-form-1 ${filterProfitDashboardCSS}">
         <input required="" type="text" id="status-slt-profit_dashboard" />
         <span><i class="fa-solid fa-timeline"></i></i>&nbsp;&nbsp;Chọn Khoảng thời gian</span>
         <ul>
@@ -252,12 +264,12 @@ const mainContentMap = {
           <li>Lọc theo tháng</li>
         </ul>
       </div>
-      <div class="main__timeline-detail-slt main__select slt-form-1">
+      <div class="main__timeline-detail-slt main__select slt-form-1 ${filterProfitDashboardCSS}">
         <input required="" type="text" id="status-slt-profit_dashboard" />
         <span><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;Chọn Thời gian cụ thể</span>
         <ul></ul>
       </div>
-      <button class="main__see-btn" id="filter-button-profit_dashboard">
+      <button class="main__see-btn ${filterProfitDashboardCSS}" id="filter-button-profit_dashboard">
         <i class="fa-solid fa-eye"></i>
         <span>Xem</span>
       </button>
@@ -278,7 +290,7 @@ const mainContentMap = {
   revenue_dashboard: `
     <h1 class="main__title">Thống kê doanh thu</h1>
     <div class="main__row">
-      <div class="main__timeline-slt main__select slt-form-1">
+      <div class="main__timeline-slt main__select slt-form-1 ${filterTotalDashboardCSS}">
         <input required="" type="text" id="status-slt-revenue_dashboard" />
         <span><i class="fa-solid fa-timeline"></i></i>&nbsp;&nbsp;Chọn Khoảng thời gian</span>
         <ul>
@@ -286,15 +298,17 @@ const mainContentMap = {
           <li>Lọc theo tháng</li>
         </ul>
       </div>
-      <div class="main__timeline-detail-slt main__select slt-form-1">
+      <div class="main__timeline-detail-slt main__select slt-form-1 ${filterTotalDashboardCSS}">
         <input required="" type="text" id="status-slt-revenue_dashboard" />
         <span><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;Chọn Thời gian cụ thể</span>
         <ul></ul>
       </div>
-      <button class="main__see-btn" id="filter-button-revenue_dashboard">
+
+      <button class="main__see-btn ${filterTotalDashboardCSS}" id="filter-button-revenue_dashboard">
         <i class="fa-solid fa-eye"></i>
         <span>Xem</span>
       </button>
+
       <button class="main__print-btn" id="print-button-revenue_dashboard">
         <i class="fa-solid fa-print"></i>
         <span>In thống kê</span>
@@ -312,7 +326,7 @@ const mainContentMap = {
   input_ticket_dashboard: `
     <h1 class="main__title">Thống kê phiếu nhập</h1>
     <div class="main__row">
-      <div class="main__timeline-slt main__select slt-form-1">
+      <div class="main__timeline-slt main__select slt-form-1 ${filterInputTicketDashboardCSS}">
         <input required="" type="text" id="status-slt-input_ticket_dashboard" />
         <span><i class="fa-solid fa-timeline"></i></i>&nbsp;&nbsp;Chọn Khoảng thời gian</span>
         <ul>
@@ -320,15 +334,17 @@ const mainContentMap = {
           <li>Lọc theo tháng</li>
         </ul>
       </div>
-      <div class="main__timeline-detail-slt main__select slt-form-1">
+      <div class="main__timeline-detail-slt main__select slt-form-1 ${filterInputTicketDashboardCSS}">
         <input required="" type="text" id="status-slt-input_ticket_dashboard" />
         <span><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;Chọn Thời gian cụ thể</span>
         <ul></ul>
       </div>
-      <button class="main__see-btn" id="filter-button-input_ticket_dashboard">
+
+      <button class="main__see-btn ${filterInputTicketDashboardCSS}" id="filter-button-input_ticket_dashboard">
         <i class="fa-solid fa-eye"></i>
         <span>Xem</span>
       </button>
+
       <button class="main__print-btn" id="print-button-input_ticket_dashboard">
         <i class="fa-solid fa-print"></i>
         <span>In thống kê</span>
@@ -346,11 +362,11 @@ const mainContentMap = {
   order_dashboard: `
     <h1 class="main__title">Thống kê đơn hàng</h1>
     <div class="main__row">
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterOrderDashboardCSS}">
         <input required="" type="text" id="find-inp-order_dashboard" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;Khách hàng</span>
       </div>
-      <div class="main__sort-slt main__select slt-form-1">
+      <div class="main__sort-slt main__select slt-form-1 ${filterOrderDashboardCSS}">
         <input required="" type="text" id="sort-slt-order_dashboard" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Chọn Sắp xếp</span>
         <ul>
@@ -366,22 +382,19 @@ const mainContentMap = {
           <li>Tổng tiền huỷ giảm dần</li>
         </ul>
       </div>
-      <div class="main__find-inp inp-text-form-1 date">
+      <div class="main__find-inp inp-text-form-1 date ${filterOrderDashboardCSS}">
         <input required="" type="date" id="date-start-inp-order_dashboard" />
         <i class="fa-solid fa-minus"></i>
         <input required="" type="date" id="date-end-inp-order_dashboard" />
         <span><i class="fa-solid fa-calendar"></i>&nbsp;&nbsp;Thời gian thống kê</span>
       </div>
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterOrderDashboardCSS}">
         <input required="" type="text" id="show-inp-order_dashboard" />
         <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Nhập số dòng</span>
       </div>
       <div class="main__buttons">
-        <button class="main__filter-btn" id="filter-button-order_dashboard">
-          <i class="fa-solid fa-filter"></i>
-          <span>Lọc</span>
-        </button>
-        <button class="main__refresh-btn" id="reset-button-order_dashboard">
+        ${filterOrderDashboardHTML}
+        <button class="main__refresh-btn ${filterOrderDashboardCSS}" id="reset-button-order_dashboard">
           <i class="fa-solid fa-refresh"></i>
           <span>Đặt lại</span>
         </button>
@@ -408,11 +421,11 @@ const mainContentMap = {
   order: `
     <h1 class="main__title">Đơn hàng</h1>
     <div class="main__row">
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterOrderCSS}">
         <input required="" type="text" id="find-inp-order" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID đơn hàng</span>
       </div>
-      <div class="main__sort-slt main__select slt-form-1">
+      <div class="main__sort-slt main__select slt-form-1 ${filterOrderCSS}">
         <input required="" type="text" id="sort-slt-order" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Chọn Sắp xếp</span>
         <ul>
@@ -424,25 +437,25 @@ const mainContentMap = {
           <li>Tổng thanh toán giảm dần</li>
         </ul>
       </div>
-      <div class="main__find-inp inp-text-form-1 date">
+      <div class="main__find-inp inp-text-form-1 date ${filterOrderCSS}">
         <input required="" type="date" id="date-start-inp-order" />
         <i class="fa-solid fa-minus"></i>
         <input required="" type="date" id="date-end-inp-order" />
         <span><i class="fa-solid fa-calendar"></i>&nbsp;&nbsp;Ngày tạo đơn</span>
       </div>
-      <div class="main__province-slt main__select slt-form-1">
+      <div class="main__province-slt main__select slt-form-1 ${filterOrderCSS}">
         <input required="" type="text" id="province-slt-order" />
         <span><i class="fa-solid fa-tree-city"></i>&nbsp;&nbsp;Chọn Tỉnh thành</span>
         <ul></ul>
       </div>
-      <div class="main__district-slt main__select slt-form-1">
+      <div class="main__district-slt main__select slt-form-1 ${filterOrderCSS}">
         <input required="" type="text" id="district-slt-order" />
         <span><i class="fa-solid fa-tree-city"></i>&nbsp;&nbsp;Chọn Quận huyện</span>
         <ul></ul>
       </div>
     </div>
     <div class="main__row">
-      <div class="main__status-slt main__select slt-form-1">
+      <div class="main__status-slt main__select slt-form-1 ${filterOrderCSS}">
         <input required="" type="text" id="status-slt-order" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
@@ -452,19 +465,19 @@ const mainContentMap = {
           <li>Đang chờ xác nhận</li>  
         </ul>
       </div>
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterOrderCSS}">
         <input required="" type="text" id="show-inp-order" />
         <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>
       <div class="main__buttons">
-        <button class="main__filter-btn" id="filter-button-order">
-          <i class="fa-solid fa-filter"></i>
-          <span>Lọc</span>
-        </button>
-        <button class="main__refresh-btn" id="reset-button-order">
+
+        ${filterOrderButtonHTML}
+
+        <button class="main__refresh-btn ${filterOrderCSS}" id="reset-button-order">
           <i class="fa-solid fa-refresh"></i>
           <span>Đặt lại</span>
         </button>
+
       </div>
     </div>
     <div class="main__data">
@@ -488,11 +501,11 @@ const mainContentMap = {
   privilege: `
     <h1 class="main__title">Nhóm quyền</h1>
     <div class="main__row">
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterRoleCSS}">
         <input required="" type="text" id="find-inp-privilege" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên nhóm quyền</span>
       </div>
-      <div class="main__sort-slt main__select slt-form-1">
+      <div class="main__sort-slt main__select slt-form-1 ${filterRoleCSS}">
         <input required="" type="text" id="sort-slt-privilege" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Chọn Sắp xếp</span>
         <ul>
@@ -502,7 +515,7 @@ const mainContentMap = {
           <li>Tên nhóm quyền giảm dần</li>
         </ul>
       </div>
-      <div class="main__status-slt main__select slt-form-1">
+      <div class="main__status-slt main__select slt-form-1 ${filterRoleCSS}">
         <input required="" type="text" id="status-slt-privilege" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
@@ -510,14 +523,11 @@ const mainContentMap = {
           <li>Tạm dừng</li>
         </ul>
       </div>
-      <button class="main__filter-btn" id="filter-button-privilege">
-        <i class="fa-solid fa-filter"></i>
-        <span>Lọc</span>
-      </button>
-      <button class="main__add-btn" id="add-button-privilege">
-        <i class="fa-solid fa-plus"></i>
-        <span>Thêm</span>
-      </button>
+
+      ${filterRoleButtonHTML}
+
+      ${addRoleButtonHTML}
+
     </div>
     <div class="main__data">
       <table class="main__table privilege">
@@ -537,11 +547,11 @@ const mainContentMap = {
   account: `
     <h1 class="main__title">Người dùng</h1>
     <div class="main__row">
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterMemCSS}">
         <input required="" type="text" id="find-inp-account" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Họ và tên</span>
       </div>
-      <div class="main__sort-slt main__select slt-form-1">
+      <div class="main__sort-slt main__select slt-form-1 ${filterMemCSS}">
         <input required="" type="text" id="sort-slt-account" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Chọn Sắp xếp</span>
         <ul>
@@ -551,14 +561,14 @@ const mainContentMap = {
           <li>Tên đăng nhập giảm dần</li>
         </ul>
       </div>
-      <div class="main__privilege-slt main__select slt-form-1">
+      <div class="main__privilege-slt main__select slt-form-1 ${filterMemCSS}">
         <input required="" type="text" id="privilege-slt-account" />
         <span><i class="fa-solid fa-user-gear"></i>&nbsp;&nbsp;Chọn Nhóm quyền</span>
         <ul>
           
         </ul>
       </div>
-      <div class="main__status-slt main__select slt-form-1">
+      <div class="main__status-slt main__select slt-form-1 ${filterMemCSS}">
         <input required="" type="text" id="status-slt-account" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
@@ -607,11 +617,11 @@ const mainContentMap = {
   discount: `
     <h1 class="main__title">Phiếu giảm giá</h1>
     <div class="main__row">
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterVoucherCSS}">
         <input required="" type="text" id="find-inp-discount" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên phiếu giảm giá</span>
       </div>
-      <div class="main__find-inp main__select slt-form-1">
+      <div class="main__find-inp main__select slt-form-1 ${filterVoucherCSS}">
         <input required="" type="text" id="type-slt-discount" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Loại phiếu giảm giá</span>
         <ul>
@@ -619,13 +629,13 @@ const mainContentMap = {
           <li>Tiền</li>
         </ul>
       </div>
-      <div class="main__find-inp inp-text-form-1 date">
+      <div class="main__find-inp inp-text-form-1 date ${filterVoucherCSS}">
         <input required="" type="date" id="date-start-inp-discount" />
         <i class="fa-solid fa-minus"></i>
         <input required="" type="date" id="date-end-inp-discount" />
         <span><i class="fa-solid fa-calendar"></i>&nbsp;&nbsp;Ngày áp dụng</span>
       </div>
-      <div class="main__status-slt main__select slt-form-1">
+      <div class="main__status-slt main__select slt-form-1 ${filterVoucherCSS}">
         <input required="" type="text" id="status-slt-discount" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Chọn Trạng thái</span>
         <ul>
@@ -633,14 +643,9 @@ const mainContentMap = {
           <li>Tạm dừng</li>
         </ul>
       </div>
-      <button class="main__filter-btn" id="filter-button-discount">
-        <i class="fa-solid fa-filter"></i>
-        <span>Lọc</span>
-      </button>
-      <button class="main__add-btn" id="add-button-discount">
-        <i class="fa-solid fa-plus"></i>
-        <span>Thêm</span>
-      </button>
+      ${filterVoucherButtonHTML}
+
+      ${addVoucherButtonHTML}
     </div>
     <div class="main__data">
       <table class="main__table discount">
@@ -664,11 +669,11 @@ const mainContentMap = {
   supplier: `
   <h1 class="main__title">Nhà cung cấp</h1>
   <div class="main__row">
-    <div class="main__find-inp inp-text-form-1">
+    <div class="main__find-inp inp-text-form-1 ${filterSupplierCSS}">
       <input required="" type="text" id="find-inp-supplier" />
       <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên nhà cung cấp</span>
     </div>
-    <div class="main__sort-slt main__select slt-form-1">
+    <div class="main__sort-slt main__select slt-form-1 ${filterSupplierCSS}">
       <input required="" type="text" id="sort-slt-supplier" />
       <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
       <ul>
@@ -678,7 +683,7 @@ const mainContentMap = {
         <li>Tên nhà cung cấp giảm dần</li>
       </ul>
     </div>
-    <div class="main__status-slt main__select slt-form-1">
+    <div class="main__status-slt main__select slt-form-1 ${filterSupplierCSS}">
       <input required="" type="text" id="status-slt-supplier" />
       <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
      <ul>
@@ -686,7 +691,7 @@ const mainContentMap = {
           <li>Tạm dừng</li>
         </ul>
     </div>
-    <div class="main__find-inp inp-text-form-1">
+    <div class="main__find-inp inp-text-form-1 ${filterSupplierCSS}">
       <input required="" type="text" id="show-inp-supplier" />
       <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
     </div>
@@ -717,11 +722,11 @@ const mainContentMap = {
   input_ticket: `
     <h1 class="main__title">Phiếu nhập</h1>
     <div class="main__row">
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterInputTicketCSS}">
         <input required="" type="text" id="find-inp-input_ticket" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID phiếu nhập</span>
       </div>
-      <div class="main__sort-slt main__select slt-form-1">
+      <div class="main__sort-slt main__select slt-form-1 ${filterInputTicketCSS}">
         <input required="" type="text" id="sort-slt-input_ticket" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
         <ul>
@@ -735,13 +740,13 @@ const mainContentMap = {
           <li>Tổng tiền nhập giảm dần</li>
         </ul>
       </div>
-      <div class="main__find-inp inp-text-form-1 date">
+      <div class="main__find-inp inp-text-form-1 date ${filterInputTicketCSS}">
         <input required="" type="date" id="date-start-inp-input_ticket" />
         <i class="fa-solid fa-minus"></i>
         <input required="" type="date" id="date-end-inp-input_ticket" />
         <span><i class="fa-solid fa-calendar"></i>&nbsp;&nbsp;Ngày lập phiếu</span>
       </div>
-      <div class="main__status-slt main__select slt-form-1">
+      <div class="main__status-slt main__select slt-form-1 ${filterInputTicketCSS}">
         <input required="" type="text" id="status-slt-input_ticket" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
         <ul>
@@ -778,11 +783,11 @@ const mainContentMap = {
   book: `
     <h1 class="main__title">Sách</h1>
     <div class="main__row">
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterBookCSS}">
         <input required="" type="text" id="find-inp-book" autocomplete="off" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tiêu đề</span>
       </div>
-      <div class="main__sort-slt main__select slt-form-1">
+      <div class="main__sort-slt main__select slt-form-1 ${filterBookCSS}">
         <input required="" type="text" id="sort-slt-book" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
         <ul>
@@ -794,12 +799,12 @@ const mainContentMap = {
           <li>Số lượng giảm dần</li>
         </ul>
       </div>
-      <div class="main__category-slt main__select slt-form-1">
+      <div class="main__category-slt main__select slt-form-1 ${filterBookCSS}">
         <input required="" type="text" id="category-slt-book" />
         <span><i class="fa-solid fa-font-awesome"></i>&nbsp;&nbsp;Thể loại</span>
         <ul></ul>
       </div>
-      <div class="main__status-slt main__select slt-form-1">
+      <div class="main__status-slt main__select slt-form-1 ${filterBookCSS}">
         <input required="" type="text" id="status-slt-book" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
         <ul>
@@ -807,7 +812,7 @@ const mainContentMap = {
           <li>Dừng bán</li>
         </ul>
       </div>
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterBookCSS}">
         <input required="" type="text" id="show-inp-book" />
         <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>
@@ -839,11 +844,11 @@ const mainContentMap = {
   author: `
     <h1 class="main__title">Tác giả</h1>
     <div class="main__row">
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterAuthorCSS}">
         <input required="" type="text" id="find-inp-author" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên tác giả</span>
       </div>
-      <div class="main__sort-slt main__select slt-form-1">
+      <div class="main__sort-slt main__select slt-form-1 ${filterAuthorCSS}">
         <input required="" type="text" id="sort-slt-author" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
         <ul>
@@ -853,7 +858,7 @@ const mainContentMap = {
           <li>Tên tác giả giảm dần</li>
         </ul>
       </div>
-      <div class="main__status-slt main__select slt-form-1">
+      <div class="main__status-slt main__select slt-form-1 ${filterAuthorCSS}">
         <input required="" type="text" id="status-slt-author" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
         <ul>
@@ -861,7 +866,7 @@ const mainContentMap = {
           <li>Tạm dừng</li>
         </ul>
       </div>
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterAuthorCSS}">
         <input required="" type="text" id="show-inp-author" />
         <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>
@@ -890,11 +895,11 @@ const mainContentMap = {
   category: `
     <h1 class="main__title">Thể loại</h1>
     <div class="main__row">
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterCategoryCSS}">
         <input required="" type="text" id="find-inp-category" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên thể loại</span>
       </div>
-      <div class="main__sort-slt main__select slt-form-1">
+      <div class="main__sort-slt main__select slt-form-1 ${filterCategoryCSS}">
         <input required="" type="text" id="sort-slt-category" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
         <ul>
@@ -904,7 +909,7 @@ const mainContentMap = {
           <li>Tên thể loại giảm dần</li>
         </ul>
       </div>
-      <div class="main__status-slt main__select slt-form-1">
+      <div class="main__status-slt main__select slt-form-1 ${filterCategoryCSS}">
         <input required="" type="text" id="status-slt-category" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
         <ul>
@@ -912,7 +917,7 @@ const mainContentMap = {
             <li>Tạm dừng</li>
           </ul>
       </div>
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterCategoryCSS}">
         <input required="" type="text" id="show-inp-category" />
         <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>
@@ -941,11 +946,12 @@ const mainContentMap = {
   cover: `
     <h1 class="main__title">Loại bìa</h1>
     <div class="main__row">
-      <div class="main__find-inp inp-text-form-1">
+
+      <div class="main__find-inp inp-text-form-1 ${filterCoverCSS}">
         <input required="" type="text" id="find-inp-cover" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên loại bìa</span>
       </div>
-      <div class="main__sort-slt main__select slt-form-1">
+      <div class="main__sort-slt main__select slt-form-1 ${filterCoverCSS}">
         <input required="" type="text" id="sort-slt-cover" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
         <ul>
@@ -955,7 +961,7 @@ const mainContentMap = {
           <li>Tên loại bìa giảm dần</li>
         </ul>
       </div>
-      <div class="main__status-slt main__select slt-form-1">
+      <div class="main__status-slt main__select slt-form-1 ${filterCoverCSS}">
         <input required="" type="text" id="status-slt-cover" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
           <ul>
@@ -963,7 +969,7 @@ const mainContentMap = {
             <li>Tạm dừng</li>
           </ul>
       </div>
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterCoverCSS}">
         <input required="" type="text" id="show-inp-cover" />
         <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>
@@ -973,6 +979,7 @@ const mainContentMap = {
       ${addCoverButtonHTML}
 
     </div>
+
     <div class="main__data">
       <table class="main__table cover">
         <thead>
@@ -993,11 +1000,11 @@ const mainContentMap = {
   publisher: `
     <h1 class="main__title">Nhà xuất bản</h1>
     <div class="main__row">
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterPublisherCSS}">
         <input required="" type="text" id="find-inp-publisher" autocomplete="off" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên nhà xuất bản</span>
       </div>
-      <div class="main__sort-slt main__select slt-form-1">
+      <div class="main__sort-slt main__select slt-form-1 ${filterPublisherCSS}">
         <input required="" type="text" id="sort-slt-publisher" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
         <ul>
@@ -1007,7 +1014,7 @@ const mainContentMap = {
           <li>Tên nhà xuất bản giảm dần</li>
         </ul>
       </div>
-      <div class="main__status-slt main__select slt-form-1">
+      <div class="main__status-slt main__select slt-form-1 ${filterPublisherCSS}">
         <input required="" type="text" id="status-slt-publisher" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
         <ul>
@@ -1015,7 +1022,7 @@ const mainContentMap = {
           <li>Tạm dừng</li>
         </ul>
       </div>
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterPublisherCSS}">
         <input required="" type="text" id="show-inp-publisher" />
         <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>

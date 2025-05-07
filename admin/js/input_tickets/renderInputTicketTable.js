@@ -7,6 +7,15 @@ import { updateInputTicketData } from "./updateInputTicketData.js";
 import { printInputTicket } from "./printInputTicket.js";
 import { filterInputTicket } from "./filterInputTicket.js";
 
+import { getDetailRole } from "../getDetailRole.js";
+const roleDetail = await getDetailRole();
+const data = roleDetail['result']['data'];
+
+var infoInputTicket = data[10] && data[10].includes(2) ? '' : 'none__item';
+var editInputTicket = data[10] && data[10].includes(4) ? '' : 'none__item';
+var lockInputTicket = data[10] && data[10].includes(5) ? '' : 'none__item';
+
+
 // Hàm cập nhật tổng tiền nhập của phiếu
 export function updateCurrentTotal(data) {
   let total = 0;
@@ -346,7 +355,7 @@ export async function renderInputTicketTable(currentPage) {
                 : 'class="gray"'
             }>${data[i].status}</span></td>
             <td>
-                <i class="fa-solid fa-pen-to-square"></i>
+                <i class="fa-solid fa-pen-to-square ${editInputTicket}"></i>
                 <i class="fa-solid fa-print"></i>
             </td>
         </tr>
