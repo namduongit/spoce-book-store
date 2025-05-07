@@ -87,7 +87,7 @@ export async function getAddressByID(addressID) {
 export async function updateInfoTopBar(promiseResponse) {
     showLoading();
     // Đưa lên Cookie
-    setCookie('cookieRole', promiseResponse['role']['data'][0]['roleId']);
+    setCookie('cookieRole', promiseResponse['role']['data'].length > 0 ? promiseResponse['role']['data'][0]['roleId'] : 'none');
 
     const currentUser = await getUserByID(promiseResponse.user['id']);
     let responseRole = await getRoleById(currentUser['role_id']);
