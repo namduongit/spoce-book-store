@@ -20,7 +20,7 @@ if (empty($maNguoiDung)) {
 $accountEmail = isset($data['accountEmail']) ? $data['accountEmail'] : '';
 $accountFullName = isset($data['accountFullName']) ? $data['accountFullName'] : '';
 $accountPassword = isset($data['accountPassword']) ? $data['accountPassword'] : '';
-$accountRole = isset($data['accountRole']) ? $data['accountRole'] : 4;
+$accountRole = isset($data['accountRole']) ? $data['accountRole'] : null;
 $accountPhone = isset($data['accountPhone']) ? $data['accountPhone'] : '';
 $accountStatus = isset($data['accountStatus']) ? $data['accountStatus'] : 'Hoạt động';
 $accountName = isset($data['accountName']) ? $data['accountName'] : '';
