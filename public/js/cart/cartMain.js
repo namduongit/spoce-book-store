@@ -1200,7 +1200,7 @@ async function checkOutBill() {
   let discountInput = document.querySelector(".checkout__promotion-input-holder .checkout__input-field #promotion-code");
   let discountSubmit = document.querySelector('.checkout__promotion-btn');
   let totalDiscount = 0;
-  let discount;
+  let discount = null;
 
   if (discountInput && discountSubmit) {
     discountInput.addEventListener('input', function () {
@@ -1431,7 +1431,7 @@ async function checkOutBill() {
         return;
       }
 
-      if (discount.status != null) {
+      if (discount != null) {
         couponsCode = discount.id;
       }
 
