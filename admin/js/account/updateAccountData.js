@@ -210,6 +210,7 @@ export function updateAccountData(idAccountSelected) {
           const username = document
             .getElementById("add-account-username")
             .value.trim();
+          console.log("quyền chọn", privilege);
 
           // Regex kiểm tra định dạng địa chỉ (có thể điều chỉnh)
           const addressFormatRegex =
@@ -271,7 +272,9 @@ export function updateAccountData(idAccountSelected) {
           data.append("accountPhone", phone);
           data.append("accountEmail", email);
           data.append("accountPassword", password);
-          data.append("accountRole", privilege);
+          if (privilege !== "null") {
+            data.append("accountPrivilege", privilege);
+          }
           data.append("accountName", username);
           // Gọi API cập nhật
           try {

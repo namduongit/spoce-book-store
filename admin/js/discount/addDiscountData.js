@@ -7,7 +7,7 @@ import { clickToShowDatePicker, defaultDateSelected } from "../others.js";
 export function addDiscountData() {
   // Biến chứa đối tượng là nút "Thêm"
   const addButton = document.getElementById("add-button-discount");
-
+  if (!addButton) return;
   // Gán sự kiện khi nhấn nút "Thêm"
   addButton.addEventListener("click", (e) => {
     // Loại bỏ giá trị mặc định

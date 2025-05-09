@@ -63,6 +63,7 @@ echo json_encode([
     "message" => "Đã đăng nhập",
     "logged_in" => true,
     "session_id" => session_id(),
-    "user" => $_SESSION["user"]
+    "user" => $_SESSION["user"],
+    "role" => $_SESSION["role"]
 ]);
 ?>

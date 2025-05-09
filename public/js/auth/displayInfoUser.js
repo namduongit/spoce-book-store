@@ -3,7 +3,7 @@ import { showConfirmationDialog } from "../question.js";
 import { Validation } from '../validation.js';
 import { updateAddressSelect } from '../../../api/address/updateAddressSelect.js';
 import { autoSelectAddressByName } from "../../../api/address/updateAddressSelect.js";
-import { deleteCookie, getRoleById } from "../common.js";
+import { deleteCookie, getRoleById, setCookie } from "../common.js";
 import { getCookie } from "../common.js";
 import { showOrderHistory } from "./orderHistory.js";
 
@@ -86,6 +86,9 @@ export async function getAddressByID(addressID) {
 
 export async function updateInfoTopBar(promiseResponse) {
     showLoading();
+    // Đưa lên Cookie
+    setCookie('cookieRole', promiseResponse['role']['data'].length > 0 ? promiseResponse['role']['data'][0]['roleId'] : 'none');
+
     const currentUser = await getUserByID(promiseResponse.user['id']);
     let responseRole = await getRoleById(currentUser['role_id']);
     let nameRole = responseRole['response'] ? responseRole['data'].name : 'Khách hàng';
@@ -157,6 +160,7 @@ export async function updateInfoTopBar(promiseResponse) {
             if (data['success']) {
                 // Xóa Session cũ và login cũ
                 deleteCookie('isLogin');
+                deleteCookie('cookieRole');
                 toast({
                     title: 'Thông báo',
                     message: 'Đăng xuất thành công !',

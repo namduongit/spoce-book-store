@@ -20,6 +20,216 @@ import { fetchData } from "../../public/js/book/getDataBook.js";
 // import { updateAddressSelect } from "../../../api/address/updateAddressSelect.js";
 // import { renderPrivilegeTable } from "./privilege/renderPrivilegeTable.js";
 import { updatePrivilegeTable } from "./privilege/updatePrivilegeTable.js";
+
+import { getDetailRole } from "./getDetailRole.js";
+const roleDetail = await getDetailRole();
+const data = roleDetail['result']['data'];
+
+/**
+
+1	Thống kê lợi nhuận
+2	Thống kê doanh thu
+3	Thống kê phiếu nhập
+4	Thống kê đơn hàng
+5	Đơn hàng
+6	Phiếu giảm giá
+7	Nhóm quyền
+8	Người dùng
+9	Nhà cung cấp
+10	Phiếu nhập
+11	Sách
+12	Tác giả
+13	Thể loại
+14	Loại bìa
+15	Nhà xuất bản
+16	Thẻ thanh toán
+
+1   Lọc
+2   Chi tiết
+3   Thêm
+4   Sửa
+5   Xóa/Khóa
+ 
+*/
+ 
+// Thống kê lợi nhuận ------------------------------------------------------------------------------------
+
+
+
+// Thống kê doanh thu ------------------------------------------------------------------------------------
+
+
+
+// Phần thống kê phiếu nhập ------------------------------------------------------------------------------------
+
+
+
+// Phần thống kê đơn hàng ------------------------------------------------------------------------------------
+
+
+
+// Phần đơn hàng ------------------------------------------------------------------------------------
+
+
+
+// Phần phiếu giảm giá ------------------------------------------------------------------------------------
+
+
+
+// Phần nhóm quyền ------------------------------------------------------------------------------------
+var filterRoleButtonHTML = data[7] && data[7].includes(1) ? `` : '';
+var detailRoleButtonHTML = data[7] && data[7].includes(2) ? `` : '';
+var addRoleButtonHTML = data[7] && data[7].includes(3) ? `` : '';
+var editRoleButtonHTML = data[7] && data[7].includes(4) ? `` : '';
+var lockRoleButtonHTML = data[7] && data[7].includes(5) ? `` : '';
+
+
+// Phần người dùng ------------------------------------------------------------------------------------
+var filterMemButtonHTML = data[8] && data[8].includes(1) ? `
+      <button class="main__filter-btn" id="filter-button-account">
+        <i class="fa-solid fa-filter"></i>
+        <span>Lọc</span>
+      </button>
+` : '';
+var detailMemButtonHTML = data[8] && data[8].includes(2) ? `` : '';
+var addMemButtonHTML = data[8] && data[8].includes(3) ? `
+      <button class="main__add-btn" id="add-button-account">
+        <i class="fa-solid fa-plus"></i>
+        <span>Thêm</span>
+      </button>
+` : '';
+var editMemButtonHTML = data[8] && data[8].includes(4) ? `` : '';
+var lockMemButtonHTML = data[8] && data[8].includes(5) ? `` : '';
+
+
+// Phần nhà cung cấp ------------------------------------------------------------------------------------
+var filterSupplierButtonHTML = data[9] && data[9].includes(1) ? `
+    <button class="main__filter-btn" id="filter-button-supplier">
+      <i class="fa-solid fa-filter"></i>
+      <span>Lọc</span>
+    </button>
+` : '';
+var detailSupplierButtonHTML = data[9] && data[9].includes(2) ? `` : '';
+var addSupplierButtonHTML = data[9] && data[9].includes(3) ? `
+    <button class="main__add-btn" id="add-button-supplier">
+      <i class="fa-solid fa-plus"></i>
+      <span>Thêm</span>
+    </button>
+` : '';
+var editSupplierButtonHTML = data[9] && data[9].includes(4) ? `` : '';
+var lockSupplierButtonHTML = data[9] && data[9].includes(5) ? `` : '';
+
+
+// Phần phiếu nhập ------------------------------------------------------------------------------------
+var filterInputTicketButtonHTML = data[10] && data[10].includes(1) ? `
+      <button class="main__filter-btn" id="filter-button-input_ticket">
+        <i class="fa-solid fa-filter"></i>
+        <span>Lọc</span>
+      </button>
+` : '';
+var detailInputTicketButtonHTML = data[10] && data[10].includes(2) ? `` : '';
+var addInputTicketButtonHTML = data[10] && data[10].includes(3) ? `
+      <button class="main__add-btn" id="add-button-input_ticket">
+        <i class="fa-solid fa-plus"></i>
+        <span>Thêm</span>
+      </button>
+` : '';
+var editInputTicketButtonHTML = data[10] && data[10].includes(4) ? `` : '';
+var lockInputTicketButtonHTML = data[10] && data[10].includes(5) ? `` : '';
+
+
+// Phần sách ------------------------------------------------------------------------------------
+var filterBookButtonHTML = data[11] && data[11].includes(1) ? `
+      <button class="main__filter-btn" id="filter-button-book">
+        <i class="fa-solid fa-filter"></i>
+        <span>Lọc</span>
+      </button>
+` : '';
+var detailBookButtonHTML = data[11] && data[11].includes(2) ? `` : '';
+var addBookButtonHTML = data[11] && data[11].includes(3) ? `
+      <button class="main__add-btn" id="add-button-book">
+        <i class="fa-solid fa-plus"></i>
+        <span>Thêm</span>
+      </button>
+` : '';
+var editBookButtonHTML = data[11] && data[11].includes(4) ? `` : '';
+var lockBookButtonHTML = data[11] && data[11].includes(5) ? `` : '';
+
+
+// Phần tác giả ------------------------------------------------------------------------------------
+var filterAuthorButtonHTML = data[12] && data[12].includes(1) ? `
+      <button class="main__filter-btn" id="filter-button-author">
+        <i class="fa-solid fa-filter"></i>
+        <span>Lọc</span>
+      </button>
+` : '';
+var detailAuthorButtonHTML = data[12] && data[12].includes(2) ? `` : '';
+var addAuthorButtonHTML = data[12] && data[12].includes(3) ? `
+      <button class="main__add-btn" id="add-button-author">
+        <i class="fa-solid fa-plus"></i>
+        <span>Thêm</span>
+      </button>
+` : '';
+var editAuthorButtonHTML = data[12] && data[12].includes(4) ? `` : '';
+var lockAuthorButtonHTML = data[12] && data[12].includes(5) ? `` : '';
+
+
+// Phần thể loại ------------------------------------------------------------------------------------
+var filterCategoryButtonHTML = data[13] && data[13].includes(1) ? `
+      <button class="main__filter-btn" id="filter-button-category">
+        <i class="fa-solid fa-filter"></i>
+        <span>Lọc</span>
+      </button>
+` : '';
+var detailCategoryButtonHTML = data[13] && data[13].includes(2) ? `` : '';
+var addCategoryButtonHTML = data[13] && data[13].includes(3) ? `
+      <button class="main__add-btn" id="add-button-category">
+        <i class="fa-solid fa-plus"></i>
+        <span>Thêm</span>
+      </button>
+` : '';
+var editCategoryButtonHTML = data[13] && data[13].includes(4) ? `` : '';
+var lockCategoryButtonHTML = data[13] && data[13].includes(5) ? `` : '';
+
+// Phần loại bìa ------------------------------------------------------------------------------------
+var filterCoverButtonHTML = data[14] && data[14].includes(1) ? `
+      <button class="main__filter-btn" id="filter-button-cover">
+        <i class="fa-solid fa-filter"></i>
+        <span>Lọc</span>
+      </button>
+` : '';
+var detailCoverButtonHTML = data[14] && data[14].includes(2) ? `` : '';
+var addCoverButtonHTML = data[14] && data[14].includes(3) ? `
+      <button class="main__add-btn" id="add-button-cover">
+        <i class="fa-solid fa-plus"></i>
+        <span>Thêm</span>
+      </button>
+` : '';
+var editCoverButtonHTML = data[14] && data[14].includes(4) ? `` : '';
+var lockCoverButtonHTML = data[14] && data[14].includes(5) ? `` : '';
+
+
+// Phần nhà xuất bản ------------------------------------------------------------------------------------
+var filterPublisherButtonHTML = data[15] && data[15].includes(1) ? `
+      <button class="main__filter-btn" id="filter-button-publisher">
+        <i class="fa-solid fa-filter"></i>
+        <span>Lọc</span>
+      </button>
+` : '';
+var addPublisherButtonHTML = data[15] && data[15].includes(3) ? `
+      <button class="main__add-btn" id="add-button-publisher">
+        <i class="fa-solid fa-plus"></i>
+        <span>Thêm</span>
+      </button>
+` : '';
+var editPublisherButtonHTML = data[15] && data[15].includes(4) ? `
+` : '';
+var lockPublisherButtonHTML = data[15] && data[15].includes(5) ? `
+` : '';
+
+
+
+
 async function getRolePrivilege() {
   try {
     const response = await fetch("api/roles/list.php");
@@ -356,14 +566,11 @@ const mainContentMap = {
           <li>Tạm dừng</li>
         </ul>
       </div>
-      <button class="main__filter-btn" id="filter-button-account">
-        <i class="fa-solid fa-filter"></i>
-        <span>Lọc</span>
-      </button>
-      <button class="main__add-btn" id="add-button-account">
-        <i class="fa-solid fa-plus"></i>
-        <span>Thêm</span>
-      </button>
+
+      ${filterMemButtonHTML}
+
+      ${addMemButtonHTML}
+
     </div>
     <div class="main__data">
       <table class="main__table account">
@@ -483,14 +690,11 @@ const mainContentMap = {
       <input required="" type="text" id="show-inp-supplier" />
       <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
     </div>
-    <button class="main__filter-btn" id="filter-button-supplier">
-      <i class="fa-solid fa-filter"></i>
-      <span>Lọc</span>
-    </button>
-    <button class="main__add-btn" id="add-button-supplier">
-      <i class="fa-solid fa-plus"></i>
-      <span>Thêm</span>
-    </button>
+
+      ${filterSupplierButtonHTML}
+
+      ${addSupplierButtonHTML}
+
   </div>
   <div class="main__data">
     <table class="main__table supplier">
@@ -547,14 +751,11 @@ const mainContentMap = {
           <li>Đã huỷ phiếu</li>
         </ul>
       </div>
-      <button class="main__filter-btn" id="filter-button-input_ticket">
-        <i class="fa-solid fa-filter"></i>
-        <span>Lọc</span>
-      </button>
-      <button class="main__add-btn" id="add-button-input_ticket">
-        <i class="fa-solid fa-plus"></i>
-        <span>Thêm</span>
-      </button>
+
+      ${filterInputTicketButtonHTML}
+
+      ${addInputTicketButtonHTML}
+
     </div>
     <div class="main__data">
       <table class="main__table input_ticket">
@@ -610,14 +811,11 @@ const mainContentMap = {
         <input required="" type="text" id="show-inp-book" />
         <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>
-      <button class="main__filter-btn" id="filter-button-book">
-        <i class="fa-solid fa-filter"></i>
-        <span>Lọc</span>
-      </button>
-      <button class="main__add-btn" id="add-button-book">
-        <i class="fa-solid fa-plus"></i>
-        <span>Thêm</span>
-      </button>
+
+      ${filterBookButtonHTML}
+
+      ${addBookButtonHTML}
+
     </div>
     <div class="main__data">
       <table class="main__table book">
@@ -667,14 +865,11 @@ const mainContentMap = {
         <input required="" type="text" id="show-inp-author" />
         <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>
-      <button class="main__filter-btn" id="filter-button-author">
-        <i class="fa-solid fa-filter"></i>
-        <span>Lọc</span>
-      </button>
-      <button class="main__add-btn" id="add-button-author">
-        <i class="fa-solid fa-plus"></i>
-        <span>Thêm</span>
-      </button>
+
+      ${filterAuthorButtonHTML}
+
+      ${addAuthorButtonHTML}
+
     </div>
     <div class="main__data">
       <table class="main__table author">
@@ -721,14 +916,11 @@ const mainContentMap = {
         <input required="" type="text" id="show-inp-category" />
         <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>
-      <button class="main__filter-btn" id="filter-button-category">
-        <i class="fa-solid fa-filter"></i>
-        <span>Lọc</span>
-      </button>
-      <button class="main__add-btn" id="add-button-category">
-        <i class="fa-solid fa-plus"></i>
-        <span>Thêm</span>
-      </button>
+
+      ${filterCategoryButtonHTML}
+
+      ${addCategoryButtonHTML}
+      
     </div>
     <div class="main__data">
       <table class="main__table category">
@@ -775,14 +967,11 @@ const mainContentMap = {
         <input required="" type="text" id="show-inp-cover" />
         <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>
-      <button class="main__filter-btn" id="filter-button-cover">
-        <i class="fa-solid fa-filter"></i>
-        <span>Lọc</span>
-      </button>
-      <button class="main__add-btn" id="add-button-cover">
-        <i class="fa-solid fa-plus"></i>
-        <span>Thêm</span>
-      </button>
+
+      ${filterCoverButtonHTML}
+
+      ${addCoverButtonHTML}
+
     </div>
     <div class="main__data">
       <table class="main__table cover">
@@ -800,6 +989,7 @@ const mainContentMap = {
     </div>
     <div class="main__pagination" id="admin-pagination-cover"></div>
   `,
+
   publisher: `
     <h1 class="main__title">Nhà xuất bản</h1>
     <div class="main__row">
@@ -829,14 +1019,11 @@ const mainContentMap = {
         <input required="" type="text" id="show-inp-publisher" />
         <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>
-      <button class="main__filter-btn" id="filter-button-publisher">
-        <i class="fa-solid fa-filter"></i>
-        <span>Lọc</span>
-      </button>
-      <button class="main__add-btn" id="add-button-publisher">
-        <i class="fa-solid fa-plus"></i>
-        <span>Thêm</span>
-      </button>
+
+      ${filterPublisherButtonHTML}
+
+      ${addPublisherButtonHTML}
+
     </div>
     <div class="main__data">
       <table class="main__table publisher">

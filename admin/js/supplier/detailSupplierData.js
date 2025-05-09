@@ -19,7 +19,7 @@ export async function detailSupplierData(idSupplierSelected) {
   // - Định dạng dialog
   detailDialog.classList.add("dialog");
   detailDialog.classList.add("supplier");
-  detailDialog.style.width = "58%";
+  // detailDialog.style.width = "58%";
   // - Ghi nội dung dialog
   detailDialog.innerHTML = `
     <h1 class="dialog__title">Chi tiết nhà cung cấp</h1>

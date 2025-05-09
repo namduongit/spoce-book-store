@@ -202,7 +202,7 @@ export async function renderAccountTable(pageIsSelected = 1) {
               <td>${data[i].maNguoiDung}</td>
               <td>${data[i].hoVaTen}</td>
               <td>${roleData.data.name}</td>
-              <td>${data[i].soDT ? data[i].soDT : "Chưa có cập nhật"}</td>
+              <td>${data[i].soDT ? data[i].soDT : "Chưa cập nhật"}</td>
               <td><span ${
                 data[i].trangThai === "Hoạt động"
                   ? 'class="green"'

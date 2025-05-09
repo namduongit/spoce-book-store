@@ -15,6 +15,7 @@ import {
 export  async function addBookData() {
   // Biến chứa đối tượng là nút "Thêm"
   const addButton = document.getElementById("add-button-book");
+  if (!addButton) return;
 
   // Gán sự kiện khi nhấn nút "Thêm"
   addButton.addEventListener("click", async (e) => {

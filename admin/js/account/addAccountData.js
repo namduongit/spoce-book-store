@@ -91,6 +91,7 @@ function showAddressSelectDialog() {
 export async function addAccountData() {
   // Biến chứa đối tượng là nút "Thêm"
   const addButton = document.getElementById("add-button-account");
+  if (!addButton) return;
 
   // Gán sự kiện khi nhấn nút "Thêm"
   addButton.addEventListener("click", (e) => {

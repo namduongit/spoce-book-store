@@ -21,7 +21,7 @@ export async function lockPublisherData(idPublisherSelected) {
   // - Định dạng dialog
   lockDialog.classList.add("dialog");
   lockDialog.classList.add("publisher");
-  lockDialog.style.width = "30%";
+  // lockDialog.style.width = "30%";
   // - Ghi nội dung dialog
   lockDialog.innerHTML = `
     <h1 class="dialog__title">${

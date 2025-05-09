@@ -23,7 +23,7 @@ export async function updateSupplierData(idSupplierSelected) {
   // - Định dạng dialog
   updateDialog.classList.add("dialog");
   updateDialog.classList.add("supplier");
-  updateDialog.style.width = "58%";
+  // updateDialog.style.width = "58%";
   // - Ghi nội dung dialog
   updateDialog.innerHTML = `
           <div id="toast"></div>

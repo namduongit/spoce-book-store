@@ -220,6 +220,53 @@
                 return ["error" => "Lỗi SQL: " . $e->getMessage()];
             }
         }
+
+        
+        public function namduongFind($columns = ['*'], $tables = [], $joins = [], $conditions = [], $orderBy = '', $orderType = 'ASC', $params = [])
+        {
+            if (self::$connection == null) self::$connection = $this->open_connect();
+
+            if (empty($tables)) {
+                return ["error" => "Thiếu thông tin bảng!"];
+            }
+
+            $columnList = is_array($columns) ? implode(", ", $columns) : '*';
+            $sql = "SELECT $columnList FROM " . array_shift($tables); // Lấy bảng đầu tiên làm bảng chính
+
+            // Nếu có thêm bảng và JOIN tương ứng
+            foreach ($tables as $index => $table) {
+                if (!isset($joins[$index])) {
+                    return ["error" => "Thiếu điều kiện JOIN cho bảng " . $table];
+                }
+                $sql .= " INNER JOIN $table ON " . $joins[$index];
+            }
+
+            // Thêm điều kiện WHERE nếu có
+            if (!empty($conditions)) {
+                $sql .= " WHERE " . implode(" AND ", $conditions);
+            }
+
+            // Thêm ORDER BY nếu có
+            if (!empty($orderBy)) {
+                $sql .= " ORDER BY $orderBy $orderType";
+            }
+
+            try {
+                $stmt = self::$connection->prepare($sql);
+
+                // Bind các tham số truy vấn
+                foreach ($params as $key => $value) {
+                    $stmt->bindValue($key, $value, is_numeric($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+                }
+
+                $stmt->execute();
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                return ["error" => "Lỗi SQL: " . $e->getMessage()];
+            }
+        }
+
+
         public function lastInsertId()
         {
             if (self::$connection == null) {

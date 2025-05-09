@@ -8,6 +8,8 @@ export function addCoverData() {
   // Biến chứa đối tượng là nút "Thêm"
   const addButton = document.getElementById("add-button-cover");
 
+  if (!addButton) return;
+
   // Gán sự kiện khi nhấn nút "Thêm"
   addButton.addEventListener("click", (e) => {
     // Loại bỏ giá trị mặc định

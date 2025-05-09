@@ -22,7 +22,7 @@ export async function updateDiscountData(idDiscountSelected) {
   // - Định dạng dialog
   updateDialog.classList.add("dialog");
   updateDialog.classList.add("discount");
-  updateDialog.style.width = "58%";
+  // updateDialog.style.width = "58%";
   // - Ghi nội dung dialog
   updateDialog.innerHTML = `
     <h1 class="dialog__title">Sửa phiếu giảm giá</h1>
