@@ -159,7 +159,7 @@ async function viewCart(type) {
           }
           return response.json();
         })
-        .then((data) => { })
+        .then((data) => {})
         .catch((error) => {
           console.error("Error occurred:", error);
         });
@@ -173,23 +173,26 @@ async function viewCart(type) {
 
     cartHTML += `
             <tr>
-                <td><img src="../public/uploads/books/${details.hinhAnh
-      }" alt="${details.tenSach}"></td>
+                <td><img src="../public/uploads/books/${
+                  details.hinhAnh
+                }" alt="${details.tenSach}"></td>
                 <td>
                     <p class="topbar__product-info">
                         <a href="#">${details.tenSach}</a>
                         <br>
-                        <span>${details.maSach} / ${details.tenTheLoai
-      } / ${formatMoney(details.giaBan)}</span>
+                        <span>${details.maSach} / ${
+      details.tenTheLoai
+    } / ${formatMoney(details.giaBan)}</span>
                     </p>
                     <div class="topbar__cart-view-amountprice-holder">
                         <span>${productItem.quantity}</span>
                         <div>${formatMoney(
-        details.giaBan * productItem.quantity
-      )}</div>
+                          details.giaBan * productItem.quantity
+                        )}</div>
                     </div>
-                    <div class="topbar__product-cancel" onclick="removeFromCart(${details.maSach
-      })">
+                    <div class="topbar__product-cancel" onclick="removeFromCart(${
+                      details.maSach
+                    })">
                         <i class="fa-solid fa-xmark"></i>
                     </div>
                 </td>
@@ -349,7 +352,7 @@ async function showAllCart(type) {
           }
           return response.json();
         })
-        .then((data) => { })
+        .then((data) => {})
         .catch((error) => {
           console.error("Error occurred:", error);
         });
@@ -377,26 +380,32 @@ async function showAllCart(type) {
     let details = productItem["details"][0];
     cartMainHTML += `
             <div class="show-cart__item d-flex desktop">
-                <img class="show-cart__img" src="../public/uploads/books/${details.hinhAnh
-      }" alt="product">
+                <img class="show-cart__img" src="../public/uploads/books/${
+                  details.hinhAnh
+                }" alt="product">
                 <div class="show-cart__detail d-flex">
                     <div class="show-cart__bookname">${details.tenSach}</div>
-                    <div class="show-cart__price">${details.maSach} / ${details.tenTheLoai
-      } / ${formatMoney(details.giaBan)}</div>
+                    <div class="show-cart__price">${details.maSach} / ${
+      details.tenTheLoai
+    } / ${formatMoney(details.giaBan)}</div>
                 </div>
                 <div class="show-cart__amountbox">
-                    <button class="show-cart__btn show-cart__btn--left" onclick='minsQuantity(${details.maSach
-      }, ${JSON.stringify(currentUser)})'>-</button>
-                    <input type="text" name="product-amount" value="${productItem.quantity
-      }" disabled>
-                    <button class="show-cart__btn show-cart__btn--right" onclick='plusQuantity(${details.maSach
-      }, ${JSON.stringify(currentUser)})'>+</button>
+                    <button class="show-cart__btn show-cart__btn--left" onclick='minsQuantity(${
+                      details.maSach
+                    }, ${JSON.stringify(currentUser)})'>-</button>
+                    <input type="text" name="product-amount" value="${
+                      productItem.quantity
+                    }" disabled>
+                    <button class="show-cart__btn show-cart__btn--right" onclick='plusQuantity(${
+                      details.maSach
+                    }, ${JSON.stringify(currentUser)})'>+</button>
                 </div>
                 <div class="show-cart__priceamount">${formatMoney(
-        productItem.quantity * details.giaBan
-      )}</div>
-                <a href="#" class="show-cart__remove" onclick='deleteFromCart(${details.maSach
-      }, ${JSON.stringify(currentUser).replace(/'/g, "\\'")})'>
+                  productItem.quantity * details.giaBan
+                )}</div>
+                <a href="#" class="show-cart__remove" onclick='deleteFromCart(${
+                  details.maSach
+                }, ${JSON.stringify(currentUser).replace(/'/g, "\\'")})'>
                     <i class="fa-solid fa-trash-can"></i>
                 </a>
             </div>
@@ -408,32 +417,39 @@ async function showAllCart(type) {
 
 
              <div class="show-cart__item d-flex mobile">
-    <img class="show-cart__img" src="../public/uploads/books/${details.hinhAnh
-      }" alt="product">
+    <img class="show-cart__img" src="../public/uploads/books/${
+      details.hinhAnh
+    }" alt="product">
     <div class="info">
     <div class="show-cart__detail d-flex">
         <div class="show-cart__bookname">${details.tenSach}</div>
         <div class="show-cart__price">
-            ${details.maSach} / ${details.tenTheLoai} / ${formatMoney(details.giaBan)}
+            ${details.maSach} / ${details.tenTheLoai} / ${formatMoney(
+      details.giaBan
+    )}
         </div>
     </div>
     <div class="show-cart__amountbox">
-        <button class="show-cart__btn show-cart__btn--left" onclick='minsQuantity(${details.maSach
-      }, ${JSON.stringify(currentUser)})'>-</button>
-        <input type="text" name="product-amount" value="${productItem.quantity
-      }" disabled>
-        <button class="show-cart__btn show-cart__btn--right" onclick='plusQuantity(${details.maSach
-      }, ${JSON.stringify(currentUser)})'>+</button>
+        <button class="show-cart__btn show-cart__btn--left" onclick='minsQuantity(${
+          details.maSach
+        }, ${JSON.stringify(currentUser)})'>-</button>
+        <input type="text" name="product-amount" value="${
+          productItem.quantity
+        }" disabled>
+        <button class="show-cart__btn show-cart__btn--right" onclick='plusQuantity(${
+          details.maSach
+        }, ${JSON.stringify(currentUser)})'>+</button>
     </div>
     <div class="show-cart__priceamount">${formatMoney(
-        productItem.quantity * details.sellingPrice
-      )}</div>
+      productItem.quantity * details.giaBan
+    )}</div>
     </div>
-    <a href="#" class="show-cart__remove" onclick='deleteFromCart(${details.maSach
-      }, ${JSON.stringify(currentUser).replace(/'/g, "\\'")})'>
+    <a href="#" class="show-cart__remove" onclick='deleteFromCart(${
+      details.maSach
+    }, ${JSON.stringify(currentUser).replace(/'/g, "\\'")})'>
         <i class="fa-solid fa-trash-can"></i>
     </a>
-</div> 
+</div>
         `;
 
     totalPrice += productItem.quantity * details.giaBan;
@@ -454,8 +470,8 @@ async function showAllCart(type) {
                 <div class="show-cart__checkout-info">
                     <div class="show-cart__checkout-title">Thông tin đơn hàng</div>
                     <div class="show-cart__totalprice">Tổng số tiền: <span>${formatMoney(
-    totalPrice
-  )}</span></div>
+                      totalPrice
+                    )}</span></div>
                     <span>Bạn có thể nhập mã giảm giá ở trang thanh toán.</span>
                 </div>
                 <div class="show-cart__checkoutbox">
@@ -463,8 +479,8 @@ async function showAllCart(type) {
                         <i class="fa-regular fa-circle-check"></i> Thanh toán
                     </button>
                     <button onclick='deleteAllCart(${JSON.stringify(
-    currentUser
-  )})'><i class="fa-solid fa-circle-xmark"></i> Xóa tất cả</button>
+                      currentUser
+                    )})'><i class="fa-solid fa-circle-xmark"></i> Xóa tất cả</button>
                 </div>
             </div>
         </div>
@@ -711,25 +727,28 @@ async function checkOutBill() {
                 <td class="checkout__product-thumbnail">
                     <div class="checkout__product-image">
                         <div class="checkout__product-image-holder">
-                            <img src="../public/uploads/books/${details.hinhAnh
-      }" alt="product-image">
+                            <img src="../public/uploads/books/${
+                              details.hinhAnh
+                            }" alt="product-image">
                         </div>
-                        <span class="checkout__product-quantity">${productItem.quantity
-      }</span>
+                        <span class="checkout__product-quantity">${
+                          productItem.quantity
+                        }</span>
                     </div>
 
                 </td>
                 <td class="checkout__product-name">
                     <div class="checkout__product-name-holder">
                         <span>${details.tenSach}</span>
-                        <span>${details.maSach} / ${details.tenTheLoai
-      } / ${formatMoney(details.giaBan)}</span>
+                        <span>${details.maSach} / ${
+      details.tenTheLoai
+    } / ${formatMoney(details.giaBan)}</span>
                     </div>
                 </td>
                 <td class="checkout__product-price">
                     <span>${formatMoney(
-        productItem.quantity * details.giaBan
-      )}</span>
+                      productItem.quantity * details.giaBan
+                    )}</span>
                 </td>
             </tr>
         `;
@@ -868,8 +887,8 @@ async function checkOutBill() {
                                 <td>
                                     <span>VND</span>
                                     <span id='total-cost-bill'>${formatMoney(
-    totalPrice
-  )}</span>
+                                      totalPrice
+                                    )}</span>
                                 </td>
                             </tr>
                         </tfoot>
@@ -1180,18 +1199,20 @@ async function checkOutBill() {
     });
 
   // Nút nhập mã chuyển màu xanh khi người dùng nhập mã
-  let discountInput = document.querySelector(".checkout__promotion-input-holder .checkout__input-field #promotion-code");
-  let discountSubmit = document.querySelector('.checkout__promotion-btn');
+  let discountInput = document.querySelector(
+    ".checkout__promotion-input-holder .checkout__input-field #promotion-code"
+  );
+  let discountSubmit = document.querySelector(".checkout__promotion-btn");
   let totalDiscount = 0;
   let discount = null;
 
   if (discountInput && discountSubmit) {
-    discountInput.addEventListener('input', function () {
+    discountInput.addEventListener("input", function () {
       discountSubmit.disabled = false;
-      discountSubmit.classList.toggle('active', discountInput.value.length > 0);
+      discountSubmit.classList.toggle("active", discountInput.value.length > 0);
     });
 
-    discountSubmit.addEventListener('click', async function (e) {
+    discountSubmit.addEventListener("click", async function (e) {
       e.preventDefault();
 
       if (discountInput.value.length == 0) {
@@ -1210,23 +1231,25 @@ async function checkOutBill() {
           type: "warning",
           message: "Đơn hàng này đã được áp dụng mã giảm giá",
           title: "Thông báo",
-          duration: 3000
+          duration: 3000,
         });
 
         return;
       }
 
-      let discountResponse = await fetch(`api/discounts/detail.php?id=${discountInput.value}`);
+      let discountResponse = await fetch(
+        `api/discounts/detail.php?id=${discountInput.value}`
+      );
       let discountResult = await discountResponse.json();
 
-      if (discountResult.status == 'success') {
+      if (discountResult.status == "success") {
         discount = discountResult.data;
-        if (discount.status == 'Tạm dừng') {
+        if (discount.status == "Tạm dừng") {
           toast({
             type: "warning",
             message: "Mã giảm giá không khả dụng",
             title: "Thông báo",
-            duration: 3000
+            duration: 3000,
           });
 
           return;
@@ -1237,31 +1260,38 @@ async function checkOutBill() {
             type: "warning",
             message: "Đơn hàng không đủ điều kiện sử dụng mã giảm giá này",
             title: "Thông báo",
-            duration: 3000
+            duration: 3000,
           });
 
           return;
         }
 
-        let discountRow = document.querySelector('.checkout__shipping-fee-holder');
-        let discountSpan = document.querySelector('#total-cost-discount');
-        let total = document.querySelector('#total-cost-bill');
+        let discountRow = document.querySelector(
+          ".checkout__shipping-fee-holder"
+        );
+        let discountSpan = document.querySelector("#total-cost-discount");
+        let total = document.querySelector("#total-cost-bill");
 
-        if (discountRow.classList.contains('hide-item')) discountRow.classList.remove('hide-item');
-        if (discount.type == 'Phần trăm') {
-          totalDiscount = totalPrice * discount.discountV / 100;
-          discountSpan.innerText = '-' + formatMoney(totalDiscount);
-          total.innerText = formatMoney(totalPrice + totalCostShip - totalDiscount);
+        if (discountRow.classList.contains("hide-item"))
+          discountRow.classList.remove("hide-item");
+        if (discount.type == "Phần trăm") {
+          totalDiscount = (totalPrice * discount.discountV) / 100;
+          discountSpan.innerText = "-" + formatMoney(totalDiscount);
+          total.innerText = formatMoney(
+            totalPrice + totalCostShip - totalDiscount
+          );
         } else {
           totalDiscount = discount.discountV;
-          discountSpan.innerText = '-' + formatMoney(totalDiscount);
-          total.innerText = formatMoney(totalPrice + totalCostShip - totalDiscount);
+          discountSpan.innerText = "-" + formatMoney(totalDiscount);
+          total.innerText = formatMoney(
+            totalPrice + totalCostShip - totalDiscount
+          );
         }
         toast({
           type: "success",
           message: "Áp mã giảm giá thành công",
           title: "Thông báo",
-          duration: 3000
+          duration: 3000,
         });
       } else {
         discount = null;
@@ -1269,13 +1299,11 @@ async function checkOutBill() {
           type: "warning",
           message: "Mã giảm giá không tồn tại",
           title: "Thông báo",
-          duration: 3000
+          duration: 3000,
         });
       }
     });
   }
-
-
 
   // Submit gửi đơn hàng lên Server
   document
@@ -1425,23 +1453,27 @@ async function checkOutBill() {
         console.log("Đồng ý thanh toán");
 
         let currentCart = [];
-        dataCurrentCart.forEach(element => {
+        dataCurrentCart.forEach((element) => {
           currentCart.push({
-            bookId: element['details'][0]['maSach'],
-            quantity: element['quantity']
+            bookId: element["details"][0]["maSach"],
+            quantity: element["quantity"],
           });
         });
 
         if (paymentMethod != -1) {
+<<<<<<< HEAD
+          showLoading();
+=======
 
           // showLoading();
+>>>>>>> 874aaddaff848e1044bfb4864a4dfa4ec6af6bb5
           const formOrder = new URLSearchParams();
           formOrder.append("maKhachHang", currentUser["user"].id);
           formOrder.append("diaChiGiao", pickUpAddress);
           formOrder.append("tongTienThu", totalPrice);
           formOrder.append("maPhuongThuc", paymentMethod);
           formOrder.append("tenNguoiNhan", customerName);
-          formOrder.append("soDienThoai", customerNumberphone)
+          formOrder.append("soDienThoai", customerNumberphone);
           if (couponsCode != null) formOrder.append("maKhuyenMai", couponsCode);
 
           const responseOrder = await fetch("api/orders/create.php", {
@@ -1453,7 +1485,7 @@ async function checkOutBill() {
           });
 
           const dataOrder = await responseOrder.json();
-          console.log(dataOrder)
+          console.log(dataOrder);
 
           if (dataOrder["success"] == true) {
             console.log("Tạo đơn hàng thành công");
@@ -1464,7 +1496,6 @@ async function checkOutBill() {
             console.log(`Đơn hàng vừa tạo ${dataOrder["data"]}`);
 
             if (dataOrder["data"] && Array.isArray(currentCart)) {
-
               const response = await fetch("api/order_details/create.php", {
                 method: "POST",
                 headers: {
@@ -1492,7 +1523,7 @@ async function checkOutBill() {
                   }),
                 })
                   .then((response) => response.json())
-                  .then((data) => { })
+                  .then((data) => {})
                   .catch((error) => {
                     console.log(
                       "Lỗi khi loại bỏ sản phẩm trong giỏ hàng sau khi thanh toán"
@@ -1610,7 +1641,7 @@ async function checkOutBill() {
             }),
           })
             .then((response) => response.json())
-            .then((data) => { })
+            .then((data) => {})
             .catch((error) => {
               console.log(
                 "Lỗi khi loại bỏ sản phẩm trong giỏ hàng sau khi thanh toán"
