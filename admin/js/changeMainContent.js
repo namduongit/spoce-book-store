@@ -21,11 +21,7 @@ import { fetchData } from "../../public/js/book/getDataBook.js";
 // import { renderPrivilegeTable } from "./privilege/renderPrivilegeTable.js";
 import { updatePrivilegeTable } from "./privilege/updatePrivilegeTable.js";
 
-import { getDetailRole } from "./getDetailRole.js";
-
-const roleDetail = await getDetailRole();
-const data = roleDetail["result"]["data"];
-sessionStorage.setItem('dataRole', JSON.stringify(roleDetail["result"]["data"]));
+const data = JSON.parse(sessionStorage.getItem('dataRole'))
 
 // Đăng xuất chuyển trang về user
 document.querySelector('.tab-home').addEventListener('click', function () {
