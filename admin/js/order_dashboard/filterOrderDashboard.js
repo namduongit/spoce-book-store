@@ -58,8 +58,6 @@ export async function filterOrderDashboard(currentPage) {
   }
   userParams.append("limit", limit);
   userParams.append("offset", offset);
-
-
   // Dành cho api đơn hàng
   if (dateStart) orderParams.append("createStart", dateStart);
   if (dateEnd) orderParams.append("createEnd", dateEnd);
@@ -77,36 +75,31 @@ export async function filterOrderDashboard(currentPage) {
     // Dữ liệu tất cả người dùng
     let responseUserJSON = await responseUser.json();
 
-
-    const responseOrder = await fetch('api/orders/listBaseFilter.php', {
-      method: 'POST',
+    const responseOrder = await fetch("api/orders/listBase.php", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        data: responseUserJSON['data'],
+        data: responseUserJSON["data"],
         createStart: dateStart,
-        createEnd: dateEnd
-      })
+        createEnd: dateEnd,
+      }),
     });
 
     const dataResOrder = await responseOrder.json();
-    console.log(dataResOrder);
 
     const usersWithOrders = [];
-    responseUserJSON['data'].map((user) => {
+    responseUserJSON["data"].map((user) => {
       let dataOrder = [];
       let ordersBuyValue = 0,
         pricesBuyValue = 0,
         ordersCancelValue = 0,
         pricesCancelValue = 0;
 
-      // usersWithOrders.push(user);
-      dataResOrder['data'].map((order) => {
-        if (user['id'] === order['customerId']) {
+      dataResOrder["data"].map((order) => {
+        if (user["id"] === order["customerId"]) {
           dataOrder.push(user);
-          console.log(order)
-
 
           if (
             order.status === "Đã giao hàng" &&
@@ -126,22 +119,15 @@ export async function filterOrderDashboard(currentPage) {
 
       if (dataOrder.length > 0) {
         usersWithOrders.push({
-          userId: user['id'],
+          userId: user["id"],
           // orders: dataOrder,
           ordersBuy: ordersBuyValue,
           pricesBuy: pricesBuyValue,
           ordersCancel: ordersCancelValue,
-          pricesCancel: pricesCancelValue
+          pricesCancel: pricesCancelValue,
         });
       }
-
     });
-
-    let ordersBuyValue = 0,
-      pricesBuyValue = 0,
-      ordersCancelValue = 0,
-      pricesCancelValue = 0;
-
 
     console.log(usersWithOrders);
 

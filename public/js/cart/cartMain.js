@@ -159,7 +159,7 @@ async function viewCart(type) {
           }
           return response.json();
         })
-        .then((data) => {})
+        .then((data) => { })
         .catch((error) => {
           console.error("Error occurred:", error);
         });
@@ -173,26 +173,23 @@ async function viewCart(type) {
 
     cartHTML += `
             <tr>
-                <td><img src="../public/uploads/books/${
-                  details.hinhAnh
-                }" alt="${details.tenSach}"></td>
+                <td><img src="../public/uploads/books/${details.hinhAnh
+      }" alt="${details.tenSach}"></td>
                 <td>
                     <p class="topbar__product-info">
                         <a href="#">${details.tenSach}</a>
                         <br>
-                        <span>${details.maSach} / ${
-      details.tenTheLoai
-    } / ${formatMoney(details.giaBan)}</span>
+                        <span>${details.maSach} / ${details.tenTheLoai
+      } / ${formatMoney(details.giaBan)}</span>
                     </p>
                     <div class="topbar__cart-view-amountprice-holder">
                         <span>${productItem.quantity}</span>
                         <div>${formatMoney(
-                          details.giaBan * productItem.quantity
-                        )}</div>
+        details.giaBan * productItem.quantity
+      )}</div>
                     </div>
-                    <div class="topbar__product-cancel" onclick="removeFromCart(${
-                      details.maSach
-                    })">
+                    <div class="topbar__product-cancel" onclick="removeFromCart(${details.maSach
+      })">
                         <i class="fa-solid fa-xmark"></i>
                     </div>
                 </td>
@@ -352,7 +349,7 @@ async function showAllCart(type) {
           }
           return response.json();
         })
-        .then((data) => {})
+        .then((data) => { })
         .catch((error) => {
           console.error("Error occurred:", error);
         });
@@ -380,32 +377,26 @@ async function showAllCart(type) {
     let details = productItem["details"][0];
     cartMainHTML += `
             <div class="show-cart__item d-flex desktop">
-                <img class="show-cart__img" src="../public/uploads/books/${
-                  details.hinhAnh
-                }" alt="product">
+                <img class="show-cart__img" src="../public/uploads/books/${details.hinhAnh
+      }" alt="product">
                 <div class="show-cart__detail d-flex">
                     <div class="show-cart__bookname">${details.tenSach}</div>
-                    <div class="show-cart__price">${details.maSach} / ${
-      details.tenTheLoai
-    } / ${formatMoney(details.giaBan)}</div>
+                    <div class="show-cart__price">${details.maSach} / ${details.tenTheLoai
+      } / ${formatMoney(details.giaBan)}</div>
                 </div>
                 <div class="show-cart__amountbox">
-                    <button class="show-cart__btn show-cart__btn--left" onclick='minsQuantity(${
-                      details.maSach
-                    }, ${JSON.stringify(currentUser)})'>-</button>
-                    <input type="text" name="product-amount" value="${
-                      productItem.quantity
-                    }" disabled>
-                    <button class="show-cart__btn show-cart__btn--right" onclick='plusQuantity(${
-                      details.maSach
-                    }, ${JSON.stringify(currentUser)})'>+</button>
+                    <button class="show-cart__btn show-cart__btn--left" onclick='minsQuantity(${details.maSach
+      }, ${JSON.stringify(currentUser)})'>-</button>
+                    <input type="text" name="product-amount" value="${productItem.quantity
+      }" disabled>
+                    <button class="show-cart__btn show-cart__btn--right" onclick='plusQuantity(${details.maSach
+      }, ${JSON.stringify(currentUser)})'>+</button>
                 </div>
                 <div class="show-cart__priceamount">${formatMoney(
-                  productItem.quantity * details.giaBan
-                )}</div>
-                <a href="#" class="show-cart__remove" onclick='deleteFromCart(${
-                  details.maSach
-                }, ${JSON.stringify(currentUser).replace(/'/g, "\\'")})'>
+        productItem.quantity * details.giaBan
+      )}</div>
+                <a href="#" class="show-cart__remove" onclick='deleteFromCart(${details.maSach
+      }, ${JSON.stringify(currentUser).replace(/'/g, "\\'")})'>
                     <i class="fa-solid fa-trash-can"></i>
                 </a>
             </div>
@@ -417,9 +408,8 @@ async function showAllCart(type) {
 
 
              <div class="show-cart__item d-flex mobile">
-    <img class="show-cart__img" src="../public/uploads/books/${
-      details.hinhAnh
-    }" alt="product">
+    <img class="show-cart__img" src="../public/uploads/books/${details.hinhAnh
+      }" alt="product">
     <div class="info">
     <div class="show-cart__detail d-flex">
         <div class="show-cart__bookname">${details.tenSach}</div>
@@ -428,23 +418,19 @@ async function showAllCart(type) {
         </div>
     </div>
     <div class="show-cart__amountbox">
-        <button class="show-cart__btn show-cart__btn--left" onclick='minsQuantity(${
-          details.maSach
-        }, ${JSON.stringify(currentUser)})'>-</button>
-        <input type="text" name="product-amount" value="${
-          productItem.quantity
-        }" disabled>
-        <button class="show-cart__btn show-cart__btn--right" onclick='plusQuantity(${
-          details.maSach
-        }, ${JSON.stringify(currentUser)})'>+</button>
+        <button class="show-cart__btn show-cart__btn--left" onclick='minsQuantity(${details.maSach
+      }, ${JSON.stringify(currentUser)})'>-</button>
+        <input type="text" name="product-amount" value="${productItem.quantity
+      }" disabled>
+        <button class="show-cart__btn show-cart__btn--right" onclick='plusQuantity(${details.maSach
+      }, ${JSON.stringify(currentUser)})'>+</button>
     </div>
     <div class="show-cart__priceamount">${formatMoney(
-      productItem.quantity * details.sellingPrice
-    )}</div>
+        productItem.quantity * details.sellingPrice
+      )}</div>
     </div>
-    <a href="#" class="show-cart__remove" onclick='deleteFromCart(${
-      details.maSach
-    }, ${JSON.stringify(currentUser).replace(/'/g, "\\'")})'>
+    <a href="#" class="show-cart__remove" onclick='deleteFromCart(${details.maSach
+      }, ${JSON.stringify(currentUser).replace(/'/g, "\\'")})'>
         <i class="fa-solid fa-trash-can"></i>
     </a>
 </div> 
@@ -468,8 +454,8 @@ async function showAllCart(type) {
                 <div class="show-cart__checkout-info">
                     <div class="show-cart__checkout-title">Thông tin đơn hàng</div>
                     <div class="show-cart__totalprice">Tổng số tiền: <span>${formatMoney(
-                      totalPrice
-                    )}</span></div>
+    totalPrice
+  )}</span></div>
                     <span>Bạn có thể nhập mã giảm giá ở trang thanh toán.</span>
                 </div>
                 <div class="show-cart__checkoutbox">
@@ -477,8 +463,8 @@ async function showAllCart(type) {
                         <i class="fa-regular fa-circle-check"></i> Thanh toán
                     </button>
                     <button onclick='deleteAllCart(${JSON.stringify(
-                      currentUser
-                    )})'><i class="fa-solid fa-circle-xmark"></i> Xóa tất cả</button>
+    currentUser
+  )})'><i class="fa-solid fa-circle-xmark"></i> Xóa tất cả</button>
                 </div>
             </div>
         </div>
@@ -725,28 +711,25 @@ async function checkOutBill() {
                 <td class="checkout__product-thumbnail">
                     <div class="checkout__product-image">
                         <div class="checkout__product-image-holder">
-                            <img src="../public/uploads/books/${
-                              details.hinhAnh
-                            }" alt="product-image">
+                            <img src="../public/uploads/books/${details.hinhAnh
+      }" alt="product-image">
                         </div>
-                        <span class="checkout__product-quantity">${
-                          productItem.quantity
-                        }</span>
+                        <span class="checkout__product-quantity">${productItem.quantity
+      }</span>
                     </div>
 
                 </td>
                 <td class="checkout__product-name">
                     <div class="checkout__product-name-holder">
                         <span>${details.tenSach}</span>
-                        <span>${details.maSach} / ${
-      details.tenTheLoai
-    } / ${formatMoney(details.giaBan)}</span>
+                        <span>${details.maSach} / ${details.tenTheLoai
+      } / ${formatMoney(details.giaBan)}</span>
                     </div>
                 </td>
                 <td class="checkout__product-price">
                     <span>${formatMoney(
-                      productItem.quantity * details.giaBan
-                    )}</span>
+        productItem.quantity * details.giaBan
+      )}</span>
                 </td>
             </tr>
         `;
@@ -885,8 +868,8 @@ async function checkOutBill() {
                                 <td>
                                     <span>VND</span>
                                     <span id='total-cost-bill'>${formatMoney(
-                                      totalPrice
-                                    )}</span>
+    totalPrice
+  )}</span>
                                 </td>
                             </tr>
                         </tfoot>
@@ -1200,7 +1183,7 @@ async function checkOutBill() {
   let discountInput = document.querySelector(".checkout__promotion-input-holder .checkout__input-field #promotion-code");
   let discountSubmit = document.querySelector('.checkout__promotion-btn');
   let totalDiscount = 0;
-  let discount;
+  let discount = null;
 
   if (discountInput && discountSubmit) {
     discountInput.addEventListener('input', function () {
@@ -1292,7 +1275,7 @@ async function checkOutBill() {
     });
   }
 
-  
+
 
   // Submit gửi đơn hàng lên Server
   document
@@ -1431,7 +1414,7 @@ async function checkOutBill() {
         return;
       }
 
-      if (discount.status != null) {
+      if (discount != null) {
         couponsCode = discount.id;
       }
 
@@ -1441,14 +1424,25 @@ async function checkOutBill() {
       if (resultOrder == true) {
         console.log("Đồng ý thanh toán");
 
+        let currentCart = [];
+        dataCurrentCart.forEach(element => {
+          currentCart.push({
+            bookId: element['details'][0]['maSach'],
+            quantity: element['quantity']
+          });
+        });
+
         if (paymentMethod != -1) {
+
           showLoading();
           const formOrder = new URLSearchParams();
           formOrder.append("maKhachHang", currentUser["user"].id);
           formOrder.append("diaChiGiao", pickUpAddress);
           formOrder.append("tongTienThu", totalPrice);
           formOrder.append("maPhuongThuc", paymentMethod);
-          formOrder.append("maKhuyenMai", couponsCode);
+          formOrder.append("tenNguoiNhan", customerName);
+          formOrder.append("soDienThoai", customerNumberphone)
+          if (couponsCode != null) formOrder.append("maKhuyenMai", couponsCode);
 
           const responseOrder = await fetch("api/orders/create.php", {
             method: "POST",
@@ -1459,16 +1453,18 @@ async function checkOutBill() {
           });
 
           const dataOrder = await responseOrder.json();
+          console.log(dataOrder)
 
           if (dataOrder["success"] == true) {
             console.log("Tạo đơn hàng thành công");
             console.log(dataOrder);
 
             console.log("Giỏ hàng trước khi thanh toán");
-            console.log(currentCart);
+            console.log(dataCurrentCart);
             console.log(`Đơn hàng vừa tạo ${dataOrder["data"]}`);
 
             if (dataOrder["data"] && Array.isArray(currentCart)) {
+
               const response = await fetch("api/order_details/create.php", {
                 method: "POST",
                 headers: {
@@ -1477,7 +1473,7 @@ async function checkOutBill() {
                 body: JSON.stringify({
                   data: {
                     maDonHang: parseInt(dataOrder["data"]),
-                    danhSachSanPham: JSON.stringify(currentCart),
+                    danhSachSanPham: currentCart,
                   },
                 }),
               });
@@ -1496,7 +1492,7 @@ async function checkOutBill() {
                   }),
                 })
                   .then((response) => response.json())
-                  .then((data) => {})
+                  .then((data) => { })
                   .catch((error) => {
                     console.log(
                       "Lỗi khi loại bỏ sản phẩm trong giỏ hàng sau khi thanh toán"
@@ -1513,8 +1509,11 @@ async function checkOutBill() {
             }
           }
           hideLoading();
-          window.location.href = "/";
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 1000);
         } else {
+          // Thanh toán bằng VNPAY
           showLoading();
 
           const formOrder = new URLSearchParams();
@@ -1522,7 +1521,7 @@ async function checkOutBill() {
           formOrder.append("diaChiGiao", pickUpAddress);
           formOrder.append("tongTienThu", totalPrice);
           formOrder.append("maPhuongThuc", paymentMethod);
-          formOrder.append("maKhuyenMai", couponsCode);
+          if (couponsCode != null) formOrder.append("maKhuyenMai", couponsCode);
 
           const responseOrder = await fetch("api/orders/create.php", {
             method: "POST",
@@ -1542,7 +1541,7 @@ async function checkOutBill() {
             body: JSON.stringify({
               data: {
                 maDonHang: parseInt(dataOrder["data"]),
-                danhSachSanPham: JSON.stringify(currentCart),
+                danhSachSanPham: currentCart,
               },
             }),
           });
@@ -1611,7 +1610,7 @@ async function checkOutBill() {
             }),
           })
             .then((response) => response.json())
-            .then((data) => {})
+            .then((data) => { })
             .catch((error) => {
               console.log(
                 "Lỗi khi loại bỏ sản phẩm trong giỏ hàng sau khi thanh toán"

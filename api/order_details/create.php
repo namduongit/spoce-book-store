@@ -31,10 +31,10 @@ if (!class_exists('app_models_ChiTietDonHang')) {
 }
 
 $maDonHang = $data['data']['maDonHang'];
-$danhSachSanPham = json_decode($data['data']['danhSachSanPham'], true);
+$danhSachSanPham = $data['data']['danhSachSanPham'];
 
 $detail_models = new app_models_ChiTietDonHang();
-foreach ($danhSachSanPham as $sanPham) {
+foreach ($danhSachSanPham as $sanPham) {    
     $result = $detail_models->insertDetailOrder([
         "maDonHang" => $maDonHang,
         "maSach" => $sanPham['bookId'],

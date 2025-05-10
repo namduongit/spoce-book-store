@@ -8,7 +8,7 @@ import { renderOrderTable } from "./renderOrderTable.js";
 // Hàm thiết lập sự kiện hiện sửa một đơn hàng
 export async function updateOrderData(idOrderSelected) {
   // Truy vấn csdl để lấy ra đơn hàng được chọn
-  const order = await fetchData(`api/orders/list.php?id=${idOrderSelected}`);
+  const order = await fetchData(`api/orders/listBase.php?id=${idOrderSelected}`);
 
   // // Biến chứa đối tượng là nút "sửa"
   // const updateButton = document.getElementById("update-button-order");

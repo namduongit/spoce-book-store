@@ -4,6 +4,7 @@ import {
   formatDate2,
   getWeeksInMonth,
   getMonthsInYear,
+  formatDate3,
 } from "../others.js";
 import { fetchData } from "../../../public/js/book/getDataBook.js";
 import { updateTableLabelRevenue_dashboard } from "../../responsive/responsive.js";
@@ -111,45 +112,66 @@ export async function renderProfitDashboardTable(
     ".main__data > .main__table.profit_dashboard > tfoot > tr > td:nth-of-type(4)"
   );
 
-  // Cập nhật lại dữ liệu cho bảng
-  let timeline =
+  // Dữ liệu về tất cả đơn hàng hiện có
+  const orders = await fetchData(`api/orders/listBase.php?`);
+  // Dữ liệu về tất cả chi tiết đơn hàng hiện có
+  const inputTickets = await fetchData(`api/input_tickets/list.php`);
+  // Tuỳ theo lựa chọn mà có dữ liệu thời gian để thống kê
+  const timeline =
     month !== 0 ? getWeeksInMonth(year, month) : getMonthsInYear(year);
-  const promises = timeline.map(async (time) => {
-    const inputTicket = await fetchData(
-      `api/input_tickets/list.php?createStart=${formatDate2(
-        time.start
-      )}&createEnd=${formatDate2(time.end)}`
-    );
-    const order = await fetchData(
-      `api/orders/list.php?createStart=${formatDate2(
-        time.start
-      )}&createEnd=${formatDate2(time.end)}`
-    );
 
+  // Mảng chứa dữ liệu để thống kê
+  let data = [];
+
+  // Duyệt qua từng thời gian
+  timeline.map((time) => {
+    // Các biến để tính tổng số sách bán và tổng doanh thu
     let revenueValue = 0,
       costValue = 0;
-    if (order.data) {
-      console.log(order);
-      for (let i = 0; i < order.data.length; i++) {
-        revenueValue += order.data[i].total;
-      }
-    }
-    if (inputTicket.data) {
-      console.log(inputTicket);
-      for (let i = 0; i < inputTicket.data.length; i++) {
-        costValue -= inputTicket.data[i].total;
-      }
-    }
 
-    return {
+    // Duyệt qua các đơn hàng theo từng thời gian
+    orders.data.map((order) => {
+      // Đổi định dạng ngày
+      const orderCreateAt = order.createAt.split(" ")[0];
+
+      // Kiểm tra và xử lý
+      if (
+        orderCreateAt >= formatDate3(time.start) &&
+        orderCreateAt <= formatDate3(time.end) &&
+        order.payStatus === "Đã thanh toán" &&
+        order.status === "Đã giao hàng"
+      ) {
+        // Tính tổng doanh thu theo từng thời gian
+        revenueValue += order.totalPrice;
+      }
+    });
+
+    // Duyệt qua các phiếu nhập theo từng thời gian
+    inputTickets.data.map((inputTicket) => {
+      // Đổi định dạng ngày
+      const inputTicketCreateAt = inputTicket.createAt.split(" ")[0];
+
+      // Kiểm tra và xử lý
+      if (
+        inputTicketCreateAt >= formatDate3(time.start) &&
+        inputTicketCreateAt <= formatDate3(time.end) &&
+        (inputTicket.status === "Đã thanh toán" ||
+          inputTicket.status === "Đã xác nhận")
+      ) {
+        // Tính tổng chi tiêu theo từng thời gian
+        costValue -= inputTicket.totalPrice;
+      }
+    });
+
+    // Thêm dữ liệu thống kê
+    data.push({
       time: time.week ? time.week : time.month,
       start: time.start,
       end: time.end,
       revenue: revenueValue,
       cost: costValue,
-    };
+    });
   });
-  const data = await Promise.all(promises);
 
   // Biến tính tổng cho các ô dữ liệu cuối
   let totalRevenue = 0,
@@ -169,7 +191,9 @@ export async function renderProfitDashboardTable(
                 <td>${row.end}</td>
                 <td>${vietnamMoneyFormat(row.revenue)}</td>
                 <td>${vietnamMoneyFormat(row.cost)}</td>
-                <td class="right">${vietnamMoneyFormat(row.revenue + row.cost)}</td>
+                <td class="right">${vietnamMoneyFormat(
+                  row.revenue + row.cost
+                )}</td>
             </tr>
         `;
     })
@@ -183,5 +207,5 @@ export async function renderProfitDashboardTable(
     vietnamMoneyFormat(totalProfit);
   totalTextInProfitDashboardTable.textContent =
     numberToVietnamWords(totalProfit);
-    updateTableLabelRevenue_dashboard();
+  updateTableLabelRevenue_dashboard();
 }

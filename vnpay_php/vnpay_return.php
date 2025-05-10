@@ -37,6 +37,9 @@ if ($secureHash == $vnp_SecureHash) {
         ];
         $order_model->updateOrder($_GET['vnp_TxnRef'], $data);
 
+        header("Location: http://localhost:$port");
+        exit();
+
         $database = new app_libs_DBConnection();
         $database->set_tableName('vnpay');
         $database->building_queryParam([
@@ -49,8 +52,6 @@ if ($secureHash == $vnp_SecureHash) {
         ]);
 
         $database->insert();
-
-
         header("Location: http://localhost:$port");
 
         exit();

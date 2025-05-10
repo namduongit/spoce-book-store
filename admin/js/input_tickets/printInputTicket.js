@@ -94,9 +94,9 @@ export async function printInputTicket(idInputTicketSelected) {
                     inputTicket.data[0].employeeName
                   }</p>
                   <p class="ticket__info"><b>Tổng tiền nhập (VNĐ):</b> ${vietnamMoneyFormat(
-                    inputTicket.data[0].total
+                    inputTicket.data[0].totalPrice
                   )}<u>đ</u> (${numberToVietnamWords(
-    inputTicket.data[0].total
+    inputTicket.data[0].totalPrice
   )})</p>
                   <p class="ticket__info"><b>Trạng thái phiếu:</b> ${
                     inputTicket.data[0].status

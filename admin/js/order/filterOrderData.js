@@ -65,7 +65,7 @@ export async function filterOrder(currentPage) {
   params.append("offset", offset);
 
   try {
-    let response = await fetch(`api/orders/list.php?${params.toString()}`);
+    let response = await fetch(`api/orders/listBase.php?${params.toString()}`);
 
     if (!response.ok) {
       throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
@@ -108,7 +108,9 @@ export function filterOrderData() {
       document.getElementById("province-slt-order").value = "";
       // document.querySelector(".main__select input#province-slt-order ~ ul").innerHTML = "";
       document.getElementById("district-slt-order").value = "";
-      document.querySelector(".main__select input#district-slt-order ~ ul").innerHTML = "";
+      document.querySelector(
+        ".main__select input#district-slt-order ~ ul"
+      ).innerHTML = "";
       document.getElementById("status-slt-order").value = "";
       document.getElementById("show-inp-order").value = "";
 

@@ -154,6 +154,14 @@ export function formatDate2(date) {
   return `${year}-${month}-${day}`;
 }
 
+export function formatDate3(date) {
+  const day = date.slice(0, 2);
+  const month = date.slice(3, 5);
+  const year = date.slice(6);
+
+  return year + "-" + month + "-" + day;
+}
+
 // Hàm lấy ra danh sách các tuần
 export function getWeeksInMonth(year, month) {
   // Chuyển tháng về dạng 0-11 cho JS

@@ -20,7 +20,7 @@ export async function updateCoverData(idCoverSelected) {
   // - Định dạng dialog
   updateDialog.classList.add("dialog");
   updateDialog.classList.add("cover");
-  // updateDialog.style.width = "30%";
+  updateDialog.style.width = "30%";
   // - Ghi nội dung dialog
   updateDialog.innerHTML = `
       <h1 class="dialog__title">Sửa loại bìa</h1>

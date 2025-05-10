@@ -4,6 +4,7 @@ import {
   formatDate2,
   getWeeksInMonth,
   getMonthsInYear,
+  formatDate3,
 } from "../others.js";
 import { fetchData } from "../../../public/js/book/getDataBook.js";
 import { updateTableLabelRevenue_dashboard } from "../../responsive/responsive.js";
@@ -110,45 +111,61 @@ export async function renderRevenueDashboardTable(
     ".main__data > .main__table.revenue_dashboard > tfoot > tr > td:nth-of-type(4)"
   );
 
-  // Cập nhật lại dữ liệu cho bảng
-  let timeline =
+  // Dữ liệu về tất cả đơn hàng hiện có
+  const orders = await fetchData(`api/orders/listBase.php?`);
+  // Dữ liệu về tất cả chi tiết đơn hàng hiện có
+  const orderDetails = await fetchData(`api/order_details/list.php`);
+  // Tuỳ theo lựa chọn mà có dữ liệu thời gian để thống kê
+  const timeline =
     month !== 0 ? getWeeksInMonth(year, month) : getMonthsInYear(year);
-  const promises = timeline.map(async (time) => {
-    const order = await fetchData(
-      `api/orders/list.php?createStart=${formatDate2(
-        time.start
-      )}&createEnd=${formatDate2(time.end)}`
-    );
 
-    let bookNumbersValue = 0,
+  // Mảng chứa dữ liệu để thống kê
+  let data = [];
+
+  // Duyệt qua từng thời gian
+  timeline.map((time) => {
+    // Các biến để tính tổng số sách bán và tổng doanh thu
+    let orderNumbersValue = 0,
+      bookNumbersValue = 0,
       totalPriceValue = 0;
-    if (order.data) {
-      console.log(order);
-      for (let i = 0; i < order.data.length; i++) {
-        totalPriceValue += order.data[i].total;
 
-        const orderDetails = await fetchData(
-          `api/order_details/list.php?orderId=${order.data[i].id}`
-        );
-        if (orderDetails.data) {
-          console.log(orderDetails);
-          for (let i = 0; i < orderDetails.data.length; i++) {
-            bookNumbersValue += orderDetails.data[i].quantity;
+    // Duyệt qua các đơn hơn theo từng thời gian
+    orders.data.map((order) => {
+      // Đổi định dạng ngày
+      const orderCreateAt = order.createAt.split(" ")[0];
+
+      // Kiểm tra và xử lý
+      if (
+        orderCreateAt >= formatDate3(time.start) &&
+        orderCreateAt <= formatDate3(time.end) &&
+        order.payStatus === "Đã thanh toán" &&
+        order.status === "Đã giao hàng"
+      ) {
+        // Tính tổng đơn hàng theo từng thời gian
+        orderNumbersValue += 1;
+
+        // Tính tổng số sách bán theo từng thời gian
+        orderDetails.data.map((orderDetail) => {
+          if (orderDetail.orderId === order.id) {
+            bookNumbersValue += orderDetail.quantity;
           }
-        }
-      }
-    }
+        });
 
-    return {
+        // Tính tổng doanh thu theo từng thời gian
+        totalPriceValue += order.totalPrice;
+      }
+    });
+
+    // Thêm dữ liệu thống kê
+    data.push({
       time: time.week ? time.week : time.month,
       start: time.start,
       end: time.end,
-      orderNumbers: order.data ? order.data.length : 0,
+      orderNumbers: orderNumbersValue,
       bookNumbers: bookNumbersValue,
       totalPrice: totalPriceValue,
-    };
+    });
   });
-  const data = await Promise.all(promises);
 
   // Biến tính tổng cho các ô dữ liệu cuối
   let orderNumbersFinal = 0,
@@ -182,5 +199,4 @@ export async function renderRevenueDashboardTable(
   totalTextInRevenueDashboardTable.textContent =
     numberToVietnamWords(totalPriceFinal);
   updateTableLabelRevenue_dashboard();
-  
 }
