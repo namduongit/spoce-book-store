@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
     <link rel="stylesheet" href="public/css/base.css">
 
     <link rel="stylesheet" href="public/css/style.css">
-    <link rel="stylesheet" href="public/css/responsive.css">
+    <!-- <link rel="stylesheet" href="public/css/responsive.css"> -->
     <!-- Nhúng các thư viện Js -->
     <script type="module" src="public/js/auth/authMain.js" defer></script>
     <script type="module" src="public/js/book/bookMain.js" defer></script>
@@ -41,7 +41,8 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
     <script type="module" src="public/js/slideshow.js" defer></script>
     <script type="module" src="public/js/footer.js" defer></script>
     <script type="module" src="public/js/book/showBook.js" defer></script>
-
+    <!-- responsive -->
+    <link rel="stylesheet" href="public/css/responsive.css">
 </head>
 
 <body>
@@ -103,7 +104,7 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
                 </div>
                 <!-- Lớp phủ trắng toàn màn hình -->
 
-                <div class="header__search-wrapper mobile" id="searchWrapper">
+                <div class="header__search-wrapper mobile" id="searchWrapper" style="display: none;">
                     <input class="header__search-input" type="text" placeholder="Tìm kiếm sản phẩm">
                     <button class="header__search-btn">Tìm kiếm</button>
                 </div>
