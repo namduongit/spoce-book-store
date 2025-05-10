@@ -48,6 +48,7 @@ export async function isLogined() {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
+        sessionStorage.setItem('user', JSON.stringify(data['user']));
         hideLoading();
         return data;
     } catch (error) {
@@ -161,6 +162,7 @@ export async function updateInfoTopBar(promiseResponse) {
                 // Xóa Session cũ và login cũ
                 deleteCookie('isLogin');
                 deleteCookie('cookieRole');
+                sessionStorage.removeItem('user');
                 toast({
                     title: 'Thông báo',
                     message: 'Đăng xuất thành công !',

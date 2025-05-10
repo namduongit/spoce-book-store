@@ -22,9 +22,12 @@ import { fetchData } from "../../public/js/book/getDataBook.js";
 import { updatePrivilegeTable } from "./privilege/updatePrivilegeTable.js";
 
 import { getDetailRole } from "./getDetailRole.js";
+
 const roleDetail = await getDetailRole();
 const data = roleDetail["result"]["data"];
+sessionStorage.setItem('dataRole', JSON.stringify(roleDetail["result"]["data"]));
 
+// Đăng xuất chuyển trang về user
 document.querySelector('.tab-home').addEventListener('click', function () {
   window.location.href = '/';
 });
@@ -359,7 +362,7 @@ const mainContentMap = {
     <h1 class="main__title">Thống kê chi tiêu</h1>
     <div class="main__row">
       <div class="main__timeline-slt main__select slt-form-1 ${filterInputTicketDashboardCSS}">
-        <input required="" type="text" id="status-slt-input_ticket_dashboard" />
+        <input required="" type="text" id="status-slt-invest_dashboard" />
         <span><i class="fa-solid fa-timeline"></i></i>&nbsp;&nbsp;Chọn Khoảng thời gian</span>
         <ul>
           <li>Lọc theo năm</li>
@@ -367,17 +370,17 @@ const mainContentMap = {
         </ul>
       </div>
       <div class="main__timeline-detail-slt main__select slt-form-1 ${filterInputTicketDashboardCSS}">
-        <input required="" type="text" id="status-slt-input_ticket_dashboard" />
+        <input required="" type="text" id="status-slt-invest_dashboard" />
         <span><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;Chọn Thời gian cụ thể</span>
         <ul></ul>
       </div>
 
-      <button class="main__see-btn ${filterInputTicketDashboardCSS}" id="filter-button-input_ticket_dashboard">
+      <button class="main__see-btn ${filterInputTicketDashboardCSS}" id="filter-button-invest_dashboard">
         <i class="fa-solid fa-eye"></i>
         <span>Xem</span>
       </button>
 
-      <button class="main__print-btn" id="print-button-input_ticket_dashboard">
+      <button class="main__print-btn" id="print-button-invest_dashboard">
         <i class="fa-solid fa-print"></i>
         <span>In thống kê</span>
       </button>

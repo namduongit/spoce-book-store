@@ -7,9 +7,7 @@ import { updateInputTicketData } from "./updateInputTicketData.js";
 import { printInputTicket } from "./printInputTicket.js";
 import { filterInputTicket } from "./filterInputTicket.js";
 
-import { getDetailRole } from "../getDetailRole.js";
-const roleDetail = await getDetailRole();
-const data = roleDetail['result']['data'];
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
 
 var infoInputTicket = data[10] && data[10].includes(2) ? '' : 'none__item';
 var editInputTicket = data[10] && data[10].includes(4) ? '' : 'none__item';

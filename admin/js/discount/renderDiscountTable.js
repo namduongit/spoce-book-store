@@ -3,9 +3,7 @@ import { updateDiscountData } from "./updateDiscountData.js";
 import { lockDiscountData } from "./lockDiscountData.js";
 import { filterDiscount } from "./filterDiscountData.js";
 
-import { getDetailRole } from "../getDetailRole.js";
-const roleDetail = await getDetailRole();
-const data = roleDetail['result']['data'];
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
 
 var infoDiscount = data[6] && data[6].includes(2) ? '' : 'none__item';
 var editDiscount = data[6] && data[6].includes(4) ? '' : 'none__item';

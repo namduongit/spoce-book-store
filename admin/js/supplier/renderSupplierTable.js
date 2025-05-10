@@ -3,10 +3,7 @@ import { detailSupplierData } from "./detailSupplierData.js";
 import { lockSupplierData } from "./lockSupplierData.js";
 import { filterSupplier } from "./filterSupplierData.js";
 
-import { getDetailRole } from "../getDetailRole.js";
-const roleDetail = await getDetailRole();
-const data = roleDetail['result']['data'];
-console.log(data)
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
 
 var infoSupplier = data[9] && data[9].includes(2) ? '' : 'none__item';
 var editSupplier = data[9] && data[9].includes(4) ? '' : 'none__item';

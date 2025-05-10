@@ -4,9 +4,7 @@ import { updateOrderData } from "./updateOrderData.js";
 import { printOrderTicket } from "./printOrderTicket.js";
 import { filterOrder } from "./filterOrderData.js";
 
-import { getDetailRole } from "../getDetailRole.js";
-const roleDetail = await getDetailRole();
-const data = roleDetail['result']['data'];
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
 
 var infoOrder = data[5] && data[5].includes(2) ? '' : 'none__item';
 var editOrder = data[5] && data[5].includes(4) ? '' : 'none__item';

@@ -2,9 +2,7 @@ import { updatePrivilegeData } from "./updatePrivilegeData.js";
 import { detailPrivilegeData } from "./detailPrivilegeData.js";
 import { lockPrivilegeData } from "./lockPrivilegeData.js";
 
-import { getDetailRole } from "../getDetailRole.js";
-const roleDetail = await getDetailRole();
-const data = roleDetail['result']['data'];
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
 
 var infoPrivilege = data[7] && data[7].includes(2) ? '' : 'none__item';
 var editPrivilege = data[7] && data[7].includes(4) ? '' : 'none__item';

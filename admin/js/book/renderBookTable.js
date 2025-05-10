@@ -3,9 +3,7 @@ import { updateBookData } from "./updateBookData.js";
 import { lockBookData } from "./lockBookData.js";
 import { filterBook } from "./filterBookData.js";
 
-import { getDetailRole } from "../getDetailRole.js";
-const roleDetail = await getDetailRole();
-const data = roleDetail['result']['data'];
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
 
 var infoBook = data[11] && data[11].includes(2) ? '' : 'none__item';
 var editBook = data[11] && data[11].includes(4) ? '' : 'none__item';

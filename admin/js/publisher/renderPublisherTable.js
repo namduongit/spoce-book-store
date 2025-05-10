@@ -2,9 +2,7 @@ import { updatePublisherData } from "./updatePublisherData.js";
 import { lockPublisherData } from "./lockPublisherData.js";
 import { filterPublisher } from "./filterPublisherData.js";
 
-import { getDetailRole } from "../getDetailRole.js";
-const roleDetail = await getDetailRole();
-const data = roleDetail['result']['data'];
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
 
 var infoPublisher = data[15] && data[15].includes(2) ? '' : 'none__item';
 var editPublisher = data[15] && data[15].includes(4) ? '' : 'none__item';

@@ -5,9 +5,7 @@ import { filterOrderDashboard } from "./filterOrderDashboard.js";
 import { detailOrderDashboardData } from "./detailOrderDashboardData.js";
 
 
-import { getDetailRole } from "../getDetailRole.js";
-const roleDetail = await getDetailRole();
-const data = roleDetail['result']['data'];
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
 
 var infoOrderDashboard = data[4] && data[4].includes(2) ? '' : 'none__item';
 var editOrderDashboard = data[4] && data[4].includes(4) ? '' : 'none__item';

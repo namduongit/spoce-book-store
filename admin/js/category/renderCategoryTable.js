@@ -2,9 +2,7 @@ import { updateCategoryData } from "./updateCategoryData.js";
 import { lockCategoryData } from "./lockCategoryData.js";
 import { filterCategory } from "./filterCategoryData.js";
 
-import { getDetailRole } from "../getDetailRole.js";
-const roleDetail = await getDetailRole();
-const data = roleDetail['result']['data'];
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
 
 var infoCategory = data[13] && data[13].includes(2) ? '' : 'none__item';
 var editCategory = data[13] && data[13].includes(4) ? '' : 'none__item';
