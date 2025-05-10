@@ -22,7 +22,7 @@ export async function updateCategoryData(idCategorySelected) {
   // - Định dạng dialog
   updateDialog.classList.add("dialog");
   updateDialog.classList.add("category");
-  // updateDialog.style.width = "30%";
+  updateDialog.style.width = "30%";
   // - Ghi nội dung dialog
   updateDialog.innerHTML = `
         <h1 class="dialog__title">Sửa thể loại</h1>

@@ -75,6 +75,8 @@ export async function detailOrderDashboardData(customerIdSelected) {
     `api/account/detail_account.php?id=${customerIdSelected}`
   );
 
+  console.log(user);
+
   // // Biến chứa đối tượng là nút "sửa"
   // const detailButton = document.getElementById("detail-button-order");
 

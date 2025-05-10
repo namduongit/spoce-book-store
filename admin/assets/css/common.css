@@ -191,6 +191,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding-left: 10px;
   line-height: 30px;
   cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .slt-form-1 input:focus + span,
 .slt-form-1 input:valid + span {
@@ -663,7 +666,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .ticket:where(
     .profit_dashboard,
     .revenue_dashboard,
-    .input_ticket_dashboard,
+    .invest_dashboard,
     .order,
     .input_ticket
   ) {

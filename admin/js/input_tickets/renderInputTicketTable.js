@@ -335,7 +335,7 @@ export async function renderInputTicketTable(currentPage) {
             <td>${data[i].id}</td>
             <td>${data[i].supplierId}</td>
             <td>${data[i].createAt}</td>
-            <td>${vietnamMoneyFormat(data[i].total)}</td>
+            <td>${vietnamMoneyFormat(data[i].totalPrice)}</td>
             <td><span ${
               data[i].status === "Đã thanh toán"
                 ? 'class="orange"'

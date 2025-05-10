@@ -11,16 +11,16 @@ header("Access-Control-Allow-Headers: Content-Type");
 $title = isset($_POST['title']) ? $_POST['title'] : '';
 $authorId = isset($_POST['authorId']) ? $_POST['authorId'] : '';
 $categoryId = isset($_POST['categoryId']) ? $_POST['categoryId'] : '';
-$numOfpages = isset($_POST['numOfpages']) ? $_POST['numOfpages'] : '';
-$coverTypeId = isset($_POST['coverTypeId']) ? $_POST['coverTypeId'] : '';
+$pages = $_POST['pages'];
+$size = $_POST['size'];
+$coverId = isset($_POST['coverId']) ? $_POST['coverId'] : '';
 $publisherId = isset($_POST['publisherId']) ? $_POST['publisherId'] : '';
-$publishYear = isset($_POST['publishYear']) ? $_POST['publishYear'] : '';
+$publisherYear = $_POST['publisherYear'];
 $priceBase = isset($_POST['priceBase']) ? $_POST['priceBase'] : '';
 $priceOrder = isset($_POST['priceOrder']) ? $_POST['priceOrder'] : '';
-$description = isset($_POST['description']) ? $_POST['description'] : '';
+$description = $_POST['description'];
 $status = isset($_POST['status']) ? $_POST['status'] : '';
-$size = isset($_POST['size']) ? $_POST['size'] : '';
-$updateDate = date('Y-m-d'); 
+$updateAt = date("Y-m-d H:i:s");
 
 $imageName = 'default.jpg';
 
@@ -57,16 +57,16 @@ $insertSuccess = $book_model->insertBook(
         "tenSach" => $title,
         "maTacGia" => $authorId,
         "maTheLoai" => $categoryId,
-        "soTrang" => $numOfpages,
-        "maLoaiBia" => $coverTypeId,
+        "kichThuoc" => $size,
+        "soTrang" => $pages,
+        "maLoaiBia" => $coverId,
         "maNXB" => $publisherId,
-        "namXuatBan" => $publishYear,
+        "namXuatBan" => $publisherYear,
         "giaTran" => $priceBase,
         "giaBan" => $priceOrder,
         "moTa" => $description,
-        "kichThuoc" => $size,
-        "ngayCapNhat" => $updateDate,
         "trangThai" => $status,
+        "ngayCapNhat" => $updateAt,
     ]);
 
 // Kiểm tra kết quả cập nhật

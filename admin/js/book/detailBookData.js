@@ -59,21 +59,6 @@ export async function detailBookData(idBookSelected) {
         </div>
         <div class="dialog__row">
             <div class="dialog__form-group book"></div>
-            <div class="dialog__form-group book half">
-                <label>Số trang</label>
-                <input type="text" id="detail-book-pages" readonly value="${book.data.pages}"/>
-            </div>
-            <div class="dialog__form-group book half">
-                <label>Kích thước</label>
-                <input type="text" id="detail-book-size" readonly value="${book.data.size}"/>
-            </div>
-            <div class="dialog__form-group book">
-                <label>Năm xuất bản</label>
-                <input type="text" id="detail-book-publish-year" readonly value="${book.data.publishYear}" />
-            </div>
-        </div>
-        <div class="dialog__row">
-            <div class="dialog__form-group book"></div>
             <div class="dialog__form-group book">
                 <label>Tác giả</label>
                 <select id="detail-book-author" class="changed" disabled>
@@ -89,6 +74,23 @@ export async function detailBookData(idBookSelected) {
         </div>
         <div class="dialog__row">
             <div class="dialog__form-group book"></div>
+            <div class="dialog__form-group book half">
+                <label>Số trang</label>
+                <input type="text" id="detail-book-pages" readonly value="${book.data.pages}"/>
+            </div>
+            <div class="dialog__form-group book half">
+                <label>Kích thước</label>
+                <input type="text" id="detail-book-size" readonly value="${book.data.size}"/>
+            </div>
+            <div class="dialog__form-group book">
+                <label>Loại bìa</label>
+                <select id="detail-book-cover" disabled>
+                    <option value="" selected>${cover.data.name}</option>
+                </select>
+            </div>
+        </div>
+        <div class="dialog__row">
+            <div class="dialog__form-group book"></div>
             <div class="dialog__form-group book">
                 <label>Nhà xuất bản</label>
                 <select id="detail-book-publish-name" disabled>
@@ -96,10 +98,8 @@ export async function detailBookData(idBookSelected) {
                 </select>
             </div>
             <div class="dialog__form-group book">
-                <label>Loại bìa</label>
-                <select id="detail-book-cover" disabled>
-                    <option value="" selected>${cover.data.name}</option>
-                </select>
+                <label>Năm xuất bản</label>
+                <input type="text" id="detail-book-publish-year" readonly value="${book.data.publishYear}" />
             </div>
         </div>
         <div class="dialog__row">
@@ -124,6 +124,10 @@ export async function detailBookData(idBookSelected) {
         <div class="dialog__row">
             <div class="dialog__form-group book"></div>
             <div class="dialog__form-group book">
+                <label>Tồn kho</label>
+                <input type="text" id="detail-book-inventory" readonly value="${book.data.inventory}" />
+            </div>
+            <div class="dialog__form-group book">
                 <label>Trạng thái</label>
                 <select id="detail-book-status" disabled>
                     <option value="" selected>${book.data.status}</option>
@@ -131,7 +135,6 @@ export async function detailBookData(idBookSelected) {
                     <option value="0">Tạm dừng</option>
                 </select>
             </div>
-            <div class="dialog__form-group book"></div>
         </div>
     </form >
   `;

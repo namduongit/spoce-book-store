@@ -428,11 +428,7 @@ button {
 .main__table.dashboard th {
   border-color: var(--primary-color);
 }
-.main__table:where(
-    .profit_dashboard,
-    .revenue_dashboard,
-    .input_ticket_dashboard
-  )
+.main__table:where(.profit_dashboard, .revenue_dashboard, .invest_dashboard)
   td:last-of-type {
   display: table-cell !important;
   text-align: right;

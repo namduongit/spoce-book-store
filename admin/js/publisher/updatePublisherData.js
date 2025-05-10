@@ -22,7 +22,7 @@ export async function updatePublisherData(idPublisherSelected) {
   // - Định dạng dialog
   updateDialog.classList.add("dialog");
   updateDialog.classList.add("publisher");
-  // updateDialog.style.width = "30%";
+  updateDialog.style.width = "30%";
   // - Ghi nội dung dialog
   updateDialog.innerHTML = `
     <h1 class="dialog__title">Sửa nhà xuất bản</h1>
@@ -132,7 +132,7 @@ export async function updatePublisherData(idPublisherSelected) {
               duration: 3000,
             });
           }
-          
+
           updateDialog.remove();
           renderPublisherTable(1);
         }

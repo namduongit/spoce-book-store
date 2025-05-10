@@ -66,7 +66,7 @@ export async function updateInputTicketData(idInputTicketSelected) {
               <div class="dialog__form-group input_ticket">
                 <label>Tổng thanh toán (VNĐ)</label>
                 <input type="text" id="input_ticket-total" value="${vietnamMoneyFormat(
-                  inputTicket.data[0].total
+                  inputTicket.data[0].totalPrice
                 )}" readonly />
               </div>
             </div>

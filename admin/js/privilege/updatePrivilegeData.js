@@ -195,7 +195,7 @@ export async function updatePrivilegeData(idPrivilegeSelected) {
           dataDetailPrivilege[privilege].push(action);
         } else {
           // Nếu bỏ chọn, xóa action khỏi mảng
-          dataDetailPrivilege[privilege] = dataDetailPrivilege[privilege].filter(item => item !== action);
+          dataDetailPrivilege[privilege] = dataDetailPrivilege[privilege].filter(item => item != action);
         }
 
         // console.log(dataDetailPrivilege);
