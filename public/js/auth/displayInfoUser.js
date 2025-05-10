@@ -48,7 +48,7 @@ export async function isLogined() {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        sessionStorage.setItem('user', JSON.stringify(data['user']));
+        sessionStorage.setItem('user', JSON.stringify(data));
         hideLoading();
         return data;
     } catch (error) {
@@ -162,7 +162,6 @@ export async function updateInfoTopBar(promiseResponse) {
                 // Xóa Session cũ và login cũ
                 deleteCookie('isLogin');
                 deleteCookie('cookieRole');
-                sessionStorage.removeItem('user');
                 toast({
                     title: 'Thông báo',
                     message: 'Đăng xuất thành công !',
@@ -229,7 +228,7 @@ async function showContentProfile(info) {
     let url = new URLSearchParams();
     let currentParams = new URLSearchParams(window.location.search);
     const infoPage = document.querySelector('.self-infomation');
-    const responseAPI = await isLogined();
+    const responseAPI = JSON.parse(sessionStorage.getItem("user")) || false;
     let user = null;
 
     if (responseAPI === false) {

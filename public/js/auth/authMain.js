@@ -382,7 +382,7 @@ function showFormUser(type) {
     
                     if (data.success === true) {
                         setCookie('isLogin', data.session_id, 1);
-                        sessionStorage.setItem('user', JSON.stringify(data['user']));
+                        sessionStorage.setItem('user', JSON.stringify(data));
                         setTimeout(() => {
                             resetToOriginParam();
                             window.location.href = '/';

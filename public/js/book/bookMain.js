@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     }
 
     
-    const currentUser = await getCurrentUser();
+    const currentUser = JSON.parse(sessionStorage.getItem("user")) || null;
     //  Kiểm tra có giỏ hàng tồn dư không
     if (localStorage.getItem('cart') && currentUser !== null) {
         const productList = JSON.parse(localStorage.getItem('cart'));
@@ -290,7 +290,7 @@ async function showDetailProduct(product_id) {
     document.querySelector('.show-detail-product__btn--add-to-cart').addEventListener('click',async function() {
         let valueQuantity = parseInt(document.querySelector('.quantity__button-number').value);
 
-        let currentUser = await getCurrentUser();
+        let currentUser = JSON.parse(sessionStorage.getItem("user")) || null;
         if (currentUser !== null) { 
             const currentUserId = currentUser['user'].id;
             let formData = new URLSearchParams();

@@ -36,7 +36,7 @@ window.onload = async function () {
 async function viewCart(type) {
   let cartDetail = document.querySelector(".topbar__cart-detail-holder");
 
-  const currentUser = await getCurrentUser();
+  const currentUser = JSON.parse(sessionStorage.getItem("user")) || null;
   console.log("Người dùng hiện tại: ", currentUser);
   let currentCartUser = null;
 
@@ -230,7 +230,7 @@ async function viewCart(type) {
 }
 
 async function removeFromCart(bookId) {
-  const currentUser = await getCurrentUser();
+  const currentUser = JSON.parse(sessionStorage.getItem("user")) || null;
   if (currentUser == null) {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     cart = cart.filter((item) => item.id != bookId);
@@ -279,7 +279,7 @@ async function showAllCart(type) {
   const orderInfo = document.querySelector(".order-history");
 
   let currentCartUser = null;
-  let currentUser = await getCurrentUser();
+  let currentUser = JSON.parse(sessionStorage.getItem("user")) || null;
   if (currentUser == null) {
     currentCartUser = JSON.parse(localStorage.getItem("cart")) || [];
   } else {
@@ -614,7 +614,7 @@ function plusQuantity(bookId, currentUser) {
 }
 
 async function checkOutBill() {
-  const currentUser = await getCurrentUser();
+  const currentUser = JSON.parse(sessionStorage.getItem("user")) || null;
 
   if (currentUser == null) {
     toast({
@@ -1434,14 +1434,14 @@ async function checkOutBill() {
 
         if (paymentMethod != -1) {
 
-          // showLoading();
+          showLoading();
           const formOrder = new URLSearchParams();
           formOrder.append("maKhachHang", currentUser["user"].id);
           formOrder.append("diaChiGiao", pickUpAddress);
           formOrder.append("tongTienThu", totalPrice);
           formOrder.append("maPhuongThuc", paymentMethod);
           formOrder.append("tenNguoiNhan", customerName);
-          formOrder.append("soDienThoai", customerNumberphone)
+          formOrder.append("soDienThoai", customerNumberphone);
           if (couponsCode != null) formOrder.append("maKhuyenMai", couponsCode);
 
           const responseOrder = await fetch("api/orders/create.php", {
@@ -1686,7 +1686,7 @@ function deleteFromCart(bookId, currentUser) {
 
 async function updateQuantityCardHolder() {
   showLoading();
-  const currentUser = await getCurrentUser();
+  const currentUser = JSON.parse(sessionStorage.getItem("user")) || null;
   let cartButton = document.querySelector(".topbar__cart-holder");
   let totalQuantity = 0;
 

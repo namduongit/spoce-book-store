@@ -1,5 +1,5 @@
 import { formatMoney } from "../book/getDataBook.js";
-import { fetchData, getUserByID, isLogined } from "./displayInfoUser.js";
+import { fetchData, getUserByID } from "./displayInfoUser.js";
 import { showConfirmationDialog } from "../question.js";
 import { toast } from "../toast.js";
 
@@ -14,7 +14,7 @@ export async function showOrderHistory() {
     showLoading();
 
     // Kiểm tra trạng thái đăng nhập
-    const responseAPI = await isLogined();
+    const responseAPI = JSON.parse(sessionStorage.getItem("user")) || false;
     let currentParams = new URLSearchParams(window.location.search);
     const orderPage = document.querySelector('.order-history');
     let user = null;
@@ -383,7 +383,7 @@ async function showOrderDetail(orderId) {
     showLoading();
 
     // Kiểm tra trạng thái đăng nhập
-    const responseAPI = await isLogined();
+    const responseAPI = JSON.parse(sessionStorage.getItem("user")) || false;
 
     // Lấy ra query string hiện tại
     let currentParams = new URLSearchParams(window.location.search);
