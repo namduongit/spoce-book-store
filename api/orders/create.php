@@ -40,14 +40,14 @@ $orderData = [
     "dcNguoiNhan" => $address,
     "tongTienThu" => $totalCost,
     "maPhuongThuc" => $idWayOrder,
-    "htvNguoiNhan" => $customerName,
+    "hvtNguoiNhan" => $customerName,
     "sdtNguoiNhan" => $customerPhone,
     "trangThaiThanhToan" => "Chưa thanh toán",
     "trangThai" => "Đang chờ xác nhận"
 ];
 
 if ($idVoucher != '') {
-    $orderData["maKhuyenMai"] = $idVoucher;
+    $orderData["maKhuyenMai"] = $idVoucher ? $idVoucher : NULL;
 }
 
 

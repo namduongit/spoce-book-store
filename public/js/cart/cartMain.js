@@ -1461,7 +1461,12 @@ async function checkOutBill() {
         });
 
         if (paymentMethod != -1) {
+<<<<<<< HEAD
           showLoading();
+=======
+
+          // showLoading();
+>>>>>>> 874aaddaff848e1044bfb4864a4dfa4ec6af6bb5
           const formOrder = new URLSearchParams();
           formOrder.append("maKhachHang", currentUser["user"].id);
           formOrder.append("diaChiGiao", pickUpAddress);
