@@ -8,8 +8,11 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Nhận dữ liệu từ $_POST hoặc JSON
+// $data = $_POST;
 $data = $_POST;
-
+if (empty($data)) {
+    $data = $_GET;
+}
 // Gán các biến từ dữ liệu nhận được
 $maNguoiDung = isset($data['maNguoiDung']) ? $data['maNguoiDung'] : null;
 
@@ -46,6 +49,7 @@ $updateSuccess = $account_model->updateUser($maNguoiDung, [
     "tenTaiKhoan" => $accountName,
     "ngayCapNhat" => $ngayCapNhat
 ]);
+// var_dump($data, $_GET);
 
 if ($updateSuccess) {
     echo json_encode([
