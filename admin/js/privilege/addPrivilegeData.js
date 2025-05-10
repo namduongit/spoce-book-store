@@ -36,16 +36,30 @@ export async function addPrivilegeData() {
 
     if (feature && Array.isArray(feature)) {
       feature.forEach(dataItem => {
+        if (dataItem.id > 4) {
         privilegeHTML += `
-        <tr data-privilege=${dataItem.id}>
-            <td>${dataItem.name}</td>
-            <td><input type="checkbox" data-action=${1}></td>
-            <td><input type="checkbox" data-action=${2}></td>
-            <td><input type="checkbox" data-action=${3}></td>
-            <td><input type="checkbox" data-action=${4}></td>
-            <td><input type="checkbox" data-action=${5}></td>
-        </tr>
-        `;
+      <tr data-privilege=${dataItem.id}>
+          <td>${dataItem.name}</td>
+          <td><input type="checkbox" data-action=${1}></td>
+          <td><input type="checkbox" data-action=${2}></td>
+          <td><input type="checkbox" data-action=${3}></td>
+          <td><input type="checkbox" data-action=${4}></td>
+          <td><input type="checkbox" data-action=${5}></td>
+      </tr>
+      `;
+      } else {
+        privilegeHTML += `
+      <tr data-privilege=${dataItem.id}>
+          <td>${dataItem.name}</td>
+          <td><input type="checkbox" data-action=${1}></td>
+          <td><input type="checkbox" data-action=${2} disabled></td>
+          <td><input type="checkbox" data-action=${3} disabled></td>
+          <td><input type="checkbox" data-action=${4} disabled></td>
+          <td><input type="checkbox" data-action=${5} disabled></td>
+      </tr>
+      `;
+      }
+        
       });
     }
 
