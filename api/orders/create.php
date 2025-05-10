@@ -18,7 +18,9 @@ $idWayOrder = isset($_POST['maPhuongThuc']) ? $_POST['maPhuongThuc'] : '';
 $idVoucher = isset($_POST['maKhuyenMai']) ? $_POST['maKhuyenMai'] : '';
 
 
+
 if (empty($idCustomer) || empty($address) || empty($totalCost) || empty($idWayOrder)) {
+    echo "thieu data";
     echo json_encode([
         "success" => false,
         "message" => "Thiếu dữ liệu để tạo hóa đơn. Vui lòng làm lại",
@@ -26,6 +28,7 @@ if (empty($idCustomer) || empty($address) || empty($totalCost) || empty($idWayOr
     ]);
     exit();
 }
+
 
 $order_models = new app_models_DonHang();
 
@@ -42,7 +45,11 @@ if ($idVoucher != '') {
     $orderData["maKhuyenMai"] = $idVoucher;
 }
 
+
+
 $result = $order_models->insertOrder($orderData);
+
+
 
 if ($result > 0) {
     echo json_encode([
