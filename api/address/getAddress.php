@@ -6,20 +6,20 @@ require_once __DIR__ . '../../../app/config.php';
 
 header('Content-Type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(405);
     echo json_encode(['error' => 'Method Not Allowed']);
     exit;
 }
 
 // Kiểm tra dữ liệu đầu vào
-if (!isset($_POST['maNguoiDung']) || empty($_POST['maNguoiDung'])) {
+if (!isset($_GET['maNguoiDung']) || empty($_GET['maNguoiDung'])) {
     http_response_code(400);
     echo json_encode(['error' => 'Thiếu mã người dùng']);
     exit;
 }
 
-$maNguoiDung = intval($_POST['maNguoiDung']);
+$maNguoiDung = intval($_GET['maNguoiDung']);
 
 try {
     $diaChiModel = new app_models_DiaChiNguoiDung();
