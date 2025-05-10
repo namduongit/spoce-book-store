@@ -13,9 +13,10 @@ export async function renderPagination(
   currentPage,
   event
 ) {
-  if (paginationId && pageCount && currentPage && event) {
-    const pagination = document.getElementById(paginationId);
-    pagination.innerHTML = "";
+  if (!paginationId) return;
+  const pagination = document.getElementById(paginationId);
+  pagination.innerHTML = "";
+  if (pageCount && currentPage && event) {
     if (pageCount > 1) {
       // Nút sang trái
       let prevButton = document.createElement("button");

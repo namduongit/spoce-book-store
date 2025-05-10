@@ -86,9 +86,13 @@ export async function updateBookData(idBookSelected) {
       </div>
       <div class="dialog__row">
           <div class="dialog__form-group book"></div>
-          <div class="dialog__form-group book">
+          <div class="dialog__form-group book half">
               <label>Số trang</label>
               <input type="text" id="update-book-pages" placeholder="Nhập Số trang" value="${book.pages}" />
+          </div>
+          <div class="dialog__form-group book half">
+              <label>Kích thước</label>
+              <input type="text" id="update-book-size" placeholder="Kích thước" value="${book.size}" />
           </div>
           <div class="dialog__form-group book">
               <label>Loại bìa</label>
@@ -103,7 +107,6 @@ export async function updateBookData(idBookSelected) {
               <label>Nhà xuất bản</label>
               <select id="update-book-publish-name"  class="changed">
                   <option value="${publisher.id}" selected>${publisher.name}</option>
-                  
               </select>
           </div>
           <div class="dialog__form-group book">
@@ -140,10 +143,7 @@ export async function updateBookData(idBookSelected) {
                   <option value="Tạm ngưng">Tạm ngưng</option>
               </select>
           </div>
-          <div class="dialog__form-group book">
-              <label>Kích thước</label>
-              <input type="text" id="update-book-size" placeholder="Kích thước" value="${book.size}" />
-          </div>
+          <div class="dialog__form-group book"></div>
       </div>
       <div class="dialog__buttons">
           <button id="update-book-button" class="add">Sửa</button>

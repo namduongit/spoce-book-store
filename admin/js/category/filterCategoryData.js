@@ -49,6 +49,7 @@ export async function filterCategory(currentPage) {
       currentPage,
       renderCategoryTable
     );
+    console.log(responseJSON);
 
     return responseJSON.data;
   } catch (error) {

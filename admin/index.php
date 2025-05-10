@@ -36,7 +36,7 @@ if (count($role) <= 0) {
     <!-- Styles CSS -->
     <link rel="stylesheet" href="admin/assets/css/base.css">
     <link rel="stylesheet" href="admin/assets/css/common.css">
-    
+
     <link rel="stylesheet" href="../public/css/toast.css">
     <link rel="stylesheet" href="admin/responsive/Responsive.css">
 
@@ -88,7 +88,7 @@ if (count($role) <= 0) {
 
                     if ($privilegeId == 1) {
                         echo '
-                        <li class="sidebar__item active">
+                        <li class="sidebar__item">
                             <a href="/profit_dashboard" class="sidebar__action" data-main-content="profit_dashboard">
                                 <i class="icon fa-solid fa-dollar-sign"></i>
                                 <span class="text">Thống kê lợi nhuận</span>
@@ -107,9 +107,9 @@ if (count($role) <= 0) {
                     } else if ($privilegeId == 3) {
                         echo '
                         <li class="sidebar__item">
-                            <a href="#" class="sidebar__action" data-main-content="input_ticket_dashboard">
+                            <a href="#" class="sidebar__action" data-main-content="invest_dashboard">
                                 <i class="icon fa-solid fa-file-invoice-dollar"></i>
-                                <span class="text">Thống kê phiếu nhập</span>
+                                <span class="text">Thống kê chi tiêu</span>
                             </a>
                         </li>
                         ';
@@ -236,13 +236,6 @@ if (count($role) <= 0) {
                 }
             }
             ?>
-
-            <!-- <li class="sidebar__item">
-                <a href="#" class="sidebar__action">
-                    <i class="icon fa-solid fa-right-from-bracket"></i>
-                    <span class="text">Đăng xuất</span>
-                </a>
-            </li> -->
         </ul>
     </sidebar>
 
@@ -255,45 +248,7 @@ if (count($role) <= 0) {
             <i class="icon fa-solid fa-power-off"></i>
         </nav>
         <!-- Content -->
-        <div class="main__content" id="main-content">
-            <h1 class="main__title">Thống kê lợi nhuận</h1>
-            <div class="main__row">
-                <div class="main__timeline-slt main__select slt-form-1">
-                    <input required="" type="text" id="status-slt-profit_dashboard" />
-                    <span><i class="fa-solid fa-timeline"></i></i>&nbsp;&nbsp;Chọn Khoảng thời gian</span>
-                    <ul>
-                        <li>Lọc theo năm</li>
-                        <li>Lọc theo tháng</li>
-                    </ul>
-                </div>
-                <div class="main__timeline-detail-slt main__select slt-form-1">
-                    <input required="" type="text" id="status-slt-profit_dashboard" />
-                    <span><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;Chọn Thời gian cụ thể</span>
-                    <ul>
-                    </ul>
-                </div>
-                <button class="main__see-btn" id="filter-button-profit_dashboard">
-                    <i class="fa-solid fa-eye"></i>
-                    <span>Xem</span>
-                </button>
-                <button class="main__print-btn" id="print-button-profit_dashboard">
-                    <i class="fa-solid fa-print"></i>
-                    <span>In thống kê</span>
-                </button>
-            </div>
-            <div class="main__data">
-                <table class="main__table dashboard profit_dashboard">
-                    <thead>
-                        <tr>
-                            <th width="100%">Thống kê lợi nhuận</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                    <tfoot></tfoot>
-                </table>
-                <p class="main__total-text"><strong>Viết bằng chữ:</strong> <span>0 đồng</span></p>
-            </div>
-        </div>
+        <div class="main__content" id="main-content"></div>
     </main>
 
     <!-- Javascript -->

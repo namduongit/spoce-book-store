@@ -20,7 +20,7 @@ function returnJSONInputTicket($filters, $pageCount) {
             "employeeName" => $filter['tenNV'],
             "employeePhone" => $filter['sodtNV'],
             "employeeEmail" => $filter['emailNV'],
-            "total" => $filter['tongTienNhap'],
+            "totalPrice" => $filter['tongTienNhap'],
             "status" => $filter['trangThai'],
             "updatedAt" => $filter['ngayCapNhat']
         ];

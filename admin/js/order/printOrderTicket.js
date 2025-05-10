@@ -5,8 +5,8 @@ import { renderOrderDetailTable } from "./renderOrderTable.js";
 
 //
 export async function printOrderTicket(idOrderSelected) {
-  // Truy vấn csdl để lấy ra đơn hàng được chọn
-  const order = await fetchData(`api/orders/list.php?id=${idOrderSelected}`);
+  // Truy vấn csdl để lấy ra đơn hàng được chọn 
+  const order = await fetchData(`api/orders/listBase.php?id=${idOrderSelected}`);
 
   // const printButton = document.getElementById("print-button-order");
 

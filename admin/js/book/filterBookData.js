@@ -5,7 +5,12 @@ import { renderPagination } from "../pagination.js";
 export async function filterBook(currentPage) {
   let findValue = document.getElementById("find-inp-book").value.trim();
   let sortValue = document.getElementById("sort-slt-book").value.trim();
+  let authorValue = document.getElementById("author-slt-book").value.trim();
   let categoryValue = document.getElementById("category-slt-book").value.trim();
+  let coverValue = document.getElementById("cover-slt-book").value.trim();
+  let publisherValue = document
+    .getElementById("publisher-slt-book")
+    .value.trim();
   let statusValue = document.getElementById("status-slt-book").value.trim();
   let limitValue = document.getElementById("show-inp-book").value.trim();
 
@@ -31,7 +36,10 @@ export async function filterBook(currentPage) {
       orderType = "DESC";
       break;
   }
+  let author = authorValue !== "" ? authorValue : "";
   let category = categoryValue !== "" ? categoryValue : "";
+  let cover = coverValue !== "" ? coverValue : "";
+  let publisher = publisherValue !== "" ? publisherValue : "";
   let status = statusValue ? statusValue : "";
   let limit = limitValue ? Number(limitValue) : 5;
   let page = currentPage ? Number(currentPage) : 1;
@@ -39,7 +47,10 @@ export async function filterBook(currentPage) {
 
   let params = new URLSearchParams();
   if (find) params.append("find", find);
+  if (author) params.append("author", author);
   if (category) params.append("category", category);
+  if (cover) params.append("cover", cover);
+  if (publisher) params.append("publisher", publisher);
   if (orderBy) params.append("orderByColumn", orderBy);
   if (orderType) params.append("orderType", orderType);
   if (status) params.append("status", status);
@@ -74,6 +85,24 @@ export function filterBookData() {
   if (filterButton) {
     filterButton.addEventListener("click", async (e) => {
       e.preventDefault();
+      await renderBookTable(1);
+    });
+  }
+
+  const resetButton = document.getElementById("reset-button-book");
+  if (resetButton) {
+    resetButton.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      document.getElementById("find-inp-book").value = "";
+      document.getElementById("sort-slt-book").value = "";
+      document.getElementById("author-slt-book").value = "";
+      document.getElementById("category-slt-book").value = "";
+      document.getElementById("cover-slt-book").value = "";
+      document.getElementById("publisher-slt-book").value = "";
+      document.getElementById("status-slt-book").value = "";
+      document.getElementById("show-inp-book").value = "";
+
       await renderBookTable(1);
     });
   }

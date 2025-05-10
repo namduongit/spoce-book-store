@@ -28,8 +28,8 @@ function returnJSONInputTicket($filters, $pageCount) {
 }
 
 $columns = [
-    'chiTietPhieuNhap.maPhieuNhap', 'chiTietPhieuNhap.maSach', 'chiTietPhieuNhap.giaNhap', 
-    'chiTietPhieuNhap.soLuong', 'sach.tenSach', 'sach.giaTran'
+    'chiTietPhieuNhap.maPhieuNhap', 'chiTietPhieuNhap.maSach', 'chiTietPhieuNhap.giaNhap', 'chiTietPhieuNhap.soLuong',
+    'sach.tenSach', 'sach.giaTran'
 ];
 $tables = ['chiTietPhieuNhap', 'sach'];
 $joins = [

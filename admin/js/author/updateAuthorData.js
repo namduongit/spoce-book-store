@@ -20,7 +20,7 @@ export async function updateAuthorData(idAuthorSelected) {
   // - Định dạng dialog
   updateDialog.classList.add("dialog");
   updateDialog.classList.add("author");
-  // updateDialog.style.width = "30%";
+  updateDialog.style.width = "30%";
   // - Ghi nội dung dialog
   updateDialog.innerHTML = `
       <h1 class="dialog__title">Sửa tác giả</h1>
