@@ -1434,7 +1434,7 @@ async function checkOutBill() {
 
         if (paymentMethod != -1) {
 
-          showLoading();
+          // showLoading();
           const formOrder = new URLSearchParams();
           formOrder.append("maKhachHang", currentUser["user"].id);
           formOrder.append("diaChiGiao", pickUpAddress);

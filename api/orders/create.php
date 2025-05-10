@@ -47,7 +47,7 @@ $orderData = [
 ];
 
 if ($idVoucher != '') {
-    $orderData["maKhuyenMai"] = $idVoucher;
+    $orderData["maKhuyenMai"] = $idVoucher ? $idVoucher : NULL;
 }
 
 

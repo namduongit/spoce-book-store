@@ -273,21 +273,26 @@ export function updateAccountData(idAccountSelected) {
           data.append("accountEmail", email);
           data.append("accountPassword", password);
           if (privilege !== "null") {
-            data.append("accountPrivilege", privilege);
+            data.append("accountRole", privilege);
           }
+
           data.append("accountName", username);
+
+          // duyệt từng key trong data
+          for (let [key, value] of data) {
+            console.log(`${key}: ${value}`);
+          }
+          console.log(data.toString());
+
           // Gọi API cập nhật
           try {
-            const response = await fetch(
-              "http://localhost:3000/api/account/update_account.php",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: data.toString(),
-              }
-            );
+            const response = await fetch("api/account/update_account.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: data.toString(),
+            });
 
             const result = await response.json();
 
@@ -330,6 +335,7 @@ export function updateAccountData(idAccountSelected) {
               }
               // Có thể reload lại dữ liệu ở đây
               updateDialog.remove(); // Nếu muốn đóng dialog sau khi sửa
+              renderAccountTable();
             } else {
               toast({
                 title: "Lỗi",
