@@ -54,6 +54,9 @@ body {
     top: 0px;
     right: 81px;
   }
+  .topbart__cart-action {
+    z-index: 3;
+  }
   .topbar__cart-holder {
     /* position: none;
        */
