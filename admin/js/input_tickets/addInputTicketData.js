@@ -105,7 +105,7 @@ export function addInputTicketData() {
     const supplierSelect = document.getElementById("add-input_ticket-supplier");
     if (supplierSelect) {
       supplierSelect.innerHTML = `<option value="">Chọn Nhà cung cấp</option>`;
-      let suppliers = await fetchData(`api/suppliers/list.php`);
+      let suppliers = await fetchData(`api/suppliers/list.php?status=Hoạt%20động`);
       suppliers.data.forEach((supplier) => {
         supplierSelect.innerHTML += `<option value="${supplier.id}">#${
           supplier.id
@@ -132,8 +132,6 @@ export function addInputTicketData() {
       .addEventListener("click", async (e) => {
         //
         e.preventDefault();
-
-        console.log(123);
 
         //
         let checkAddInputTicket = false;

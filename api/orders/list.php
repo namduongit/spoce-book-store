@@ -12,6 +12,8 @@ function returnJSONOrder($filters, $pageCount) {
     }
 
     $response = array_map(function ($filter) {
+        $name = $filter["maPhuongThuc"] != -1 ? "VNPAY" : $filter['tenPhuongThuc'];
+        
         return [
             "id" => $filter['maDonHang'],
             "createAt" => $filter['ngayTaoDon'],
@@ -23,7 +25,7 @@ function returnJSONOrder($filters, $pageCount) {
             "discountId" => $filter['maKhuyenMai'],
             "discountName" => $filter['tenPGG'],
             "payId" => $filter['maPhuongThuc'],
-            "payName" => $filter['tenPhuongThuc'],
+            "payName" => $name,
             "payStatus" => $filter['trangThaiThanhToan'],
             "total" => $filter['tongTienThu'],
             "addressToShip" => $filter['diaChiGiao'],

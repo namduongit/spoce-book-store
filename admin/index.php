@@ -248,10 +248,11 @@ if (count($role) <= 0) {
             <i class="icon fa-solid fa-power-off tab-logout"></i>
         </nav>
         <!-- Content -->
-        <div class="main__content" id="main-content"></div>
+        <div class="main__content" id="main-content">213</div>
     </main>
 
     <!-- Javascript -->
+    <script type="module" src="admin/js/main.js"></script>
     <script type="module" src="admin/js/changeMainContent.js"></script>
     <script type="module" src="admin/js/showSidebar.js"></script>
     <script type="module" src="admin/responsive/responsive.js"></script>

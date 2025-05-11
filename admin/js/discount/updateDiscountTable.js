@@ -9,5 +9,5 @@ export function updateDiscountTable() {
   clickToShowDatePicker("date-end-inp-discount");
   filterDiscountData();
   addDiscountData();
-  renderDiscountTable();
+  renderDiscountTable(1);
 }

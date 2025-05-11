@@ -460,7 +460,8 @@ async function showOrderDetail(orderId) {
                     <p class="order-detail__title">ĐƠN HÀNG: #${orderId}, <span class="order-detail__date">Đặt lúc — ${formatDate(order['ngayTaoDon'])}</span></p>
                     <p class="order-detail__status"><span>Tình trạng thanh toán: </span>${order['trangThaiThanhToan']}</p>
                     <p class="order-detail__status"><span>Trạng thái đơn hàng: </span>${order['trangThai']}</p>
-                    <p class="order-detail__status"><span>Địa chỉ giao hàng: </span>${order['diaChiGiao']}</p>
+                    <p class="order-detail__status"><span>Tên người nhận: </span>${order['hvtNguoiNhan']}</p>
+                    <p class="order-detail__status"><span>Địa chỉ giao hàng: </span>${order['dcNguoiNhan']}</p>
                 </div>
                 <div class="order-detail__product-detail-container">
                     <div class="order-detail__product-content">
@@ -477,8 +478,12 @@ async function showOrderDetail(orderId) {
                                 </tr>
                                 ${productString}
                                 <tr class="order-detail__total-section">
-                                    <td colspan="5" class="right-align">Tổng tiền</td>
+                                    <td colspan="5" class="right-align">Tổng tiền sản phẩm</td>
                                     <td class="right-align">${formatMoney(totalPrice)}</td>
+                                </tr>
+                                <tr class="">
+                                    <td colspan="5" class="right-align font-weight-500">Tổng tiền đơn hàng (bao gồm phí ship và trừ giảm giá nếu có)</td>
+                                    <td class="right-align font-weight-600">${formatMoney(order['tongTienThu'])}</td>
                                 </tr>
                             </table>
                         </div>

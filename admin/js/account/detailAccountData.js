@@ -27,7 +27,7 @@
 //   // Gọi song song hai API: một để lấy thông tin người dùng, một để lấy địa chỉ
 //   Promise.all([
 //     fetch(
-//       `http://localhost:3000/api/address/getAddress.php?maNguoiDung=${id}`
+//       `api/address/getAddress.php?maNguoiDung=${id}`
 //     ).then((response) => response.json()),
 //     fetch(`http://localhost:3000/api/account/detail_account.php?id=${id}`).then(
 //       (response) => response.json()
@@ -188,11 +188,17 @@ export async function detailAccountData(idAccountSelected) {
   console.log("ID người dùng:", id);
 
   try {
+    let param = new URLSearchParams();
+    param.append("maNguoiDung", id);
     const [addressResponse, userResponse] = await Promise.all([
-      fetch(
-        `http://localhost:3000/api/address/getAddress.php?maNguoiDung=${id}`
-      ),
-      fetch(`http://localhost:3000/api/account/detail_account.php?id=${id}`),
+      fetch(`api/address/getAddress.php`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: param.toString()
+      }),
+      fetch(`api/account/detail_account.php?id=${id}`),
     ]);
 
     const addressData = await addressResponse.json();

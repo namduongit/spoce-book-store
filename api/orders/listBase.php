@@ -23,11 +23,13 @@ function returnJSONOrder($filters, $pageCount) {
             "createAt" => $filter['ngayTaoDon'],
             "employeeId" => $filter['maNhanVien'],
             "customerId" => $filter['maKhachHang'],
+            "customerFullname" => $filter['hvtNguoiNhan'],
+            "customerPhone" => $filter['sdtNguoiNhan'],
+            "customerAddress" => $filter['dcNguoiNhan'],
             "discountId" => $filter['maKhuyenMai'],
             "payId" => $filter['maPhuongThuc'],
             "payStatus" => $filter['trangThaiThanhToan'],
             "total" => $filter['tongTienThu'],
-            "addressToShip" => $filter['diaChiGiao'],
             "status" => $filter['trangThai'],
             "updatedAt" => $filter['ngayCapNhat']
         ];
@@ -43,8 +45,9 @@ function returnJSONOrder($filters, $pageCount) {
 
 $columns = [
     'donHang.maDonHang', 'donHang.ngayTaoDon', 'donHang.maNhanVien', 'donHang.maKhachHang', 
+    'donHang.hvtNguoiNhan', 'donHang.sdtNguoiNhan', 'donHang.dcNguoiNhan', 
     'donHang.maKhuyenMai', 'donHang.maPhuongThuc', 'donHang.trangThaiThanhToan',
-    'donHang.tongTienThu', 'donHang.diaChiGiao',  'donHang.ngayCapNhat', 'donHang.trangThai', 
+    'donHang.tongTienThu', 'donHang.ngayCapNhat', 'donHang.trangThai', 
 ];
 $tables = ['donHang'];
 $joins = [];
@@ -64,8 +67,6 @@ $addressToShip = isset($_GET['addressToShip']) ? trim($_GET['addressToShip']) : 
 $status = isset($_GET['status']) ? trim($_GET['status']) : '';
 $orderByColumn = isset($_GET['orderByColumn']) ? trim($_GET['orderByColumn']) : 'maDonHang';
 $orderType = isset($_GET['orderType']) ? trim($_GET['orderType']) : 'ASC';
-
-
 
 if (!empty($id)) {
     $conditions[] = "(donHang.maDonHang = :id)";
