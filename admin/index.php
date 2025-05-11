@@ -251,6 +251,13 @@ if (count($role) <= 0) {
         <div class="main__content" id="main-content">213</div>
     </main>
 
+    <!-- Spinner chờ trong khi lấy dữ liệu từ Server -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="public/js/spinner.js"></script>
+
     <!-- Javascript -->
     <script type="module" src="admin/js/main.js"></script>
     <script type="module" src="admin/js/changeMainContent.js"></script>

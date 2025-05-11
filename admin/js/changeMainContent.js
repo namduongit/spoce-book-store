@@ -22,6 +22,7 @@ import { fetchData } from "../../public/js/book/getDataBook.js";
 import { updatePrivilegeTable } from "./privilege/updatePrivilegeTable.js";
 
 import { getDetailRole } from "./getDetailRole.js";
+import { updatePaymentTable } from "./payment/updatePaymentTable.js";
 const roleDetail = await getDetailRole();
 const data = roleDetail["result"]["data"];
 
@@ -1092,6 +1093,59 @@ const mainContentMap = {
     </div>
     <div class="main__pagination" id="admin-pagination-publisher"></div>
   `,
+  payment: `
+    <h1 class="main__title">Thẻ thanh toán</h1>
+  <div class="main__row">
+    <div class="main__find-inp inp-text-form-1">
+      <input required="" type="text" id="find-inp-payment" autocomplete="off" />
+      <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tên phương thức</span>
+    </div>
+    <div class="main__sort-slt main__select slt-form-1">
+      <input required="" type="text" id="sort-slt-payment" autocomplete="off" />
+      <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
+      <ul>
+        <li>ID tăng dần</li>
+        <li>ID giảm dần</li>
+        <li>Tên phương thức tăng dần</li>
+        <li>Tên phương thức giảm dần</li>
+      </ul>
+    </div>
+    <div class="main__status-slt main__select slt-form-1">
+      <input required="" type="text" id="status-slt-payment" autocomplete="off" />
+      <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
+     <ul>
+          <li>Hoạt động</li>
+          <li>Tạm dừng</li>
+        </ul>
+    </div>
+    <div class="main__find-inp inp-text-form-1">
+      <input required="" type="text" id="show-inp-payment" autocomplete="off" />
+      <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
+    </div>
+
+      ${filterSupplierButtonHTML}
+
+      ${addSupplierButtonHTML}
+
+  </div>
+  <div class="main__data">
+    <table class="main__table payment">
+      <thead>
+        <tr>
+            <th width="10%">ID</th>
+            <th width="28%">Tên phương thức</th>
+            <th width="14%">Mô tả</th>
+            <th width="20%">Hình thức</th>
+            <th width="14%">Trạng thái</th>
+            <th width="14%"></th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <div class="main__pagination" id="admin-pagination-payment"></div>
+  `
 };
 
 // Biến dùng để chuyển nội dung chính tương ứng với từng trang
@@ -1170,6 +1224,8 @@ menuInSideBar.forEach((item, i) => {
         updateCoverTable();
       } else if (mainContentKey === "publisher") {
         updatePublisherTable();
+      } else if (mainContentKey === "payment") {
+        updatePaymentTable();
       }
     }
   });

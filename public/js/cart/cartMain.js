@@ -757,7 +757,7 @@ async function checkOutBill() {
 
   async function getDataPayment() {
     try {
-      const response = await fetch("api/payments/get.php", {
+      const response = await fetch("api/payments/list.php", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -771,30 +771,32 @@ async function checkOutBill() {
   }
 
   let dataPayment = await getDataPayment();
-  console.log(dataPayment);
   let HTMLPayment = ``;
 
-  console.log(dataPayment);
 
-  if (Array.isArray(dataPayment) && dataPayment) {
-    dataPayment.forEach((data) => {
+  const onlineID = dataPayment['data'].filter(data => {
+    return data['online'] != 0;
+  });
+
+  if (Array.isArray(dataPayment['data']) && dataPayment['data']) {
+    dataPayment['data'].forEach((data) => {
       let holderPayment = "";
       if (
-        data.info != null &&
-        data.desc != null &&
-        data.qrCode != null &&
-        data.auth != null
+        data.data != null &&
+        data.description != null &&
+        data.qr_code != null &&
+        data.name_auth != null
       ) {
         holderPayment = `
                     <div class="checkout__payment-method-child">
                         <div class="checkout__qrcode-method-child-wrapper">
                             <div class="checkout__qrcode-text">
-                                • ${data.info}
-                                • ${data.desc}
-                                • ${data.auth}
+                                • ${data.data}
+                                • ${data.description}
+                                • ${data.name_auth}
                             </div>
                             <div class="checkout__qrcode-img">
-                                <img src="../public/images/banking/uploads/${data.qrCode}" alt="payment_qr">
+                                <img src="../public/images/banking/uploads/${data.qr_code}" alt="payment_qr">
                             </div>
                         </div>
                     </div>
@@ -818,22 +820,6 @@ async function checkOutBill() {
             `;
     });
   }
-
-  // Cái cuối cùng dùng để ứng dụng thanh toán cho thầy coi
-  HTMLPayment += `
-    <label class="checkout__payment-method-option" for="-1">
-        <div class="checkout__payment-method-radiobtn">
-            <label class="checkout__payment-radiobtn-holder">
-                <input type="radio" id="-1" name="payment" value="-1">
-                <span></span>
-            </label>
-        </div>
-        <div class="checkout__payment-method-content">
-            <img src="../public/images/banking/logo/type_atm.svg" alt="payment_icon">
-            <span>Chuyển khoản trực tiếp VNPAY - Dùng làm Demo</span>
-        </div>
-    </label>
-    `;
 
   let rightHTMLCheckOut = `
             <div class="checkout__cart-info-holder">
@@ -1460,7 +1446,9 @@ async function checkOutBill() {
           });
         });
 
-        if (paymentMethod != -1) {
+        const exists = onlineID.some(obj => obj.id == paymentMethod);
+
+        if (exists == false) {
 
           showLoading();
 
@@ -1545,7 +1533,7 @@ async function checkOutBill() {
             window.location.href = "/";
           }, 1000);
         } else {
-          // Thanh toán bằng VNPAY
+          // Thanh toán Online
           showLoading();
 
           const formOrder = new URLSearchParams();
@@ -1553,6 +1541,8 @@ async function checkOutBill() {
           formOrder.append("diaChiGiao", pickUpAddress);
           formOrder.append("tongTienThu", totalPrice);
           formOrder.append("maPhuongThuc", paymentMethod);
+          formOrder.append("tenNguoiNhan", customerName);
+          formOrder.append("soDienThoai", customerNumberphone);
           if (couponsCode != null) formOrder.append("maKhuyenMai", couponsCode);
 
           const responseOrder = await fetch("api/orders/create.php", {
@@ -1577,8 +1567,6 @@ async function checkOutBill() {
               },
             }),
           });
-
-          const dataDetail = await responseDetail.json();
 
           const formData = new URLSearchParams();
           formData.append("order_type", "billpayment");
