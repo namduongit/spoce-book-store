@@ -48,7 +48,7 @@ export async function updateBookData(idBookSelected) {
   <form method="post" class="dialog__form">
       <div class="dialog__row">
           <div class="dialog__form-group book image">
-              <label>Hình ảnh</label>
+              <label>Hình ảnh <span>*<span></label>
               <img id="preview-image"  src="public/uploads/books/${book.image}?v=${Date.now()}" alt"book-image"></img>
               <input type="file" id="update-book-image" accept="image/*" style="display: none;" />
               <button type="button" onclick="document.getElementById('update-book-image').click()">Tải hình ảnh</button>
@@ -59,25 +59,25 @@ export async function updateBookData(idBookSelected) {
       <div class="dialog__row">
           <div class="dialog__form-group book"></div>
           <div class="dialog__form-group book">
-              <label>Mã sách</label>  
+              <label>Mã sách <span>*<span></label>  
               <input type="text" id="update-book-id" readonly value="${book.id}"/>
           </div>
           <div class="dialog__form-group book">
-              <label>Tiêu đề</label>
+              <label>Tiêu đề <span>*<span></label>
               <input type="text" id="update-book-title" placeholder="Nhập Tiêu đề" value="${book.name}" />
           </div>
       </div>
       <div class="dialog__row">
           <div class="dialog__form-group book"></div>
           <div class="dialog__form-group book">
-              <label>Tác giả</label>
+              <label>Tác giả <span>*<span></label>
               <select id="update-book-author" class="changed">
                   <option value="${author.id}" selected>${author.name}</option>
 
               </select>
           </div>
           <div class="dialog__form-group book">
-              <label>Thể loại</label>
+              <label>Thể loại <span>*<span></label>
               <select id="update-book-type"  class="changed">
                   <option value="${category.id}" selected>${category.name}</option>
 
@@ -87,15 +87,15 @@ export async function updateBookData(idBookSelected) {
       <div class="dialog__row">
           <div class="dialog__form-group book"></div>
           <div class="dialog__form-group book half">
-              <label>Số trang</label>
-              <input type="text" id="update-book-pages" placeholder="Nhập Số trang" value="${book.pages}" />
+              <label>Số trang <span>*<span></label>
+              <input type="number" id="update-book-pages" placeholder="Nhập Số trang" value="${book.pages}" />
           </div>
           <div class="dialog__form-group book half">
-              <label>Kích thước</label>
-              <input type="text" id="update-book-size" placeholder="Kích thước" value="${book.size}" />
+              <label>Kích thước <span>*<span></label>
+              <input type="number" id="update-book-size" placeholder="Kích thước" value="${book.size}" />
           </div>
           <div class="dialog__form-group book">
-              <label>Loại bìa</label>
+              <label>Loại bìa <span>*<span></label>
               <select id="update-book-cover"  class="changed">
                   <option value="${corver.id}" selected>${corver.name}</option>
               </select>
@@ -104,14 +104,14 @@ export async function updateBookData(idBookSelected) {
       <div class="dialog__row">
           <div class="dialog__form-group book"></div>
           <div class="dialog__form-group book">
-              <label>Nhà xuất bản</label>
+              <label>Nhà xuất bản <span>*<span></label>
               <select id="update-book-publish-name"  class="changed">
                   <option value="${publisher.id}" selected>${publisher.name}</option>
               </select>
           </div>
           <div class="dialog__form-group book">
-              <label>Năm xuất bản</label>
-              <input type="date" id="update-book-publish-year" class="hasValidDate" placeholder="Nhập Năm xuất bản" value="${book.publishYear}" />
+              <label>Năm xuất bản <span>*<span></label>
+              <input type="number" id="update-book-publish-year" class="hasValidDate" placeholder="Nhập Năm xuất bản" value="${book.publishYear}" />
           </div>
       </div>
       <div class="dialog__row">
@@ -125,28 +125,32 @@ export async function updateBookData(idBookSelected) {
       <div class="dialog__row">
           <div class="dialog__form-group book"></div>
           <div class="dialog__form-group book">
-              <label>Giá gốc</label>
-              <input type="text" id="update-book-price-base" placeholder="Nhập giá gốc" value="${book.basePrice}"/>
+              <label>Giá gốc <span>*<span></label>
+              <input type="number" id="update-book-price-base" placeholder="Nhập giá gốc" value="${book.basePrice}"/>
           </div>
           <div class="dialog__form-group book">
-              <label>Giá bán</label>
-              <input type="text" id="update-book-price-order" placeholder="Nhập Giá bán" value="${book.sellPrice}" />
+              <label>Giá bán <span>*<span></label>
+              <input type="number" id="update-book-price-order" placeholder="Nhập Giá bán" value="${book.sellPrice}" />
           </div>
       </div>
       <div class="dialog__row">
-          <div class="dialog__form-group book"></div>
-          <div class="dialog__form-group book">
-              <label>Trạng thái</label>
-              <select id="update-book-status" class="changed" disabled>
-                  <option value="${book.status}" selected>${book.status}</option>
-                  <option value="Còn hàng">Còn hàng</option>
-                  <option value="Tạm ngưng">Tạm ngưng</option>
-              </select>
-          </div>
-          <div class="dialog__form-group book"></div>
-      </div>
+            <div class="dialog__form-group book"></div>
+            <div class="dialog__form-group book">
+                <label>Tồn kho</label>
+                <input type="text" id="detail-book-inventory" readonly value="${book.inventory}" />
+                </div>
+            <div class="dialog__form-group book">
+                <label>Trạng thái <span>*<span></label>
+                <select id="update-book-status" class="changed" disabled>
+                    <option value="${book.status}" selected>${book.status}</option>
+                    <option value="Còn hàng">Còn hàng</option>
+                    <option value="Tạm ngưng">Tạm ngưng</option>
+                </select>
+            </div>
+    
+        </div>
       <div class="dialog__buttons">
-          <button id="update-book-button" class="add">Sửa</button>
+          <button id="update-book-button" class="update">Sửa</button>
       </div>
   </form>
 `;
@@ -273,31 +277,63 @@ document.getElementById("update-book-button").addEventListener("click", async (e
     }
 
     let checkNumPage = true;
-    if (!pages.match(/^\d+$/)) {
-        toast({ title: "Lỗi", message: "Số trang chỉ được nhập số.", type: "warning", duration: 3000 });
+    if (!pages) {
+        toast({ title: "Lỗi", message: "Vui lòng nhập số trang", type: "warning", duration: 3000 });
+        checkNumPage = false;
+    }
+    if (pages < 0) {
+        toast({ title: "Lỗi", message: "Số trang phải lơn hơn 0", type: "warning", duration: 3000 });
         checkNumPage = false;
     }
 
     let checkOriginPrice = true;
-    if (!priceBase.match(/^\d+$/)) {
-        toast({ title: "Lỗi", message: "Giá gốc chỉ được nhập số.", type: "warning", duration: 3000 });
+    if (!priceBase) {
+        toast({ title: "Lỗi", message: "Vui lòng nhập giá gốc", type: "warning", duration: 3000 });
+        checkOriginPrice = false;
+    }
+     if (priceBase < 0) {
+        toast({ title: "Lỗi", message: "Giá gốc phải lớn hơn 0", type: "warning", duration: 3000 });
         checkOriginPrice = false;
     }
 
     let checkSellingPrice = true;
-    if (!priceOrder.match(/^\d+$/)) {
-        toast({ title: "Lỗi", message: "Giá bán chỉ được nhập số.", type: "warning", duration: 3000 });
+    if (!priceOrder) {
+        toast({ title: "Lỗi", message: "Vui lòng nhập giá bán", type: "warning", duration: 3000 });
+        checkSellingPrice = false;
+    }
+     if (priceOrder < 0) {
+        toast({ title: "Lỗi", message: "Giá bán phải lơn hơn 0", type: "warning", duration: 3000 });
         checkSellingPrice = false;
     }
 
 
+
     let checkSize = true;
-    if (!size.match(/^\d+$/)) {
-        toast({ title: "Lỗi", message: "Kích thước chỉ được nhập số.", type: "warning", duration: 3000 });
+    if (!size ) {
+        toast({ title: "Lỗi", message: "Vui lòng nhập kích thước.", type: "warning", duration: 3000 });
+        checkSize = false;
+    }
+     if (size < 0 ) {
+        toast({ title: "Lỗi", message: "Kích thước phải lớn hơn 0", type: "warning", duration: 3000 });
         checkSize = false;
     }
 
-    if(checkTitle && checkNumPage && checkOriginPrice && checkSellingPrice && checkSize){
+      let checkPublishYear = true;
+    if (!publishYear ) {
+        toast({ title: "Lỗi", message: "Vui lòng nhập năm xuất bản", type: "warning", duration: 3000 });
+        checkPublishYear = false;
+    }
+     if (publishYear < 0 ) {
+        toast({ title: "Lỗi", message: "Năm xuất bản phải lớn hơn 0", type: "warning", duration: 3000 });
+        checkPublishYear = false;
+    }
+     if (publishYear  > (new Date()).getFullYear() ) {
+        toast({ title: "Lỗi", message:"Năm xuất bản phải bé hơn hoặc bằng năm hiện tại", type: "warning", duration: 3000 });
+        checkPublishYear = false;
+    }
+
+
+    if(checkTitle && checkNumPage && checkOriginPrice && checkSellingPrice && checkSize && checkPublishYear){
 
         let yes = await showNotification("Bạn có đồng ý lưu chỉnh sửa không ?");
         if(yes){
@@ -356,12 +392,12 @@ document.getElementById("update-book-button").addEventListener("click", async (e
 
 // Gán sự kiện cho nút "Đóng" dialog
 document.getElementById("close-book-button").addEventListener("click", async () => {
-    let yes = await showNotification("Bạn có đồng ý thoát không?");
-    if(yes){
+    // let yes = await showNotification("Bạn có đồng ý thoát không?");
+    // if(yes){
         // Xoá dialog
         updateDialog.remove();
         // updateButton.classList.remove("active");
-    }
+    // }
 
 
 });

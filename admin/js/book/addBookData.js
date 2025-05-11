@@ -76,12 +76,12 @@ export async function addBookData() {
             <div class="dialog__row">
                 <div class="dialog__form-group book"></div>
                 <div class="dialog__form-group book half">
-                    <label>Số trang</label>
-                    <input type="text" id="add-book-pages" placeholder="Nhập Số trang" />
+                    <label>Số trang<span>*<span></label>
+                    <input type="number" id="add-book-pages" placeholder="Nhập Số trang" />
                 </div>
                 <div class="dialog__form-group book half">
-                    <label>Kích thước</label>
-                    <input type="text" id="add-book-size" placeholder="Nhập kích thước" />
+                    <label>Kích thước<span>*<span></label>
+                    <input type="number" id="add-book-size" placeholder="Nhập kích thước" />
                 </div>
                 <div class="dialog__form-group book">
                     <label>Loại bìa<span>*<span></label>
@@ -99,8 +99,8 @@ export async function addBookData() {
                     </select>
                 </div>
                 <div class="dialog__form-group book">
-                    <label>Năm xuất bản</label>
-                    <input type="date" id="add-book-publisher-year" placeholder="Nhập Năm xuất bản" />
+                    <label>Năm xuất bản<span>*<span></label>
+                    <input type="number" id="add-book-publisher-year" placeholder="Nhập Năm xuất bản" />
                 </div>
             </div>
             <div class="dialog__row">
@@ -115,11 +115,11 @@ export async function addBookData() {
                 <div class="dialog__form-group book"></div>
                 <div class="dialog__form-group book">
                     <label>Giá trần<span>*<span></label>
-                    <input type="text" id="add-book-price-base" placeholder="Nhập Giá trần" />
+                    <input type="number" id="add-book-price-base" placeholder="Nhập Giá trần" />
                 </div>
                 <div class="dialog__form-group book">
                     <label>Giá bán<span>*<span></label>
-                    <input type="text" id="add-book-price-order" placeholder="Nhập Giá bán" />
+                    <input type="number" id="add-book-price-order" placeholder="Nhập Giá bán" />
                 </div>
             </div>
             <div class="dialog__row">
@@ -338,39 +338,42 @@ export async function addBookData() {
           });
           return;
         }
-        // else if (!pages) {
-        //   toast({
-        //     title: "Lỗi",
-        //     message: "Vui lòng nhập số trang.",
-        //     type: "warning",
-        //     duration: 3000,
-        //   });
-        //   return;
-        // } else if (!isNumber(pages)) {
-        //   toast({
-        //     title: "Lỗi",
-        //     message: "Số trang phải là số.",
-        //     type: "warning",
-        //     duration: 3000,
-        //   });
-        //   return;
-        // } else if (!size) {
-        //   toast({
-        //     title: "Lỗi",
-        //     message: "Vui lòng nhập kích thước.",
-        //     type: "warning",
-        //     duration: 3000,
-        //   });
-        //   return;
-        // } else if (!isNumber(size)) {
-        //   toast({
-        //     title: "Lỗi",
-        //     message: "Kích thước phải là số.",
-        //     type: "warning",
-        //     duration: 3000,
-        //   });
-        //   return;
-        // }
+        else if (!pages) {
+          toast({
+            title: "Lỗi",
+            message: "Vui lòng nhập số trang.",
+            type: "warning",
+            duration: 3000,
+          });
+          return;
+        } 
+        else if (pages < 0) {
+          toast({
+            title: "Lỗi",
+            message: "Số trang phải lớn hơn 0",
+            type: "warning",
+            duration: 3000,
+          });
+          return;
+        }
+         else if (!size) {
+          toast({
+            title: "Lỗi",
+            message: "Vui lòng nhập kích thước.",
+            type: "warning",
+            duration: 3000,
+          });
+          return;
+        }
+         else if (size < 0) {
+          toast({
+            title: "Lỗi",
+            message: "Kích thước phải lớn hơn 0",
+            type: "warning",
+            duration: 3000,
+          });
+          return;
+        }
         else if (!cover) {
           toast({
             title: "Lỗi",
@@ -388,15 +391,24 @@ export async function addBookData() {
           });
           return;
         }
-        // else if (!publisherYear) {
-        //   toast({
-        //     title: "Lỗi",
-        //     message: "Vui lòng chọn năm xuất bản.",
-        //     type: "warning",
-        //     duration: 3000,
-        //   });
-        //   return;
-        // }
+        else if (publisherYear < 0) {
+          toast({
+            title: "Lỗi",
+            message: "Năm xuất bản phải lớn hơn 0",
+            type: "warning",
+            duration: 3000,
+          });
+          return;
+        }
+        else if (publisherYear > (new Date()).getFullYear()) {
+          toast({
+            title: "Lỗi",
+            message: "Năm xuất bản phải bé hơn hoặc bằng năm hiện tại",
+            type: "warning",
+            duration: 3000,
+          });
+          return;
+        }
         else if (!priceBase) {
           toast({
             title: "Lỗi",
@@ -405,10 +417,10 @@ export async function addBookData() {
             duration: 3000,
           });
           return;
-        } else if (!isNumber(priceBase)) {
+        } else if (priceBase < 0) {
           toast({
             title: "Lỗi",
-            message: "Giá trần phải là số.",
+            message: "Giá trần phải lớn hơn 0",
             type: "warning",
             duration: 3000,
           });
@@ -421,10 +433,10 @@ export async function addBookData() {
             duration: 3000,
           });
           return;
-        } else if (!isNumber(priceOrder)) {
+        } else if (priceOrder < 0) {
           toast({
             title: "Lỗi",
-            message: "Giá bán phải là số.",
+            message: "Giá bán phải là lớn hơn 0",
             type: "warning",
             duration: 3000,
           });
