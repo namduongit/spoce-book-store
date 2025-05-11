@@ -2,7 +2,7 @@ import { renderPaymentTable } from "./renderPaymentTable.js";
 import { renderPagination } from "../pagination.js";
 
 
-export async function filterPaymentData(currentPage) {
+export async function filterPayment(currentPage) {
     let findValue = document.getElementById("find-inp-payment").value.trim();
     let sortValue = document.getElementById("sort-slt-payment").value.trim();
     let statusValue = document
@@ -38,5 +38,34 @@ export async function filterPaymentData(currentPage) {
     params.append("limit", limit);
     params.append("offset", offset);
 
-    
+    try {
+        let response = await fetch(`api/payments/list.php?${params.toString()}`);
+
+        if (!response.ok) {
+            throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
+        }
+        let responseJSON = await response.json();
+        await renderPagination(
+            "admin-pagination-payment",
+            responseJSON.pageCount,
+            currentPage,
+            renderPaymentTable
+        );
+
+        return responseJSON.data;
+    } catch (error) {
+        alert("Lỗi khi lấy dữ liệu: " + error.message);
+        return [];
+    }
+}
+
+// Thêm sự kiện lọc
+export function filterPublisherData() {
+  const filterButton = document.getElementById("filter-button-payment");
+  if (filterButton) {
+    filterButton.addEventListener("click", async (e) => {
+      e.preventDefault();
+      await renderPaymentTable(1);
+    });
+  }
 }

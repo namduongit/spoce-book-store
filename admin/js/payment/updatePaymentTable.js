@@ -1,5 +1,7 @@
-import { filterPaymentData } from "./filterPaymentData.js";
+import { filterPayment } from "./filterPaymentData.js";
+import { renderPaymentTable } from "./renderPaymentTable.js";
 
-export function updatePaymentTable() {
-    filterPaymentData();
+export function updatePaymentTable(dataDetail) {
+    filterPayment();
+    renderPaymentTable(1, dataDetail);
 }
