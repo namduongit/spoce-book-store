@@ -54,6 +54,9 @@ body {
     top: 0px;
     right: 81px;
   }
+  .topbart__cart-action {
+    z-index: 3;
+  }
   .topbar__cart-holder {
     /* position: none;
        */
@@ -274,8 +277,11 @@ body {
     margin-top: 10px;
     padding: 13px;
   }
-  .header__search-wrapper.mobile .header__search-btn {
-    display: none;
+  .mobile .header__search-btn {
+    display: none !important;
+  }
+  .show-cart__item.mobile {
+    display: none !important;
   }
 }
 /* ============================== ĐIỆN THOẠI (767px) ============================== */
@@ -366,6 +372,9 @@ body {
     transform: translateX(170%);
     transition: transform 0.3s ease;
     z-index: 1000;
+  }
+  .mobile .header__search-btn {
+    display: block !important;
   }
 
   /* Khi mở thì trượt vào */

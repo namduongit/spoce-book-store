@@ -1,3 +1,8 @@
+/* ẩn nội dung */
+.none__item {
+  display: none !important;
+}
+
 /* thoong bao */
 #notification-dialog {
   position: fixed;

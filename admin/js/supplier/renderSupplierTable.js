@@ -3,6 +3,12 @@ import { detailSupplierData } from "./detailSupplierData.js";
 import { lockSupplierData } from "./lockSupplierData.js";
 import { filterSupplier } from "./filterSupplierData.js";
 
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
+
+var infoSupplier = data[9] && data[9].includes(2) ? '' : 'none__item';
+var editSupplier = data[9] && data[9].includes(4) ? '' : 'none__item';
+var lockSupplier = data[9] && data[9].includes(5) ? '' : 'none__item';
+
 // Hàm cập nhật lại dữ liệu cho bảng Nhà cung cấp
 export async function renderSupplierTable(currentPage) {
   const data = (await filterSupplier(currentPage)) || [];
@@ -24,11 +30,11 @@ export async function renderSupplierTable(currentPage) {
               data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
             }>${data[i].status}</span></td>
             <td>
-                <i class="fa-solid fa-circle-info"></i>
-                <i class="fa-solid fa-pen-to-square"></i>
+                <i class="fa-solid fa-circle-info ${infoSupplier}"></i>
+                <i class="fa-solid fa-pen-to-square ${editSupplier}"></i>
                 <i class="fa-solid fa-${
                   data[i].status === "Hoạt động" ? "" : "un"
-                }lock"></i>
+                }lock ${lockSupplier}"></i>
             </td>
         </tr>
     `;

@@ -3,6 +3,13 @@ import { updateBookData } from "./updateBookData.js";
 import { lockBookData } from "./lockBookData.js";
 import { filterBook } from "./filterBookData.js";
 
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
+
+var infoBook = data[11] && data[11].includes(2) ? '' : 'none__item';
+var editBook = data[11] && data[11].includes(4) ? '' : 'none__item';
+var lockBook = data[11] && data[11].includes(5) ? '' : 'none__item';
+
+
 // Hàm cập nhật lại dữ liệu cho bảng Thể loại
 export async function renderBookTable(currentPage) {
   const data = await filterBook(currentPage);
@@ -31,11 +38,11 @@ export async function renderBookTable(currentPage) {
                 </span>
             </td>
             <td>
-                <i class="fa-solid fa-circle-info"></i>  
-                <i class="fa-solid fa-pen-to-square"></i>
+                <i class="fa-solid fa-circle-info ${infoBook}"></i>  
+                <i class="fa-solid fa-pen-to-square ${editBook}"></i>
                 <i class="fa-solid fa-${
                   book.status === "Đang bán" ? "" : "un"
-                }lock lock-button-book"></i>
+                }lock lock-button-book ${lockBook}"></i>
             </td>
         </tr>`;
     });

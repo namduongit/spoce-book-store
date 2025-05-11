@@ -34,7 +34,8 @@ export async function updatePrivilegeData(idPrivilegeSelected) {
   let privilegeHTML = ``;
   if (feature && Array.isArray(feature)) {
     feature.forEach(dataItem => {
-      privilegeHTML += `
+      if (dataItem.id > 4) {
+        privilegeHTML += `
       <tr data-privilege=${dataItem.id}>
           <td>${dataItem.name}</td>
           <td><input type="checkbox" data-action=${1}></td>
@@ -44,6 +45,18 @@ export async function updatePrivilegeData(idPrivilegeSelected) {
           <td><input type="checkbox" data-action=${5}></td>
       </tr>
       `;
+      } else {
+        privilegeHTML += `
+      <tr data-privilege=${dataItem.id}>
+          <td>${dataItem.name}</td>
+          <td><input type="checkbox" data-action=${1}></td>
+          <td><input type="checkbox" data-action=${2} disabled></td>
+          <td><input type="checkbox" data-action=${3} disabled></td>
+          <td><input type="checkbox" data-action=${4} disabled></td>
+          <td><input type="checkbox" data-action=${5} disabled></td>
+      </tr>
+      `;
+      }
     })
   }
 

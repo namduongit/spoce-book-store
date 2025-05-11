@@ -2,6 +2,12 @@ import { updateAuthorData } from "./updateAuthorData.js";
 import { lockAuthorData } from "./lockAuthorData.js";
 import { filterAuthor } from "./filterAuthorData.js";
 
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
+
+var infoAuthor = data[12] && data[12].includes(2) ? '' : 'none__item';
+var editAuthor = data[12] && data[12].includes(4) ? '' : 'none__item';
+var lockAuthor = data[12] && data[12].includes(5) ? '' : 'none__item';
+
 // Hàm cập nhật lại dữ liệu cho bảng Tác giả
 export async function renderAuthorTable(currentPage) {
   const data = await filterAuthor(currentPage) || [];
@@ -21,10 +27,10 @@ export async function renderAuthorTable(currentPage) {
                 data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
               }>${data[i].status}</span></td>
               <td>
-                  <i class="fa-solid fa-pen-to-square"></i>
+                  <i class="fa-solid fa-pen-to-square ${editAuthor}"></i>
                   <i class="fa-solid fa-${
                     data[i].status === "Hoạt động" ? "" : "un"
-                  }lock"></i>
+                  }lock ${lockAuthor}"></i>
               </td>
           </tr>
       `;

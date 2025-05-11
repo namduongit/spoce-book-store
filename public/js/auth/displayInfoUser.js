@@ -48,6 +48,7 @@ export async function isLogined() {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
+        sessionStorage.setItem('user', JSON.stringify(data));
         hideLoading();
         return data;
     } catch (error) {
@@ -227,7 +228,7 @@ async function showContentProfile(info) {
     let url = new URLSearchParams();
     let currentParams = new URLSearchParams(window.location.search);
     const infoPage = document.querySelector('.self-infomation');
-    const responseAPI = await isLogined();
+    const responseAPI = JSON.parse(sessionStorage.getItem("user")) || false;
     let user = null;
 
     if (responseAPI === false) {

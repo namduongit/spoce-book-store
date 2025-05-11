@@ -3,6 +3,12 @@ import { updateDiscountData } from "./updateDiscountData.js";
 import { lockDiscountData } from "./lockDiscountData.js";
 import { filterDiscount } from "./filterDiscountData.js";
 
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
+
+var infoDiscount = data[6] && data[6].includes(2) ? '' : 'none__item';
+var editDiscount = data[6] && data[6].includes(4) ? '' : 'none__item';
+var lockDiscount = data[6] && data[6].includes(5) ? '' : 'none__item';
+
 // Hàm cập nhật lại dữ liệu cho bảng khuyến mãi
 export async function renderDiscountTable(currentPage) {
   // Lấy dữ liệu từ API
@@ -25,10 +31,10 @@ export async function renderDiscountTable(currentPage) {
             <td><span ${data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
       }>${data[i].status}</span></td>
             <td>
-              <i class="fa-solid fa-circle-info"></i>
-              <i class="fa-solid fa-pen-to-square"></i>
+              <i class="fa-solid fa-circle-info ${infoDiscount}"></i>
+              <i class="fa-solid fa-pen-to-square ${editDiscount}"></i>
               <i class="fa-solid fa-${data[i].status === "Hoạt động" ? "lock" : "unlock"
-      }"></i>
+      } ${lockDiscount}"></i>
             </td>
         </tr>
       `;

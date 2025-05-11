@@ -4,6 +4,13 @@ import { vietnamMoneyFormat } from "../others.js";
 import { filterOrderDashboard } from "./filterOrderDashboard.js";
 import { detailOrderDashboardData } from "./detailOrderDashboardData.js";
 
+
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
+
+var infoOrderDashboard = data[4] && data[4].includes(2) ? '' : 'none__item';
+var editOrderDashboard = data[4] && data[4].includes(4) ? '' : 'none__item';
+var lockOrderDashboard = data[4] && data[4].includes(5) ? '' : 'none__item';
+
 // Hàm cập nhật lại dữ liệu cho bảng Đơn hàng
 export async function renderOrderDashboardTable(currentPage) {
   // Lấy dữ liệu từ API
@@ -25,7 +32,7 @@ export async function renderOrderDashboardTable(currentPage) {
             <td>${data[i].ordersCancel}</td>
             <td>${vietnamMoneyFormat(data[i].pricesCancel)}</td>
             <td>
-                <i class="fa-solid fa-circle-info"></i>
+                <i class="fa-solid fa-circle-info ${infoOrderDashboard}"></i>
                 <i class="fa-solid fa-print"></i>
             </td>
         </tr>

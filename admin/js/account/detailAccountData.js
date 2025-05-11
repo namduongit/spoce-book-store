@@ -27,7 +27,7 @@
 //   // Gọi song song hai API: một để lấy thông tin người dùng, một để lấy địa chỉ
 //   Promise.all([
 //     fetch(
-//       `http://localhost:3000/api/address/getAddress.php?maNguoiDung=${id}`
+//       `api/address/getAddress.php?maNguoiDung=${id}`
 //     ).then((response) => response.json()),
 //     fetch(`http://localhost:3000/api/account/detail_account.php?id=${id}`).then(
 //       (response) => response.json()
@@ -190,9 +190,9 @@ export async function detailAccountData(idAccountSelected) {
   try {
     const [addressResponse, userResponse] = await Promise.all([
       fetch(
-        `http://localhost:3000/api/address/getAddress.php?maNguoiDung=${id}`
+        `api/address/getAddress.php?maNguoiDung=${id}`
       ),
-      fetch(`http://localhost:3000/api/account/detail_account.php?id=${id}`),
+      fetch(`api/account/detail_account.php?id=${id}`),
     ]);
 
     const addressData = await addressResponse.json();

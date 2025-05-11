@@ -4,6 +4,12 @@ import { updateOrderData } from "./updateOrderData.js";
 import { printOrderTicket } from "./printOrderTicket.js";
 import { filterOrder } from "./filterOrderData.js";
 
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
+
+var infoOrder = data[5] && data[5].includes(2) ? '' : 'none__item';
+var editOrder = data[5] && data[5].includes(4) ? '' : 'none__item';
+var lockOrder = data[5] && data[5].includes(5) ? '' : 'none__item';
+
 // Hàm tách địa chỉ giao thành còn Quận huyện và Tỉnh thành
 function splitAddressToShip(address) {
   const addressArray = address.split(" / ");

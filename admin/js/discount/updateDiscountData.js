@@ -175,8 +175,8 @@ export async function updateDiscountData(idDiscountSelected) {
           errorMessage += "Giá trị phải là số!\n";
         } else if (type === "Phần trăm" && (valueNum <= 0 || valueNum > 100)) {
           errorMessage += "Giá trị phần trăm phải từ 0 đến 100!\n";
-        } else if (type === "Tiền" && valueNum <= 0) {
-          errorMessage += "Giá trị tiền phải lớn hơn 0!\n";
+        } else if (type === "Tiền" && valueNum <= 1000) {
+          errorMessage += "Giá trị tiền phải lớn hơn 1000!\n";
         }
       }
       if (!dateStart || !dateEnd) {

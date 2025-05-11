@@ -2,6 +2,12 @@ import { updateCategoryData } from "./updateCategoryData.js";
 import { lockCategoryData } from "./lockCategoryData.js";
 import { filterCategory } from "./filterCategoryData.js";
 
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
+
+var infoCategory = data[13] && data[13].includes(2) ? '' : 'none__item';
+var editCategory = data[13] && data[13].includes(4) ? '' : 'none__item';
+var lockCategory = data[13] && data[13].includes(5) ? '' : 'none__item';
+
 // Hàm cập nhật lại dữ liệu cho bảng Thể loại
 export async function renderCategoryTable(currentPage) {
   //
@@ -22,10 +28,10 @@ export async function renderCategoryTable(currentPage) {
                 data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
               }>${data[i].status}</span></td>
               <td>
-                  <i class="fa-solid fa-pen-to-square"></i>
+                  <i class="fa-solid fa-pen-to-square ${editCategory}"></i>
                   <i class="fa-solid fa-${
                     data[i].status === "Hoạt động" ? "" : "un"
-                  }lock"></i>
+                  }lock ${lockCategory}"></i>
               </td>
           </tr>
       `;

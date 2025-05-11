@@ -2,6 +2,12 @@ import { updatePublisherData } from "./updatePublisherData.js";
 import { lockPublisherData } from "./lockPublisherData.js";
 import { filterPublisher } from "./filterPublisherData.js";
 
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
+
+var infoPublisher = data[15] && data[15].includes(2) ? '' : 'none__item';
+var editPublisher = data[15] && data[15].includes(4) ? '' : 'none__item';
+var lockPublisher = data[15] && data[15].includes(5) ? '' : 'none__item';
+
 // Hàm cập nhật lại dữ liệu cho bảng Nhà xuất bản
 export async function renderPublisherTable(currentPage) {
   const data = (await filterPublisher(currentPage)) || [];
@@ -21,10 +27,10 @@ export async function renderPublisherTable(currentPage) {
           data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
         }>${data[i].status}</span></td>
         <td>
-          <i class="fa-solid fa-pen-to-square"></i>
+          <i class="fa-solid fa-pen-to-square ${editPublisher}"></i>
           <i class="fa-solid fa-${
             data[i].status === "Hoạt động" ? "" : "un"
-          }lock"></i>
+          }lock ${lockPublisher}"></i>
         </td>
       </tr>
     `;

@@ -36,7 +36,7 @@ window.onload = async function () {
 async function viewCart(type) {
   let cartDetail = document.querySelector(".topbar__cart-detail-holder");
 
-  const currentUser = await getCurrentUser();
+  const currentUser = JSON.parse(sessionStorage.getItem("user")) || null;
   console.log("Người dùng hiện tại: ", currentUser);
   let currentCartUser = null;
 
@@ -233,7 +233,7 @@ async function viewCart(type) {
 }
 
 async function removeFromCart(bookId) {
-  const currentUser = await getCurrentUser();
+  const currentUser = JSON.parse(sessionStorage.getItem("user")) || null;
   if (currentUser == null) {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     cart = cart.filter((item) => item.id != bookId);
@@ -282,7 +282,7 @@ async function showAllCart(type) {
   const orderInfo = document.querySelector(".order-history");
 
   let currentCartUser = null;
-  let currentUser = await getCurrentUser();
+  let currentUser = JSON.parse(sessionStorage.getItem("user")) || null;
   if (currentUser == null) {
     currentCartUser = JSON.parse(localStorage.getItem("cart")) || [];
   } else {
@@ -424,7 +424,9 @@ async function showAllCart(type) {
     <div class="show-cart__detail d-flex">
         <div class="show-cart__bookname">${details.tenSach}</div>
         <div class="show-cart__price">
-            ${details.maSach} / ${details.tenTheLoai} / ${formatMoney(details.giaBan)}
+            ${details.maSach} / ${details.tenTheLoai} / ${formatMoney(
+      details.giaBan
+    )}
         </div>
     </div>
     <div class="show-cart__amountbox">
@@ -439,7 +441,7 @@ async function showAllCart(type) {
         }, ${JSON.stringify(currentUser)})'>+</button>
     </div>
     <div class="show-cart__priceamount">${formatMoney(
-      productItem.quantity * details.sellingPrice
+      productItem.quantity * details.giaBan
     )}</div>
     </div>
     <a href="#" class="show-cart__remove" onclick='deleteFromCart(${
@@ -447,7 +449,7 @@ async function showAllCart(type) {
     }, ${JSON.stringify(currentUser).replace(/'/g, "\\'")})'>
         <i class="fa-solid fa-trash-can"></i>
     </a>
-</div> 
+</div>
         `;
 
     totalPrice += productItem.quantity * details.giaBan;
@@ -628,7 +630,7 @@ function plusQuantity(bookId, currentUser) {
 }
 
 async function checkOutBill() {
-  const currentUser = await getCurrentUser();
+  const currentUser = JSON.parse(sessionStorage.getItem("user")) || null;
 
   if (currentUser == null) {
     toast({
@@ -1197,18 +1199,20 @@ async function checkOutBill() {
     });
 
   // Nút nhập mã chuyển màu xanh khi người dùng nhập mã
-  let discountInput = document.querySelector(".checkout__promotion-input-holder .checkout__input-field #promotion-code");
-  let discountSubmit = document.querySelector('.checkout__promotion-btn');
+  let discountInput = document.querySelector(
+    ".checkout__promotion-input-holder .checkout__input-field #promotion-code"
+  );
+  let discountSubmit = document.querySelector(".checkout__promotion-btn");
   let totalDiscount = 0;
-  let discount;
+  let discount = null;
 
   if (discountInput && discountSubmit) {
-    discountInput.addEventListener('input', function () {
+    discountInput.addEventListener("input", function () {
       discountSubmit.disabled = false;
-      discountSubmit.classList.toggle('active', discountInput.value.length > 0);
+      discountSubmit.classList.toggle("active", discountInput.value.length > 0);
     });
 
-    discountSubmit.addEventListener('click', async function (e) {
+    discountSubmit.addEventListener("click", async function (e) {
       e.preventDefault();
 
       if (discountInput.value.length == 0) {
@@ -1227,23 +1231,25 @@ async function checkOutBill() {
           type: "warning",
           message: "Đơn hàng này đã được áp dụng mã giảm giá",
           title: "Thông báo",
-          duration: 3000
+          duration: 3000,
         });
 
         return;
       }
 
-      let discountResponse = await fetch(`api/discounts/detail.php?id=${discountInput.value}`);
+      let discountResponse = await fetch(
+        `api/discounts/detail.php?id=${discountInput.value}`
+      );
       let discountResult = await discountResponse.json();
 
-      if (discountResult.status == 'success') {
+      if (discountResult.status == "success") {
         discount = discountResult.data;
-        if (discount.status == 'Tạm dừng') {
+        if (discount.status == "Tạm dừng") {
           toast({
             type: "warning",
             message: "Mã giảm giá không khả dụng",
             title: "Thông báo",
-            duration: 3000
+            duration: 3000,
           });
 
           return;
@@ -1254,31 +1260,38 @@ async function checkOutBill() {
             type: "warning",
             message: "Đơn hàng không đủ điều kiện sử dụng mã giảm giá này",
             title: "Thông báo",
-            duration: 3000
+            duration: 3000,
           });
 
           return;
         }
 
-        let discountRow = document.querySelector('.checkout__shipping-fee-holder');
-        let discountSpan = document.querySelector('#total-cost-discount');
-        let total = document.querySelector('#total-cost-bill');
+        let discountRow = document.querySelector(
+          ".checkout__shipping-fee-holder"
+        );
+        let discountSpan = document.querySelector("#total-cost-discount");
+        let total = document.querySelector("#total-cost-bill");
 
-        if (discountRow.classList.contains('hide-item')) discountRow.classList.remove('hide-item');
-        if (discount.type == 'Phần trăm') {
-          totalDiscount = totalPrice * discount.discountV / 100;
-          discountSpan.innerText = '-' + formatMoney(totalDiscount);
-          total.innerText = formatMoney(totalPrice + totalCostShip - totalDiscount);
+        if (discountRow.classList.contains("hide-item"))
+          discountRow.classList.remove("hide-item");
+        if (discount.type == "Phần trăm") {
+          totalDiscount = (totalPrice * discount.discountV) / 100;
+          discountSpan.innerText = "-" + formatMoney(totalDiscount);
+          total.innerText = formatMoney(
+            totalPrice + totalCostShip - totalDiscount
+          );
         } else {
           totalDiscount = discount.discountV;
-          discountSpan.innerText = '-' + formatMoney(totalDiscount);
-          total.innerText = formatMoney(totalPrice + totalCostShip - totalDiscount);
+          discountSpan.innerText = "-" + formatMoney(totalDiscount);
+          total.innerText = formatMoney(
+            totalPrice + totalCostShip - totalDiscount
+          );
         }
         toast({
           type: "success",
           message: "Áp mã giảm giá thành công",
           title: "Thông báo",
-          duration: 3000
+          duration: 3000,
         });
       } else {
         discount = null;
@@ -1286,13 +1299,11 @@ async function checkOutBill() {
           type: "warning",
           message: "Mã giảm giá không tồn tại",
           title: "Thông báo",
-          duration: 3000
+          duration: 3000,
         });
       }
     });
   }
-
-  
 
   // Submit gửi đơn hàng lên Server
   document
@@ -1431,7 +1442,7 @@ async function checkOutBill() {
         return;
       }
 
-      if (discount.status != null) {
+      if (discount != null) {
         couponsCode = discount.id;
       }
 
@@ -1441,14 +1452,30 @@ async function checkOutBill() {
       if (resultOrder == true) {
         console.log("Đồng ý thanh toán");
 
+        let currentCart = [];
+        dataCurrentCart.forEach((element) => {
+          currentCart.push({
+            bookId: element["details"][0]["maSach"],
+            quantity: element["quantity"],
+          });
+        });
+
         if (paymentMethod != -1) {
+
           showLoading();
+
+          showLoading();
+
+          // showLoading();
+
           const formOrder = new URLSearchParams();
           formOrder.append("maKhachHang", currentUser["user"].id);
           formOrder.append("diaChiGiao", pickUpAddress);
           formOrder.append("tongTienThu", totalPrice);
           formOrder.append("maPhuongThuc", paymentMethod);
-          formOrder.append("maKhuyenMai", couponsCode);
+          formOrder.append("tenNguoiNhan", customerName);
+          formOrder.append("soDienThoai", customerNumberphone);
+          if (couponsCode != null) formOrder.append("maKhuyenMai", couponsCode);
 
           const responseOrder = await fetch("api/orders/create.php", {
             method: "POST",
@@ -1459,13 +1486,14 @@ async function checkOutBill() {
           });
 
           const dataOrder = await responseOrder.json();
+          console.log(dataOrder);
 
           if (dataOrder["success"] == true) {
             console.log("Tạo đơn hàng thành công");
             console.log(dataOrder);
 
             console.log("Giỏ hàng trước khi thanh toán");
-            console.log(currentCart);
+            console.log(dataCurrentCart);
             console.log(`Đơn hàng vừa tạo ${dataOrder["data"]}`);
 
             if (dataOrder["data"] && Array.isArray(currentCart)) {
@@ -1477,7 +1505,7 @@ async function checkOutBill() {
                 body: JSON.stringify({
                   data: {
                     maDonHang: parseInt(dataOrder["data"]),
-                    danhSachSanPham: JSON.stringify(currentCart),
+                    danhSachSanPham: currentCart,
                   },
                 }),
               });
@@ -1513,8 +1541,11 @@ async function checkOutBill() {
             }
           }
           hideLoading();
-          window.location.href = "/";
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 1000);
         } else {
+          // Thanh toán bằng VNPAY
           showLoading();
 
           const formOrder = new URLSearchParams();
@@ -1522,7 +1553,7 @@ async function checkOutBill() {
           formOrder.append("diaChiGiao", pickUpAddress);
           formOrder.append("tongTienThu", totalPrice);
           formOrder.append("maPhuongThuc", paymentMethod);
-          formOrder.append("maKhuyenMai", couponsCode);
+          if (couponsCode != null) formOrder.append("maKhuyenMai", couponsCode);
 
           const responseOrder = await fetch("api/orders/create.php", {
             method: "POST",
@@ -1542,7 +1573,7 @@ async function checkOutBill() {
             body: JSON.stringify({
               data: {
                 maDonHang: parseInt(dataOrder["data"]),
-                danhSachSanPham: JSON.stringify(currentCart),
+                danhSachSanPham: currentCart,
               },
             }),
           });
@@ -1687,7 +1718,7 @@ function deleteFromCart(bookId, currentUser) {
 
 async function updateQuantityCardHolder() {
   showLoading();
-  const currentUser = await getCurrentUser();
+  const currentUser = JSON.parse(sessionStorage.getItem("user")) || null;
   let cartButton = document.querySelector(".topbar__cart-holder");
   let totalQuantity = 0;
 

@@ -2,6 +2,12 @@ import { updateCoverData } from "./updateCoverData.js";
 import { lockCoverData } from "./lockCoverData.js";
 import { filterCover } from "./filterCoverData.js";
 
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
+
+var infoCover = data[14] && data[14].includes(2) ? '' : 'none__item';
+var editCover = data[14] && data[14].includes(4) ? '' : 'none__item';
+var lockCover = data[14] && data[14].includes(5) ? '' : 'none__item';
+
 // Hàm cập nhật lại dữ liệu cho bảng Thể loại
 export async function renderCoverTable(currentPage) {
   const data = (await filterCover(currentPage)) || [];
@@ -21,10 +27,10 @@ export async function renderCoverTable(currentPage) {
                 data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
               }>${data[i].status}</span></td>
               <td>
-                  <i class="fa-solid fa-pen-to-square"></i>
+                  <i class="fa-solid fa-pen-to-square ${editCover}"></i>
                   <i class="fa-solid fa-${
                     data[i].status === "Hoạt động" ? "" : "un"
-                  }lock"></i>
+                  }lock ${lockCover}"></i>
               </td>
           </tr>
       `;
