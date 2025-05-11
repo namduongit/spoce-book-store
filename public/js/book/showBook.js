@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Cập nhật URL mà không load lại trang
       history.replaceState(null, document.title, newUrl);
       let apiUrl = `api/books/get.php?${queryParams.join("&")}`;
-      console.log(apiUrl);
+      // console.log(apiUrl);
 
       let response = await fetch(apiUrl);
       if (!response.ok) throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
