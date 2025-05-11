@@ -188,10 +188,16 @@ export async function detailAccountData(idAccountSelected) {
   console.log("ID người dùng:", id);
 
   try {
+    let param = new URLSearchParams();
+    param.append("maNguoiDung", id);
     const [addressResponse, userResponse] = await Promise.all([
-      fetch(
-        `api/address/getAddress.php?maNguoiDung=${id}`
-      ),
+      fetch(`api/address/getAddress.php`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: param.toString()
+      }),
       fetch(`api/account/detail_account.php?id=${id}`),
     ]);
 
