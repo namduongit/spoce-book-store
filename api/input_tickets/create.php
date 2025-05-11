@@ -16,22 +16,23 @@ $status = isset($_POST['status']) ? $_POST['status'] : '';
 $updateDateTime = date("Y-m-d H:i:s");
 
 try {
-   
+
     $cover_model = new app_models_PhieuNhap();
 
     $result = $cover_model->insertInputTicket(
-        [  
+        [
             "ngayTaoPhieu" => $createAt,
             "maNCC" => $supplierId,
             "maNhanVien" => $employeeId,
             "tongTienNhap" => $total,
             "trangThai" => $status,
             "ngayCapNhat" => $updateDateTime
-        ]);
+        ]
+    );
 
     // Kiểm tra số dòng bị ảnh hưởng
-    if ($result ) {
-        echo json_encode(["success" => true, "message" => "Thêm phiếp nhập thành công.", "inputTicketId" => $result ]);
+    if ($result) {
+        echo json_encode(["success" => true, "message" => "Thêm phiếp nhập thành công.", "inputTicketId" => $result]);
     } else {
         echo json_encode(["success" => false, "message" => "Không có thay đổi hoặc ID không tồn tại."]);
     }

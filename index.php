@@ -32,7 +32,8 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
     <link rel="stylesheet" href="public/css/base.css">
 
     <link rel="stylesheet" href="public/css/style.css">
-    <!-- <link rel="stylesheet" href="public/css/responsive.css"> -->
+    <!-- <link rel="stylesheet" href="public/css/responsive.css">git rebase --abort
+ -->
     <!-- Nhúng các thư viện Js -->
     <script type="module" src="public/js/auth/authMain.js" defer></script>
     <script type="module" src="public/js/book/bookMain.js" defer></script>

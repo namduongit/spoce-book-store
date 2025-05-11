@@ -12,6 +12,9 @@ let data = [],
 
 // Hàm thiết lập sự kiện hiện thêm một phiếu nhập
 export function addInputTicketData() {
+  const userData = sessionStorage.getItem("user");
+
+  const userObject = JSON.parse(userData);
   // Biến chứa đối tượng là nút "thêm"
   const addButton = document.getElementById("add-button-input_ticket");
   if (!addButton) return;
@@ -61,7 +64,9 @@ export function addInputTicketData() {
             <div class="dialog__row">
               <div class="dialog__form-group input_ticket">
                 <label>Nhân viên</label>
-                <input type="text" id="add-input_ticket-employee" value="" readonly />
+                <input type="text" id="add-input_ticket-employee" value="#${
+                  userObject.user.id
+                }-${userObject.user.name}" class="text-center" readonly />
               </div>
               <div class="dialog__form-group input_ticket full">
                 <label>Nhà cung cấp</label>
@@ -105,7 +110,9 @@ export function addInputTicketData() {
     const supplierSelect = document.getElementById("add-input_ticket-supplier");
     if (supplierSelect) {
       supplierSelect.innerHTML = `<option value="">Chọn Nhà cung cấp</option>`;
-      let suppliers = await fetchData(`api/suppliers/list.php?status=Hoạt%20động`);
+      let suppliers = await fetchData(
+        `api/suppliers/list.php?status=Hoạt%20động`
+      );
       suppliers.data.forEach((supplier) => {
         supplierSelect.innerHTML += `<option value="${supplier.id}">#${
           supplier.id
@@ -154,7 +161,7 @@ export function addInputTicketData() {
         const total = document.getElementById("input_ticket-total").value
           ? document.getElementById("input_ticket-total").value
           : null;
-
+        const employee_id = employeeId.match(/#(\d+)-/)[1];
         let checkCreateDate = true,
           checkSupplierId = true;
         if (!createAt) {
@@ -190,7 +197,7 @@ export function addInputTicketData() {
                 body: new URLSearchParams({
                   createAt: createAt,
                   supplierId: supplierId,
-                  employeeId: employeeId,
+                  employeeId: employee_id, //đã tách id và name
                   total: total,
                   status: status,
                 }),
@@ -202,6 +209,8 @@ export function addInputTicketData() {
                 checkAddInputTicket = true;
               } else {
                 checkAddInputTicket = false;
+                console.log("2");
+
                 toast({
                   title: "Lỗi",
                   message: `Lỗi thêm phiếu nhập: ${result.message}`,

@@ -23,6 +23,7 @@ export async function updateInputTicketData(idInputTicketSelected) {
   );
   data = inputTicketDetails.data;
   status = inputTicket.data[0].status;
+  console.log(inputTicket);
 
   // // Biến chứa đối tượng là nút "thêm"
   // const updateButton = document.getElementById("update-button-input_ticket");
