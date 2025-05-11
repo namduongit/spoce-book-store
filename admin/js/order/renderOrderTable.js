@@ -6,13 +6,13 @@ import { filterOrder } from "./filterOrderData.js";
 
 // Hàm tách địa chỉ giao thành còn Quận huyện và Tỉnh thành
 function splitAddressToShip(address) {
-  const addressArray = address.split(",");
-  const houseNumberAndStreetName = addressArray[0]
-    ? addressArray[0].trim()
+  const addressArray = address.split(" / ");
+  const houseNumberAndStreetName = addressArray[3]
+    ? addressArray[3].trim()
     : "";
-  const ward = addressArray[1] ? addressArray[1].trim() : "";
-  const district = addressArray[2] ? addressArray[2].trim() : "";
-  const province = addressArray[3] ? addressArray[3].trim() : "";
+  const ward = addressArray[2] ? addressArray[2].trim() : "";
+  const district = addressArray[1] ? addressArray[1].trim() : "";
+  const province = addressArray[0] ? addressArray[0].trim() : "";
 
   if (district && province) return district + ", " + province;
   return "Địa chỉ không hợp lệ";
@@ -68,7 +68,7 @@ export async function renderOrderTable(currentPage) {
       <tr>
         <td>${data[i].id}</td>
         <td>${data[i].createAt}</td>
-        <td>${splitAddressToShip(data[i].addressToShip)}</td>
+        <td>${splitAddressToShip(data[i].customerAddress)}</td>
         <td>${vietnamMoneyFormat(data[i].total)}</td>
         <td><span ${
           data[i].status === "Đã giao hàng"

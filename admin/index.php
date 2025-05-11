@@ -248,7 +248,7 @@ if (count($role) <= 0) {
             <i class="icon fa-solid fa-power-off"></i>
         </nav>
         <!-- Content -->
-        <div class="main__content" id="main-content"></div>
+        <div class="main__content" id="main-content">213</div>
     </main>
 
     <!-- Javascript -->
