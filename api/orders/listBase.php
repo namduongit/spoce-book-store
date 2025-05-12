@@ -26,8 +26,10 @@ function returnJSONOrder($filters, $pageCount) {
             "customerFullname" => $filter['hvtNguoiNhan'],
             "customerPhone" => $filter['sdtNguoiNhan'],
             "customerAddress" => $filter['dcNguoiNhan'],
+            "customerEmail" => $filter['emailKhachHang'],
             "discountId" => $filter['maKhuyenMai'],
             "payId" => $filter['maPhuongThuc'],
+            "payName" => $filter['tenPhuongThuc'],
             "payStatus" => $filter['trangThaiThanhToan'],
             "total" => $filter['tongTienThu'],
             "status" => $filter['trangThai'],
@@ -47,10 +49,15 @@ $columns = [
     'donHang.maDonHang', 'donHang.ngayTaoDon', 'donHang.maNhanVien', 'donHang.maKhachHang', 
     'donHang.hvtNguoiNhan', 'donHang.sdtNguoiNhan', 'donHang.dcNguoiNhan', 
     'donHang.maKhuyenMai', 'donHang.maPhuongThuc', 'donHang.trangThaiThanhToan',
-    'donHang.tongTienThu', 'donHang.ngayCapNhat', 'donHang.trangThai', 
+    'donHang.tongTienThu', 'donHang.ngayCapNhat', 'donHang.trangThai',
+    'phuongThucThanhToan.tenPhuongThuc',
+    'khachHang.email as emailKhachHang',
 ];
-$tables = ['donHang'];
-$joins = [];
+$tables = ['donHang', 'phuongThucThanhToan', 'nguoiDung as khachHang'];
+$joins = [
+    'donHang.maPhuongThuc = phuongThucThanhToan.maPhuongThuc',
+    'donHang.maKhachHang = khachHang.maNguoiDung',
+];
 $conditions = [];
 $params = [];
 $limit = isset($_GET['limit']) ? trim($_GET['limit']) : PHP_INT_MAX;
@@ -114,6 +121,7 @@ if (empty($result)) {
     echo json_encode(["error" => "Không có đơn hàng nào phù hợp!", "pageCount" => 0]);
     exit();
 }
+
 
 returnJSONOrder($result, $pageCount);
 
