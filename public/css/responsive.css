@@ -339,6 +339,7 @@ body {
     top: 32px;
     right: 461px;
     width: 300px;
+    z-index: 3;
   }
   .topbar__cart-content > p {
     display: none;

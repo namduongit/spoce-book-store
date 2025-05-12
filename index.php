@@ -138,7 +138,26 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
                 </div>
             </div>
         </div>
+
+        <div class="menu-container">
+            <div class="menu">
+                <?php 
+                require_once __DIR__ . '/app/config.php';
+
+                $category_model = new app_models_TheLoai();
+                $categoryList = $category_model->getAllCategories();
+
+                echo '<a class="menu-item" data-id="all-category">Tất cả</a>';
+                foreach ($categoryList as $row) {
+                    if ($row['trangThai'] == 'Hoạt động') {
+                        echo '<a class="menu-item" data-id="' . $row['maTheLoai'] . '">' . $row['tenTheLoai'] . '</a>';
+                    }
+                }
+                ?>
+            </div>
+        </div>
     </header>
+    
 
     <div class="main">
         <div class="main__container container d-flex just-content-spbt">
@@ -353,7 +372,7 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
 
                 <div class="book-category__sort d-flex">
 
-                    <div class="book-category__sort-item">
+                    <!-- <div class="book-category__sort-item">
                         <label for="type-category">Thể loại: </label>
                         <select name="" id="type-category">
                             <option value="all-category" selected>Tất cả</option>
@@ -378,7 +397,7 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
                             }
                             ?>
                         </select>
-                    </div>
+                    </div> -->
 
 
 

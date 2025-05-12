@@ -78,21 +78,6 @@ document.addEventListener("DOMContentLoaded", async function() {
     });
 
 
-    /* Lọc theo thể loại */
-    let tyeCategory = "";
-    const categoryCombox = document.querySelector("#type-category");
-
-    if (categoryCombox) {
-        const savedCategory = localStorage.getItem("selectedCategory");
-        if (savedCategory) {
-            categoryCombox.value = savedCategory;
-        }
-
-        categoryCombox.addEventListener("change", function () {
-            tyeCategory = categoryCombox.value;
-            localStorage.setItem("selectedCategory", tyeCategory);
-        });
-    }
 
 
     /* Lọc theo sắp xếp theo */

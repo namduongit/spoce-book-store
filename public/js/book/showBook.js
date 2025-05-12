@@ -16,7 +16,7 @@ function formatNumber(numberString) {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-  const categoryType = document.getElementById("type-category");
+  // const categoryType = document.getElementById("type-category");
   const sortType = document.getElementById("sort-combobox");
   const pageSizeSelect = document.getElementById("page-show-by");
   const minPrice = formatNumber(document.getElementById('min-price').innerText);
@@ -26,7 +26,8 @@ document.addEventListener("DOMContentLoaded", function () {
   async function fetchBooks() {
     try {
       showLoading();
-      const categoryValue = categoryType.value !== "all-category" ? categoryType.value : "";
+      // const categoryValue = categoryType !== "all-category" ? categoryType : "";
+      const categoryValue = localStorage.getItem('selectedCategory') != 'all-category' ? localStorage.getItem('selectedCategory') : '';
       const sortValue = sortType.value !== "base" ? sortType.value : "";
       const pageSizeValue = parseInt(pageSizeSelect.value);
 
@@ -206,11 +207,23 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Khi có thay đổi các combox thì tự động đưa về trang đầu
-  categoryType.addEventListener("change", () => {
-    page = 1;
-    localStorage.setItem("currentPage", page);
-    fetchBooks();
-  });
+  // categoryType.addEventListener("change", () => {
+  //   page = 1;
+  //   localStorage.setItem("currentPage", page);
+  //   fetchBooks();
+  // });
+  const categoryList = document.querySelectorAll('.menu-item');
+    if (categoryList) {
+        categoryList.forEach(category => {
+            category.addEventListener('click', function () {
+                page = 1;
+                localStorage.setItem('currentPage', page);
+                let categoryId = category.dataset.id;
+                localStorage.setItem('selectedCategory', categoryId);
+                fetchBooks();
+            });
+        });
+    }
 
 
   sortType.addEventListener("change", () => {

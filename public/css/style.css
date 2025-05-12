@@ -46,7 +46,7 @@
 .header {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-  padding: 1.5rem 0;
+  padding: 1.5rem 0 0 0;
   position: sticky;
   z-index: 4;
   top: 0;
@@ -2718,5 +2718,47 @@ td {
 .status-selection-active {
   padding-bottom: 0.5rem;
   border-bottom: 3px solid black;
+  font-weight: 600;
+}
+
+.menu-container {
+  background-color: var(--topbar-color);
+  padding: 1.5rem 0;
+  margin-top: 1.5rem;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.menu-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.menu-container::-webkit-scrollbar-thumb {
+  background-color: #3498db;
+}
+
+.menu-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.menu {
+  min-width: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: nowrap;
+  padding: 0.5rem 1rem;
+}
+
+.menu-container .menu a {
+  padding: 0.5rem 0.7rem;
+  color: white;
+  transition: all 0.3s;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.menu-container .menu a:hover {
   font-weight: 600;
 }
