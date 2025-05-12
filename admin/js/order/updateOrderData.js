@@ -10,6 +10,18 @@ export async function updateOrderData(idOrderSelected) {
   // Truy vấn csdl để lấy ra đơn hàng được chọn
   const order = await fetchData(`api/orders/listBase.php?id=${idOrderSelected}`);
 
+  const loginEmployee = JSON.parse(sessionStorage.getItem('user'));
+
+  console.log(loginEmployee)
+  
+  let statusPayHTML = `
+      <option value="" disabled>Chọn trạng thái</option>
+      <option value="Đã thanh toán">Đã thanh toán</option>
+      <option value="Chưa thanh toán">Chưa thanh toán</option>
+  `;
+  
+
+
   // // Biến chứa đối tượng là nút "sửa"
   // const updateButton = document.getElementById("update-button-order");
 
@@ -74,7 +86,7 @@ export async function updateOrderData(idOrderSelected) {
               <div class="dialog__form-group order full">
                 <label>Địa chỉ giao hàng</label>
                 <input type="text" id="update-order-address-to-ship" readonly value="${
-                  order.data[0].addressToShip
+                  order.data[0].customerAddress
                 }" />
               </div>
             </div>
@@ -94,7 +106,7 @@ export async function updateOrderData(idOrderSelected) {
               <div class="dialog__form-group order">
                 <label>Họ và tên</label>
                 <input type="text" id="update-order-customer-fullname" readonly value="${
-                  order.data[0].customerName
+                  order.data[0].customerFullname
                 }" />
               </div>
               <div class="dialog__form-group order">
@@ -122,10 +134,13 @@ export async function updateOrderData(idOrderSelected) {
                 </table>
               </div>
             </div>
-            <div class="dialog__buttons order">
-              <p style="align-self: flex-end; margin-right: auto; color: var(--primary-color); font-size: 20px; font-weight: 700;">${
-                order.data[0].payStatus
-              }</p>
+            <div class="dialog__buttons order order-buttons">
+              <p style="align-self: flex-end; margin-right: auto; font-size: 20px; font-weight: 700;">
+                <select id="status-pay-order">
+                  ${statusPayHTML}
+                <select/>
+              </p>
+
               ${
                 order.data[0].status === "Đã giao hàng" &&
                 order.data[0].payStatus === "Chưa thanh toán"
@@ -142,6 +157,11 @@ export async function updateOrderData(idOrderSelected) {
                   ? "<button type='button' id='confirm-button' class='confirm-status'>Xác nhận</button><button type='button' id='cancel-button' class='cancel-status'>Huỷ đơn</button>"
                   : ""
               }
+              ${
+                order.data[0].status == 'Đã giao hàng' && order.data[0].payStatus == 'Đã thanh toán'
+                ? ''
+                : "<button type='button' id='confirm-pay-button' class='confirm-status-pay'>Xác nhận thanh toán</button>"
+              }
             </div>
           </form >
     `;
@@ -155,14 +175,20 @@ export async function updateOrderData(idOrderSelected) {
   // Cập nhật chi tiết đơn hàng
   renderOrderDetailTable(order.data[0].id);
 
+  // Cập nhật trạng thái đơn cho select
+  document.getElementById('status-pay-order').value = order.data[0].payStatus;
+
+  if (!order.data[0].status == 'Đã hủy đơn') document.getElementById('status-pay-order').style.pointerEvents = "none";
+
+  if (order.data[0].payStatus == 'Đã thanh toán' && order.data[0].status == 'Đã giao hàng') document.getElementById('status-pay-order').style.pointerEvents = "none";
+
   // Gán sự kiện cho các nút để "cập nhật" đơn hàng
   // - Gọi api để cập nhật đơn hàng
   async function callApiToUpdateOrder(status) {
     // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
     const id = document.getElementById("update-order-id").value;
-    const employeeId = document.getElementById("update-order-employee-id").value
-      ? document.getElementById("update-order-employee-id").value
-      : null;
+    const employeeId = loginEmployee['user'].id;
+    const statusPay = document.getElementById('status-pay-order').value;
 
     // Tiến hành gọi api
     try {
@@ -174,6 +200,8 @@ export async function updateOrderData(idOrderSelected) {
         body: new URLSearchParams({
           id: id,
           status: status,
+          employeeId: employeeId,
+          statusPay: statusPay
         }),
       });
 
@@ -205,6 +233,26 @@ export async function updateOrderData(idOrderSelected) {
     updateDialog.remove();
     renderOrderTable(1);
   }
+  // Nút xác thay đổi trạng thái thanh toán
+  const confirmStatusPay = document.getElementById('confirm-pay-button');
+  if (confirmStatusPay) {
+    confirmStatusPay.addEventListener('click', async (e) => {
+      e.preventDefault();
+
+      // Thêm class 'active' thể hiện là nút được nhấn
+      e.target.classList.add("active");
+
+      // Hỏi lần nữa trước khi cập nhật
+      let yes = await showNotification("Bạn có đồng ý lưu chỉnh sửa không.");
+      if (yes) {
+        callApiToUpdateOrder(order.data[0].status);
+      } else {
+        // Xoá class 'active' thể hiện là nút không còn ược nhấn
+        e.target.classList.remove("active");
+      }
+    });
+  }
+
   // - Nút 'Giao hàng'
   const shipButton = document.getElementById("ship-button");
   if (shipButton) {

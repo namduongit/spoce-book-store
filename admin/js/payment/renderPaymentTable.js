@@ -1,7 +1,14 @@
 import { updatePaymentData } from "./updatePaymentData.js";
 // Hàm khóa
+import { lockPaymentData } from "./lockPaymentData.js";
 
 import { filterPayment } from "./filterPaymentData.js";
+
+const data = JSON.parse(sessionStorage.getItem('dataRole'));
+
+var infoPayment = data[16] && data[16].includes(2) ? '' : 'none__item';
+var editPayment = data[16] && data[16].includes(4) ? '' : 'none__item';
+var lockPayment = data[16] && data[16].includes(5) ? '' : 'none__item';
 
 export async function renderPaymentTable(currentPage) {
     const data = (await filterPayment(currentPage)) || [];
@@ -19,13 +26,13 @@ export async function renderPaymentTable(currentPage) {
         <td>${data[i].id}</td>
         <td>${data[i].name}</td>
         <td>${data[i].description != null ? data[i].description : 'Không có mô tả'}</td>
-        <td>${data[i].online != 0 ? 'Nhận hàng - trả tiền' : 'Thanh toán online'}</td>
+        <td>${data[i].online != 1 ? 'Nhận hàng - trả tiền' : 'Thanh toán online'}</td>
         <td><span ${data[i].status === "Hoạt động" ? 'class="green"' : 'class="red"'
             }>${data[i].status}</span></td>
         <td>
-          <i class="fa-solid fa-pen-to-square"></i>
+          <i class="fa-solid fa-pen-to-square ${editPayment}"></i>
           <i class="fa-solid fa-${data[i].status === "Hoạt động" ? "" : "un"
-            }lock"></i>
+            }lock ${lockPayment}"></i>
         </td>
       </tr>
     `;
@@ -73,7 +80,7 @@ export async function renderPaymentTable(currentPage) {
                 e.preventDefault();
 
                 // Gọi hàm sự kiện khóa
-                // lockpaymentData(idpaymentSelected);
+                lockPaymentData(idpaymentSelected);
             });
         });
     }

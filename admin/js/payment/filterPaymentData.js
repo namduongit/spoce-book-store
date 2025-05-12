@@ -60,7 +60,7 @@ export async function filterPayment(currentPage) {
 }
 
 // Thêm sự kiện lọc
-export function filterPublisherData() {
+export function filterPaymentData() {
   const filterButton = document.getElementById("filter-button-payment");
   if (filterButton) {
     filterButton.addEventListener("click", async (e) => {

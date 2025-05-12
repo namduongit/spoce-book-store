@@ -43,10 +43,10 @@ export async function renderOrderDetailTable(orderIdSelected) {
           <tr>
               <td>${orderDetails.data[i].bookId}</td>
               <td class="left">${orderDetails.data[i].bookName}</td>
-              <td>${vietnamMoneyFormat(orderDetails.data[i].price)}</td>
+              <td>${vietnamMoneyFormat(orderDetails.data[i].price / orderDetails.data[i].quantity)}</td>
               <td>${orderDetails.data[i].quantity}</td>
               <td class="right">${vietnamMoneyFormat(
-                orderDetails.data[i].quantity * orderDetails.data[i].price
+                orderDetails.data[i].price
               )}</td>
           </tr>
       `;
