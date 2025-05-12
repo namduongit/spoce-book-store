@@ -27,10 +27,9 @@ try {
         "status" => $data['trangThai'],
         "updatedAt" => $data['ngayCapNhat'],
         "icon" => $data['icon_url'],
-        "qr_code" => $data['qr_code_url'],
         "data" => $data['thongTin'],
         "description" => $data['moTa'],
-        "name_auth" => $data['chuTaiKhoan'],
+        "name_auth" => $data['taiKhoan'],
         "online" => $data['trucTuyen']
     ];
 

@@ -757,7 +757,7 @@ async function checkOutBill() {
 
   async function getDataPayment() {
     try {
-      const response = await fetch("api/payments/list.php", {
+      const response = await fetch("api/payments/fetch.php", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -784,7 +784,6 @@ async function checkOutBill() {
       if (
         data.data != null &&
         data.description != null &&
-        data.qr_code != null &&
         data.name_auth != null
       ) {
         holderPayment = `
@@ -792,11 +791,8 @@ async function checkOutBill() {
                         <div class="checkout__qrcode-method-child-wrapper">
                             <div class="checkout__qrcode-text">
                                 • ${data.data}
-                                • ${data.description}
                                 • ${data.name_auth}
-                            </div>
-                            <div class="checkout__qrcode-img">
-                                <img src="../public/images/banking/uploads/${data.qr_code}" alt="payment_qr">
+                                • ${data.description}
                             </div>
                         </div>
                     </div>
@@ -812,7 +808,7 @@ async function checkOutBill() {
                             </label>
                         </div>
                         <div class="checkout__payment-method-content">
-                            <img src="../public/images/banking/logo/${data.icon}" alt="payment_icon">
+                            <img src="../public/bank_icon/${data.icon}" alt="payment_icon">
                             <span>${data.name}</span>
                         </div>
                         ${holderPayment}

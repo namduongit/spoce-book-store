@@ -15,10 +15,9 @@ function returnJSONPayment($filters, $pageCount) {
             "status" => $filter['trangThai'],
             "updatedAt" => $filter['ngayCapNhat'],
             "icon" => $filter['icon_url'],
-            "qr_code" => $filter['qr_code_url'],
             "data" => $filter['thongTin'],
             "description" => $filter['moTa'],
-            "name_auth" => $filter['chuTaiKhoan'],
+            "name_auth" => $filter['taiKhoan'],
             "online" => $filter['trucTuyen']
         ];
     }, is_array($filters[0]) ? $filters : [$filters]);

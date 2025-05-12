@@ -276,7 +276,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .publisher,
   .issuer,
   .address-select,
-  .input_ticket-detail) {
+  .input_ticket-detail,
+  .payment) {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -799,7 +800,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .revenue_dashboard,
   .invest_dashboard,
   .order,
-  .input_ticket) {
+  .input_ticket,
+  .payment) {
   position: fixed;
   top: 50%;
   left: 50%;

@@ -1235,19 +1235,15 @@ menuInSideBar.forEach((item, i) => {
 
 // render nhóm quyền người dùng
 async function renderPrivilegesAccount() {
-  console.log("hi");
 
   const privileges = await getRolePrivilege();
-  console.log("privileges", privileges);
 
-  if (!privileges) return; // Nếu lỗi thì không làm gì
+  if (!privileges) return; 
 
   const privilegeUl = document.querySelector(
     "#privilege-slt-account + span + ul"
   );
-  console.log("privilegeUl", privilegeUl);
   const privilegeInput = document.getElementById("privilege-slt-account");
-  console.log("privilegeInput", privilegeInput);
 
   if (!privilegeUl || !privilegeInput) return;
   privilegeUl.innerHTML = "";

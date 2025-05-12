@@ -23,8 +23,7 @@ function returnJSONPaymentMethods($paymentMethods) {
             "name" => $paymentMethod['tenPhuongThuc'],
             "info" => $paymentMethod['thongTin'],
             "desc" => $paymentMethod['moTa'],
-            "auth" => $paymentMethod['chuTaiKhoan'],
-            "qrCode" => $paymentMethod['qr_code_url'],
+            "auth" => $paymentMethod['taiKhoan'],
             "icon" => $paymentMethod['icon_url'],
             "status" => $paymentMethod['trangThai'],
         ];
