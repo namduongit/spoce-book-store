@@ -198,7 +198,7 @@ export function addInputTicketData() {
                   createAt: createAt,
                   supplierId: supplierId,
                   employeeId: employee_id, //đã tách id và name
-                  total: total,
+                  total: total.replace(/\./g, ""),
                   status: status,
                 }),
               });
