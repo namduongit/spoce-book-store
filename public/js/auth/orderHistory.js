@@ -461,7 +461,7 @@ async function showOrderDetail(orderId) {
                     <p class="order-detail__status"><span>Tình trạng thanh toán: </span>${order['trangThaiThanhToan']}</p>
                     <p class="order-detail__status"><span>Trạng thái đơn hàng: </span>${order['trangThai']}</p>
                     <p class="order-detail__status"><span>Tên người nhận: </span>${order['hvtNguoiNhan']}</p>
-                    <p class="order-detail__status"><span>Địa chỉ giao hàng: </span>${order['dcNguoiNhan']}</p>
+                    <p class="order-detail__status"><span>Địa chỉ giao hàng: </span>${formatAddress(order['dcNguoiNhan'])}</p>
                 </div>
                 <div class="order-detail__product-detail-container">
                     <div class="order-detail__product-content">
@@ -529,6 +529,7 @@ function hideMainPage() {
     const footer = document.querySelector('.footer-info');
     const showCart = document.querySelector('.show-cart');
     const infoPage = document.querySelector('.self-infomation');
+    const menu = document.querySelector('.menu-container');
 
     // Ẩn các thành phần khác trong trang
     if (!main.classList.contains('hide-item')) {
@@ -553,6 +554,10 @@ function hideMainPage() {
 
     if (!infoPage.classList.contains('hide-item')) {
         infoPage.classList.add('hide-item');
+    }
+
+    if (!menu.classList.contains('hide-item')) {
+        menu.classList.add('hide-item');
     }
 }
 
@@ -596,3 +601,11 @@ function formatStatus(str) {
     return result;
 }
 
+function formatAddress(address) {
+    let arr = address.split(" / ");
+    if (arr.length == 4) {
+        return `${arr[3]}, ${arr[2]}, ${arr[1]}, ${arr[0]}`;
+    }
+
+    return address;
+}
