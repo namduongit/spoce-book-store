@@ -197,6 +197,7 @@ export function hideMainPage() {
     const footer = document.querySelector('.footer-info');
     const showCart = document.querySelector('.show-cart');
     const orderPage = document.querySelector('.order-history');
+    const categoryMenu = document.querySelector('.menu-container');
 
     if (!main.classList.contains('hide-item')) {
         main.classList.add('hide-item');
@@ -220,6 +221,10 @@ export function hideMainPage() {
 
     if (!orderPage.classList.contains('hide-item')) {
         orderPage.classList.add('hide-item');
+    }
+
+    if (!categoryMenu.classList.contains('hide-item')) {
+        categoryMenu.classList.add('hide-item');
     }
 }
 

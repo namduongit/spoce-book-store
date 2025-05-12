@@ -431,7 +431,9 @@ function showFooterInfo(info) {
         url.set("info", "payment");
     }
     hideLoading();
-    history.pushState(null, '', window.location.pathname + "?" + url.toString());
+    setTimeout(() => {
+        history.pushState(null, '', window.location.pathname + "?" + url.toString());
+    }, 500);
 }
 
 document.querySelector('.footer__aboutus').addEventListener('click', function () {
@@ -470,6 +472,7 @@ function hideMainPage() {
     const selfinformation = document.querySelector('.self-infomation');
     const mainCart = document.querySelector('.show-cart');
     const order = document.querySelector('.order-history');
+    const categoryMenu = document.querySelector('.menu-container');
 
     if (!main.classList.contains('hide-item')) {
         main.classList.add('hide-item');
@@ -493,6 +496,10 @@ function hideMainPage() {
 
     if (!order.classList.contains('hide-item')) {
         order.classList.add('hide-item');
+    }
+
+    if (!categoryMenu.classList.contains('hide-item')) {
+        categoryMenu.classList.add('hide-item');
     }
 }
 

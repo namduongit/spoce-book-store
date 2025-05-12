@@ -55,7 +55,7 @@ body {
     right: 81px;
   }
   .topbart__cart-action {
-    z-index: 3;
+    z-index: 5;
   }
   .topbar__cart-holder {
     /* position: none;
@@ -73,7 +73,7 @@ body {
 
   /* HEADER */
   .header {
-    padding-bottom: 30px;
+    padding-bottom: 0px;
   }
   .header > .d-flex {
     flex-wrap: wrap;
