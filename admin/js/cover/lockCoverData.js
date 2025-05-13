@@ -61,53 +61,67 @@ export async function lockCoverData(idCoverSelected) {
     // Ngăn ...
     e.preventDefault();
 
-    //
-    let yes = await showNotification(
-      "Bạn có đồng ý thay đổi trạng thái không."
-    );
-    if (yes) {
-      const id = document.getElementById("lock-cover-id").value;
-      const status = document.getElementById("lock-cover-status").value;
-
-      try {
-        const response = await fetch("api/covers/lock.php", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({
-            id: id,
-            status: status,
-          }),
-        });
-
-        const result = await response.json();
-        if (result.success) {
-          toast({
-            title: "Thành công",
-            message: `Lưu chỉnh sửa thành công`,
-            type: "success",
-            duration: 3000,
-          });
-        } else {
-          toast({
+    const id = document.getElementById("lock-cover-id").value;
+    let cover = await fetchData(`api/covers/detail.php?id=${id}`);
+    let bookList = await fetchData(`api/books/list.php?cover=${cover.data.name}`);
+    if(bookList.data.length > 0){
+       toast({
             title: "Cảnh báo",
-            message: `${result.message}`,
+            message: `Không thể khoá loại bìa này vì loại bìa này còn sách`,
             type: "warning",
             duration: 3000,
           });
+    }else{
+
+      let yes = await showNotification(
+        "Bạn có đồng ý thay đổi trạng thái không."
+      );
+      if (yes) {
+        const id = document.getElementById("lock-cover-id").value;
+        const status = document.getElementById("lock-cover-status").value;
+  
+        try {
+          const response = await fetch("api/covers/lock.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              id: id,
+              status: status,
+            }),
+          });
+  
+          const result = await response.json();
+          if (result.success) {
+            toast({
+              title: "Thành công",
+              message: `Lưu chỉnh sửa thành công`,
+              type: "success",
+              duration: 3000,
+            });
+          } else {
+            toast({
+              title: "Cảnh báo",
+              message: `${result.message}`,
+              type: "warning",
+              duration: 3000,
+            });
+          }
+        } catch (error) {
+          toast({
+            title: "Lỗi",
+            message: `Lỗi fetch API:${error}`,
+            type: "error",
+            duration: 3000,
+          });
         }
-      } catch (error) {
-        toast({
-          title: "Lỗi",
-          message: `Lỗi fetch API:${error}`,
-          type: "error",
-          duration: 3000,
-        });
+        lockDialog.remove();
+        renderCoverTable(1);
       }
-      lockDialog.remove();
-      renderCoverTable(1);
     }
+
+    //
   });
 
   // Gán sự kiện cho nút "Đóng" dialog
