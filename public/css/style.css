@@ -471,6 +471,7 @@
 /* Danh mục sách */
 .body__container .book-category {
   width: 75%;
+  scroll-margin-top: 220px;
 }
 
 .book-category__title {
@@ -2516,6 +2517,7 @@ td {
 
 .order-history__table tbody td {
   padding: 2rem 0;
+  vertical-align: middle;
 }
 
 .order-history__order {
@@ -2535,6 +2537,7 @@ td {
   font-weight: 500;
   border-radius: 7px;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .order-history__detail-btn:hover {
@@ -2761,4 +2764,32 @@ td {
 
 .menu-container .menu a:hover {
   font-weight: 600;
+}
+
+.header__container {
+  padding-bottom: 1.5rem !important;
+}
+
+.scroll-to-top-container {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  z-index: 20;
+}
+
+.scroll-to-top-btn {
+  display: block;
+  background-color: #3498db;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  line-height: 30px;
+  text-align: center;
+  cursor: pointer;
+  
+}
+
+.scroll-to-top-btn i {
+  color: white;
+  margin-right: 0;
 }

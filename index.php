@@ -439,6 +439,12 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
 
     <!-- ''''''''''''''''' NỘI DUNG LUÂN ĐÃ VIẾT Ở ĐÂY ''''''''''''''''' -->
 
+    <div class="scroll-to-top-container">
+        <span class="scroll-to-top-btn">
+            <i class="fa-solid fa-up-long"></i>
+        </span>
+    </div>
+
     <div class="show-cart hide-item">
         <div class="show-cart__container">
             <div class="show-cart__title">

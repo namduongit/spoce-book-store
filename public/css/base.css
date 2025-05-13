@@ -141,6 +141,10 @@ i {
     border-bottom: 1px solid gray;
 }
 
+.padding-bottom-medium {
+    padding-bottom: 1.5rem;
+}
+
 /* ----------------------------------BUTTOn-------------------------------------- */
 .sort-btn {
     background-color: #0565bc;

@@ -430,6 +430,7 @@ function showFooterInfo(info) {
         `;
         url.set("info", "payment");
     }
+    scrollToTop();
     hideLoading();
     setTimeout(() => {
         history.pushState(null, '', window.location.pathname + "?" + url.toString());
@@ -501,6 +502,15 @@ function hideMainPage() {
     if (!categoryMenu.classList.contains('hide-item')) {
         categoryMenu.classList.add('hide-item');
     }
+}
+
+function scrollToTop() {
+    window.scrollTo(
+        {
+            top: 0,
+            behavior: 'smooth'
+        }
+    );
 }
 
 document.addEventListener('DOMContentLoaded', function () {
