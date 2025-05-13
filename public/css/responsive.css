@@ -592,7 +592,7 @@ body {
   }
   .filter-toggle {
     position: absolute;
-            right: 0;
+    right: 0;
   }
   #toast {
     width: 300px;
@@ -669,10 +669,10 @@ body {
   }
   /* Thông tin khách hàng */
   .topbar__auth-list {
-            right: -64px;
-        width: 236%;
-    }
+    right: -64px !important;
+    width: 236% !important;
   }
+
   .right-content__warpper {
     display: none;
   }
@@ -690,10 +690,6 @@ body {
   .left-container__warpper .left-container__header .left-container__button {
     padding: 15px;
     margin-top: 8px;
-  }
-  .topbar .topbar__auth .topbar__auth-list {
-    right: -36px;
-    width: 142%;
   }
 
   .order-history__container {
