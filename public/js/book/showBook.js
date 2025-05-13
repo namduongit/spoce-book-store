@@ -14,6 +14,14 @@ function formatNumber(numberString) {
   return numberString.replace(/\D/g, '');
 }
 
+function scrollToBook() {
+  document.querySelector('.book-category').scrollIntoView(
+      {
+          behavior: "smooth",
+          block: "start"
+      }
+  );
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   // const categoryType = document.getElementById("type-category");
@@ -221,6 +229,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 let categoryId = category.dataset.id;
                 localStorage.setItem('selectedCategory', categoryId);
                 fetchBooks();
+                scrollToBook();
             });
         });
     }
