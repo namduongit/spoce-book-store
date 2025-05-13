@@ -296,7 +296,7 @@ body {
 /* ============================== ĐIỆN THOẠI (767px) ============================== */
 @media (max-width: 767px) {
   html {
-    font-size: 50%; /* 1rem = 8px */
+    font-size: 45%; /* 1rem = 8px */
     position: relative;
     width: 100vw !important;
     min-height: 100vh;
@@ -392,11 +392,14 @@ body {
     transform: translateX(0);
   }
   .header__search .header__search-wrapper input {
-    width: 290px;
+    width: 280px;
     padding: 10px !important;
   }
-  .header__search .header__search-wrapper button {
-    display: none;
+  .header__search .header__search-wrapper.mobile button {
+    top: -573px;
+  }
+  .header__search .header__search-wrapper.mobile {
+    display: block !important;
   }
 
   /* result search */
@@ -589,6 +592,7 @@ body {
   }
   .filter-toggle {
     position: absolute;
+            right: 0;
   }
   #toast {
     width: 300px;
@@ -665,8 +669,9 @@ body {
   }
   /* Thông tin khách hàng */
   .topbar__auth-list {
-    right: -45px;
-    width: 143%;
+            right: -64px;
+        width: 236%;
+    }
   }
   .right-content__warpper {
     display: none;
