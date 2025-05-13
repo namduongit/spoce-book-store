@@ -1237,18 +1237,18 @@ async function checkOutBill() {
             title: "Thông báo",
             duration: 3000,
           });
-
+          discount = null;
           return;
         }
 
-        if (!(totalPrice >= discount.min && totalPrice <= discount.max)) {
+        if (totalPrice < discount.min) {
           toast({
             type: "warning",
             message: "Đơn hàng không đủ điều kiện sử dụng mã giảm giá này",
             title: "Thông báo",
             duration: 3000,
           });
-
+          discount = null;
           return;
         }
 
@@ -1262,12 +1262,14 @@ async function checkOutBill() {
           discountRow.classList.remove("hide-item");
         if (discount.type == "Phần trăm") {
           totalDiscount = (totalPrice * discount.discountV) / 100;
+          if (totalDiscount > discount.max) totalDiscount = discount.max;
           discountSpan.innerText = "-" + formatMoney(totalDiscount);
           total.innerText = formatMoney(
             totalPrice + totalCostShip - totalDiscount
           );
         } else {
           totalDiscount = discount.discountV;
+          if (totalDiscount > discount.max) totalDiscount = discount.max;
           discountSpan.innerText = "-" + formatMoney(totalDiscount);
           total.innerText = formatMoney(
             totalPrice + totalCostShip - totalDiscount
