@@ -30,18 +30,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Nếu không ấn nút chuyển slide thì mặc định chuyển sang slide kế tiếp sau mỗi 5s
-    setInterval(() => {
+    let interval = setInterval(() => {
         moveToNextSlide();
     }, 5000);
+
+    function createNewInterval() {
+        interval = setInterval(() => {
+        moveToNextSlide();
+        }, 5000);
+    }
+
+    function resetInterval() {
+        clearInterval(interval);
+        createNewInterval();
+    }
     
-    document.querySelector('.slider__btn--left').addEventListener("click", moveToPreviousSlide);
-    document.querySelector('.slider__btn--right').addEventListener("click", moveToNextSlide);
+    document.querySelector('.slider__btn--left').addEventListener("click", function () {
+        moveToPreviousSlide();
+        resetInterval();
+    });
+    document.querySelector('.slider__btn--right').addEventListener("click", function () {
+        moveToNextSlide();
+        resetInterval();
+    });
 
     // Nếu nút nào được ấn thì sẽ chuyển đến slide đó
     positionBtns.forEach(btn => {
         btn.addEventListener("click", () => {
             currentSlideIndex = parseInt(btn.dataset.id);
             updatePosition();
+            resetInterval();
         });
     });
 });
