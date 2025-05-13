@@ -281,7 +281,7 @@ async function getRolePrivilege() {
 }
 // Biến chứa nội dung sẽ thay đổi của menu tương ứng
 const mainContentMap = {
-    profit_dashboard: `
+  profit_dashboard: `
     <h1 class="main__title">Thống kê lợi nhuận</h1>
     <div class="main__row">
       <div class="main__timeline-slt main__select slt-form-1 ${filterProfitDashboardCSS}">
@@ -808,7 +808,7 @@ const mainContentMap = {
     </div>
     <div class="main__pagination" id="admin-pagination-input_ticket"></div>
   `,
- book: `
+  book: `
     <h1 class="main__title">Sách</h1>
     <div class="main__row">
       <div class="main__find-inp inp-text-form-1">
@@ -1228,6 +1228,100 @@ menuInSideBar.forEach((item, i) => {
   });
 });
 
+const firstKey = Object.keys(data)[0];
+
+menuInSideBar.item(0).click();
+
+if (firstKey == 1) {
+  window.addEventListener("load", function () {
+    updateTimelineSelects();
+    printProfitDashboardTicket();
+    updateProfitDashboardTable();
+  });
+}
+else if (firstKey == 2) {
+  window.addEventListener("load", function () {
+    updateTimelineSelects();
+    printRevenueDashboardTicket();
+    updateRevenueDashboardTable();
+  });
+}
+else if (firstKey == 3) {
+  window.addEventListener("load", function () {
+    updateTimelineSelects();
+    printInvestDashboardTicket();
+    updateInvestDashboardTable();
+  });
+}
+else if (firstKey == 4) {
+  window.addEventListener("load", function () {
+    updateOrderDashboardTable();
+  });
+}
+else if (firstKey == 5) {
+  window.addEventListener("load", function () {
+    updateOrderTable();
+  });
+}
+else if (firstKey == 6) {
+  window.addEventListener("load", function () {
+    updatePrivilegeTable();
+  });
+}
+else if (firstKey == 7) {
+  window.addEventListener("load", async function () {
+    await renderPrivilegesAccount();
+    updateAccountTable();
+  });
+}
+else if (firstKey == 8) {
+  window.addEventListener("load", function () {
+    updateSupplierTable();
+  });
+}
+else if (firstKey == 9) {
+  window.addEventListener("load", function () {
+    updateDiscountTable();
+  });
+}
+else if (firstKey == 10) {
+  window.addEventListener("load", function () {
+    updateInputTicketTable();
+  });
+}
+else if (firstKey == 11) {
+  window.addEventListener("load", function () {
+    updateBookTable();
+  });
+}
+else if (firstKey == 12) {
+  window.addEventListener("load", function () {
+    updateAuthorTable();
+  });
+}
+else if (firstKey == 13) {
+  window.addEventListener("load", function () {
+    updateCategoryTable();
+  });
+}
+else if (firstKey == 14) {
+  window.addEventListener("load", function () {
+    updateCoverTable();
+  });
+}
+else if (firstKey == 15) {
+  window.addEventListener("load", function () {
+    updatePublisherTable();
+  });
+}
+else if (firstKey == 16) {
+  window.addEventListener("load", function () {
+    updatePaymentTable();
+  });
+}
+
+
+
 // // Mặc định thì "Thống kê Lợi nhuận" luôn được hiển thị đầu tiên
 // menuInSideBar.item(0).click();
 // window.addEventListener("load", function () {
@@ -1261,7 +1355,7 @@ async function renderPrivilegesAccount() {
 
   const privileges = await getRolePrivilege();
 
-  if (!privileges) return; 
+  if (!privileges) return;
 
   const privilegeUl = document.querySelector(
     "#privilege-slt-account + span + ul"
