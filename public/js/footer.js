@@ -504,7 +504,7 @@ function hideMainPage() {
     }
 }
 
-function scrollToTop() {
+export function scrollToTop() {
     window.scrollTo(
         {
             top: 0,

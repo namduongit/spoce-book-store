@@ -240,9 +240,9 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
                             <i class="filter-group__toggle fa-solid fa-minus" onclick="showFilter(this)"></i>
                         </div>
                         <!-- Ô nhập tìm kiếm tác giả -->
-                        <div class="filter-group__search">
+                        <!-- <div class="filter-group__search">
                             <input type="text" class="filter-group__search-input" placeholder="Nhập tên tác giả . . .">
-                        </div>
+                        </div> -->
 
                         <div class="filter-group__content list-author-content">
                             <?php
@@ -283,9 +283,9 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
                             <i class="filter-group__toggle fa-solid fa-minus" onclick="showFilter(this)"></i>
                         </div>
                         <!-- Ô nhập tìm kiếm tác giả -->
-                        <div class="filter-group__search">
+                        <!-- <div class="filter-group__search">
                             <input type="text" class="filter-group__search-input" placeholder="Nhập nhà xuất bản . . .">
-                        </div>
+                        </div> -->
 
                         <div class="filter-group__content list-publisher-content">
                             <?php
@@ -326,9 +326,9 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
                             <i class="filter-group__toggle fa-solid fa-minus" onclick="showFilter(this)"></i>
                         </div>
                         <!-- Ô nhập tìm kiếm tác giả -->
-                        <div class="filter-group__search">
+                        <!-- <div class="filter-group__search">
                             <input type="text" class="filter-group__search-input" placeholder="Nhập tên bìa . . .">
-                        </div>
+                        </div> -->
 
                         <div class="filter-group__content list-cover-content">
                             <?php

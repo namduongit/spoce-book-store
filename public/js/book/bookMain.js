@@ -2,6 +2,7 @@ import { formatMoney, getNameAuthorByID, getNameCategoryByID, getNameCoverByID, 
 import { toast } from '../toast.js'
 import { getCurrentUser } from "../auth/displayInfoUser.js";
 import { showConfirmationDialog } from '../question.js';
+import { scrollToTop } from '../footer.js';
 
 // Lưu dữ liệu vào LocalStorage
 document.addEventListener("DOMContentLoaded", async function() {
@@ -213,7 +214,7 @@ async function showDetailProduct(product_id) {
 
                     <div class="show-detail-product__actions">
                         <button class="show-detail-product__btn show-detail-product__btn--buy-now">
-                            <i class="fa-solid fa-bolt"></i>&nbsp;Mua ngay
+                            <i class="fa-solid fa-bolt" data-id="${productDetail['id']}"></i>&nbsp;Mua ngay
                         </button>
                         <button class="show-detail-product__btn show-detail-product__btn--add-to-cart">
                             <i class="fa-solid fa-cart-plus" data-id=${productDetail['id']}></i>&nbsp;Giỏ hàng
@@ -329,7 +330,83 @@ async function showDetailProduct(product_id) {
         viewCart('Recursive');
     });
 
-   
+    document.querySelector('.show-detail-product__btn--buy-now').addEventListener('click', async function () {
+        let quantity = parseInt(document.querySelector('.quantity__button-number').value);
+        let currentUser = JSON.parse(sessionStorage.getItem('user')) || null;
+
+        if (currentUser != null) {
+            let userId = currentUser['user']['id'];
+            let data = new URLSearchParams();
+            data.append('maNguoiDung', userId);
+            data.append('maSach', product_id);
+            data.append('soLuong', quantity);
+            fetch('api/carts/add.php', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: data.toString()
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.error('Có lỗi trong khi thêm sản phẩm vào giỏ để mua ngay');
+                }
+
+                return response.json();
+            })
+            .then(data => {
+                toast(
+                    {
+                        title: "Thông báo",
+                        message: data.message,
+                        type: data.success ? "success" : "warning",
+                        duration: 3000
+                    }
+                );
+            })
+            .catch(() => {
+                console.error('Có lỗi trong khi thêm sản phẩm vào giỏ để mua ngay');
+            });
+            updateQuantityCardHolder();
+            checkOutBill();
+            scrollToTop();
+        } else {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            let currentBook = {
+                bookId: product_id,
+                quantity: quantity
+            };
+
+            let existingProduct = cart.find(book => book.bookId == currentBook.bookId);
+            if (existingProduct) {
+                existingProduct.quantity += currentBook.quantity;
+            } else {
+                cart.push(currentBook);
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            toast(
+                {
+                    title: 'Thông báo',
+                    message: 'Sản phẩm đã được thêm vào giỏ hàng',
+                    type: 'success',
+                    duration: 3000
+                }
+            );
+            toast(
+                {
+                    title: 'Thông báo',
+                    message: 'Vui lòng đăng nhập để tiếp tục thanh toán',
+                    type: 'warning',
+                    duration: 3000
+                }
+            );
+            updateQuantityCardHolder();
+            viewCart('Recursive');
+        }
+    });
+
     const urlSource = new URLSearchParams(window.location.search);
     urlSource.set("bookID", productDetail["id"]);
     urlSource.set("dislayBookName", productDetail["name"]);
