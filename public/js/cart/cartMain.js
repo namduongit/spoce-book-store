@@ -1653,6 +1653,10 @@ async function checkOutBill() {
         }
       }
     });
+
+  document.querySelector('.checkout__back-to-cart-btn').addEventListener('click', function () {
+    showAllCart();
+  });
 }
 
 function deleteFromCart(bookId, currentUser) {
