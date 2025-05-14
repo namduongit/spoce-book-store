@@ -71,6 +71,7 @@ export async function renderPaymentTable(currentPage) {
                 e.preventDefault();
 
                 // Gọi hàm sự kiện cập nhật
+                updatePaymentData(idpaymentSelected);
                 
             });
 

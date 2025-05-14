@@ -248,7 +248,7 @@ if (count($role) <= 0) {
             <i class="icon fa-solid fa-power-off tab-logout"></i>
         </nav>
         <!-- Content -->
-        <div class="main__content" id="main-content">213</div>
+        <div class="main__content" id="main-content"></div>
     </main>
 
     <!-- Spinner chờ trong khi lấy dữ liệu từ Server -->
