@@ -257,7 +257,7 @@ if (count($role) <= 0) {
         <div class="spinner"></div>
     </div>
 
-    <!-- <script src="public/js/spinner.js"></script> -->
+    <script src="public/js/spinner.js"></script>
 
     <!-- Javascript -->
     <script type="module" src="admin/js/main.js"></script>
