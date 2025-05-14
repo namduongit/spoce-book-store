@@ -26,11 +26,11 @@ export async function renderOrderDashboardTable(currentPage) {
   for (let i = 0; i < data.length; i++) {
     html += `
         <tr>
-            <td>${data[i].userId}</td>
-            <td>${data[i].ordersBuy}</td>
-            <td>${vietnamMoneyFormat(data[i].pricesBuy)}</td>
-            <td>${data[i].ordersCancel}</td>
-            <td>${vietnamMoneyFormat(data[i].pricesCancel)}</td>
+            <td>${data[i].idCustomer}</td>
+            <td>${data[i].soDonDaGiaoVaThanhToan}</td>
+            <td>${vietnamMoneyFormat(data[i].tongTienDaGiaoVaThanhToan)}</td>
+            <td>${data[i].soDonHuyVaChuaThanhToan}</td>
+            <td>${vietnamMoneyFormat(data[i].tongTienHuyVaChuaThanhToan)}</td>
             <td>
                 <i class="fa-solid fa-circle-info ${infoOrderDashboard}"></i>
                 <i class="fa-solid fa-print"></i>
