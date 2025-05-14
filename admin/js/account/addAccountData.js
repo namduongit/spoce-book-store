@@ -212,15 +212,23 @@ export async function addAccountData() {
           const numberHomeAndStreetName = document.getElementById(
             "number-home-and-street-name-input"
           ).value;
-          const province = document
-            .getElementById("province-select")
-            .selectedOptions[0].textContent.trim();
-          const district = document
-            .getElementById("district-select")
-            .selectedOptions[0].textContent.trim();
-          const ward = document
-            .getElementById("ward-select")
-            .selectedOptions[0].textContent.trim();
+
+          const provinceSelect = document.getElementById("province-select");
+          const districtSelect = document.getElementById("district-select");
+          const wardSelect = document.getElementById("ward-select");
+
+          const province =
+            provinceSelect.selectedOptions.length > 0
+              ? provinceSelect.selectedOptions[0].textContent.trim()
+              : "";
+          const district =
+            districtSelect.selectedOptions.length > 0
+              ? districtSelect.selectedOptions[0].textContent.trim()
+              : "";
+          const ward =
+            wardSelect.selectedOptions.length > 0
+              ? wardSelect.selectedOptions[0].textContent.trim()
+              : "";
 
           if (!numberHomeAndStreetName || !province || !district || !ward) {
             toast({
@@ -257,6 +265,8 @@ export async function addAccountData() {
         const address = document
           .getElementById("add-account-address")
           .value.trim();
+        console.log(address);
+
         const username = document
           .getElementById("add-account-username")
           .value.trim();

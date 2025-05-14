@@ -227,7 +227,7 @@ export function updateAccountData(idAccountSelected) {
 
           // Regex kiểm tra định dạng địa chỉ (có thể điều chỉnh)
           const addressFormatRegex =
-            /^.+?,\s*(phường|Phường)\s+.+?,\s*(quận|Quận|huyện|Huyện)\s+.+?,\s*(tỉnh|Tỉnh|tp|TP|Thành Phố|Thành phố)\.?\s+.+$/;
+            /^.+?,\s*(phường|Phường)\s+.+?,\s*(quận|Quận|huyện|Huyện|tp|TP|Thành Phố|Thành phố)\s+.+?,\s*(tỉnh|Tỉnh|tp|TP|Thành Phố|Thành phố)\.?\s+.+$/;
           const addressUser = address.split(",");
           const numberHomeAndStreetName = addressUser[0];
           const province = addressUser[3];
@@ -250,7 +250,6 @@ export function updateAccountData(idAccountSelected) {
             // { condition: !address, message: "Vui lòng nhập địa chỉ." },
             {
               condition:
-                address &&
                 address !== "Chưa có địa chỉ" &&
                 !addressFormatRegex.test(address),
               message:
