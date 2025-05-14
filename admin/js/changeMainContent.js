@@ -180,7 +180,7 @@ var filterBookButtonHTML =
 `
     : "";
 var addBookButtonHTML = data[11] && data[11].includes(3) ? `
-      <button class="main__add-btn" id="add-button-book">
+      <button class="main__add-btn" id="add-button-book" style="width: 19%">
         <i class="fa-solid fa-plus"></i>
         <span>Thêm</span>
       </button>
@@ -811,11 +811,11 @@ const mainContentMap = {
   book: `
     <h1 class="main__title">Sách</h1>
     <div class="main__row">
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterBookCSS}">
         <input required="" type="text" id="find-inp-book" autocomplete="off" />
         <span><i class="fa-solid fa-search"></i>&nbsp;&nbsp;ID / Tiêu đề</span>
       </div>
-      <div class="main__sort-slt main__select slt-form-1">
+      <div class="main__sort-slt main__select slt-form-1 ${filterBookCSS}">
         <input required="" type="text" id="sort-slt-book" autocomplete="off" />
         <span><i class="fa-solid fa-sort"></i>&nbsp;&nbsp;Sắp xếp</span>
         <ul>
@@ -827,29 +827,29 @@ const mainContentMap = {
           <li>Số lượng giảm dần</li>
         </ul>
       </div>
-      <div class="main__author-slt main__select slt-form-1">
+      <div class="main__author-slt main__select slt-form-1 ${filterBookCSS}">
         <input required="" type="text" id="author-slt-book" autocomplete="off" />
         <span><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Tác giả </span>
         <ul></ul>
       </div>
-      <div class="main__category-slt main__select slt-form-1">
+      <div class="main__category-slt main__select slt-form-1 ${filterBookCSS}">
         <input required="" type="text" id="category-slt-book" autocomplete="off" />
         <span><i class="fa-solid fa-font-awesome"></i>&nbsp;&nbsp;Thể loại</span>
         <ul></ul>
       </div>
-      <div class="main__cover-slt main__select slt-form-1">
+      <div class="main__cover-slt main__select slt-form-1 ${filterBookCSS}">
         <input required="" type="text" id="cover-slt-book" autocomplete="off" />
         <span><i class="fa-solid fa-book-open"></i>&nbsp;&nbsp;Loại bìa</span>
         <ul></ul>
       </div>
     </div>
     <div class="main__row">
-      <div class="main__publisher-slt main__select slt-form-1">
+      <div class="main__publisher-slt main__select slt-form-1 ${filterBookCSS}">
         <input required="" type="text" id="publisher-slt-book" autocomplete="off" />
         <span><i class="fa-solid fa-user-tag"></i>&nbsp;&nbsp;Nhà xuất bản</span>
         <ul></ul>
       </div>
-      <div class="main__status-slt main__select slt-form-1">
+      <div class="main__status-slt main__select slt-form-1 ${filterBookCSS}">
         <input required="" type="text" id="status-slt-book" autocomplete="off" />
         <span><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Trạng thái</span>
         <ul>
@@ -857,7 +857,7 @@ const mainContentMap = {
           <li>Dừng bán</li>
         </ul>
       </div>
-      <div class="main__find-inp inp-text-form-1">
+      <div class="main__find-inp inp-text-form-1 ${filterBookCSS}">
         <input required="" type="text" id="show-inp-book" autocomplete="off" />
         <span><i class="fa-solid fa-list-ol"></i>&nbsp;&nbsp;Hiển thị</span>
       </div>
