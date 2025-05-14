@@ -160,6 +160,9 @@ export async function updateInfoTopBar(promiseResponse) {
             hideLoading();
             if (data['success']) {
                 // Xóa Session cũ và login cũ
+                sessionStorage.removeItem('user');
+                sessionStorage.removeItem('dataRole');
+                // Xóa cookie
                 deleteCookie('isLogin');
                 deleteCookie('cookieRole');
                 toast({
