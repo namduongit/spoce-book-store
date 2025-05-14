@@ -7,6 +7,7 @@ import {
   formatDate3,
 } from "../others.js";
 import { fetchData } from "../../../public/js/book/getDataBook.js";
+import { showLoading } from "../spiner.js";
 
 // Biến chứa các đối tượng bảng Thống kê phiếu nhập
 let headInInvestDashboardTable = null;
@@ -110,12 +111,14 @@ export async function renderInvestDashboardTable(
     ".main__data > .main__table.invest_dashboard > tfoot > tr > td:nth-of-type(4)"
   );
 
+  showLoading();
   // Dữ liệu về tất cả phiếu nhập hiện có
   const inputTickets = await fetchData(`api/input_tickets/list.php?`);
   // Dữ liệu về tất cả chi tiết phiếu nhập hiện có
   const inputTicketDetails = await fetchData(
     `api/input_ticket_details/list.php`
   );
+  // hideLoading();
   // Tuỳ theo lựa chọn mà có dữ liệu thời gian để thống kê
   const timeline =
     month !== 0 ? getWeeksInMonth(year, month) : getMonthsInYear(year);
@@ -142,7 +145,6 @@ export async function renderInvestDashboardTable(
         (inputTicket.status === "Đã xác nhận" ||
           inputTicket.status === "Đã thanh toán")
       ) {
-        console.log(time.start + inputTicket);
         // Tính tổng phiếu nhập theo từng thời gian
         ticketNumbersValue += 1;
 

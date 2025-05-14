@@ -252,11 +252,12 @@ if (count($role) <= 0) {
     </main>
 
     <!-- Spinner chờ trong khi lấy dữ liệu từ Server -->
-    <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-overlay" id="loading-overlay"
+        style="position: absolute; top: 0; left: 0; height: auto; background: red">
         <div class="spinner"></div>
     </div>
 
-    <script src="public/js/spinner.js"></script>
+    <!-- <script src="public/js/spinner.js"></script> -->
 
     <!-- Javascript -->
     <script type="module" src="admin/js/main.js"></script>

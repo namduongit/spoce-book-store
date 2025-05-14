@@ -108,13 +108,13 @@
   pointer-events: none;
 }
 
-.inp-text-form-1 input:focus~span,
-.inp-text-form-1 input:valid~span {
+.inp-text-form-1 input:focus ~ span,
+.inp-text-form-1 input:valid ~ span {
   color: #000;
   transform: translateY(-30px) translateX(-10px) scale(0.95);
 }
 
-.inp-text-form-1 input:not(:focus)~span {
+.inp-text-form-1 input:not(:focus) ~ span {
   color: #dedede;
 }
 
@@ -123,8 +123,8 @@
   border: 2px solid #000;
 }
 
-.inp-text-form-1 input:hover~span,
-.inp-text-form-1 input:valid~span {
+.inp-text-form-1 input:hover ~ span,
+.inp-text-form-1 input:valid ~ span {
   color: #000;
 }
 
@@ -149,7 +149,7 @@
   font-family: "Poppins";
 }
 
-.inp-text-form-1.date>i {
+.inp-text-form-1.date > i {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -159,9 +159,9 @@
   transition: 0.3s ease-in-out;
 }
 
-.inp-text-form-1.date:has(input:hover)>i,
-.inp-text-form-1.date:has(input:focus)>i,
-.inp-text-form-1.date:has(input:valid)>i {
+.inp-text-form-1.date:has(input:hover) > i,
+.inp-text-form-1.date:has(input:focus) > i,
+.inp-text-form-1.date:has(input:valid) > i {
   color: #000;
 }
 
@@ -230,13 +230,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   text-overflow: ellipsis;
 }
 
-.slt-form-1 input:focus+span,
-.slt-form-1 input:valid+span {
+.slt-form-1 input:focus + span,
+.slt-form-1 input:valid + span {
   color: #000;
   transform: translateY(-30px) translateX(-10px) scale(0.95);
 }
 
-.slt-form-1 input:not(:focus)+span {
+.slt-form-1 input:not(:focus) + span {
   color: #dedede;
 }
 
@@ -245,39 +245,41 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border: 2px solid #000;
 }
 
-.slt-form-1 input:hover+span,
-.slt-form-1 input:valid+span {
+.slt-form-1 input:hover + span,
+.slt-form-1 input:valid + span {
   color: #000;
 }
 
-.slt-form-1 input:focus~ul {
+.slt-form-1 input:focus ~ ul {
   opacity: 1;
   visibility: visible;
 }
 
-.slt-form-1 input:focus~ul li:hover,
-.slt-form-1 input:focus~ul li.select {
+.slt-form-1 input:focus ~ ul li:hover,
+.slt-form-1 input:focus ~ ul li.select {
   background: #000;
   color: #fff;
 }
 
 /* <===== Detail / Add / Update Dialog =====> */
-.dialog:where(.profit_dashboard,
-  .order,
-  .privilege,
-  .account,
-  .discount,
-  .supplier,
-  .input_ticket,
-  .book,
-  .author,
-  .category,
-  .cover,
-  .publisher,
-  .issuer,
-  .address-select,
-  .input_ticket-detail,
-  .payment) {
+.dialog:where(
+    .profit_dashboard,
+    .order,
+    .privilege,
+    .account,
+    .discount,
+    .supplier,
+    .input_ticket,
+    .book,
+    .author,
+    .category,
+    .cover,
+    .publisher,
+    .issuer,
+    .address-select,
+    .input_ticket-detail,
+    .payment
+  ) {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -314,7 +316,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   margin-top: 10px;
 }
 
-.dialog__row+.dialog__row {
+.dialog__row + .dialog__row {
   margin-top: 14px;
 }
 
@@ -412,7 +414,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #000;
 }
 
-.dialog__form-group:has(:is(input, textarea):not(:placeholder-shown)) label span {
+.dialog__form-group:has(:is(input, textarea):not(:placeholder-shown))
+  label
+  span {
   color: red;
 }
 
@@ -705,6 +709,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   text-align: right;
 }
 
+.dialog__form-group table tr.green {
+  background: #4bd08b;
+}
+
+.dialog__form-group table tr.red {
+  background: #fb977d;
+}
+
 .dialog__buttons:is(.order, .input_ticket) {
   justify-content: flex-end;
 }
@@ -744,7 +756,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #3dc55d;
 }
 
-
 .dialog__buttons button.cancel-status {
   background: #f44336;
   border-color: #f44336;
@@ -756,15 +767,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 #confirm-pay-button {
-  background: #7B1FA2;
-  border-color: #7B1FA2;
+  background: #7b1fa2;
+  border-color: #7b1fa2;
 }
 
 #confirm-pay-button:where(:hover, .active) {
-    background: #fff;
-  color: #7B1FA2;
+  background: #fff;
+  color: #7b1fa2;
 }
-
 
 .dialog__privilege-detail {
   margin-top: 14px;
@@ -796,12 +806,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* <===== Dashboard =====> */
-.ticket:where(.profit_dashboard,
-  .revenue_dashboard,
-  .invest_dashboard,
-  .order,
-  .input_ticket,
-  .payment) {
+.ticket:where(
+    .profit_dashboard,
+    .revenue_dashboard,
+    .invest_dashboard,
+    .order,
+    .input_ticket,
+    .payment
+  ) {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -842,7 +854,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   object-fit: cover;
 }
 
-.ticket__contact>p {
+.ticket__contact > p {
   font-size: 16px;
   font-weight: bold;
 }

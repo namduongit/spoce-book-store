@@ -152,7 +152,7 @@ export async function renderRevenueDashboardTable(
         });
 
         // Tính tổng doanh thu theo từng thời gian
-        totalPriceValue += order.totalPrice;
+        totalPriceValue += order.total;
       }
     });
 

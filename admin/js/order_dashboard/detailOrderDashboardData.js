@@ -30,7 +30,15 @@ async function renderOrderTableForDashboard(customerId) {
   if (orders.data) {
     for (let i = 0; i < orders.data.length; i++) {
       html += `
-          <tr>
+          <tr class=${
+            orders.data[i].status === "Đã giao hàng" &&
+            orders.data[i].payStatus === "Đã thanh toán"
+              ? "green"
+              : orders.data[i].status === "Đã hủy đơn" &&
+                orders.data[i].payStatus === "Chưa thanh toán"
+              ? "red"
+              : ""
+          }>
               <td>${orders.data[i].id}</td>
               <td>${orders.data[i].createAt}</td>
               <td>${vietnamMoneyFormat(orders.data[i].total)}</td>
@@ -42,11 +50,17 @@ async function renderOrderTableForDashboard(customerId) {
           </tr>
       `;
 
-      if (orders.data[i].status == 'Đã giao hàng' && orders.data[i].payStatus == 'Đã thanh toán') {
+      if (
+        orders.data[i].status == "Đã giao hàng" &&
+        orders.data[i].payStatus == "Đã thanh toán"
+      ) {
         totalBuy += orders.data[i].total;
-        console.log(orders.data[i].total)
+        console.log(orders.data[i].total);
       }
-      if (orders.data[i].status == 'Đã hủy đơn' && orders.data[i].payStatus == 'Chưa thanh toán') {
+      if (
+        orders.data[i].status == "Đã hủy đơn" &&
+        orders.data[i].payStatus == "Chưa thanh toán"
+      ) {
         totalCancel += orders.data[i].total;
       }
     }
@@ -66,7 +80,6 @@ async function renderOrderTableForDashboard(customerId) {
 
 // Hàm thiết lập sự kiện hiện chi tiết một thống kê đơn hàng
 export async function detailOrderDashboardData(customerIdSelected) {
-
   // Truy vấn csdl để lấy ra thống kê đơn hàng được chọn
   const user = await fetchData(
     `api/account/detail_account.php?id=${customerIdSelected}`

@@ -4,12 +4,11 @@ import { vietnamMoneyFormat } from "../others.js";
 import { filterOrderDashboard } from "./filterOrderDashboard.js";
 import { detailOrderDashboardData } from "./detailOrderDashboardData.js";
 
+const data = JSON.parse(sessionStorage.getItem("dataRole"));
 
-const data = JSON.parse(sessionStorage.getItem('dataRole'));
-
-var infoOrderDashboard = data[4] && data[4].includes(2) ? '' : 'none__item';
-var editOrderDashboard = data[4] && data[4].includes(4) ? '' : 'none__item';
-var lockOrderDashboard = data[4] && data[4].includes(5) ? '' : 'none__item';
+var infoOrderDashboard = data[4] && data[4].includes(2) ? "" : "none__item";
+var editOrderDashboard = data[4] && data[4].includes(4) ? "" : "none__item";
+var lockOrderDashboard = data[4] && data[4].includes(5) ? "" : "none__item";
 
 // Hàm cập nhật lại dữ liệu cho bảng Đơn hàng
 export async function renderOrderDashboardTable(currentPage) {
@@ -33,7 +32,7 @@ export async function renderOrderDashboardTable(currentPage) {
             <td>${vietnamMoneyFormat(data[i].tongTienHuyVaChuaThanhToan)}</td>
             <td>
                 <i class="fa-solid fa-circle-info ${infoOrderDashboard}"></i>
-                <i class="fa-solid fa-print"></i>
+                <!-- <i class="fa-solid fa-print"></i> -->
             </td>
         </tr>
     `;

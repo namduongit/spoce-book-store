@@ -142,7 +142,7 @@ export async function renderProfitDashboardTable(
         order.status === "Đã giao hàng"
       ) {
         // Tính tổng doanh thu theo từng thời gian
-        revenueValue += order.totalPrice;
+        revenueValue += order.total;
       }
     });
 

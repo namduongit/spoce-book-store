@@ -1,5 +1,6 @@
 import { renderSupplierTable } from "./renderSupplierTable.js";
 import { renderPagination } from "../pagination.js";
+import { hideLoading, showLoading } from "../spiner.js";
 
 //  Tiến hành lọc
 export async function filterSupplier(currentPage) {
@@ -42,7 +43,9 @@ export async function filterSupplier(currentPage) {
     if (!response.ok) {
       throw new Error("Lỗi khi lấy dữ liệu! HTTP Status: " + response.status);
     }
+    showLoading();
     let responseJSON = await response.json();
+    hideLoading();
     await renderPagination(
       "admin-pagination-supplier",
       responseJSON.pageCount,
