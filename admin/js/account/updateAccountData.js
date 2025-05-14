@@ -80,22 +80,35 @@ export function updateAccountData(idAccountSelected) {
 
   // Gọi API
   Promise.all([
-    fetch(
-      `http://localhost:3000/api/address/getAddress.php?maNguoiDung=${id}`
-    ).then((res) => res.json()),
-    fetch(`http://localhost:3000/api/account/detail_account.php?id=${id}`).then(
-      (res) => res.json()
+    fetch(`api/address/get_address.php?maNguoiDung=${id}`).then((res) =>
+      res.json()
     ),
+    fetch(`api/account/detail_account.php?id=${id}`).then((res) => res.json()),
   ])
     .then(([addressData, userData]) => {
       if (userData.status !== "success") return;
 
       const user = userData.data;
       const address = addressData.data;
-
+      console.log("address", address);
+      console.log("user", user);
       const fullAddress =
         address && address.length > 0
-          ? `${address[0].street}, ${address[0].ward}, ${address[0].district}, ${address[0].province}`
+          ? [
+              address[0].street,
+              address[0].ward,
+              address[0].district,
+              address[0].province,
+            ]
+              .filter(
+                (part) =>
+                  part &&
+                  part.trim() !== "" &&
+                  part !== "undefined" &&
+                  part !== "null" &&
+                  part !== "Chưa có địa chỉ"
+              )
+              .join(", ")
           : "Chưa có địa chỉ";
 
       // Gán nội dung dialog
@@ -328,7 +341,7 @@ export function updateAccountData(idAccountSelected) {
               } else {
                 toast({
                   title: "Thành công",
-                  message: "Sửa người dùng và địa chỉ thành công",
+                  message: "Sửa người dùng thành công",
                   type: "success",
                   duration: 3000,
                 });

@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
 
         <div class="menu-container">
             <div class="menu">
-                <?php 
+                <?php
                 require_once __DIR__ . '/app/config.php';
 
                 $category_model = new app_models_TheLoai();
@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
             </div>
         </div>
     </header>
-    
+
 
     <div class="main">
         <div class="main__container container d-flex just-content-spbt">
@@ -638,6 +638,7 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
         `;
         }
     }
+
 
     window.addEventListener('resize', updateSelectOptionsForBreakpoint);
     window.addEventListener('DOMContentLoaded', updateSelectOptionsForBreakpoint);
