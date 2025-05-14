@@ -139,7 +139,7 @@ export async function addAccountData() {
           <div class="dialog__form-group full">
             <label>Địa chỉ</label>
             <input type="text" id="add-account-address" placeholder="Nhập Địa chỉ" />
-            <button class="address">Chọn</button>
+            <button type="button" class="address">Chọn</button>
           </div>
         </div>
         <div class="dialog__row">
@@ -246,6 +246,7 @@ export async function addAccountData() {
       .getElementsByClassName("add")[0]
       .addEventListener("click", async (e) => {
         e.preventDefault();
+
         // Lấy ra giá trị của các biến để kiểm tra tính hợp lệ
         const id = document.getElementById("add-account-id").value.trim();
         const fullname = document
@@ -291,11 +292,11 @@ export async function addAccountData() {
             condition: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
             message: "Email không hợp lệ.",
           },
-          {
-            condition: address && !addressFormatRegex.test(address),
-            message:
-              "Địa chỉ không đúng định dạng. Ví dụ: '12 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP Hồ Chí Minh'",
-          },
+          // {
+          //   // condition: address && !addressFormatRegex.test(address),
+          //   message:
+          //     "Địa chỉ không đúng định dạng. Ví dụ: '12 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP Hồ Chí Minh'",
+          // },
           { condition: !username, message: "Vui lòng nhập tên tài khoản." },
           { condition: !password, message: "Vui lòng nhập mật khẩu." },
           { condition: !privilege, message: "Vui lòng chọn nhóm quyền." },
@@ -334,7 +335,7 @@ export async function addAccountData() {
           console.log(`${key}: ${value}`);
         }
 
-        if (address) {
+        if (address || !address) {
           try {
             // Gửi form tạo người dùng
             const response = await fetch("api/account/add_account.php", {
