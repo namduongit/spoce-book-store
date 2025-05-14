@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
 
         <div class="menu-container">
             <div class="menu">
-                <?php 
+                <?php
                 require_once __DIR__ . '/app/config.php';
 
                 $category_model = new app_models_TheLoai();
@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
             </div>
         </div>
     </header>
-    
+
 
     <div class="main">
         <div class="main__container container d-flex just-content-spbt">
@@ -240,9 +240,9 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
                             <i class="filter-group__toggle fa-solid fa-minus" onclick="showFilter(this)"></i>
                         </div>
                         <!-- Ô nhập tìm kiếm tác giả -->
-                        <div class="filter-group__search">
+                        <!-- <div class="filter-group__search">
                             <input type="text" class="filter-group__search-input" placeholder="Nhập tên tác giả . . .">
-                        </div>
+                        </div> -->
 
                         <div class="filter-group__content list-author-content">
                             <?php
@@ -283,9 +283,9 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
                             <i class="filter-group__toggle fa-solid fa-minus" onclick="showFilter(this)"></i>
                         </div>
                         <!-- Ô nhập tìm kiếm tác giả -->
-                        <div class="filter-group__search">
+                        <!-- <div class="filter-group__search">
                             <input type="text" class="filter-group__search-input" placeholder="Nhập nhà xuất bản . . .">
-                        </div>
+                        </div> -->
 
                         <div class="filter-group__content list-publisher-content">
                             <?php
@@ -326,9 +326,9 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
                             <i class="filter-group__toggle fa-solid fa-minus" onclick="showFilter(this)"></i>
                         </div>
                         <!-- Ô nhập tìm kiếm tác giả -->
-                        <div class="filter-group__search">
+                        <!-- <div class="filter-group__search">
                             <input type="text" class="filter-group__search-input" placeholder="Nhập tên bìa . . .">
-                        </div>
+                        </div> -->
 
                         <div class="filter-group__content list-cover-content">
                             <?php
@@ -638,6 +638,7 @@ if ($_SERVER['REQUEST_URI'] !== '/' && !isset($_GET['pageSize']) && !isset($_GET
         `;
         }
     }
+
 
     window.addEventListener('resize', updateSelectOptionsForBreakpoint);
     window.addEventListener('DOMContentLoaded', updateSelectOptionsForBreakpoint);

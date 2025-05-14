@@ -714,3 +714,5 @@ body {
     white-space: nowrap;
   }
 }
+@media (max-width: 700px) and (min-width: 600px) {
+}
