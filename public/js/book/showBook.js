@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (minPrice) queryParams.push(`minPrice=${minPrice}`);
       if (maxPrice) queryParams.push(`maxPrice=${maxPrice}`);
 
+      queryParams.push('bookStatus=Đang bán');
       // Tạo URL mới (KHÔNG encode dấu `,`)
       let newUrl = `${window.location.origin}${window.location.pathname}?${queryParams.join("&")}`;
 

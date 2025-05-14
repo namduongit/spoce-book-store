@@ -72,6 +72,11 @@ if (!empty($find)) {
     $params[':id'] = $find;
 }
 
+if (!empty($status)) {
+    $conditions[] = 'sach.trangThai = :status';
+    $params['status'] = $status;
+}
+
 $db = new app_libs_DBConnection();
 $result = $db->joinTables($columns, $tables, $joins, $conditions, $orderByColumn, $orderType, $limit, $offset, $params);
 $result2 = $db->joinTables($columns, $tables, $joins, $conditions, $orderByColumn, $orderType, null, null, $params);
