@@ -236,14 +236,15 @@ export function updateAccountData(idAccountSelected) {
           // Validate dữ liệu
           const validations = [
             { condition: !fullname, message: "Vui lòng nhập họ và tên." },
-            { condition: !phone, message: "Vui lòng nhập số điện thoại." },
+            // { condition: !phone, message: "Vui lòng nhập số điện thoại." },
             {
-              condition: !/^\d{10,11}$/.test(phone),
+              condition: !/^\d{10,11}$/.test(phone) && phone.length > 0,
               message: "Số điện thoại không hợp lệ.",
             },
-            { condition: !email, message: "Vui lòng nhập email." },
+            // { condition: !email, message: "Vui lòng nhập email." },
             {
-              condition: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+              condition:
+                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length > 0,
               message: "Email không hợp lệ.",
             },
             // { condition: !address, message: "Vui lòng nhập địa chỉ." },
