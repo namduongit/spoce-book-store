@@ -669,8 +669,8 @@ body {
   }
   /* Thông tin khách hàng */
   .topbar__auth-list {
-    right: -64px !important;
-    width: 236% !important;
+    right: -15px !important;
+    width: 108% !important;
   }
 
   .right-content__warpper {
