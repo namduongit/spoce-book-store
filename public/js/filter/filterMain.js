@@ -82,6 +82,7 @@ function searchProduct(query) {
 
 async function displayProduct(data) {
     const searchResult = document.querySelector('.result-search .result-search__wrapper');
+    if (!data) return;
 
     if (!data || !Array.isArray(data) || data.length === 0) {
         searchResult.querySelector('.result-search__wrapper-title').innerHTML =
@@ -91,6 +92,8 @@ async function displayProduct(data) {
         return;
     }
     showLoading();
+
+    if (!searchResult.querySelector('.result-search__wrapper-title')) return;
 
     searchResult.querySelector('.result-search__wrapper-title').innerHTML =
         `Kết quả tìm kiếm: <strong>${data.length} sản phẩm</strong>`;

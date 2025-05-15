@@ -96,7 +96,7 @@ export async function updateInfoTopBar(promiseResponse) {
 
     let adminPage = nameRole != 'Khách hàng' ? `
     <li class="topbar__history-order-btn">
-       <a href='http://localhost:3000/admin'>
+       <a href='/admin'>
             <i class="fa-solid fa-toolbox"></i>
             Trang quản lý
        </a>
