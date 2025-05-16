@@ -9,13 +9,13 @@
 
     class app_libs_DBConnection
     {
-        // protected $dsn = "mysql:host=159.89.207.183;port=3306;dbname=bookstore;charset=utf8";
-        protected $dsn = "mysql:host=localhost;port=3306;dbname=bookStore;charset=utf8";
-        // protected $username = "bookStore";
-        // protected $password = "bookStore";
+        protected $dsn = "mysql:host=159.89.207.183;port=3306;dbname=bookstore;charset=utf8";
+        // protected $dsn = "mysql:host=localhost;port=3306;dbname=bookStore;charset=utf8";
+        protected $username = "bookStore";
+        protected $password = "bookStore";
 
-        protected $username = "root";
-        protected $password = "NDuong205";
+        // protected $username = "root";
+        // protected $password = "NDuong205";
 
         protected $table_name = 'default_table';
         // Mảng lưu trữ các param được dùng để truy vấn
