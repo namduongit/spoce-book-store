@@ -1,0 +1,20 @@
+Nhóm 8: Quản lý cửa hàng bán sách
+3123560012	Nguyễn Nam	Dương	
+3123560040	Võ Trịnh	Khang
+3123560048	Chênh Tiên	Luân
+3123560072	Trần Thanh	Quy
+3123560091	Nguyễn Ngọc Anh	Tuấn
+
+* Một vài tài khoản quan trọng trên hệ thống
+Tài khoản quản trị viên: quantrivien
+Mật khẩu tài khoản quản trị viên: quantrivien
+
+Tài khoản người dùng: namduongit   
+Mật khẩu tài khoản người dùng: NDuong205
+
+Tài khoản quản lý kho: quanlykho1
+Mật khẩu tài khoản quản lí kho: quanlykho1
+
+Tài khoản quản lý bán hàng: quanlybanhang1
+Mật khẩu tài khoản quản lý bán hàng: quanlybanhang1 
+
